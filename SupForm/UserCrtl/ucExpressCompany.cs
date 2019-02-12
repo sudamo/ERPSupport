@@ -1,0 +1,198 @@
+﻿using System;
+using ERPSupport.SQL.K3Cloud;
+using System.Windows.Forms;
+using System.Text.RegularExpressions;
+
+namespace ERPSupport.SupForm.UserCrtl
+{
+    /// <summary>
+    /// 快递公司
+    /// </summary>
+    public partial class ucExpressCompany : UserControl
+    {
+        /// <summary>
+        /// 正则表达式
+        /// </summary>
+        private Regex reg = null;
+        /// <summary>
+        /// 内码
+        /// </summary>
+        private int iFID = 0;
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public ucExpressCompany()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// 窗体加载
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ucExpressCompany_Load(object sender, EventArgs e)
+        {
+            dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
+            dgv1.Columns[0].Visible = false;
+        }
+
+        /// <summary>
+        /// dgv1_Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv1_Click(object sender, EventArgs e)
+        {
+            if (dgv1.Rows.Count > 0)
+            {
+                txtMatchBillno.Text = dgv1.CurrentRow.Cells[1].Value.ToString();
+                txtNumber.Text = dgv1.CurrentRow.Cells[2].Value.ToString();
+                txtECPY.Text = dgv1.CurrentRow.Cells[3].Value.ToString();
+
+                iFID = int.Parse(dgv1.CurrentRow.Cells[0].Value.ToString());
+                btnEdit.Enabled = true;
+                btnDelete.Enabled = true;
+            }
+        }
+
+        /// <summary>
+        /// txtBillno_KeyPress
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtMatchBillno_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            reg = new Regex(@"^[1-9]\d*|0$");
+            if (e.KeyChar != '\b')
+            {
+                if (!reg.IsMatch(e.KeyChar.ToString()))
+                {
+                    e.Handled = true;
+                }
+            }
+            if (e.KeyChar != '\b' && txtMatchBillno.Text.Trim().Length - txtMatchBillno.SelectedText.Length >= 8)//控制文本输入长度
+                e.Handled = true;
+        }
+
+        /// <summary>
+        /// txtNumber_KeyPress
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void txtNumber_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            reg = new Regex(@"^[1-9]\d*|0$");
+            if (e.KeyChar != '\b')
+            {
+                if (!reg.IsMatch(e.KeyChar.ToString()))
+                {
+                    e.Handled = true;
+                }
+            }
+            if (e.KeyChar != '\b' && txtNumber.Text.Trim().Length - txtNumber.SelectedText.Length >= 2)//控制文本输入长度
+                e.Handled = true;
+        }
+
+        /// <summary>
+        /// 新增
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            if (!CheckData()) return;
+            try
+            {
+                if (CommonFunction.NumberMatchExists("COMPANYNAME", txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), txtECPY.Text.Trim()))
+                {
+                    MessageBox.Show("不能重复设定匹配规则或公司名称。");
+                    return;
+                }
+
+                CommonFunction.AddNumberMatch(txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), "COMPANYNAME", txtMatchBillno.Text.Trim(), txtECPY.Text.Trim(), "快递公司名称与编码前缀匹配", "0");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("新增失败" + ex.Message);
+                return;
+            }
+            MessageBox.Show("新增成功");
+            dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
+        }
+
+        /// <summary>
+        /// 修改
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            if (!CheckData()) return;
+            try
+            {
+                if (CommonFunction.NumberMatchExists("COMPANYNAME", iFID, txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), txtECPY.Text.Trim()))
+                {
+                    MessageBox.Show("匹配规则或公司名称已经存在。");
+                    return;
+                }
+                CommonFunction.UpdateNumberMatch(iFID, txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), txtECPY.Text.Trim());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("修改失败" + ex.Message);
+                return;
+            }
+            MessageBox.Show("修改成功");
+            dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CommonFunction.DelNumberMatch(iFID);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("删除失败" + ex.Message);
+                return;
+            }
+            MessageBox.Show("删除成功");
+            dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
+        }
+
+        /// <summary>
+        /// 数据检查
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckData()
+        {
+            if (txtMatchBillno.Text.Trim() == "")
+            {
+                MessageBox.Show("匹配运单号不能为空！");
+                txtMatchBillno.Focus();
+                return false;
+            }
+            if (txtNumber.Text.Trim() == "")
+            {
+                MessageBox.Show("运单号位数不能为空！");
+                txtNumber.Focus();
+                return false;
+            }
+            if (txtECPY.Text.Trim() == "")
+            {
+                MessageBox.Show("快递公司不能为空！");
+                txtECPY.Focus();
+                return false;
+            }
+            return true;
+        }
+    }
+}

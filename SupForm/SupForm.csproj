@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3B0D1663-5164-4CE9-A5AA-E11197E90E37}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ERPSupport.SupForm</RootNamespace>
+    <AssemblyName>ERP辅助系统</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <PublishUrl>D:\IIS\Sup\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <InstallUrl>http://14.18.236.28:8008/</InstallUrl>
+    <ProductName>辅助系统</ProductName>
+    <PublisherName>广州车邦</PublisherName>
+    <SuiteName>Supp</SuiteName>
+    <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
+    <WebPage>publish.htm</WebPage>
+    <ApplicationRevision>10</ApplicationRevision>
+    <ApplicationVersion>1.0.2.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ICON\gzcb48.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>DB300C0A275B3CDA77B9809488AA0E4FEB81965F</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>ExpressOutStock_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DMData.Code, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\DMData.Code.dll</HintPath>
+    </Reference>
+    <Reference Include="Kingdee.BOS.WebApi.Client, Version=6.1.316.5, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Kingdee.BOS.WebApi.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\frmTimer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmTimer.Designer.cs">
+      <DependentUpon>frmTimer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmAddFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmAddFilter.Designer.cs">
+      <DependentUpon>frmAddFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmBillModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmBillModify.Designer.cs">
+      <DependentUpon>frmBillModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmFilter.Designer.cs">
+      <DependentUpon>frmFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmHelp.Designer.cs">
+      <DependentUpon>frmHelp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmInstockSynchr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmInstockSynchr.Designer.cs">
+      <DependentUpon>frmInstockSynchr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmLockStockResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmLockStockResult.Designer.cs">
+      <DependentUpon>frmLockStockResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmLogin.Designer.cs">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.Designer.cs">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOrderOperation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOrderOperation.Designer.cs">
+      <DependentUpon>frmOrderOperation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmOrderSummary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmOrderSummary.Designer.cs">
+      <DependentUpon>frmOrderSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmParameter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmParameter.Designer.cs">
+      <DependentUpon>frmParameter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmResult.Designer.cs">
+      <DependentUpon>frmResult.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmSetting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmSetting.Designer.cs">
+      <DependentUpon>frmSetting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Common\frmSetDefaultStock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmSetDefaultStock.Designer.cs">
+      <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserClass\AppConfig.cs" />
+    <Compile Include="UserClass\DataGridViewAutoFilterColumnHeaderCell.cs" />
+    <Compile Include="UserClass\DataGridViewAutoFilterTextBoxColumn.cs" />
+    <Compile Include="UserClass\WinMessager.cs" />
+    <Compile Include="UserCrtl\ucBillModify.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucBillModify.Designer.cs">
+      <DependentUpon>ucBillModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucERPRecord.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucERPRecord.Designer.cs">
+      <DependentUpon>ucERPRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucExpressCompany.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucExpressCompany.Designer.cs">
+      <DependentUpon>ucExpressCompany.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucLockStock.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucLockStock.Designer.cs">
+      <DependentUpon>ucLockStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucLogin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucLogin.Designer.cs">
+      <DependentUpon>ucLogin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucOrderRecord.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucOrderRecord.Designer.cs">
+      <DependentUpon>ucOrderRecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucReportMtl203.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucReportMtl203.Designer.cs">
+      <DependentUpon>ucReportMtl203.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucNaviga.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucNaviga.Designer.cs">
+      <DependentUpon>ucNaviga.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucPDARecord.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucPDARecord.Designer.cs">
+      <DependentUpon>ucPDARecord.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucPickMTLDepartment.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucPickMTLDepartment.Designer.cs">
+      <DependentUpon>ucPickMTLDepartment.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucReportBom.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucReportBom.Designer.cs">
+      <DependentUpon>ucReportBom.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucStockEdit.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucStockEdit.Designer.cs">
+      <DependentUpon>ucStockEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucUser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucUser.Designer.cs">
+      <DependentUpon>ucUser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucUserAcc.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucUserAcc.Designer.cs">
+      <DependentUpon>ucUserAcc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserCrtl\ucUTMTLNumber.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucUTMTLNumber.Designer.cs">
+      <DependentUpon>ucUTMTLNumber.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="Common\frmTimer.resx">
+      <DependentUpon>frmTimer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmAddFilter.resx">
+      <DependentUpon>frmAddFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmBillModify.resx">
+      <DependentUpon>frmBillModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmFilter.resx">
+      <DependentUpon>frmFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmHelp.resx">
+      <DependentUpon>frmHelp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmInstockSynchr.resx">
+      <DependentUpon>frmInstockSynchr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmLockStockResult.resx">
+      <DependentUpon>frmLockStockResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmLogin.resx">
+      <DependentUpon>frmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOrderOperation.resx">
+      <DependentUpon>frmOrderOperation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmOrderSummary.resx">
+      <DependentUpon>frmOrderSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmParameter.resx">
+      <DependentUpon>frmParameter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmProgress.resx">
+      <DependentUpon>frmProgress.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmResult.resx">
+      <DependentUpon>frmResult.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmSetting.resx">
+      <DependentUpon>frmSetting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Common\frmSetDefaultStock.resx">
+      <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucBillModify.resx">
+      <DependentUpon>ucBillModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucERPRecord.resx">
+      <DependentUpon>ucERPRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucExpressCompany.resx">
+      <DependentUpon>ucExpressCompany.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucLockStock.resx">
+      <DependentUpon>ucLockStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucLogin.resx">
+      <DependentUpon>ucLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucOrderRecord.resx">
+      <DependentUpon>ucOrderRecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucReportMtl203.resx">
+      <DependentUpon>ucReportMtl203.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucNaviga.resx">
+      <DependentUpon>ucNaviga.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucPDARecord.resx">
+      <DependentUpon>ucPDARecord.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucPickMTLDepartment.resx">
+      <DependentUpon>ucPickMTLDepartment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucReportBom.resx">
+      <DependentUpon>ucReportBom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucStockEdit.resx">
+      <DependentUpon>ucStockEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucUser.resx">
+      <DependentUpon>ucUser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucUserAcc.resx">
+      <DependentUpon>ucUserAcc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\ucUTMTLNumber.resx">
+      <DependentUpon>ucUTMTLNumber.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DLL\Kingdee.BOS.WebApi.Client.dll" />
+    <Content Include="DLL\Newtonsoft.Json.dll" />
+    <Content Include="DLL\Oracle.ManagedDataAccess.dll" />
+    <Content Include="DLL\System.Data.SQLite.dll" />
+    <Content Include="ICON\gzcb.ico" />
+    <Content Include="ICON\gzcb48.ico" />
+    <Content Include="ICON\kk.ico" />
+    <Content Include="ICON\Timer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 和 x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.4.5">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 4.5</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DALFactory\DALFactory.csproj">
+      <Project>{73986a07-2165-4e44-86f9-0411cc534337}</Project>
+      <Name>DALFactory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDAL\IDAL.csproj">
+      <Project>{c4401e2c-f1ee-45b1-b565-e2399568a50b}</Project>
+      <Name>IDAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{94fad769-72f9-44ce-8b93-204462fa3679}</Project>
+      <Name>Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SQLFactory\SQL.csproj">
+      <Project>{062daca4-1a17-4ec9-b722-2f6ece41f060}</Project>
+      <Name>SQL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
