@@ -11,6 +11,50 @@ namespace ERPSupport.Model.Globa
         /// <summary>
         /// 构造函数
         /// </summary>
+        public GlobalParameter()
+        {
+
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="pK3Inf"></param>
+        public GlobalParameter(K3Setting pK3Inf)
+        {
+            _K3Inf = pK3Inf;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="pSQLInf"></param>
+        public GlobalParameter(SQLConfig pSQLInf)
+        {
+            _SQLInf = pSQLInf;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="pLocalInf"></param>
+        public GlobalParameter(LocalInfo pLocalInf)
+        {
+            _LocalInf = pLocalInf;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="pOperationInf"></param>
+        public GlobalParameter(OperationInfo pOperationInf)
+        {
+            _OperationInf = pOperationInf;
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
         /// <param name="pK3Inf">配置信息</param>
         public GlobalParameter(K3Setting pK3Inf, SQLConfig pSQLInf)
         {
@@ -18,8 +62,11 @@ namespace ERPSupport.Model.Globa
             _SQLInf = pSQLInf;
         }
 
+
         private static K3Setting _K3Inf;
         private static SQLConfig _SQLInf;
+        private static LocalInfo _LocalInf;
+        private static OperationInfo _OperationInf;
 
 
         /// <summary>
@@ -51,6 +98,38 @@ namespace ERPSupport.Model.Globa
             set
             {
                 _SQLInf = value;
+            }
+        }
+
+        /// <summary>
+        /// 本地信息
+        /// </summary>
+        public static LocalInfo LocalInf
+        {
+            get
+            {
+                return _LocalInf;
+            }
+
+            set
+            {
+                _LocalInf = value;
+            }
+        }
+
+        /// <summary>
+        /// 操作信息
+        /// </summary>
+        public static OperationInfo OperationInf
+        {
+            get
+            {
+                return _OperationInf;
+            }
+
+            set
+            {
+                _OperationInf = value;
             }
         }
     }

@@ -70,8 +70,11 @@ namespace ERPSupport.SupForm.UserCrtl
             }
             else if (strRecordType == "ASSISTANT")
             {
-                MessageBox.Show("辅助系统操作日志暂未完善。");
-                return;
+                dt = CommonFunction.GetDM_Log_Local(txtUser.Text.Trim(), dtpFrom.Value);
+                if (dt.Rows.Count > 0)
+                    dgv1.DataSource = dt;
+                else
+                    dgv1.DataSource = null;
             }
         }
     }

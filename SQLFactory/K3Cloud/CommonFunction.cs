@@ -1213,6 +1213,40 @@ namespace ERPSupport.SQL.K3Cloud
                 return false;
             return true;
         }
+
+        /// <summary>
+        /// 查询本地操作日志
+        /// </summary>
+        /// <param name="pUser"></param>
+        /// <param name="pDate"></param>
+        /// <returns></returns>
+        public static DataTable GetDM_Log_Local(string pUser, DateTime pDate)
+        {
+            if (pUser.Equals(string.Empty))
+                strSQL = @"SELECT OUSER 用户,IP IP地址,MAC,TO_CHAR(LOGINTIME,'YYYY-MM-DD HH24:MI:SS') 登录时间,TO_CHAR(OTIME,'YYYY-MM-DD HH24:MI:SS') 操作时间,ONAME 操作名称,ONAVI 模块,OCONTENT 操作内容描述,CASE WHEN FLAG = '1' THEN '操作成功' ELSE '操作失败' END 操作状态
+                FROM DM_LOG_LOCAL
+                WHERE ISDEL = '0' AND TO_CHAR(OTIME,'YYYY-MM-DD') = '" + pDate.ToString("yyyy-MM-dd") + "'";
+            else
+                strSQL = @"SELECT OUSER 用户,IP IP地址,MAC,TO_CHAR(LOGINTIME,'YYYY-MM-DD HH24:MI:SS') 登录时间,TO_CHAR(OTIME,'YYYY-MM-DD HH24:MI:SS') 操作时间,ONAME 操作名称,ONAVI 模块,OCONTENT 操作内容描述,CASE WHEN FLAG = '1' THEN '操作成功' ELSE '操作失败' END 操作状态
+                FROM DM_LOG_LOCAL
+                WHERE ISDEL = '0' AND OUSER = '" + pUser + "' AND TO_CHAR(OTIME,'YYYY-MM-DD') = '" + pDate.ToString("yyyy-MM-dd") + "'";
+
+            return ORAHelper.ExecuteTable(strSQL);
+        }
+
+        /// <summary>
+        /// 保存本地操作日志
+        /// </summary>
+        /// <param name="pK3Inf">K3配置信息</param>
+        /// <param name="pLocalInf">本地信息</param>
+        /// <param name="pOperationInf">操作信息</param>
+        public static void DM_Log_Local(K3Setting pK3Inf, Model.Globa.LocalInfo pLocalInf, Model.Globa.OperationInfo pOperationInf, string pFlag)
+        {
+            strSQL = @"INSERT INTO DM_LOG_LOCAL(OUSER,IP,MAC,LOGINTIME,LOGOUTTIME,OTIME,ONAME,ONAVI,OCONTENT,FLAG)
+            VALUES('" + pK3Inf.UserName + "','" + pLocalInf.IP + "','" + pLocalInf.MAC + "',TO_DATE('" + pLocalInf.LoginTime.ToString("yyyy-MM-dd hh:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),TO_DATE('" + pLocalInf.LogoutTime.ToString("yyyy-MM-dd hh:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),TO_DATE('" + pOperationInf.OTime.ToString("yyyy-MM-dd hh:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),'" + pOperationInf.OName + "','" + pOperationInf.ONavi + "','" + pOperationInf.OContent + "','" + pFlag + "')";
+
+            ORAHelper.ExecuteNonQuery(strSQL);
+        }
         #endregion
 
         #region Barcode
@@ -1266,7 +1300,7 @@ namespace ERPSupport.SQL.K3Cloud
             INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FLOGONORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
             INNER JOIN T_META_OBJECTTYPE_L OBJL ON A.FOBJECTTYPEID = OBJL.FID AND OBJL.FLOCALEID = 2052
             INNER JOIN T_META_SUBSYSTEM_L SUBL ON A.FSUBSYSTEMID = SUBL.FID AND SUBL.FLOCALEID = 2052
-            WHERE A.FDATETIME BETWEEN TO_DATE('" + pDate.ToString("yyyy-MM-dd") + "','yyyy-mm-dd') AND TO_DATE('" + pDate.AddDays(1).ToString("yyyy-MM-dd") + "','yyyy-mm-dd') AND B.FNAME = '" + pUser + "'";
+            WHERE TO_CHAR(A.FDATETIME,'YYYY-MM-DD') = '" + pDate.ToString("yyyy-MM-dd") + "' AND B.FNAME = '" + pUser + "'";
 
             return ORAHelper.ExecuteTable(strSQL);
         }
@@ -1367,7 +1401,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取本机IP地址
         /// </summary>
         /// <returns></returns>
-        internal static string GetLocalIP()
+        public static string GetLocalIP()
         {
             //string strIP = string.Empty;
             //try
@@ -1405,7 +1439,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取本机MAC地址
         /// </summary>
         /// <returns></returns>
-        internal static string GetMac()
+        public static string GetMac()
         {
             string Mac = string.Empty;
             try
