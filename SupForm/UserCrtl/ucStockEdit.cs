@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows.Forms;
 using ERPSupport.SQL.K3Cloud;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -77,6 +78,9 @@ namespace ERPSupport.SupForm.UserCrtl
             CommonFunction.UpdateMStockSetting(STOCKNUMBER, int.Parse(FID));
             btnSearch_Click(null, null);
             cbxStock.SelectedIndex = 0;
+
+            //操作日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "设置默认仓库", "配置\\物料默认仓库", txtMaterialNO.Text + ":" + cbxStock.Text, "1");
         }
 
         /// <summary>
@@ -87,6 +91,10 @@ namespace ERPSupport.SupForm.UserCrtl
         private void btnDelete_Click(object sender, EventArgs e)
         {
             CommonFunction.DelMStockSetting();
+
+            //操作日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "设置默认仓库", "配置\\物料默认仓库", "清除空值仓库", "1");
+
             MessageBox.Show("清除完成");
         }
 

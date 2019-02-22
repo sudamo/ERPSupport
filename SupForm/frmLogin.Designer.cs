@@ -37,12 +37,12 @@
             // lblTitle
             // 
             this.lblTitle.Dock = System.Windows.Forms.DockStyle.Top;
-            this.lblTitle.Font = new System.Drawing.Font("华文楷体", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTitle.Font = new System.Drawing.Font("华文楷体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.lblTitle.Location = new System.Drawing.Point(0, 0);
             this.lblTitle.Name = "lblTitle";
             this.lblTitle.Size = new System.Drawing.Size(304, 42);
             this.lblTitle.TabIndex = 1;
-            this.lblTitle.Text = "ERP辅助系统";
+            this.lblTitle.Text = "ERP辅助系统V3.1";
             this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // pl1

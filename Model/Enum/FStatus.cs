@@ -73,4 +73,39 @@ namespace ERPSupport.Model.Enum
         /// </summary>
         B = 2
     }
+
+    /// <summary>
+    /// 生产订单业务状态
+    /// </summary>
+    public enum MoStatus : int
+    {
+        /// <summary>
+        /// 计划
+        /// </summary>
+        JH = 1,
+        /// <summary>
+        /// 计划确认
+        /// </summary>
+        JHQR = 2,
+        /// <summary>
+        /// 下达
+        /// </summary>
+        XD = 3,
+        /// <summary>
+        /// 开工
+        /// </summary>
+        KG = 4,
+        /// <summary>
+        /// 完工
+        /// </summary>
+        WG = 5,
+        /// <summary>
+        /// 结案
+        /// </summary>
+        JA = 6,
+        /// <summary>
+        /// 结算
+        /// </summary>
+        JS = 7
+    }
 }

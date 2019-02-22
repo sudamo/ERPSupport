@@ -2,6 +2,7 @@
 using System.Data;
 using ERPSupport.SQL.K3Cloud;
 using System.Windows.Forms;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -88,7 +89,8 @@ namespace ERPSupport.SupForm.UserCrtl
 
             //新增记录
             CommonFunction.AddPickMTLDept(iDeptId.ToString(), strNumber, strName, strUseOrgId);
-
+            //操作日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "新增领料部门", "配置\\设置领料部门", cbxUseOrg.Text + ":" + cbxDepartment.Text, "1");
             MessageBox.Show("添加成功");
             //重新获取数据
             dgv1.DataSource = CommonFunction.PickMTLDepartment();
@@ -103,8 +105,10 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             if (dgv1.Rows.Count == 0) return;
 
-            ////根据序号删除数据
+            //根据序号删除数据
             CommonFunction.DelPickMTLDept(dgv1.CurrentRow.Cells[0].Value.ToString());
+            //操作日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "删除领料部门", "配置\\设置领料部门", dgv1.CurrentRow.Cells[0].Value.ToString(), "1");
             MessageBox.Show("删除成功");
             //重新获取数据
             dgv1.DataSource = CommonFunction.PickMTLDepartment();

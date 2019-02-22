@@ -3,6 +3,7 @@ using System.Data;
 using ERPSupport.SQL.K3Cloud;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -128,6 +129,14 @@ namespace ERPSupport.SupForm.UserCrtl
             //新增记录
             CommonFunction.AddCalculateStock(strType, iSEQ, iStockId, strStockNo, strStockName);
 
+            //操作日志
+            string OName;
+            if (strType == "LOCKSTOCK")
+                OName = "锁库仓库";
+            else
+                OName = "运算仓库";
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "新增" + OName, "配置\\设置" + OName, txtSEQ.Text + "|" + cbxUseOrg.Text + "|" + cbxStock.Text, "1");
+
             //重新获取数据
             SetDataSource();
         }
@@ -144,6 +153,13 @@ namespace ERPSupport.SupForm.UserCrtl
 
             //根据序号删除数据
             CommonFunction.UpdateCalculateStock(iFID);
+            //操作日志
+            string OName;
+            if (strType == "LOCKSTOCK")
+                OName = "锁库仓库";
+            else
+                OName = "运算仓库";
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "删除" + OName, "配置\\设置" + OName, txtSEQ.Text + "|" + cbxUseOrg.Text + "|" + cbxStock.Text, "1");
             //重新获取数据
             SetDataSource();
         }

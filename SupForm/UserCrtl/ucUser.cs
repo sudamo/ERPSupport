@@ -2,6 +2,7 @@
 using System.Data;
 using System.Windows.Forms;
 using ERPSupport.SQL.K3Cloud;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -159,6 +160,21 @@ namespace ERPSupport.SupForm.UserCrtl
                 CommonFunction.UpdateUser_Role(sUserId, sRIDS);
             }
 
+            //操作日志
+            string strContent = "分配角色:";
+            if (libOwn.Items.Count == 0)
+                strContent = "移除用户[" + grbRole.Text + "]所有角色";
+            else
+            {
+                strContent = "[" + grbRole.Text + "][";
+                for (int i = 0; i < libOwn.Items.Count; i++)
+                {
+                    if (i > 0) strContent += "|";
+                    strContent += libOwn.Items[i].ToString();
+                }
+                strContent += "]";
+            }
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "用户管理", "系统管理\\用户管理", strContent, "1");
             MessageBox.Show("保存成功！");
         }
 

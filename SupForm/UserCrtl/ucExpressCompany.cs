@@ -2,6 +2,7 @@
 using ERPSupport.SQL.K3Cloud;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -116,8 +117,12 @@ namespace ERPSupport.SupForm.UserCrtl
             catch (Exception ex)
             {
                 MessageBox.Show("新增失败" + ex.Message);
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "快递公司配置", "配置\\快递公司配置", "新增失败：" + ex.Message, "0");
                 return;
             }
+            //操作日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "快递公司配置", "配置\\快递公司配置", "新增：" + txtMatchBillno.Text + "|" + txtNumber.Text + "|" + txtECPY.Text, "1");
             MessageBox.Show("新增成功");
             dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
         }
@@ -142,8 +147,12 @@ namespace ERPSupport.SupForm.UserCrtl
             catch (Exception ex)
             {
                 MessageBox.Show("修改失败" + ex.Message);
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "快递公司配置", "配置\\快递公司配置", "修改失败：" + ex.Message, "0");
                 return;
             }
+            //操作日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "快递公司配置", "配置\\快递公司配置", "修改：" + txtMatchBillno.Text + "|" + txtNumber.Text + "|" + txtECPY.Text, "1");
             MessageBox.Show("修改成功");
             dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
         }
@@ -162,8 +171,12 @@ namespace ERPSupport.SupForm.UserCrtl
             catch (Exception ex)
             {
                 MessageBox.Show("删除失败" + ex.Message);
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "快递公司配置", "配置\\快递公司配置", "删除失败：" + ex.Message, "0");
                 return;
             }
+            //操作日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "快递公司配置", "配置\\快递公司配置", "删除：" + txtMatchBillno.Text + "|" + txtNumber.Text + "|" + txtECPY.Text, "1");
             MessageBox.Show("删除成功");
             dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
         }

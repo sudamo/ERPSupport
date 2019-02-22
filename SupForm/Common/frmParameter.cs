@@ -4,6 +4,7 @@ using ERPSupport.Model.K3Cloud;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Excel = Microsoft.Office.Interop.Excel;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.Common
 {
@@ -87,6 +88,9 @@ namespace ERPSupport.SupForm.Common
             UserClass.AppConfig.WriteValue("ORP_SumMoonths", txtSumDays.Text);
             UserClass.AppConfig.WriteValue("ORP_AddJoinQty", AddJoinQty);
 
+            //操作日志
+            string OContent = string.Format("LockType:{0}|IsUse:{1}|LockNumber:{2}|LockPercent:{3}|SafeStockDays:{4}|LogisticsDays:{5}|AddGoodsDays:{6}|LowGoods:{7}|MinBats:{8}|StarTime:{9}|EndTime:{10}|SumMoonths:{11}|AddJoinQty:{12}", LockType, IsUse, txtNumber.Text, txtPercent.Text, txtSafeStockDays.Text, txtLogisticsDays.Text, txtAddGoodsDays.Text, txtLowBook.Text, txtMinBats.Text, dtpStar.Value.ToString(), dtpEnd.Value.ToString(), txtSumDays.Text, AddJoinQty);
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "参数设定", "菜单->工具->参数", OContent, "1");
 
             MessageBox.Show("保存成功");
             DialogResult = DialogResult.OK;

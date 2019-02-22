@@ -2,6 +2,7 @@
 using System.Data;
 using ERPSupport.SQL.K3Cloud;
 using System.Windows.Forms;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -11,7 +12,7 @@ namespace ERPSupport.SupForm.UserCrtl
     public partial class ucBillModify : UserControl
     {
         /// <summary>
-        /// 
+        /// 构造函数
         /// </summary>
         public ucBillModify()
         {
@@ -19,7 +20,7 @@ namespace ERPSupport.SupForm.UserCrtl
         }
 
         /// <summary>
-        /// 
+        /// 窗体加载
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -70,7 +71,7 @@ namespace ERPSupport.SupForm.UserCrtl
         }
 
         /// <summary>
-        /// 
+        /// 查询数据
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -81,7 +82,7 @@ namespace ERPSupport.SupForm.UserCrtl
         }
 
         /// <summary>
-        /// 
+        /// 数据绑定
         /// </summary>
         private void DataBind()
         {
@@ -95,7 +96,7 @@ namespace ERPSupport.SupForm.UserCrtl
         }
 
         /// <summary>
-        /// 
+        /// btnBatchModify_Click
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -108,18 +109,22 @@ namespace ERPSupport.SupForm.UserCrtl
         }
 
         /// <summary>
-        /// 
+        /// 同步需求日期
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void btnSyn_Click(object sender, EventArgs e)
         {
             if (MessageBox.Show("此时间段：" + dtpFrom.Value.ToString("yyyy-MM-dd") + "至" + dtpTo.Value.ToString("yyyy-MM-dd") + "\n 共有" + PrdAllocation.Asyn_PPBom_FNeedDate(dtpFrom.Value, dtpTo.Value).ToString() + "不同步，确定同步吗？", "同步确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
                 PrdAllocation.Syn_PPBom_FNeedDate(dtpFrom.Value, dtpTo.Value);
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "同步需求日期", "配置\\单据信息调整", "时间段：" + dtpFrom.Value.ToString("yyyy-MM-dd") + "至" + dtpTo.Value.ToString("yyyy-MM-dd"), "1");
+            }
         }
 
         /// <summary>
-        /// 
+        /// cbxType_SelectedIndexChanged
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

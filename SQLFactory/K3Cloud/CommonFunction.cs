@@ -84,7 +84,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pConnectionString"></param>
         /// <param name="pUserName"></param>
         /// <returns></returns>
-        public static DataTable GetUserInfoByName(string pConnectionString,string pUserName)
+        public static DataTable GetUserInfoByName(string pConnectionString, string pUserName)
         {
             strSQL = @"SELECT US.FUSERID,NVL(UR.RIDS,' ') RIDS,NVL(WM_CONCAT(R.MIDS),' ') MIDS
             FROM T_SEC_USER US
@@ -656,7 +656,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pIsMatch">是否匹配，默认'0'</param>
         public static void AddNumberMatch(string pNumber, int pLength, string pType, string pTypeNumber, string pTypeName, string pDescription, string pIsMatch)
         {
-            strSQL = @"INSERT INTO DM_NUMBERMATCH(FNUMBER,LENGTH,FTYPE,TYPENUMBER,TYPENAME,CREATOR,DESCRIPTION,ISMATCH) VALUES('" + pType + "','" + pNumber + "'," + pLength.ToString() + ",'" + pTypeNumber + "','" + pTypeName + "','" + Model.Globa.GlobalParameter.K3Inf.UserName + "','" + pDescription + "','" + pIsMatch + "')";
+            strSQL = @"INSERT INTO DM_NUMBERMATCH(FTYPE,FNUMBER,FLENGTH,TYPENUMBER,TYPENAME,CREATOR,DESCRIPTION,ISMATCH) VALUES('" + pType + "','" + pNumber + "'," + pLength.ToString() + ",'" + pTypeNumber + "','" + pTypeName + "','" + Model.Globa.GlobalParameter.K3Inf.UserName + "','" + pDescription + "','" + pIsMatch + "')";
 
             ORAHelper.ExecuteNonQuery(strSQL);
         }
@@ -1240,10 +1240,10 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pK3Inf">K3配置信息</param>
         /// <param name="pLocalInf">本地信息</param>
         /// <param name="pOperationInf">操作信息</param>
-        public static void DM_Log_Local(K3Setting pK3Inf, Model.Globa.LocalInfo pLocalInf, Model.Globa.OperationInfo pOperationInf, string pFlag)
+        public static void DM_Log_Local(K3Setting pK3Inf, Model.Globa.LocalInfo pLocalInf, string pOName, string pONavi, string pOContent, string pFlag)
         {
             strSQL = @"INSERT INTO DM_LOG_LOCAL(OUSER,IP,MAC,LOGINTIME,LOGOUTTIME,OTIME,ONAME,ONAVI,OCONTENT,FLAG)
-            VALUES('" + pK3Inf.UserName + "','" + pLocalInf.IP + "','" + pLocalInf.MAC + "',TO_DATE('" + pLocalInf.LoginTime.ToString("yyyy-MM-dd hh:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),TO_DATE('" + pLocalInf.LogoutTime.ToString("yyyy-MM-dd hh:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),TO_DATE('" + pOperationInf.OTime.ToString("yyyy-MM-dd hh:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),'" + pOperationInf.OName + "','" + pOperationInf.ONavi + "','" + pOperationInf.OContent + "','" + pFlag + "')";
+            VALUES('" + pK3Inf.UserName + "','" + pLocalInf.IP + "','" + pLocalInf.MAC + "',TO_DATE('" + pLocalInf.LoginTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),TO_DATE('" + pLocalInf.LogoutTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),SYSDATE,'" + pOName + "','" + pONavi + "','" + pOContent + "','" + pFlag + "')";
 
             ORAHelper.ExecuteNonQuery(strSQL);
         }

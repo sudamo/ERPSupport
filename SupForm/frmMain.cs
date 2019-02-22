@@ -124,9 +124,7 @@ namespace ERPSupport.SupForm
             MenuSet();
 
             GlobalParameter.LocalInf = new LocalInfo(CommonFunction.GetLocalIP(), CommonFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);//配置本地信息
-            GlobalParameter.OperationInf = new OperationInfo("登录系统", DateTime.Now, "主窗口", "登录系统");//配置操作信息
-
-            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, GlobalParameter.OperationInf, "1");//登录日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "登录系统", "主窗口", "登录系统", "1");//登录日志
         }
         #endregion
 
@@ -1420,19 +1418,12 @@ namespace ERPSupport.SupForm
                 CommonFunction.UpdateLockStatus(0, "PICKMTL");
 
                 //操作日志
-                GlobalParameter.OperationInf.OName = "冲领料单";
-                GlobalParameter.OperationInf.OTime = DateTime.Now;
-                GlobalParameter.OperationInf.ONavi = Text.Substring(0, Text.IndexOf("-") - 1);
-
                 string BillNos = string.Empty;
                 for (int i = 0; i < dtResult.Rows.Count; i++)
                 {
-                    BillNos += dtResult.Rows[i]["单号"].ToString();
+                    BillNos += "[" + dtResult.Rows[i]["单号"].ToString() + "]";
                 }
-
-                GlobalParameter.OperationInf.OContent = BillNos;
-
-                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, GlobalParameter.OperationInf, "1");
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "倒冲领料", "辅助功能\\倒冲领料", BillNos, "1");
             }
             else if (eFormId == FormID.PRD_PPBOM)//生成直接调拨单
             {
@@ -1514,11 +1505,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //操作日志
-                GlobalParameter.OperationInf.OName = "锁库";
-                GlobalParameter.OperationInf.OTime = DateTime.Now;
-                GlobalParameter.OperationInf.ONavi = Text.Substring(0, Text.IndexOf("-") - 1);
-                GlobalParameter.OperationInf.OContent = "请查看锁库日志";
-                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, GlobalParameter.OperationInf, "1");
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "锁库", "辅助功能\\锁库", "请查看锁库日志", "1");
             }
             else if (eFormId == FormID.SAL_SALEORDERRUN)//订单运算
             {
@@ -1597,11 +1584,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //操作日志
-                GlobalParameter.OperationInf.OName = "运算";
-                GlobalParameter.OperationInf.OTime = DateTime.Now;
-                GlobalParameter.OperationInf.ONavi = Text.Substring(0, Text.IndexOf("-") - 1);
-                GlobalParameter.OperationInf.OContent = "请查看运算日志";
-                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, GlobalParameter.OperationInf, "1");
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "运算", "辅助功能\\运算", "请查看运算日志", "1");
             }
         }
         #endregion
@@ -1618,7 +1601,7 @@ namespace ERPSupport.SupForm
             List<string> lstOutStock;
 
             DataTable dt;
-            DataTable dtDept  = CommonFunction.GetPickMtlDepartment();
+            DataTable dtDept = CommonFunction.GetPickMtlDepartment();
 
             if (dtDept == null || dtDept.Rows.Count == 0)
                 return -1;
@@ -1687,7 +1670,7 @@ namespace ERPSupport.SupForm
                         tmp = PrdAllocation.TransferDirect(dt2, dtpDate.Value);
 
                         if (tmp != "")
-                            strBillNos += "[" + tmp + "] ";
+                            strBillNos += "[" + tmp + "]";
                     }
                 }
 
@@ -1722,12 +1705,7 @@ namespace ERPSupport.SupForm
             }
 
             //操作日志
-            GlobalParameter.OperationInf.OName = "调拨单";
-            GlobalParameter.OperationInf.OTime = DateTime.Now;
-            GlobalParameter.OperationInf.ONavi = Text.Substring(0, Text.IndexOf("-") - 1);
-            GlobalParameter.OperationInf.OContent = strBillNos;
-
-            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, GlobalParameter.OperationInf, sFlag);
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "调拨单", "辅助功能\\调拨", strBillNos, sFlag);
 
             return -1;
         }
@@ -2238,9 +2216,7 @@ namespace ERPSupport.SupForm
         {
             if (MessageBox.Show("您确定要注销用户[" + GlobalParameter.K3Inf.UserName + "]吗？", "用户注销", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                GlobalParameter.LocalInf.LogoutTime = DateTime.Now;
-                GlobalParameter.OperationInf = new OperationInfo("注销系统", DateTime.Now, "主窗口", "关闭主窗体并注销用户");//配置操作信息
-                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, GlobalParameter.OperationInf, "1");//日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "注销系统", "主窗口", "关闭主窗体并注销用户", "1");//日志
 
                 Dispose();
                 DialogResult = DialogResult.None;
@@ -2271,9 +2247,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            GlobalParameter.LocalInf.LogoutTime = DateTime.Now;
-            GlobalParameter.OperationInf = new OperationInfo("退出系统", DateTime.Now, "主窗口", "关闭主窗体并退出系统");//配置操作信息
-            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, GlobalParameter.OperationInf, "1");//日志
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "退出系统", "主窗口", "关闭主窗体并退出系统", "1");//日志
         }
 
         /// <summary>
@@ -2322,6 +2296,8 @@ namespace ERPSupport.SupForm
                 if (MessageBox.Show("倒冲领料操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     CommonFunction.UpdateLockStatus(0, "PICKMTL");
+                    //操作日志
+                    CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "解除冲突", "菜单->工具->占用解除", "解除倒冲领料", "1");
                 }
             }
         }
@@ -2344,6 +2320,8 @@ namespace ERPSupport.SupForm
                 if (MessageBox.Show("调拨操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     CommonFunction.UpdateLockStatus(0, "TRANS");
+                    //操作日志
+                    CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "解除冲突", "菜单->工具->占用解除", "解除调拨", "1");
                 }
             }
         }
@@ -2366,6 +2344,8 @@ namespace ERPSupport.SupForm
                 if (MessageBox.Show("锁库操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     CommonFunction.UpdateLockStatus(0, "LOCKSTOCK");
+                    //操作日志
+                    CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "解除冲突", "菜单->工具->占用解除", "解除锁库占用", "1");
                 }
             }
         }
@@ -2388,6 +2368,8 @@ namespace ERPSupport.SupForm
                 if (MessageBox.Show("订单运算操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     CommonFunction.UpdateLockStatus(0, "ORDERRUN");
+                    //操作日志
+                    CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "解除冲突", "菜单->工具->占用解除", "解除订单运算占用", "1");
                 }
             }
         }
@@ -2410,6 +2392,8 @@ namespace ERPSupport.SupForm
                 if (MessageBox.Show("自动领料操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     CommonFunction.UpdateLockStatus(0, "LOCKPICKMTL");
+                    //操作日志
+                    CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "解除冲突", "菜单->工具->占用解除", "解除自动领料", "1");
                 }
             }
         }
@@ -2449,6 +2433,9 @@ namespace ERPSupport.SupForm
                     tExecute.Elapsed += new ElapsedEventHandler(timer_Elapsed);
                     tExecute.Start();
                 }
+
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "定时器", "菜单->工具", "操作定时器", "1");
             }
             //frmTime.Dispose();
         }

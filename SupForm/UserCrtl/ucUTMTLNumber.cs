@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using ERPSupport.SQL.K3Cloud;
 using System.Text.RegularExpressions;
+using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -76,8 +77,14 @@ namespace ERPSupport.SupForm.UserCrtl
             catch (Exception ex)
             {
                 MessageBox.Show("新增失败" + ex.Message);
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "出库物料配置", "配置\\出库物料匹配", "新增失败" + ex.Message, "0");
                 return;
             }
+            //操作日志
+            string strMatch = rbtMatch.Checked ? "携带" : "排除";
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "出库物料配置", "配置\\出库物料匹配", "新增:" + txtMatchBillno.Text + "|" + strMatch, "1");
+
             MessageBox.Show("新增成功");
             dgv1.DataSource = CommonFunction.NumberMatch("UTMTL");
         }
@@ -108,9 +115,14 @@ namespace ERPSupport.SupForm.UserCrtl
             }
             catch (Exception ex)
             {
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "出库物料配置", "配置\\出库物料匹配", "修改失败" + ex.Message, "0");
                 MessageBox.Show("修改失败" + ex.Message);
                 return;
             }
+            //操作日志
+            string strMatch = rbtMatch.Checked ? "携带" : "排除";
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "出库物料配置", "配置\\出库物料匹配", "修改:" + txtMatchBillno.Text + "|" + strMatch, "1");
             MessageBox.Show("修改成功");
             dgv1.DataSource = CommonFunction.NumberMatch("UTMTL");
         }
@@ -128,9 +140,14 @@ namespace ERPSupport.SupForm.UserCrtl
             }
             catch (Exception ex)
             {
+                //操作日志
+                CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "出库物料配置", "配置\\出库物料匹配", "删除失败" + ex.Message, "0");
                 MessageBox.Show("删除失败" + ex.Message);
                 return;
             }
+            //操作日志
+            string strMatch = rbtMatch.Checked ? "携带" : "排除";
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "出库物料配置", "配置\\出库物料匹配", "删除:" + txtMatchBillno.Text + "|" + strMatch, "1");
             MessageBox.Show("删除成功");
             dgv1.DataSource = CommonFunction.NumberMatch("UTMTL");
         }

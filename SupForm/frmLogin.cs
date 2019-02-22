@@ -160,7 +160,7 @@ namespace ERPSupport.SupForm
                 Visible = false;
                 fMain.ShowDialog();
             }
-            catch { }
+            catch (Exception ex) { }
             finally
             {
                 fMain.Dispose();
