@@ -86,12 +86,16 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetUserInfoByName(string pConnectionString, string pUserName)
         {
-            strSQL = @"SELECT US.FUSERID,NVL(UR.RIDS,' ') RIDS,NVL(WM_CONCAT(R.MIDS),' ') MIDS
+            strSQL = @"SELECT US.FUSERID,NVL(UR.RIDS,' ') RIDS,NVL(WM_CONCAT(R.MIDS),' ') MIDS,US.FPHONE,NVL(DEP.FDEPTID,0) FDEPTID,NVL(DEP.FNUMBER,' ') FDEPTNUMBER,NVL(DEPL.FNAME,' ') FDEPTNAME
             FROM T_SEC_USER US
             LEFT JOIN dm_user_role UR ON US.Fuserid = UR.USERID
             LEFT JOIN dm_role R ON INSTR(UR.RIDS,TO_CHAR(r.RID)) > 0
+            LEFT JOIN T_BD_STAFF_L STFL ON US.FUSERACCOUNT = STFL.FNAME
+            LEFT JOIN T_BD_STAFF STF ON STFL.FSTAFFID = STF.FSTAFFID
+            LEFT JOIN T_BD_DEPARTMENT DEP ON STF.FDEPTID = DEP.FDEPTID
+            LEFT JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID
             WHERE US.FNAME = '" + pUserName + @"'
-            GROUP BY US.FUSERID,UR.RIDS";
+            GROUP BY US.FUSERID,UR.RIDS,US.FPHONE,DEP.FDEPTID,DEP.FNUMBER,DEPL.FNAME";
 
             return ORAHelper.ExecuteTable(pConnectionString, strSQL);
         }

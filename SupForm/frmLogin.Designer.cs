@@ -30,35 +30,25 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmLogin));
             this.lblTitle = new System.Windows.Forms.Label();
-            this.pl1 = new System.Windows.Forms.Panel();
             this.llbSetting = new System.Windows.Forms.LinkLabel();
+            this.lblVersion = new System.Windows.Forms.Label();
+            this.pl1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // lblTitle
             // 
-            this.lblTitle.Dock = System.Windows.Forms.DockStyle.Top;
             this.lblTitle.Font = new System.Drawing.Font("华文楷体", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblTitle.Location = new System.Drawing.Point(0, 0);
+            this.lblTitle.Location = new System.Drawing.Point(1, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(304, 42);
+            this.lblTitle.Size = new System.Drawing.Size(200, 42);
             this.lblTitle.TabIndex = 1;
-            this.lblTitle.Text = "ERP辅助系统V3.1";
-            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // pl1
-            // 
-            this.pl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pl1.Location = new System.Drawing.Point(6, 48);
-            this.pl1.Name = "pl1";
-            this.pl1.Size = new System.Drawing.Size(298, 120);
-            this.pl1.TabIndex = 11;
+            this.lblTitle.Text = "ERP辅助系统";
+            this.lblTitle.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // llbSetting
             // 
             this.llbSetting.AutoSize = true;
-            this.llbSetting.Location = new System.Drawing.Point(4, 181);
+            this.llbSetting.Location = new System.Drawing.Point(5, 180);
             this.llbSetting.Name = "llbSetting";
             this.llbSetting.Size = new System.Drawing.Size(65, 12);
             this.llbSetting.TabIndex = 12;
@@ -66,12 +56,30 @@
             this.llbSetting.Text = "服务器设置";
             this.llbSetting.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.llbSetting_LinkClicked);
             // 
+            // lblVersion
+            // 
+            this.lblVersion.Font = new System.Drawing.Font("宋体", 10F);
+            this.lblVersion.Location = new System.Drawing.Point(195, 13);
+            this.lblVersion.Name = "lblVersion";
+            this.lblVersion.Size = new System.Drawing.Size(41, 23);
+            this.lblVersion.TabIndex = 13;
+            this.lblVersion.Text = "V3.1";
+            this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // pl1
+            // 
+            this.pl1.Location = new System.Drawing.Point(6, 57);
+            this.pl1.Name = "pl1";
+            this.pl1.Size = new System.Drawing.Size(240, 120);
+            this.pl1.TabIndex = 11;
+            // 
             // frmLogin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(304, 202);
+            this.ClientSize = new System.Drawing.Size(284, 202);
             this.ControlBox = false;
+            this.Controls.Add(this.lblVersion);
             this.Controls.Add(this.llbSetting);
             this.Controls.Add(this.pl1);
             this.Controls.Add(this.lblTitle);
@@ -89,7 +97,8 @@
 
         #endregion
         private System.Windows.Forms.Label lblTitle;
-        private System.Windows.Forms.Panel pl1;
         private System.Windows.Forms.LinkLabel llbSetting;
+        private System.Windows.Forms.Label lblVersion;
+        private System.Windows.Forms.Panel pl1;
     }
 }

@@ -41,8 +41,16 @@
             this.lblDate = new System.Windows.Forms.Label();
             this.lblType = new System.Windows.Forms.Label();
             this.dgv1 = new System.Windows.Forms.DataGridView();
+            this.lblMTL = new System.Windows.Forms.Label();
+            this.pl2 = new System.Windows.Forms.Panel();
+            this.txtMTL = new System.Windows.Forms.TextBox();
+            this.lblCanOutQty = new System.Windows.Forms.Label();
+            this.txtCanOutQty = new System.Windows.Forms.TextBox();
+            this.chkSingle = new System.Windows.Forms.CheckBox();
+            this.btnModify = new System.Windows.Forms.Button();
             this.pl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
+            this.pl2.SuspendLayout();
             this.SuspendLayout();
             // 
             // cbxType
@@ -172,16 +180,85 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv1.Location = new System.Drawing.Point(5, 30);
+            this.dgv1.Location = new System.Drawing.Point(5, 75);
             this.dgv1.Name = "dgv1";
             this.dgv1.RowTemplate.Height = 23;
-            this.dgv1.Size = new System.Drawing.Size(1016, 735);
+            this.dgv1.Size = new System.Drawing.Size(1016, 690);
             this.dgv1.TabIndex = 2;
+            this.dgv1.Visible = false;
+            // 
+            // lblMTL
+            // 
+            this.lblMTL.AutoSize = true;
+            this.lblMTL.Location = new System.Drawing.Point(3, 11);
+            this.lblMTL.Name = "lblMTL";
+            this.lblMTL.Size = new System.Drawing.Size(65, 12);
+            this.lblMTL.TabIndex = 3;
+            this.lblMTL.Text = "物料编码：";
+            // 
+            // pl2
+            // 
+            this.pl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pl2.Controls.Add(this.btnModify);
+            this.pl2.Controls.Add(this.chkSingle);
+            this.pl2.Controls.Add(this.txtCanOutQty);
+            this.pl2.Controls.Add(this.txtMTL);
+            this.pl2.Controls.Add(this.lblCanOutQty);
+            this.pl2.Controls.Add(this.lblMTL);
+            this.pl2.Location = new System.Drawing.Point(5, 30);
+            this.pl2.Name = "pl2";
+            this.pl2.Size = new System.Drawing.Size(1016, 39);
+            this.pl2.TabIndex = 4;
+            // 
+            // txtMTL
+            // 
+            this.txtMTL.Location = new System.Drawing.Point(74, 8);
+            this.txtMTL.Name = "txtMTL";
+            this.txtMTL.Size = new System.Drawing.Size(142, 21);
+            this.txtMTL.TabIndex = 4;
+            // 
+            // lblCanOutQty
+            // 
+            this.lblCanOutQty.AutoSize = true;
+            this.lblCanOutQty.Location = new System.Drawing.Point(277, 11);
+            this.lblCanOutQty.Name = "lblCanOutQty";
+            this.lblCanOutQty.Size = new System.Drawing.Size(65, 12);
+            this.lblCanOutQty.TabIndex = 3;
+            this.lblCanOutQty.Text = "可出数量：";
+            // 
+            // txtCanOutQty
+            // 
+            this.txtCanOutQty.Location = new System.Drawing.Point(353, 8);
+            this.txtCanOutQty.Name = "txtCanOutQty";
+            this.txtCanOutQty.Size = new System.Drawing.Size(142, 21);
+            this.txtCanOutQty.TabIndex = 4;
+            // 
+            // chkSingle
+            // 
+            this.chkSingle.AutoSize = true;
+            this.chkSingle.Location = new System.Drawing.Point(518, 12);
+            this.chkSingle.Name = "chkSingle";
+            this.chkSingle.Size = new System.Drawing.Size(72, 16);
+            this.chkSingle.TabIndex = 5;
+            this.chkSingle.Text = "整单发货";
+            this.chkSingle.UseVisualStyleBackColor = true;
+            // 
+            // btnModify
+            // 
+            this.btnModify.Location = new System.Drawing.Point(624, 6);
+            this.btnModify.Name = "btnModify";
+            this.btnModify.Size = new System.Drawing.Size(75, 23);
+            this.btnModify.TabIndex = 6;
+            this.btnModify.Text = "修改";
+            this.btnModify.UseVisualStyleBackColor = true;
+            this.btnModify.Click += new System.EventHandler(this.btnModify_Click);
             // 
             // ucBillModify
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.pl2);
             this.Controls.Add(this.dgv1);
             this.Controls.Add(this.pl1);
             this.Name = "ucBillModify";
@@ -190,6 +267,8 @@
             this.pl1.ResumeLayout(false);
             this.pl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).EndInit();
+            this.pl2.ResumeLayout(false);
+            this.pl2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -209,5 +288,12 @@
         private System.Windows.Forms.Label lblDate;
         private System.Windows.Forms.DataGridView dgv1;
         private System.Windows.Forms.Button btnSyn;
+        private System.Windows.Forms.Label lblMTL;
+        private System.Windows.Forms.Panel pl2;
+        private System.Windows.Forms.Button btnModify;
+        private System.Windows.Forms.CheckBox chkSingle;
+        private System.Windows.Forms.TextBox txtCanOutQty;
+        private System.Windows.Forms.TextBox txtMTL;
+        private System.Windows.Forms.Label lblCanOutQty;
     }
 }

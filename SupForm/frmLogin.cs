@@ -45,8 +45,8 @@ namespace ERPSupport.SupForm
         private void UserLogin(object sender, EventArgs e)
         {
             bool bLog = false;//登陆状态
-            int iUserId;//用户内码
-            string strRIDS, strMIDS;
+            int iUserId, iDepartmentID;
+            string strRIDS, strMIDS, strDepartmentNumber, strDepartmentName, strFPhone;
             string strUserName = ((TextBox)pl1.Controls.Find("txtUser", true)[0]).Text.Trim();//登陆用户名
             string strPWD = ((TextBox)pl1.Controls.Find("txtPWD", true)[0]).Text.Trim();//登陆用户密码
 
@@ -62,23 +62,26 @@ namespace ERPSupport.SupForm
                 return;
             }
 
-            //配置信息
+            #region 配置信息
             //K3Inf
-            string C_ERPADDRESS, C_DBUSER, C_PWD, C_ZTID, C_ORCLADDRESS;
+            string C_ERPADDRESS, C_DBUSER, C_PWD, C_ZTID, C_ORCLADDRESS, C_USERNAME, C_PASSWORD;
             C_ERPADDRESS = ConfigurationManager.AppSettings["K3_URL"];
             C_DBUSER = ConfigurationManager.AppSettings["K3_User"];
             C_PWD = DMData.Code.DataEncoder.DecryptData(ConfigurationManager.AppSettings["K3_Orcl_PWD"]);
             C_ZTID = ConfigurationManager.AppSettings["K3_ZTID"];
             C_ORCLADDRESS = "Data Source=" + ConfigurationManager.AppSettings["K3_Orcl_IP"] + ";User Id=" + C_DBUSER + ";Password=" + C_PWD;
+            C_USERNAME = ConfigurationManager.AppSettings["K3_USERNAME"];
+            C_PASSWORD = DMData.Code.DataEncoder.DecryptData(ConfigurationManager.AppSettings["K3_PASSWORD"]);
             //SQLInf
             string IP, Port, UserName, Password, Catalog;
             IP = ConfigurationManager.AppSettings["SQL_IP"];
             Port = ConfigurationManager.AppSettings["SQL_Port"];
             UserName = ConfigurationManager.AppSettings["SQL_User"];
-            Password = ConfigurationManager.AppSettings["SQL_PWD"];
+            Password = DMData.Code.DataEncoder.DecryptData(ConfigurationManager.AppSettings["SQL_PWD"]);
             Catalog = ConfigurationManager.AppSettings["SQL_Catalog"];
+            #endregion
 
-            //调用服务方法验证用户登录
+            #region 调用服务方法验证用户登录
             K3CloudApiClient client = new K3CloudApiClient(C_ERPADDRESS);
             try
             {
@@ -108,8 +111,9 @@ namespace ERPSupport.SupForm
                 MessageBox.Show("数据库查询失败，请联系管理员。");
                 return;
             }
+            #endregion
 
-            //判断程序是否启用
+            #region 判断程序是否启用
             int iFlag = CommonFunction.ApplicationFlag(C_ORCLADDRESS, "ERPSupport.SupForm");
             switch (iFlag)
             {
@@ -133,11 +137,12 @@ namespace ERPSupport.SupForm
                         return;
                     }
             }
+            #endregion
 
-            //判断MAC是否已注册使用  -  未开发 <> Administrator
-            //
+            #region 判断MAC是否已注册使用  -  未开发 <> Administrator
+            #endregion
 
-            //获取用户信息
+            #region 设置信息
             DataTable dtTempUser = CommonFunction.GetUserInfoByName(C_ORCLADDRESS, strUserName);
 
             if (dtTempUser == null || dtTempUser.Rows.Count == 0)
@@ -149,9 +154,14 @@ namespace ERPSupport.SupForm
             iUserId = int.Parse(dtTempUser.Rows[0]["FUSERID"].ToString());//获取登陆用户内码
             strRIDS = dtTempUser.Rows[0]["RIDS"].ToString();//获取登陆用户角色ID
             strMIDS = dtTempUser.Rows[0]["MIDS"].ToString();//获取登陆用户功能ID
+            iDepartmentID = int.Parse(dtTempUser.Rows[0]["FDEPTID"].ToString());//部门ID
+            strDepartmentNumber = dtTempUser.Rows[0]["FDEPTNUMBER"].ToString();//部门编码
+            strDepartmentName = dtTempUser.Rows[0]["FDEPTNAME"].ToString();//部门名称
+            strFPhone = dtTempUser.Rows[0]["FPHONE"].ToString();//电话
 
-            //设置全局参数
-            new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, "Administrator", "tjb316,", C_ORCLADDRESS, iUserId, strUserName, strPWD, DateTime.Now, strRIDS, strMIDS), new SQLConfig(IP, Port, UserName, Password, Catalog));
+            //全局参数
+            new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, C_USERNAME, C_PASSWORD, C_ORCLADDRESS, iUserId, strUserName, strPWD, DateTime.Now, strRIDS, strMIDS, iDepartmentID, strDepartmentNumber, strDepartmentName, strFPhone), new SQLConfig(IP, Port, UserName, Password, Catalog));
+            #endregion
 
             //主窗体
             frmMain fMain = new frmMain();

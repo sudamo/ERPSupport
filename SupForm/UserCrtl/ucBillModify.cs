@@ -30,6 +30,8 @@ namespace ERPSupport.SupForm.UserCrtl
             dtpFrom.Value = DateTime.Now.AddDays(-3);
             dtpTo.Value = DateTime.Now;
             btnSyn.Visible = false;
+
+            cbxType_SelectedIndexChanged(null, null);
         }
 
         /// <summary>
@@ -77,8 +79,8 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            cbxType.SelectedValue = "SAL_ORDER";
-            DataBind();
+            //cbxType.SelectedValue = "SAL_ORDER";
+            //DataBind();
         }
 
         /// <summary>
@@ -124,16 +126,48 @@ namespace ERPSupport.SupForm.UserCrtl
         }
 
         /// <summary>
+        /// btnModify_Click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnModify_Click(object sender, EventArgs e)
+        {
+            string billno = txtBillNo.Text.Trim();
+            bool chk = chkSingle.Checked;
+
+            if (billno.Equals(string.Empty))
+            {
+                MessageBox.Show("请输入销售订单编号。");
+                return;
+            }
+
+            MessageBox.Show(SalOrder.UpdateSingle(billno, chk));
+        }
+
+        /// <summary>
         /// cbxType_SelectedIndexChanged
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void cbxType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbxType != null && cbxType.SelectedValue.ToString() == "PRD_MO")
+            if (cbxType == null) return;
+
+            if (cbxType.SelectedValue.ToString() == "PRD_MO")
                 btnSyn.Visible = true;
             else
                 btnSyn.Visible = false;
+
+            if (cbxType.SelectedValue.ToString() == "SAL_ORDER" && GlobalParameter.K3Inf.DepartmentID == 619615)
+            {
+                pl2.Visible = true;
+                dgv1.Location = new System.Drawing.Point(new System.Drawing.Size(5, 75));
+            }
+            else
+            {
+                pl2.Visible = false;
+                dgv1.Location = new System.Drawing.Point(new System.Drawing.Size(5, 30));
+            }
         }
     }
 }

@@ -337,7 +337,7 @@ namespace ERPSupport.SQL.K3Cloud
         {
             string strRetrunValue = string.Empty;
             K3CloudApiClient client = new K3CloudApiClient(GlobalParameter.K3Inf.C_ERPADDRESS);
-            var bLogin = client.Login(GlobalParameter.K3Inf.C_ZTID, "damo", "111111", 2052);
+            var bLogin = client.Login(GlobalParameter.K3Inf.C_ZTID, GlobalParameter.K3Inf.UserName, GlobalParameter.K3Inf.UserPWD, 2052);
 
             if (bLogin)
             {
@@ -877,6 +877,41 @@ namespace ERPSupport.SQL.K3Cloud
                     break;
             }
             return ORAHelper.ExecuteTable(strSQL);
+        }
+
+        /// <summary>
+        /// 修改销售订单整单发过标识
+        /// </summary>
+        /// <param name="pFBillNo"></param>
+        /// <param name="pSingle"></param>
+        /// <returns></returns>
+        public static string UpdateSingle(string pFBillNo, bool pSingle)
+        {
+            object obj;
+            string strSQL;
+
+            if (!pFBillNo.Contains("XSDD") && !pFBillNo.Contains("SEORD") && !pFBillNo.Contains("W"))
+                return "[" + pFBillNo + "]并非销售订单";
+
+            strSQL = "SELECT F_PAEZ_SINGLESHIPMENT FROM T_SAL_ORDER WHERE FBILLNO = '" + pFBillNo + "'";
+
+            obj = ORAHelper.ExecuteScalar(strSQL);
+
+            if (obj == null)
+                return "[" + pFBillNo + "]单号不存在，可能被删除。";
+            else if (obj.ToString() == "1" && pSingle)
+                return "[" + pFBillNo + "]已经是整单发货。";
+            else if (obj.ToString() == "0" && !pSingle)
+                return "[" + pFBillNo + "]已经是非整单发货。";
+
+            if (pSingle)
+                strSQL = "UPDATE T_SAL_ORDER SET F_PAEZ_SINGLESHIPMENT = '1' WHERE FBILLNO ='" + pFBillNo + "'";
+            else
+                strSQL = "UPDATE T_SAL_ORDER SET F_PAEZ_SINGLESHIPMENT = '0' WHERE FBILLNO ='" + pFBillNo + "'";
+
+            ORAHelper.ExecuteNonQuery(strSQL);
+
+            return "[" + pFBillNo + "]修改成功。";
         }
     }
 }

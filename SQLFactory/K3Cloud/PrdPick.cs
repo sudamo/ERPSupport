@@ -207,7 +207,7 @@ namespace ERPSupport.SQL.K3Cloud
             if (dt.Rows.Count < 1) return "[" + pBillNO + "]生成失败,错误:在数据库找不到数据，或者领过料";
 
             K3CloudApiClient client = new K3CloudApiClient(GlobalParameter.K3Inf.C_ERPADDRESS);
-            var bLogin = client.Login(GlobalParameter.K3Inf.C_ZTID, GlobalParameter.K3Inf.C_USERNAME, GlobalParameter.K3Inf.C_PASSWORD, 2052);
+            var bLogin = client.Login(GlobalParameter.K3Inf.C_ZTID, GlobalParameter.K3Inf.UserName, GlobalParameter.K3Inf.UserPWD, 2052);
 
             if (bLogin)
             {

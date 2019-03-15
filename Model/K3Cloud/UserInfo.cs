@@ -34,7 +34,7 @@ namespace ERPSupport.Model.K3Cloud
         /// <param name="pLoginTime">登录时间</param>
         /// <param name="pRIDS">角色ID</param>
         /// <param name="pMIDS">功能ID</param>
-        public UserInfo(int pUserId, string pUserName, string pUserPWD, DateTime pLoginTime, string pRIDS, string pMIDS)
+        public UserInfo(int pUserId, string pUserName, string pUserPWD, DateTime pLoginTime, string pRIDS, string pMIDS, int pDepartmentID, string pDepartmentNumber, string pDepartmentName, string pFPhone)
         {
             _UserId = pUserId;
             _UserName = pUserName;
@@ -42,7 +42,12 @@ namespace ERPSupport.Model.K3Cloud
             _LoginTime = pLoginTime;
             _RIDS = pRIDS;
             _MIDS = pMIDS;
+            _DepartmentID = pDepartmentID;
+            _DepartmentNumber = pDepartmentNumber;
+            _DepartmentName = pDepartmentName;
+            _FPhone = pFPhone;
         }
+
         //Base
         private int _UserId;
         private string _UserName;
@@ -51,6 +56,12 @@ namespace ERPSupport.Model.K3Cloud
         //Extend
         private string _RIDS;
         private string _MIDS;
+        //Department
+        private int _DepartmentID;
+        private string _DepartmentNumber;
+        private string _DepartmentName;
+        //Contact
+        private string _FPhone;
 
         /// <summary>
         /// 登陆账户内码
@@ -120,6 +131,68 @@ namespace ERPSupport.Model.K3Cloud
             set
             {
                 _MIDS = value;
+            }
+        }
+
+        /// <summary>
+        /// 部门ID
+        /// </summary>
+        public int DepartmentID
+        {
+            get
+            {
+                return _DepartmentID;
+            }
+
+            set
+            {
+                _DepartmentID = value;
+            }
+        }
+        /// <summary>
+        /// 部门编码
+        /// </summary>
+        public string DepartmentNumber
+        {
+            get
+            {
+                return _DepartmentNumber;
+            }
+
+            set
+            {
+                _DepartmentNumber = value;
+            }
+        }
+        /// <summary>
+        /// 部门名称
+        /// </summary>
+        public string DepartmentName
+        {
+            get
+            {
+                return _DepartmentName;
+            }
+
+            set
+            {
+                _DepartmentName = value;
+            }
+        }
+
+        /// <summary>
+        /// 电话
+        /// </summary>
+        public string FPhone
+        {
+            get
+            {
+                return _FPhone;
+            }
+
+            set
+            {
+                _FPhone = value;
             }
         }
     }

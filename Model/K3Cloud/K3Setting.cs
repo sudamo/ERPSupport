@@ -45,7 +45,7 @@ namespace ERPSupport.Model.K3Cloud
         /// <param name="pLoginTime">登录时间</param>
         /// <param name="pRIDS">角色ID</param>
         /// <param name="pMIDS">功能ID</param>
-        public K3Setting(string pC_ERPADDRESS, string pC_OWNER, string pC_ZTID, string pC_USERNAME, string pC_PASSWORD, string pC_ORCLADDRESS, int pUserId, string pUserName, string pUserPWD, DateTime pLoginTime, string pRIDS, string pMIDS)
+        public K3Setting(string pC_ERPADDRESS, string pC_OWNER, string pC_ZTID, string pC_USERNAME, string pC_PASSWORD, string pC_ORCLADDRESS, int pUserId, string pUserName, string pUserPWD, DateTime pLoginTime, string pRIDS, string pMIDS,int pDepartmentID,string pDepartmentNumber,string pDepartmentName,string pFPhone)
         {
             _C_ERPADDRESS = pC_ERPADDRESS;
             _C_DBUSER = pC_OWNER;
@@ -59,6 +59,10 @@ namespace ERPSupport.Model.K3Cloud
             LoginTime = pLoginTime;
             RIDS = pRIDS;
             MIDS = pMIDS;
+            DepartmentID = pDepartmentID;
+            DepartmentNumber = pDepartmentNumber;
+            DepartmentName = pDepartmentName;
+            FPhone = pFPhone;
         }
 
         private string _C_ERPADDRESS;
