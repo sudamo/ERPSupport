@@ -10,14 +10,15 @@ namespace ERPSupport.SupForm.Common
     public partial class frmSetDefaultStock : Form
     {
         #region Variable & Constructor
-        /// <summary>
-        /// 计划开工日期
-        /// </summary>
-        private string PlanStartDate = string.Empty;
+
         /// <summary>
         /// 初次加载
         /// </summary>
-        private bool bLoad = false;
+        private bool _Load;
+        /// <summary>
+        /// 计划开工日期
+        /// </summary>
+        private string _PlanStartDate;
 
         /// <summary>
         /// 构造函数
@@ -26,7 +27,9 @@ namespace ERPSupport.SupForm.Common
         public frmSetDefaultStock(string pFPlanStartDate)
         {
             InitializeComponent();
-            PlanStartDate = pFPlanStartDate;
+            _PlanStartDate = pFPlanStartDate;
+
+            _Load = false;
         }
         #endregion
 
@@ -108,9 +111,9 @@ namespace ERPSupport.SupForm.Common
         /// </summary>
         private void CheckStock()
         {
-            dgv1.DataSource = PrdInstock.GetMo(PlanStartDate);
+            dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
 
-            if (!bLoad)
+            if (!_Load)
             {
                 DataGridViewComboBoxColumn dgvcbxc = new DataGridViewComboBoxColumn();
                 dgvcbxc.HeaderText = "仓库";
@@ -120,7 +123,7 @@ namespace ERPSupport.SupForm.Common
                 dgvcbxc.DisplayMember = "FName";
                 dgvcbxc.ValueMember = "FValue";
                 dgv1.Columns.Add(dgvcbxc);
-                bLoad = true;
+                _Load = true;
             }
         }
 

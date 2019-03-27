@@ -11,11 +11,10 @@ namespace ERPSupport.SupForm.UserCrtl
     /// </summary>
     public partial class ucUserAcc : UserControl
     {
-        #region Fields & Constructor
         /// <summary>
         /// 手动修改节点Checked
         /// </summary>
-        private bool bManual = true;
+        private bool _Manual;
 
         /// <summary>
         /// 构造函数
@@ -23,8 +22,9 @@ namespace ERPSupport.SupForm.UserCrtl
         public ucUserAcc()
         {
             InitializeComponent();
+
+            _Manual = true;
         }
-        #endregion
 
         /// <summary>
         /// 窗体加载
@@ -136,7 +136,7 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             trv1.BeginUpdate();//禁用TreeView视图重绘的功能。
 
-            if (bManual)//用户手动修改节点Checked时才执行
+            if (_Manual)//用户手动修改节点Checked时才执行
             {
                 //修改子节点
                 SetSubNodeCheck(e.Node);
@@ -144,8 +144,8 @@ namespace ERPSupport.SupForm.UserCrtl
                 SetParentCheck(e.Node);
                 SetParentNotCheck(e.Node);
 
-                //修改完还原bManual
-                bManual = true;
+                //修改完还原Manual
+                _Manual = true;
             }
 
             trv1.EndUpdate();//启用TreeView视图重绘的功能。
@@ -157,7 +157,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="pNode"></param>
         private void SetSubNodeCheck(TreeNode pNode)
         {
-            bManual = false;
+            _Manual = false;
             foreach (TreeNode tn in pNode.Nodes)
             {
                 tn.Checked = pNode.Checked;

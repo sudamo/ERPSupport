@@ -34,14 +34,14 @@
             this.lblOwner = new System.Windows.Forms.Label();
             this.lblZTID = new System.Windows.Forms.Label();
             this.lblPWD = new System.Windows.Forms.Label();
-            this.txtERPADDRESS = new System.Windows.Forms.TextBox();
-            this.txtOwner = new System.Windows.Forms.TextBox();
+            this.txtURL = new System.Windows.Forms.TextBox();
+            this.txtUser = new System.Windows.Forms.TextBox();
             this.txtZTID = new System.Windows.Forms.TextBox();
-            this.txtPWD = new System.Windows.Forms.TextBox();
+            this.txtOrcl_PWD = new System.Windows.Forms.TextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnCancle = new System.Windows.Forms.Button();
             this.lblORCLADDRESS = new System.Windows.Forms.Label();
-            this.txtORCLADDRESS = new System.Windows.Forms.TextBox();
+            this.txtOrcl_IP = new System.Windows.Forms.TextBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.SuspendLayout();
             // 
@@ -81,21 +81,21 @@
             this.lblPWD.Text = "数据库密码";
             this.lblPWD.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // txtERPADDRESS
+            // txtURL
             // 
-            this.txtERPADDRESS.Location = new System.Drawing.Point(71, 8);
-            this.txtERPADDRESS.Name = "txtERPADDRESS";
-            this.txtERPADDRESS.Size = new System.Drawing.Size(210, 21);
-            this.txtERPADDRESS.TabIndex = 1;
-            this.tt.SetToolTip(this.txtERPADDRESS, "在此输入K3Cloud地址。");
+            this.txtURL.Location = new System.Drawing.Point(71, 8);
+            this.txtURL.Name = "txtURL";
+            this.txtURL.Size = new System.Drawing.Size(210, 21);
+            this.txtURL.TabIndex = 1;
+            this.tt.SetToolTip(this.txtURL, "在此输入K3Cloud地址。");
             // 
-            // txtOwner
+            // txtUser
             // 
-            this.txtOwner.Location = new System.Drawing.Point(71, 68);
-            this.txtOwner.Name = "txtOwner";
-            this.txtOwner.Size = new System.Drawing.Size(210, 21);
-            this.txtOwner.TabIndex = 3;
-            this.tt.SetToolTip(this.txtOwner, "ORACLE库名。");
+            this.txtUser.Location = new System.Drawing.Point(71, 68);
+            this.txtUser.Name = "txtUser";
+            this.txtUser.Size = new System.Drawing.Size(210, 21);
+            this.txtUser.TabIndex = 3;
+            this.tt.SetToolTip(this.txtUser, "ORACLE库名。");
             // 
             // txtZTID
             // 
@@ -105,14 +105,14 @@
             this.txtZTID.TabIndex = 2;
             this.tt.SetToolTip(this.txtZTID, "在此输入所使用的ERP帐套ID。");
             // 
-            // txtPWD
+            // txtOrcl_PWD
             // 
-            this.txtPWD.Location = new System.Drawing.Point(71, 98);
-            this.txtPWD.Name = "txtPWD";
-            this.txtPWD.PasswordChar = '*';
-            this.txtPWD.Size = new System.Drawing.Size(210, 21);
-            this.txtPWD.TabIndex = 4;
-            this.tt.SetToolTip(this.txtPWD, "ORACLE登陆密码。");
+            this.txtOrcl_PWD.Location = new System.Drawing.Point(71, 98);
+            this.txtOrcl_PWD.Name = "txtOrcl_PWD";
+            this.txtOrcl_PWD.PasswordChar = '*';
+            this.txtOrcl_PWD.Size = new System.Drawing.Size(210, 21);
+            this.txtOrcl_PWD.TabIndex = 4;
+            this.tt.SetToolTip(this.txtOrcl_PWD, "ORACLE登陆密码。");
             // 
             // btnOK
             // 
@@ -145,13 +145,13 @@
             this.lblORCLADDRESS.Text = "数据库地址";
             this.lblORCLADDRESS.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // txtORCLADDRESS
+            // txtOrcl_IP
             // 
-            this.txtORCLADDRESS.Location = new System.Drawing.Point(71, 128);
-            this.txtORCLADDRESS.Name = "txtORCLADDRESS";
-            this.txtORCLADDRESS.Size = new System.Drawing.Size(210, 21);
-            this.txtORCLADDRESS.TabIndex = 5;
-            this.tt.SetToolTip(this.txtORCLADDRESS, "数据库链接地址。");
+            this.txtOrcl_IP.Location = new System.Drawing.Point(71, 128);
+            this.txtOrcl_IP.Name = "txtOrcl_IP";
+            this.txtOrcl_IP.Size = new System.Drawing.Size(210, 21);
+            this.txtOrcl_IP.TabIndex = 5;
+            this.tt.SetToolTip(this.txtOrcl_IP, "数据库链接地址。");
             // 
             // frmSetting
             // 
@@ -161,11 +161,11 @@
             this.ControlBox = false;
             this.Controls.Add(this.btnCancle);
             this.Controls.Add(this.btnOK);
-            this.Controls.Add(this.txtORCLADDRESS);
-            this.Controls.Add(this.txtPWD);
+            this.Controls.Add(this.txtOrcl_IP);
+            this.Controls.Add(this.txtOrcl_PWD);
             this.Controls.Add(this.txtZTID);
-            this.Controls.Add(this.txtOwner);
-            this.Controls.Add(this.txtERPADDRESS);
+            this.Controls.Add(this.txtUser);
+            this.Controls.Add(this.txtURL);
             this.Controls.Add(this.lblORCLADDRESS);
             this.Controls.Add(this.lblPWD);
             this.Controls.Add(this.lblZTID);
@@ -188,14 +188,14 @@
         private System.Windows.Forms.Label lblOwner;
         private System.Windows.Forms.Label lblZTID;
         private System.Windows.Forms.Label lblPWD;
-        private System.Windows.Forms.TextBox txtERPADDRESS;
-        private System.Windows.Forms.TextBox txtOwner;
+        private System.Windows.Forms.TextBox txtURL;
+        private System.Windows.Forms.TextBox txtUser;
         private System.Windows.Forms.TextBox txtZTID;
-        private System.Windows.Forms.TextBox txtPWD;
+        private System.Windows.Forms.TextBox txtOrcl_PWD;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Button btnCancle;
         private System.Windows.Forms.Label lblORCLADDRESS;
-        private System.Windows.Forms.TextBox txtORCLADDRESS;
+        private System.Windows.Forms.TextBox txtOrcl_IP;
         private System.Windows.Forms.ToolTip tt;
     }
 }

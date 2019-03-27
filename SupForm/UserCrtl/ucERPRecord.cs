@@ -13,7 +13,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <summary>
         /// 类型
         /// </summary>
-        private string strRecordType;
+        private string _RecordType;
 
         /// <summary>
         /// 构造函数
@@ -22,7 +22,7 @@ namespace ERPSupport.SupForm.UserCrtl
         public ucERPRecord(string pRecordType)
         {
             InitializeComponent();
-            strRecordType = pRecordType;
+            _RecordType = pRecordType;
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace ERPSupport.SupForm.UserCrtl
         private void btnSearch_Click(object sender, EventArgs e)
         {
             DataTable dt = new DataTable();
-            if (strRecordType == "K3CLOUD")
+            if (_RecordType == "K3CLOUD")
             {
                 if (txtUser.Text.Trim().Equals(string.Empty))
                 {
@@ -68,7 +68,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 else
                     dgv1.DataSource = null;
             }
-            else if (strRecordType == "ASSISTANT")
+            else if (_RecordType == "ASSISTANT")
             {
                 dt = CommonFunction.GetDM_Log_Local(txtUser.Text.Trim(), dtpFrom.Value);
                 if (dt.Rows.Count > 0)

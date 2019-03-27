@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using ERPSupport.SQL.K3Cloud;
 using ERPSupport.Model.Globa;
 using ERPSupport.Model.K3Cloud;
@@ -31,7 +31,7 @@ namespace ERPSupport.SupForm.Common
         /// <summary>
         /// 过滤条件
         /// </summary>
-        public List<Filter> lstFilter;
+        public List<Filter> _ListFilter;
 
         /// <summary>
         /// 构造函数
@@ -40,7 +40,7 @@ namespace ERPSupport.SupForm.Common
         public frmAddFilter(List<Filter> pListFilter)
         {
             InitializeComponent();
-            lstFilter = pListFilter;
+            _ListFilter = pListFilter;
         }
 
         /// <summary>
@@ -77,11 +77,11 @@ namespace ERPSupport.SupForm.Common
 
             string sContent = string.Empty;
             int iRows = 0;
-            for (int i = 0; i < lstFilter.Count; i++)
+            for (int i = 0; i < _ListFilter.Count; i++)
             {
-                if (lstFilter[i].Validation)
+                if (_ListFilter[i].Validation)
                 {
-                    sContent += "[" + lstFilter[i].ParenthesesLeft.ToString() + "|" + lstFilter[i].Field.ToString() + "|" + lstFilter[i].Compare.ToString() + "|" + lstFilter[i].FilterValue.FilterDateTime.ToString() + "|" + lstFilter[i].FilterValue.FilterText.ToString() + "|" + lstFilter[i].FilterValue.FilterIndex.ToString() + "|" + (lstFilter[i].FilterValue.FilterCheck ? "1" : "0") + "|" + lstFilter[i].ParenthesesRight.ToString() + "|" + lstFilter[i].Logic.ToString() + "]";
+                    sContent += "[" + _ListFilter[i].ParenthesesLeft.ToString() + "|" + _ListFilter[i].Field.ToString() + "|" + _ListFilter[i].Compare.ToString() + "|" + _ListFilter[i].FilterValue.FilterDateTime.ToString() + "|" + _ListFilter[i].FilterValue.FilterText.ToString() + "|" + _ListFilter[i].FilterValue.FilterIndex.ToString() + "|" + (_ListFilter[i].FilterValue.FilterCheck ? "1" : "0") + "|" + _ListFilter[i].ParenthesesRight.ToString() + "|" + _ListFilter[i].Logic.ToString() + "]";
                     iRows++;
                 }
             }

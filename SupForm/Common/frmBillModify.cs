@@ -8,14 +8,14 @@ namespace ERPSupport.SupForm.Common
     /// </summary>
     public partial class frmBillModify : Form
     {
+        ///// <summary>
+        ///// 
+        ///// </summary>
+        //private string _FormID;
         /// <summary>
         /// 
         /// </summary>
-        private string strFormID;
-        /// <summary>
-        /// 
-        /// </summary>
-        private string strFBillNo;
+        private string _FBillNo;
 
         /// <summary>
         /// 
@@ -25,8 +25,8 @@ namespace ERPSupport.SupForm.Common
         public frmBillModify(string pFormId, string pFBillNo)
         {
             InitializeComponent();
-            strFormID = pFormId;
-            strFBillNo = pFBillNo;
+            //_FormID = pFormId;
+            _FBillNo = pFBillNo;
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void frmBiliModify_Load(object sender, EventArgs e)
         {
-            lblFBillNo.Text = "单据编码：" + strFBillNo;
+            lblFBillNo.Text = "单据编码：" + _FBillNo;
 
             txtValue.Visible = true;
             cbxValue.Visible = false;

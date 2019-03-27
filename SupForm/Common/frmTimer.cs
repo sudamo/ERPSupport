@@ -16,14 +16,12 @@ namespace ERPSupport.SupForm.Common
         /// <summary>
         /// 进行时间累计(秒)
         /// </summary>
-        int iSecond;
+        int _Second;
         /// <summary>
         /// 正则表达式
         /// </summary>
-        private Regex reg;
-        /// <summary>
-        /// 定时器实例
-        /// </summary>
+        private Regex _reg;
+
         private TimerParameter _TimerPara;
         /// <summary>
         /// 计时器参数
@@ -61,8 +59,8 @@ namespace ERPSupport.SupForm.Common
         {
             tSumSecond.Interval = 1000;
             tSumSecond.Enabled = false;
-            reg = new Regex(@"^[1-9]\d*|0$");
-            iSecond = 0;
+            _reg = new Regex(@"^[1-9]\d*|0$");
+            _Second = 0;
 
             FillComboBox();
 
@@ -119,8 +117,8 @@ namespace ERPSupport.SupForm.Common
         /// </summary>
         private void ShowTime()
         {
-            lblDays.Text = string.Format("{0:d}", (_TimerPara.RunSeconds + iSecond) / 86400);//24*60*60
-            lblTime.Text = string.Format("{0:d2}:{1:d2}:{2:d2}", (_TimerPara.RunSeconds + iSecond) / 3600 % 24, (_TimerPara.RunSeconds + iSecond) / 60 % 60, (_TimerPara.RunSeconds + iSecond) % 60);
+            lblDays.Text = string.Format("{0:d}", (_TimerPara.RunSeconds + _Second) / 86400);//24*60*60
+            lblTime.Text = string.Format("{0:d2}:{1:d2}:{2:d2}", (_TimerPara.RunSeconds + _Second) / 3600 % 24, (_TimerPara.RunSeconds + _Second) / 60 % 60, (_TimerPara.RunSeconds + _Second) % 60);
         }
 
         /// <summary>
@@ -130,7 +128,7 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void tSumSecond_Tick(object sender, EventArgs e)
         {
-            iSecond++;
+            _Second++;
             ShowTime();
         }
 
@@ -174,7 +172,7 @@ namespace ERPSupport.SupForm.Common
             tSumSecond.Stop();
 
             _TimerPara = new TimerParameter(0, 20, 0, true, false, "NULL");
-            iSecond = 0;
+            _Second = 0;
             txtPickMinute.Text = _TimerPara.PickMinute.ToString();
             btnStar.Enabled = true;
             btnPause.Enabled = false;
@@ -225,7 +223,7 @@ namespace ERPSupport.SupForm.Common
             _TimerPara.ExeTimes = int.Parse(lblTimes.Text.Trim() == "" ? "0" : lblTimes.Text.Trim());
             _TimerPara.PickMinute = int.Parse(txtPickMinute.Text);
             _TimerPara.FuncID = cbxFnuction.SelectedIndex == 0 ? "ALL" : "PickMtrl";
-            _TimerPara.RunSeconds += iSecond;
+            _TimerPara.RunSeconds += _Second;
 
             if (_TimerPara.PauseStatus)//更新占用自动领料功能状态。
             {
@@ -260,7 +258,7 @@ namespace ERPSupport.SupForm.Common
         {
             if (e.KeyChar != '\b')
             {
-                if (!reg.IsMatch(e.KeyChar.ToString()))
+                if (!_reg.IsMatch(e.KeyChar.ToString()))
                 {
                     e.Handled = true;
                 }

@@ -15,37 +15,39 @@ namespace ERPSupport.SupForm.Common
         /// <summary>
         /// 检验是否成功
         /// </summary>
-        private bool bCheck = true;
-        private string _strFilterName;
+        private bool _Check;
+
+        private string _FilterName;
         /// <summary>
         /// 方案名称
         /// </summary>
-        public string strFilterName
+        public string FilterName
         {
             get
             {
-                return _strFilterName;
+                return _FilterName;
             }
 
             set
             {
-                _strFilterName = value;
+                _FilterName = value;
             }
         }
-        private List<Filter> _lstFilter;
+
+        private List<Filter> _ListFilter;
         /// <summary>
         /// 过滤条件
         /// </summary>
-        public List<Filter> lstFilter
+        public List<Filter> ListFilter
         {
             get
             {
-                return _lstFilter;
+                return _ListFilter;
             }
 
             set
             {
-                _lstFilter = value;
+                _ListFilter = value;
             }
         }
 
@@ -57,8 +59,10 @@ namespace ERPSupport.SupForm.Common
         public frmFilter(List<Filter> pListFilter, string pFilterName)
         {
             InitializeComponent();
-            strFilterName = pFilterName;
-            _lstFilter = pListFilter;
+            _FilterName = pFilterName;
+            _ListFilter = pListFilter;
+
+            _Check = true;
         }
 
         /// <summary>
@@ -314,36 +318,36 @@ namespace ERPSupport.SupForm.Common
         /// </summary>
         private void SetComboBoxStatus()
         {
-            if (lstFilter == null || lstFilter.Count == 0)
+            if (ListFilter == null || ListFilter.Count == 0)
                 return;
             int iTemp = 0;
-            for (int i = 0; i < lstFilter.Count; i++)
+            for (int i = 0; i < ListFilter.Count; i++)
             {
-                if (!lstFilter[i].Validation) continue;//无效逻辑
+                if (!ListFilter[i].Validation) continue;//无效逻辑
                 iTemp++;
                 //左括号
-                if (lstFilter[i].ParenthesesLeft > 0)
-                    ((ComboBox)sc1.Panel2.Controls.Find("cbxLeft" + iTemp, false)[0]).SelectedIndex = lstFilter[i].ParenthesesLeft;
+                if (ListFilter[i].ParenthesesLeft > 0)
+                    ((ComboBox)sc1.Panel2.Controls.Find("cbxLeft" + iTemp, false)[0]).SelectedIndex = ListFilter[i].ParenthesesLeft;
                 //右括号
-                if (lstFilter[i].ParenthesesRight > 0)
-                    ((ComboBox)sc1.Panel2.Controls.Find("cbxRight" + iTemp, false)[0]).SelectedIndex = lstFilter[i].ParenthesesRight;
+                if (ListFilter[i].ParenthesesRight > 0)
+                    ((ComboBox)sc1.Panel2.Controls.Find("cbxRight" + iTemp, false)[0]).SelectedIndex = ListFilter[i].ParenthesesRight;
                 //字段
-                if (lstFilter[i].Field > 0)
-                    ((ComboBox)sc1.Panel2.Controls.Find("cbxField" + iTemp, false)[0]).SelectedIndex = lstFilter[i].Field;
+                if (ListFilter[i].Field > 0)
+                    ((ComboBox)sc1.Panel2.Controls.Find("cbxField" + iTemp, false)[0]).SelectedIndex = ListFilter[i].Field;
                 //比较
-                if (lstFilter[i].Compare > 0)
-                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iTemp, false)[0]).SelectedIndex = lstFilter[i].Compare;
+                if (ListFilter[i].Compare > 0)
+                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iTemp, false)[0]).SelectedIndex = ListFilter[i].Compare;
                 //逻辑
-                if (lstFilter[i].Logic > 0)
-                    ((ComboBox)sc1.Panel2.Controls.Find("cbxLogic" + iTemp, false)[0]).SelectedIndex = lstFilter[i].Logic;
+                if (ListFilter[i].Logic > 0)
+                    ((ComboBox)sc1.Panel2.Controls.Find("cbxLogic" + iTemp, false)[0]).SelectedIndex = ListFilter[i].Logic;
 
                 //值
-                if (lstFilter[i].Field > 0)
+                if (ListFilter[i].Field > 0)
                 {
-                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iTemp, false)[0]).SelectedIndex = lstFilter[i].FilterValue.FilterIndex;
-                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iTemp, false)[0]).Text = lstFilter[i].FilterValue.FilterText;
-                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iTemp, false)[0]).Value = lstFilter[i].FilterValue.FilterDateTime;
-                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iTemp, false)[0]).Checked = lstFilter[i].FilterValue.FilterCheck;
+                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iTemp, false)[0]).SelectedIndex = ListFilter[i].FilterValue.FilterIndex;
+                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iTemp, false)[0]).Text = ListFilter[i].FilterValue.FilterText;
+                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iTemp, false)[0]).Value = ListFilter[i].FilterValue.FilterDateTime;
+                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iTemp, false)[0]).Checked = ListFilter[i].FilterValue.FilterCheck;
                 }
             }
         }
@@ -353,12 +357,12 @@ namespace ERPSupport.SupForm.Common
         /// </summary>
         private void SeletRow()
         {
-            if (_strFilterName.Equals(string.Empty)) return;
+            if (_FilterName.Equals(string.Empty)) return;
             if (dgv1 == null || dgv1.Rows.Count == 0) return;
 
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
-                if (dgv1.Rows[i].Cells[0].Value.ToString().Contains(_strFilterName))
+                if (dgv1.Rows[i].Cells[0].Value.ToString().Contains(_FilterName))
                 {
                     dgv1.ClearSelection();
                     dgv1.Rows[i].Selected = true;
@@ -367,7 +371,7 @@ namespace ERPSupport.SupForm.Common
                 }
             }
 
-            Text = "过滤条件 - " + _strFilterName;
+            Text = "过滤条件 - " + _FilterName;
         }
 
         /// <summary>
@@ -377,8 +381,8 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void btnOK_Click(object sender, EventArgs e)
         {
-            lstFilter = CheckLogic(true);
-            if (!bCheck)
+            ListFilter = CheckLogic(true);
+            if (!_Check)
                 return;
             DialogResult = DialogResult.OK;
         }
@@ -419,10 +423,10 @@ namespace ERPSupport.SupForm.Common
             {
                 if (pShowMessageBox)
                     MessageBox.Show("逻辑检验失败：左右括号数量不一致。");
-                bCheck = false;
-                return lstFilter;
+                _Check = false;
+                return ListFilter;
             }
-            bCheck = true;
+            _Check = true;
             return ListFilterNew;
         }
 
@@ -444,8 +448,8 @@ namespace ERPSupport.SupForm.Common
         private void btnSave_Click(object sender, EventArgs e)
         {
             if (Text != "过滤条件")
-                _strFilterName = Text.Substring(7);
-            if (_strFilterName.Equals(string.Empty))
+                _FilterName = Text.Substring(7);
+            if (_FilterName.Equals(string.Empty))
             {
                 SaveAs();
             }
@@ -470,21 +474,21 @@ namespace ERPSupport.SupForm.Common
         /// </summary>
         private void Save()
         {
-            lstFilter = CheckLogic(false);
+            ListFilter = CheckLogic(false);
             string sContent = string.Empty;
             int iRows = 0;
-            for (int i = 0; i < lstFilter.Count; i++)
+            for (int i = 0; i < ListFilter.Count; i++)
             {
-                if (lstFilter[i].Validation)
+                if (ListFilter[i].Validation)
                 {
-                    sContent += "[" + lstFilter[i].ParenthesesLeft.ToString() + "|" + lstFilter[i].Field.ToString() + "|" + lstFilter[i].Compare.ToString() + "|" + lstFilter[i].FilterValue.FilterDateTime.ToString() + "|" + lstFilter[i].FilterValue.FilterText.ToString() + "|" + lstFilter[i].FilterValue.FilterIndex.ToString() + "|" + (lstFilter[i].FilterValue.FilterCheck ? "1" : "0") + "|" + lstFilter[i].ParenthesesRight.ToString() + "|" + lstFilter[i].Logic.ToString() + "]";
+                    sContent += "[" + ListFilter[i].ParenthesesLeft.ToString() + "|" + ListFilter[i].Field.ToString() + "|" + ListFilter[i].Compare.ToString() + "|" + ListFilter[i].FilterValue.FilterDateTime.ToString() + "|" + ListFilter[i].FilterValue.FilterText.ToString() + "|" + ListFilter[i].FilterValue.FilterIndex.ToString() + "|" + (ListFilter[i].FilterValue.FilterCheck ? "1" : "0") + "|" + ListFilter[i].ParenthesesRight.ToString() + "|" + ListFilter[i].Logic.ToString() + "]";
                     iRows++;
                 }
             }
             if (sContent.Equals(string.Empty)) sContent = " ";
 
-            CommonFunction.UpdateSolution(_strFilterName, sContent, iRows);
-            MessageBox.Show("[" + _strFilterName + "]修改成功！");
+            CommonFunction.UpdateSolution(_FilterName, sContent, iRows);
+            MessageBox.Show("[" + _FilterName + "]修改成功！");
         }
 
         /// <summary>
@@ -492,18 +496,18 @@ namespace ERPSupport.SupForm.Common
         /// </summary>
         private void SaveAs()
         {
-            lstFilter = CheckLogic(false);
-            if (lstFilter == null || lstFilter.Count == 0)
+            ListFilter = CheckLogic(false);
+            if (ListFilter == null || ListFilter.Count == 0)
             {
                 MessageBox.Show("过滤条件为空或逻辑有误");
                 return;
             }
 
-            Common.frmAddFilter frm = new Common.frmAddFilter(lstFilter);
+            Common.frmAddFilter frm = new Common.frmAddFilter(ListFilter);
             frm.ShowDialog();
             if (frm.DialogResult == DialogResult.OK)
             {
-                _strFilterName = frm.StrFilterName;
+                _FilterName = frm.StrFilterName;
                 MessageBox.Show("保存成功");
                 SetDataSource();
                 SeletRow();
@@ -518,12 +522,12 @@ namespace ERPSupport.SupForm.Common
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (dgv1.DataSource == null || dgv1.Rows.Count == 0) return;
-            _strFilterName = dgv1.CurrentRow.Cells[0].Value.ToString();
-            if (MessageBox.Show("是否删除方案：" + _strFilterName, "删除方案", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            _FilterName = dgv1.CurrentRow.Cells[0].Value.ToString();
+            if (MessageBox.Show("是否删除方案：" + _FilterName, "删除方案", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                CommonFunction.DelSolution(_strFilterName);
+                CommonFunction.DelSolution(_FilterName);
                 SetDataSource();
-                _strFilterName = string.Empty;
+                _FilterName = string.Empty;
                 Text = "过滤条件";
             }
         }
@@ -652,7 +656,7 @@ namespace ERPSupport.SupForm.Common
                 }
             }
 
-            _strFilterName = string.Empty;
+            _FilterName = string.Empty;
         }
 
         /// <summary>
@@ -681,7 +685,7 @@ namespace ERPSupport.SupForm.Common
             ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Value = DateTime.Now;
             ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Checked = false;
 
-            _strFilterName = string.Empty;
+            _FilterName = string.Empty;
         }
         #endregion
 
@@ -693,9 +697,9 @@ namespace ERPSupport.SupForm.Common
         private void dgv1_DoubleClick(object sender, EventArgs e)
         {
             DataTable dtContent = new DataTable();
-            _strFilterName = dgv1.CurrentRow.Cells[0].Value.ToString();//获取方案名
+            _FilterName = dgv1.CurrentRow.Cells[0].Value.ToString();//获取方案名
 
-            dtContent = CommonFunction.GetSolution(_strFilterName);
+            dtContent = CommonFunction.GetSolution(_FilterName);
             int iRows = int.Parse(dtContent.Rows[0]["SROWS"].ToString());
             string sContent = dtContent.Rows[0]["SCONTENT"].ToString(), tmp;
 
@@ -753,7 +757,7 @@ namespace ERPSupport.SupForm.Common
                 }
             }
 
-            Text = "过滤条件 - " + _strFilterName;
+            Text = "过滤条件 - " + _FilterName;
         }
     }
 }

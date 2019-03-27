@@ -1,7 +1,7 @@
 ﻿using System;
-using ERPSupport.SQL.K3Cloud;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
+using ERPSupport.SQL.K3Cloud;
 using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
@@ -12,13 +12,13 @@ namespace ERPSupport.SupForm.UserCrtl
     public partial class ucExpressCompany : UserControl
     {
         /// <summary>
-        /// 正则表达式
-        /// </summary>
-        private Regex reg = null;
-        /// <summary>
         /// 内码
         /// </summary>
-        private int iFID = 0;
+        private int _FID;
+        /// <summary>
+        /// 正则表达式
+        /// </summary>
+        private Regex _reg;
 
         /// <summary>
         /// 构造函数
@@ -35,6 +35,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void ucExpressCompany_Load(object sender, EventArgs e)
         {
+            _FID = 0;
             dgv1.DataSource = CommonFunction.NumberMatch("COMPANYNAME");
             dgv1.Columns[0].Visible = false;
         }
@@ -52,7 +53,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 txtNumber.Text = dgv1.CurrentRow.Cells[2].Value.ToString();
                 txtECPY.Text = dgv1.CurrentRow.Cells[3].Value.ToString();
 
-                iFID = int.Parse(dgv1.CurrentRow.Cells[0].Value.ToString());
+                _FID = int.Parse(dgv1.CurrentRow.Cells[0].Value.ToString());
                 btnEdit.Enabled = true;
                 btnDelete.Enabled = true;
             }
@@ -65,10 +66,10 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void txtMatchBillno_KeyPress(object sender, KeyPressEventArgs e)
         {
-            reg = new Regex(@"^[1-9]\d*|0$");
+            _reg = new Regex(@"^[1-9]\d*|0$");
             if (e.KeyChar != '\b')
             {
-                if (!reg.IsMatch(e.KeyChar.ToString()))
+                if (!_reg.IsMatch(e.KeyChar.ToString()))
                 {
                     e.Handled = true;
                 }
@@ -84,10 +85,10 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void txtNumber_KeyPress(object sender, KeyPressEventArgs e)
         {
-            reg = new Regex(@"^[1-9]\d*|0$");
+            _reg = new Regex(@"^[1-9]\d*|0$");
             if (e.KeyChar != '\b')
             {
-                if (!reg.IsMatch(e.KeyChar.ToString()))
+                if (!_reg.IsMatch(e.KeyChar.ToString()))
                 {
                     e.Handled = true;
                 }
@@ -137,12 +138,12 @@ namespace ERPSupport.SupForm.UserCrtl
             if (!CheckData()) return;
             try
             {
-                if (CommonFunction.NumberMatchExists("COMPANYNAME", iFID, txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), txtECPY.Text.Trim()))
+                if (CommonFunction.NumberMatchExists("COMPANYNAME", _FID, txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), txtECPY.Text.Trim()))
                 {
                     MessageBox.Show("匹配规则或公司名称已经存在。");
                     return;
                 }
-                CommonFunction.UpdateNumberMatch(iFID, txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), txtECPY.Text.Trim());
+                CommonFunction.UpdateNumberMatch(_FID, txtMatchBillno.Text.Trim(), int.Parse(txtNumber.Text), txtECPY.Text.Trim());
             }
             catch (Exception ex)
             {
@@ -166,7 +167,7 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             try
             {
-                CommonFunction.DelNumberMatch(iFID);
+                CommonFunction.DelNumberMatch(_FID);
             }
             catch (Exception ex)
             {

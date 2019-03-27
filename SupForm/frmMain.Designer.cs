@@ -37,7 +37,6 @@
             this.dtpDate = new System.Windows.Forms.DateTimePicker();
             this.btnFilter = new System.Windows.Forms.Button();
             this.btnCheck = new System.Windows.Forms.Button();
-            this.btnSelect = new System.Windows.Forms.Button();
             this.cbxCondition = new System.Windows.Forms.ComboBox();
             this.txtCondition = new System.Windows.Forms.TextBox();
             this.btnUnLock = new System.Windows.Forms.Button();
@@ -49,13 +48,13 @@
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiFile_New = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiFile_Open = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssFile1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiFile_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiFile_L = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiFile_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTool = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTool_Config = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTool_Parameter = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssTool1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiTool_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiTool_Occupy = new System.Windows.Forms.ToolStripMenuItem();
             this.smiTool_Occupy_PickMtl = new System.Windows.Forms.ToolStripMenuItem();
             this.smiTool_Occupy_Trans = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,11 +62,11 @@
             this.tsmiTool_Occupy_OrderRun = new System.Windows.Forms.ToolStripMenuItem();
             this.tssTool_Occupy_1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiTool_Occupy_LockPickMtl = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssTool2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiTool_tss2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiTool_Timer = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp_Regedit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tssHelp1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiHelp_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiHelp_View = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp_Version = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp_About = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,7 +107,6 @@
             this.panel1.Controls.Add(this.dtpDate);
             this.panel1.Controls.Add(this.btnFilter);
             this.panel1.Controls.Add(this.btnCheck);
-            this.panel1.Controls.Add(this.btnSelect);
             this.panel1.Controls.Add(this.cbxCondition);
             this.panel1.Controls.Add(this.txtCondition);
             this.panel1.Controls.Add(this.btnUnLock);
@@ -125,7 +123,7 @@
             // 
             // btnShowAll
             // 
-            this.btnShowAll.Location = new System.Drawing.Point(594, 5);
+            this.btnShowAll.Location = new System.Drawing.Point(510, 5);
             this.btnShowAll.Name = "btnShowAll";
             this.btnShowAll.Size = new System.Drawing.Size(80, 20);
             this.btnShowAll.TabIndex = 19;
@@ -169,18 +167,6 @@
             this.btnCheck.Visible = false;
             this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
             // 
-            // btnSelect
-            // 
-            this.btnSelect.Location = new System.Drawing.Point(509, 5);
-            this.btnSelect.Margin = new System.Windows.Forms.Padding(2);
-            this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(80, 20);
-            this.btnSelect.TabIndex = 9;
-            this.btnSelect.Text = "勾选";
-            this.tt.SetToolTip(this.btnSelect, "勾取选定的数据行");
-            this.btnSelect.UseVisualStyleBackColor = true;
-            this.btnSelect.Click += new System.EventHandler(this.btnSelect_Click);
-            // 
             // cbxCondition
             // 
             this.cbxCondition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -202,7 +188,7 @@
             // 
             // btnUnLock
             // 
-            this.btnUnLock.Location = new System.Drawing.Point(763, 5);
+            this.btnUnLock.Location = new System.Drawing.Point(679, 5);
             this.btnUnLock.Margin = new System.Windows.Forms.Padding(2);
             this.btnUnLock.Name = "btnUnLock";
             this.btnUnLock.Size = new System.Drawing.Size(60, 20);
@@ -224,7 +210,7 @@
             // 
             // btnCommit
             // 
-            this.btnCommit.Location = new System.Drawing.Point(679, 5);
+            this.btnCommit.Location = new System.Drawing.Point(595, 5);
             this.btnCommit.Margin = new System.Windows.Forms.Padding(2);
             this.btnCommit.Name = "btnCommit";
             this.btnCommit.Size = new System.Drawing.Size(80, 20);
@@ -285,7 +271,7 @@
             this.tsmiFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiFile_New,
             this.tsmiFile_Open,
-            this.tssFile1,
+            this.tsmiFile_tss1,
             this.tsmiFile_L,
             this.tsmiFile_Exit});
             this.tsmiFile.Name = "tsmiFile";
@@ -306,10 +292,10 @@
             this.tsmiFile_Open.Size = new System.Drawing.Size(179, 22);
             this.tsmiFile_Open.Text = "打开模板(&O)";
             // 
-            // tssFile1
+            // tsmiFile_tss1
             // 
-            this.tssFile1.Name = "tssFile1";
-            this.tssFile1.Size = new System.Drawing.Size(176, 6);
+            this.tsmiFile_tss1.Name = "tsmiFile_tss1";
+            this.tsmiFile_tss1.Size = new System.Drawing.Size(176, 6);
             // 
             // tsmiFile_L
             // 
@@ -330,9 +316,9 @@
             this.tsmiTool.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiTool_Config,
             this.tsmiTool_Parameter,
-            this.tssTool1,
+            this.tsmiTool_tss1,
             this.tsmiTool_Occupy,
-            this.tssTool2,
+            this.tsmiTool_tss2,
             this.tsmiTool_Timer});
             this.tsmiTool.Name = "tsmiTool";
             this.tsmiTool.Size = new System.Drawing.Size(68, 20);
@@ -341,21 +327,21 @@
             // tsmiTool_Config
             // 
             this.tsmiTool_Config.Name = "tsmiTool_Config";
-            this.tsmiTool_Config.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Config.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Config.Text = "系统配置(&C)";
             this.tsmiTool_Config.Click += new System.EventHandler(this.tsmiTool_Config_Click);
             // 
             // tsmiTool_Parameter
             // 
             this.tsmiTool_Parameter.Name = "tsmiTool_Parameter";
-            this.tsmiTool_Parameter.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Parameter.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Parameter.Text = "参数(&P)";
             this.tsmiTool_Parameter.Click += new System.EventHandler(this.tsmiTool_Parameter_Click);
             // 
-            // tssTool1
+            // tsmiTool_tss1
             // 
-            this.tssTool1.Name = "tssTool1";
-            this.tssTool1.Size = new System.Drawing.Size(148, 6);
+            this.tsmiTool_tss1.Name = "tsmiTool_tss1";
+            this.tsmiTool_tss1.Size = new System.Drawing.Size(149, 6);
             // 
             // tsmiTool_Occupy
             // 
@@ -367,7 +353,7 @@
             this.tssTool_Occupy_1,
             this.tsmiTool_Occupy_LockPickMtl});
             this.tsmiTool_Occupy.Name = "tsmiTool_Occupy";
-            this.tsmiTool_Occupy.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Occupy.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy.Text = "占用解除(&O)";
             // 
             // smiTool_Occupy_PickMtl
@@ -410,15 +396,15 @@
             this.tsmiTool_Occupy_LockPickMtl.Text = "自动领料";
             this.tsmiTool_Occupy_LockPickMtl.Click += new System.EventHandler(this.tsmiTool_Occupy_LockPickMtl_Click);
             // 
-            // tssTool2
+            // tsmiTool_tss2
             // 
-            this.tssTool2.Name = "tssTool2";
-            this.tssTool2.Size = new System.Drawing.Size(148, 6);
+            this.tsmiTool_tss2.Name = "tsmiTool_tss2";
+            this.tsmiTool_tss2.Size = new System.Drawing.Size(149, 6);
             // 
             // tsmiTool_Timer
             // 
             this.tsmiTool_Timer.Name = "tsmiTool_Timer";
-            this.tsmiTool_Timer.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Timer.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Timer.Text = "定时器(&T)";
             this.tsmiTool_Timer.Click += new System.EventHandler(this.tsmiTool_Timer_Click);
             // 
@@ -426,7 +412,7 @@
             // 
             this.tsmiHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiHelp_Regedit,
-            this.tssHelp1,
+            this.tsmiHelp_tss1,
             this.tsmiHelp_View,
             this.tsmiHelp_Version,
             this.tsmiHelp_About});
@@ -441,10 +427,10 @@
             this.tsmiHelp_Regedit.Text = "注册(&R)";
             this.tsmiHelp_Regedit.Click += new System.EventHandler(this.tsmiHelp_Regedit_Click);
             // 
-            // tssHelp1
+            // tsmiHelp_tss1
             // 
-            this.tssHelp1.Name = "tssHelp1";
-            this.tssHelp1.Size = new System.Drawing.Size(176, 6);
+            this.tsmiHelp_tss1.Name = "tsmiHelp_tss1";
+            this.tsmiHelp_tss1.Size = new System.Drawing.Size(176, 6);
             // 
             // tsmiHelp_View
             // 
@@ -512,7 +498,6 @@
         private System.Windows.Forms.TextBox txtCondition;
         private System.Windows.Forms.ComboBox cbxLogic;
         private System.Windows.Forms.DataGridView dgv1;
-        private System.Windows.Forms.Button btnSelect;
         private System.Windows.Forms.Button btnCommit;
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnUnLock;
@@ -526,20 +511,20 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp_Version;
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp_About;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile_L;
-        private System.Windows.Forms.ToolStripSeparator tssHelp1;
-        private System.Windows.Forms.ToolStripSeparator tssFile1;
+        private System.Windows.Forms.ToolStripSeparator tsmiHelp_tss1;
+        private System.Windows.Forms.ToolStripSeparator tsmiFile_tss1;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Timer;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile_New;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile_Open;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Occupy;
-        private System.Windows.Forms.ToolStripSeparator tssTool1;
+        private System.Windows.Forms.ToolStripSeparator tsmiTool_tss1;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Parameter;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Occupy_LockStock;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Occupy_OrderRun;
         private System.Windows.Forms.Button btnShowAll;
         private System.Windows.Forms.Timer tSumSecond;
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp_Regedit;
-        private System.Windows.Forms.ToolStripSeparator tssTool2;
+        private System.Windows.Forms.ToolStripSeparator tsmiTool_tss2;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Occupy_LockPickMtl;
         private System.Windows.Forms.ToolTip tt;
         private System.Windows.Forms.ToolStripMenuItem smiTool_Occupy_PickMtl;

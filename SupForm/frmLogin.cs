@@ -33,7 +33,7 @@ namespace ERPSupport.SupForm
             UserCrtl.ucLogin ucLG = new UserCrtl.ucLogin();
             ucLG.Name = "Login";
             ucLG.Dock = DockStyle.Fill;
-            ucLG.pLoginClick += new EventHandler(UserLogin);
+            ucLG._LoginClick += new EventHandler(UserLogin);
             pl1.Controls.Add(ucLG);
         }
 
@@ -44,19 +44,17 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void UserLogin(object sender, EventArgs e)
         {
-            bool bLog = false;//登陆状态
-            int iUserId, iDepartmentID;
-            string strRIDS, strMIDS, strDepartmentNumber, strDepartmentName, strFPhone;
-            string strUserName = ((TextBox)pl1.Controls.Find("txtUser", true)[0]).Text.Trim();//登陆用户名
-            string strPWD = ((TextBox)pl1.Controls.Find("txtPWD", true)[0]).Text.Trim();//登陆用户密码
+            bool login = false;//登陆状态
+            int userId, departmentId;
+            string RIDS, MIDS, departmentNumber, departmentName, phone, userName = ((TextBox)pl1.Controls.Find("txtUser", true)[0]).Text.Trim(), PWD = ((TextBox)pl1.Controls.Find("txtPWD", true)[0]).Text.Trim();
 
-            if (string.IsNullOrEmpty(strUserName))
+            if (string.IsNullOrEmpty(userName))
             {
                 MessageBox.Show("用户名不能为空！", "错误提示");
                 return;
             }
 
-            if (string.IsNullOrEmpty(strPWD))
+            if (string.IsNullOrEmpty(PWD))
             {
                 MessageBox.Show("密码不能为空！", "错误提示");
                 return;
@@ -85,7 +83,7 @@ namespace ERPSupport.SupForm
             K3CloudApiClient client = new K3CloudApiClient(C_ERPADDRESS);
             try
             {
-                bLog = client.Login(C_ZTID, strUserName, strPWD, 2052);
+                login = client.Login(C_ZTID, userName, PWD, 2052);
             }
             catch
             {
@@ -93,7 +91,7 @@ namespace ERPSupport.SupForm
                 return;
             }
 
-            if (!bLog)
+            if (!login)
             {
                 MessageBox.Show("用户名或密码错误", "登录失败");
                 return;
@@ -143,7 +141,7 @@ namespace ERPSupport.SupForm
             #endregion
 
             #region 设置信息
-            DataTable dtTempUser = CommonFunction.GetUserInfoByName(C_ORCLADDRESS, strUserName);
+            DataTable dtTempUser = CommonFunction.GetUserInfoByName(C_ORCLADDRESS, userName);
 
             if (dtTempUser == null || dtTempUser.Rows.Count == 0)
             {
@@ -151,16 +149,16 @@ namespace ERPSupport.SupForm
                 return;
             }
 
-            iUserId = int.Parse(dtTempUser.Rows[0]["FUSERID"].ToString());//获取登陆用户内码
-            strRIDS = dtTempUser.Rows[0]["RIDS"].ToString();//获取登陆用户角色ID
-            strMIDS = dtTempUser.Rows[0]["MIDS"].ToString();//获取登陆用户功能ID
-            iDepartmentID = int.Parse(dtTempUser.Rows[0]["FDEPTID"].ToString());//部门ID
-            strDepartmentNumber = dtTempUser.Rows[0]["FDEPTNUMBER"].ToString();//部门编码
-            strDepartmentName = dtTempUser.Rows[0]["FDEPTNAME"].ToString();//部门名称
-            strFPhone = dtTempUser.Rows[0]["FPHONE"].ToString();//电话
+            userId = int.Parse(dtTempUser.Rows[0]["FUSERID"].ToString());//获取登陆用户内码
+            RIDS = dtTempUser.Rows[0]["RIDS"].ToString();//获取登陆用户角色ID
+            MIDS = dtTempUser.Rows[0]["MIDS"].ToString();//获取登陆用户功能ID
+            departmentId = int.Parse(dtTempUser.Rows[0]["FDEPTID"].ToString());//部门ID
+            departmentNumber = dtTempUser.Rows[0]["FDEPTNUMBER"].ToString();//部门编码
+            departmentName = dtTempUser.Rows[0]["FDEPTNAME"].ToString();//部门名称
+            phone = dtTempUser.Rows[0]["FPHONE"].ToString();//电话
 
             //全局参数
-            new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, C_USERNAME, C_PASSWORD, C_ORCLADDRESS, iUserId, strUserName, strPWD, DateTime.Now, strRIDS, strMIDS, iDepartmentID, strDepartmentNumber, strDepartmentName, strFPhone), new SQLConfig(IP, Port, UserName, Password, Catalog));
+            new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, C_USERNAME, C_PASSWORD, C_ORCLADDRESS, userId, userName, PWD, DateTime.Now, RIDS, MIDS, departmentId, departmentNumber, departmentName, phone), new SQLConfig(IP, Port, UserName, Password, Catalog));
             #endregion
 
             //主窗体
@@ -170,7 +168,7 @@ namespace ERPSupport.SupForm
                 Visible = false;
                 fMain.ShowDialog();
             }
-            catch (Exception ex) { }
+            catch { }
             finally
             {
                 fMain.Dispose();

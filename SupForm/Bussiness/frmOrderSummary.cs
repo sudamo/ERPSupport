@@ -3,8 +3,9 @@ using System.Data;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using ERPSupport.SQL.K3Cloud;
+using System.Drawing;
 
-namespace ERPSupport.SupForm
+namespace ERPSupport.SupForm.Bussiness
 {
     /// <summary>
     /// 运算汇总
@@ -46,20 +47,16 @@ namespace ERPSupport.SupForm
         ///// 生产订单编号
         ///// </summary>
         //private string strMoBillNO;
-        /// <summary>
-        /// 全部选择
-        /// </summary>
-        private bool bSelect = false;
 
         /// <summary>
         /// 半成品明细信息
         /// </summary>
-        private DataTable dtDtl;
+        private DataTable _dtDtl;
 
         /// <summary>
         /// 汇总信息
         /// </summary>
-        private DataTable dtSum;
+        private DataTable _dtSum;
 
         /// <summary>
         /// 构造函数
@@ -69,7 +66,7 @@ namespace ERPSupport.SupForm
         public frmOrderSummary(DataTable pDT, List<int> pFEntryId)
         {
             InitializeComponent();
-            dtDtl = pDT;
+            _dtDtl = pDT;
             _FEntryIds = pFEntryId;
         }
         #endregion
@@ -94,70 +91,70 @@ namespace ERPSupport.SupForm
         /// /// <param name="pFEntryId"></param>
         private void SetDataSource(bool pIsLack, List<int> pFEntryId)
         {
-            if (dtDtl == null || dtDtl.Rows.Count == 0) return;
+            if (_dtDtl == null || _dtDtl.Rows.Count == 0) return;
             bool bMatch = false;
             string strNow = DateTime.Now.ToString("yyyy-MM-dd");
-            dtSum = new DataTable();
+            _dtSum = new DataTable();
             DataRow dr;
-            dtSum.Columns.Add("日期");
-            dtSum.Columns.Add("物料编码");
-            dtSum.Columns.Add("物料名称");
-            dtSum.Columns.Add("物料属性");
-            dtSum.Columns.Add("单位");
+            _dtSum.Columns.Add("日期");
+            _dtSum.Columns.Add("物料编码");
+            _dtSum.Columns.Add("物料名称");
+            _dtSum.Columns.Add("物料属性");
+            _dtSum.Columns.Add("单位");
 
-            dtSum.Columns.Add("BOM");
-            dtSum.Columns.Add("采购在途");
-            dtSum.Columns.Add("生产自制");
-            dtSum.Columns.Add("库存数量");
-            dtSum.Columns.Add("库存可用数量");
+            _dtSum.Columns.Add("BOM");
+            _dtSum.Columns.Add("采购在途");
+            _dtSum.Columns.Add("生产自制");
+            _dtSum.Columns.Add("库存数量");
+            _dtSum.Columns.Add("库存可用数量");
 
-            dtSum.Columns.Add("库存可用天数");
-            dtSum.Columns.Add("最低订货量");
-            dtSum.Columns.Add("最小批量");
-            dtSum.Columns.Add("安全库存");
-            dtSum.Columns.Add("欠料数量");
+            _dtSum.Columns.Add("库存可用天数");
+            _dtSum.Columns.Add("最低订货量");
+            _dtSum.Columns.Add("最小批量");
+            _dtSum.Columns.Add("安全库存");
+            _dtSum.Columns.Add("欠料数量");
 
-            dtSum.Columns.Add("需求汇总");
+            _dtSum.Columns.Add("需求汇总");
 
-            for (int i = 0; i < dtDtl.Rows.Count; i++)
+            for (int i = 0; i < _dtDtl.Rows.Count; i++)
             {
-                dr = dtSum.NewRow();
+                dr = _dtSum.NewRow();
 
                 if (i == 0)
                 {
                     dr["日期"] = strNow;
-                    dr["物料编码"] = dtDtl.Rows[i]["物料编码"].ToString();
-                    dr["物料名称"] = dtDtl.Rows[i]["物料名称"].ToString();
-                    dr["物料属性"] = dtDtl.Rows[i]["物料属性"].ToString();
-                    dr["单位"] = dtDtl.Rows[i]["单位"].ToString();
+                    dr["物料编码"] = _dtDtl.Rows[i]["物料编码"].ToString();
+                    dr["物料名称"] = _dtDtl.Rows[i]["物料名称"].ToString();
+                    dr["物料属性"] = _dtDtl.Rows[i]["物料属性"].ToString();
+                    dr["单位"] = _dtDtl.Rows[i]["单位"].ToString();
 
-                    dr["BOM"] = dtDtl.Rows[i]["BOM"].ToString();
-                    dr["采购在途"] = dtDtl.Rows[i]["采购在途"].ToString();
-                    dr["生产自制"] = dtDtl.Rows[i]["生产自制"].ToString();
-                    dr["库存数量"] = dtDtl.Rows[i]["库存数量"].ToString();
-                    dr["库存可用数量"] = dtDtl.Rows[i]["库存可用数量"].ToString();
+                    dr["BOM"] = _dtDtl.Rows[i]["BOM"].ToString();
+                    dr["采购在途"] = _dtDtl.Rows[i]["采购在途"].ToString();
+                    dr["生产自制"] = _dtDtl.Rows[i]["生产自制"].ToString();
+                    dr["库存数量"] = _dtDtl.Rows[i]["库存数量"].ToString();
+                    dr["库存可用数量"] = _dtDtl.Rows[i]["库存可用数量"].ToString();
 
-                    dr["库存可用天数"] = string.Format("{0:N2}", decimal.Parse(dtDtl.Rows[i]["库存可用天数"].ToString()));
-                    dr["最低订货量"] = dtDtl.Rows[i]["最低订货量"].ToString();
-                    dr["最小批量"] = dtDtl.Rows[i]["最小批量"].ToString();
-                    dr["安全库存"] = dtDtl.Rows[i]["安全库存"].ToString();
-                    dr["欠料数量"] = dtDtl.Rows[i]["欠料数量"].ToString();
+                    dr["库存可用天数"] = string.Format("{0:N2}", decimal.Parse(_dtDtl.Rows[i]["库存可用天数"].ToString()));
+                    dr["最低订货量"] = _dtDtl.Rows[i]["最低订货量"].ToString();
+                    dr["最小批量"] = _dtDtl.Rows[i]["最小批量"].ToString();
+                    dr["安全库存"] = _dtDtl.Rows[i]["安全库存"].ToString();
+                    dr["欠料数量"] = _dtDtl.Rows[i]["欠料数量"].ToString();
 
                     dr["需求汇总"] = double.Parse(dr["欠料数量"].ToString()) <= 0 ? 0 : (dr["物料属性"].ToString() == "自制" ? double.Parse(dr["安全库存"].ToString()) : (double.Parse(dr["安全库存"].ToString()) <= double.Parse(dr["最低订货量"].ToString()) ? double.Parse(dr["最低订货量"].ToString()) : (double.Parse(dr["最小批量"].ToString()) <= 0 ? 0 : (double.Parse(dr["安全库存"].ToString()) % double.Parse(dr["最小批量"].ToString()) == 0 ? double.Parse(dr["安全库存"].ToString()) : double.Parse(dr["安全库存"].ToString()) / double.Parse(dr["最小批量"].ToString()) * (double.Parse(dr["最小批量"].ToString()) + 1)))));
 
-                    dtSum.Rows.Add(dr);
+                    _dtSum.Rows.Add(dr);
                 }
                 else
                 {
-                    for (int j = 0; j < dtSum.Rows.Count; j++)
+                    for (int j = 0; j < _dtSum.Rows.Count; j++)
                     {
                         bMatch = false;
-                        if (dtSum.Rows[j]["物料编码"].ToString() == dtDtl.Rows[i]["物料编码"].ToString())
+                        if (_dtSum.Rows[j]["物料编码"].ToString() == _dtDtl.Rows[i]["物料编码"].ToString())
                         {
-                            dtSum.Rows[j]["库存可用数量"] = double.Parse(dtSum.Rows[j]["库存可用数量"].ToString()) > double.Parse(dtDtl.Rows[i]["库存可用数量"].ToString()) ? double.Parse(dtDtl.Rows[i]["库存可用数量"].ToString()) : double.Parse(dtSum.Rows[j]["库存可用数量"].ToString());
-                            dtSum.Rows[j]["欠料数量"] = double.Parse(dtSum.Rows[j]["欠料数量"].ToString()) > double.Parse(dtDtl.Rows[i]["欠料数量"].ToString()) ? double.Parse(dtSum.Rows[j]["欠料数量"].ToString()) : double.Parse(dtDtl.Rows[i]["欠料数量"].ToString());
+                            _dtSum.Rows[j]["库存可用数量"] = double.Parse(_dtSum.Rows[j]["库存可用数量"].ToString()) > double.Parse(_dtDtl.Rows[i]["库存可用数量"].ToString()) ? double.Parse(_dtDtl.Rows[i]["库存可用数量"].ToString()) : double.Parse(_dtSum.Rows[j]["库存可用数量"].ToString());
+                            _dtSum.Rows[j]["欠料数量"] = double.Parse(_dtSum.Rows[j]["欠料数量"].ToString()) > double.Parse(_dtDtl.Rows[i]["欠料数量"].ToString()) ? double.Parse(_dtSum.Rows[j]["欠料数量"].ToString()) : double.Parse(_dtDtl.Rows[i]["欠料数量"].ToString());
 
-                            dtSum.Rows[j]["需求汇总"] = double.Parse(dtSum.Rows[j]["欠料数量"].ToString()) <= 0 ? 0 : (dtSum.Rows[j]["物料属性"].ToString() == "自制" ? double.Parse(dtSum.Rows[j]["安全库存"].ToString()) : (double.Parse(dtSum.Rows[j]["安全库存"].ToString()) <= double.Parse(dtSum.Rows[j]["最低订货量"].ToString()) ? double.Parse(dtSum.Rows[j]["最低订货量"].ToString()) : (double.Parse(dtSum.Rows[j]["最小批量"].ToString()) <= 0 ? 0 : (double.Parse(dtSum.Rows[j]["安全库存"].ToString()) % double.Parse(dtSum.Rows[j]["最小批量"].ToString()) == 0 ? double.Parse(dtSum.Rows[j]["安全库存"].ToString()) : double.Parse(dtSum.Rows[j]["安全库存"].ToString()) / double.Parse(dtSum.Rows[j]["最小批量"].ToString()) * (double.Parse(dtSum.Rows[j]["最小批量"].ToString()) + 1)))));
+                            _dtSum.Rows[j]["需求汇总"] = double.Parse(_dtSum.Rows[j]["欠料数量"].ToString()) <= 0 ? 0 : (_dtSum.Rows[j]["物料属性"].ToString() == "自制" ? double.Parse(_dtSum.Rows[j]["安全库存"].ToString()) : (double.Parse(_dtSum.Rows[j]["安全库存"].ToString()) <= double.Parse(_dtSum.Rows[j]["最低订货量"].ToString()) ? double.Parse(_dtSum.Rows[j]["最低订货量"].ToString()) : (double.Parse(_dtSum.Rows[j]["最小批量"].ToString()) <= 0 ? 0 : (double.Parse(_dtSum.Rows[j]["安全库存"].ToString()) % double.Parse(_dtSum.Rows[j]["最小批量"].ToString()) == 0 ? double.Parse(_dtSum.Rows[j]["安全库存"].ToString()) : double.Parse(_dtSum.Rows[j]["安全库存"].ToString()) / double.Parse(_dtSum.Rows[j]["最小批量"].ToString()) * (double.Parse(_dtSum.Rows[j]["最小批量"].ToString()) + 1)))));
 
                             bMatch = true;
                             break;
@@ -166,32 +163,51 @@ namespace ERPSupport.SupForm
                     if (!bMatch)
                     {
                         dr["日期"] = strNow;
-                        dr["物料编码"] = dtDtl.Rows[i]["物料编码"].ToString();
-                        dr["物料名称"] = dtDtl.Rows[i]["物料名称"].ToString();
-                        dr["物料属性"] = dtDtl.Rows[i]["物料属性"].ToString();
-                        dr["单位"] = dtDtl.Rows[i]["单位"].ToString();
+                        dr["物料编码"] = _dtDtl.Rows[i]["物料编码"].ToString();
+                        dr["物料名称"] = _dtDtl.Rows[i]["物料名称"].ToString();
+                        dr["物料属性"] = _dtDtl.Rows[i]["物料属性"].ToString();
+                        dr["单位"] = _dtDtl.Rows[i]["单位"].ToString();
 
-                        dr["BOM"] = dtDtl.Rows[i]["BOM"].ToString();
-                        dr["采购在途"] = dtDtl.Rows[i]["采购在途"].ToString();
-                        dr["生产自制"] = dtDtl.Rows[i]["生产自制"].ToString();
-                        dr["库存数量"] = dtDtl.Rows[i]["库存数量"].ToString();
-                        dr["库存可用数量"] = dtDtl.Rows[i]["库存可用数量"].ToString();
+                        dr["BOM"] = _dtDtl.Rows[i]["BOM"].ToString();
+                        dr["采购在途"] = _dtDtl.Rows[i]["采购在途"].ToString();
+                        dr["生产自制"] = _dtDtl.Rows[i]["生产自制"].ToString();
+                        dr["库存数量"] = _dtDtl.Rows[i]["库存数量"].ToString();
+                        dr["库存可用数量"] = _dtDtl.Rows[i]["库存可用数量"].ToString();
 
-                        dr["库存可用天数"] = string.Format("{0:N2}", decimal.Parse(dtDtl.Rows[i]["库存可用天数"].ToString())); 
-                        dr["最低订货量"] = dtDtl.Rows[i]["最低订货量"].ToString();
-                        dr["最小批量"] = dtDtl.Rows[i]["最小批量"].ToString();
-                        dr["安全库存"] = dtDtl.Rows[i]["安全库存"].ToString();
-                        dr["欠料数量"] = dtDtl.Rows[i]["欠料数量"].ToString();
+                        dr["库存可用天数"] = string.Format("{0:N2}", decimal.Parse(_dtDtl.Rows[i]["库存可用天数"].ToString())); 
+                        dr["最低订货量"] = _dtDtl.Rows[i]["最低订货量"].ToString();
+                        dr["最小批量"] = _dtDtl.Rows[i]["最小批量"].ToString();
+                        dr["安全库存"] = _dtDtl.Rows[i]["安全库存"].ToString();
+                        dr["欠料数量"] = _dtDtl.Rows[i]["欠料数量"].ToString();
 
                         dr["需求汇总"] = double.Parse(dr["欠料数量"].ToString()) <= 0 ? 0 : (dr["物料属性"].ToString() == "自制" ? double.Parse(dr["安全库存"].ToString()) : (double.Parse(dr["安全库存"].ToString()) <= double.Parse(dr["最低订货量"].ToString()) ? double.Parse(dr["最低订货量"].ToString()) : (double.Parse(dr["最小批量"].ToString()) <= 0 ? 0 : (double.Parse(dr["安全库存"].ToString()) % double.Parse(dr["最小批量"].ToString()) == 0 ? double.Parse(dr["安全库存"].ToString()) : double.Parse(dr["安全库存"].ToString()) / double.Parse(dr["最小批量"].ToString()) * (double.Parse(dr["最小批量"].ToString()) + 1)))));
 
-                        dtSum.Rows.Add(dr);
+                        _dtSum.Rows.Add(dr);
                     }
                 }
             }
 
-            dgv1.DataSource = dtSum;
+            dgv1.DataSource = _dtSum;
         }
+
+        #region 勾选
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void chbHand_CheckedChanged(object sender, EventArgs e)
+        {
+            if (dgv1 == null || dgv1.Rows.Count == 0)
+                return;
+
+            foreach (DataGridViewRow dr in dgv1.Rows)
+            {
+                dr.Cells[0].Value = ((CheckBox)sender).Checked;
+            }
+            dgv1.EndEdit();
+        }
+        #endregion
 
         /// <summary>
         /// 填充部门下拉框
@@ -202,36 +218,6 @@ namespace ERPSupport.SupForm
             cbxWorkShop.DisplayMember = "FName";
             cbxWorkShop.ValueMember = "FValue";
         }
-
-        #region 全部选择、取消
-        /// <summary>
-        /// 全部选择、取消
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSelect_Click(object sender, EventArgs e)
-        {
-            if (dgv1.DataSource == null || dgv1.Rows.Count < 1) return;
-            if (!bSelect)
-            {
-                for (int i = 0; i < dgv1.Rows.Count; i++)
-                {
-                    dgv1.Rows[i].Cells[0].Value = true;
-                }
-                bSelect = true;
-                btnSelect.Text = "取消选择";
-            }
-            else
-            {
-                for (int i = 0; i < dgv1.Rows.Count; i++)
-                {
-                    dgv1.Rows[i].Cells[0].Value = false;
-                }
-                bSelect = false;
-                btnSelect.Text = "全部选择";
-            }
-        }
-        #endregion
 
         /// <summary>
         /// 保存汇总结果

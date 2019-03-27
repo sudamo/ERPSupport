@@ -11,7 +11,6 @@ namespace ERPSupport.SupForm.UserCrtl
     /// </summary>
     public partial class ucStockEdit : UserControl
     {
-        #region Constructor
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -19,7 +18,6 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             InitializeComponent();
         }
-        #endregion
 
         /// <summary>
         /// 窗体加载

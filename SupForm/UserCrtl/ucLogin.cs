@@ -9,9 +9,9 @@ namespace ERPSupport.SupForm.UserCrtl
     public partial class ucLogin : UserControl
     {
         /// <summary>
-        /// 委托BTN
+        /// 委托 Login
         /// </summary>
-        public event EventHandler pLoginClick;
+        public event EventHandler _LoginClick;
 
         /// <summary>
         /// 构造函数
@@ -32,7 +32,7 @@ namespace ERPSupport.SupForm.UserCrtl
             //{
             //    pLoginClick(sender, e);
             //}
-            pLoginClick?.Invoke(sender, e);
+            _LoginClick?.Invoke(sender, e);
         }
 
         /// <summary>

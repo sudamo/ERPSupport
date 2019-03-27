@@ -13,53 +13,47 @@ namespace ERPSupport.SupForm.Common
         /// <summary>
         /// ERP地址
         /// </summary>
-        private string C_ERPADDRESS;
-        /// <summary>
-        /// Owner
-        /// </summary>
-        private string C_OWNER;
+        private string _K3_URL;
         /// <summary>
         /// 账套ID
         /// </summary>
-        private string C_ZTID;
-        /// <summary>
-        /// 数据密码
-        /// </summary>
-        private string C_PWD;
+        private string _K3_ZTID;
         /// <summary>
         /// Oracle数据库地址
         /// </summary>
-        private string C_ORCLADDRESS;
-        private bool _bLogout;
+        private string _K3_Orcl_IP;
+
+        private bool _Logout;
         /// <summary>
         /// 是否注销
         /// </summary>
-        public bool BLogout
+        public bool Logout
         {
             get
             {
-                return _bLogout;
+                return _Logout;
             }
 
             set
             {
-                _bLogout = value;
+                _Logout = value;
             }
         }
-        private int _iEntry;
+
+        private int _Entry;
         /// <summary>
         /// 加载方式：1、从登陆界面加载；2、从菜单加载
         /// </summary>
-        public int IEntry
+        public int Entry
         {
             get
             {
-                return _iEntry;
+                return _Entry;
             }
 
             set
             {
-                _iEntry = value;
+                _Entry = value;
             }
         }
 
@@ -70,7 +64,9 @@ namespace ERPSupport.SupForm.Common
         public frmSetting(int pEntry)
         {
             InitializeComponent();
-            _iEntry = pEntry;
+            _Entry = pEntry;
+
+            _Logout = false;
         }
         #endregion
 
@@ -81,12 +77,11 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void frmSetting_Load(object sender, EventArgs e)
         {
-            txtERPADDRESS.Text = C_ERPADDRESS = ConfigurationManager.AppSettings["K3_URL"];
-            txtZTID.Text = C_ZTID = ConfigurationManager.AppSettings["K3_ZTID"];
-            txtOwner.Text = ConfigurationManager.AppSettings["K3_User"];
-            txtPWD.Text = DMData.Code.DataEncoder.DecryptData(ConfigurationManager.AppSettings["K3_Orcl_PWD"]);
-            txtORCLADDRESS.Text = C_ORCLADDRESS = ConfigurationManager.AppSettings["K3_Orcl_IP"];
-            _bLogout = false;
+            txtURL.Text = _K3_URL = ConfigurationManager.AppSettings["K3_URL"];
+            txtZTID.Text = _K3_ZTID = ConfigurationManager.AppSettings["K3_ZTID"];
+            txtUser.Text = ConfigurationManager.AppSettings["K3_User"];
+            txtOrcl_PWD.Text = DMData.Code.DataEncoder.DecryptData(ConfigurationManager.AppSettings["K3_Orcl_PWD"]);
+            txtOrcl_IP.Text = _K3_Orcl_IP = ConfigurationManager.AppSettings["K3_Orcl_IP"];
         }
 
         /// <summary>
@@ -96,10 +91,10 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (txtERPADDRESS.Text.Trim() == "")
+            if (txtURL.Text.Trim() == "")
             {
                 MessageBox.Show("服务器地址不能为空");
-                txtERPADDRESS.Focus();
+                txtURL.Focus();
                 return;
             }
 
@@ -110,31 +105,31 @@ namespace ERPSupport.SupForm.Common
                 return;
             }
 
-            if (txtOwner.Text.Trim() == "")
+            if (txtUser.Text.Trim() == "")
             {
                 MessageBox.Show("库用户不能为空");
-                txtOwner.Focus();
+                txtUser.Focus();
                 return;
             }
 
-            if (txtPWD.Text.Trim() == "")
+            if (txtOrcl_PWD.Text.Trim() == "")
             {
                 MessageBox.Show("数据库地址不能为空");
-                txtPWD.Focus();
+                txtOrcl_PWD.Focus();
                 return;
             }
 
             //保存配置文件
-            UserClass.AppConfig.WriteValue("K3_URL", txtERPADDRESS.Text.Trim());
+            UserClass.AppConfig.WriteValue("K3_URL", txtURL.Text.Trim());
             UserClass.AppConfig.WriteValue("K3_ZTID", txtZTID.Text.Trim());
-            UserClass.AppConfig.WriteValue("K3_User", txtOwner.Text.Trim());
-            UserClass.AppConfig.WriteValue("K3_Orcl_PWD", txtPWD.Text.Trim());
-            UserClass.AppConfig.WriteValue("K3_Orcl_IP", txtORCLADDRESS.Text.Trim());
+            UserClass.AppConfig.WriteValue("K3_User", txtUser.Text.Trim());
+            UserClass.AppConfig.WriteValue("K3_Orcl_PWD", txtOrcl_PWD.Text.Trim());
+            UserClass.AppConfig.WriteValue("K3_Orcl_IP", txtOrcl_IP.Text.Trim());
 
-            if (IEntry == 2)//从菜单加载需要询问是否重新登录
+            if (Entry == 2)//从菜单加载需要询问是否重新登录
                 if (MessageBox.Show("保存成功，重新登录后生效，现在注销吗？", "提示", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
-                    _bLogout = true;
+                    _Logout = true;
                 }
 
             Close();

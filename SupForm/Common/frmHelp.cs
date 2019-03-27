@@ -13,11 +13,11 @@ namespace ERPSupport.SupForm.Common
         /// <summary>
         /// 类型
         /// </summary>
-        private int strType;
+        private int _Type;
         /// <summary>
         /// 文本内容
         /// </summary>
-        string strContext;
+        string _Context;
 
         /// <summary>
         /// 构造函数
@@ -26,7 +26,7 @@ namespace ERPSupport.SupForm.Common
         public frmHelp(int pType)
         {
             InitializeComponent();
-            strType = pType;
+            _Type = pType;
         }
 
         /// <summary>
@@ -36,13 +36,13 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void frmHelp_Load(object sender, EventArgs e)
         {
-            switch (strType)
+            switch (_Type)
             {
                 case 1:
-                    strContext = "开放使用中，无需注册。";
+                    _Context = "开放使用中，无需注册。";
                     break;
                 case 2:
-                    strContext = "\n\r如需帮助请联系信息部。\n电话：020-62870908-";
+                    _Context = "\n\r如需帮助请联系信息部。\n电话：020-62870908-";
                     break;
                 case 3:
                     {
@@ -65,21 +65,21 @@ namespace ERPSupport.SupForm.Common
                         strFileVersion = ((AssemblyFileVersionAttribute)attributes[0]).Version.ToString();
                         strVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-                        strContext = "\n\r          程序集信息\r 标题：" + strTitle + "\n 备注：" + strDescription + "\n 产品名称：" + strProduct + "\n 公司：" + strCompany + "\n 版权：" + strCopyRight + "\n 配置：" + strConfiguration + "\n 商标声明：" + strTradeMark + "\n 版本：" + strVersion + "\n 修订版本：" + strFileVersion;
+                        _Context = "\n\r          程序集信息\r 标题：" + strTitle + "\n 备注：" + strDescription + "\n 产品名称：" + strProduct + "\n 公司：" + strCompany + "\n 版权：" + strCopyRight + "\n 配置：" + strConfiguration + "\n 商标声明：" + strTradeMark + "\n 版本：" + strVersion + "\n 修订版本：" + strFileVersion;
                     }
                     break;
                 case 4:
                     {
                         txtSay.Visible = true;
                         btnSay.Visible = true;
-                        strContext = "\n\r          留言簿\n\r 试问江南应不好 却道 此心安处是吾乡 - 大漠[20181212]\n\r 老猴聊发少年狂，左手抱，右手抗，香槟宝马，一任潇洒郎。\r 猴抓*，崂山酒，满*春色任我*。\r 东风恶，欢情薄，一怀愁绪，几年离索。\r 错，错，错。 - 小候[20190101]\n\r 本系统由广州车邦汽车用品制造有限公司开发，版权归本公司所有。";
+                        _Context = "\n\r          留言簿\n\r 试问江南应不好 却道 此心安处是吾乡 - 大漠[20181212]\n\r 老猴聊发少年狂，左手抱，右手抗，香槟宝马，一任潇洒郎。\r 猴抓*，崂山酒，满*春色任我*。\r 东风恶，欢情薄，一怀愁绪，几年离索。\r 错，错，错。 - 小候[20190101]\n\r 本系统由广州车邦汽车用品制造有限公司开发，版权归本公司所有。";
                     }
                     break;
                 default:
-                    strContext = "";
+                    _Context = "";
                     break;
             }
-            rtbContext.Text = strContext;
+            rtbContext.Text = _Context;
             rtbContext.Font = new Font(rtbContext.Font.FontFamily, 10, rtbContext.Font.Style);
         }
 

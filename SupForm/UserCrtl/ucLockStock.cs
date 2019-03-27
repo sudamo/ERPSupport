@@ -13,18 +13,17 @@ namespace ERPSupport.SupForm.UserCrtl
     public partial class ucLockStock : UserControl
     {
         /// <summary>
-        /// 正则表达式
-        /// </summary>
-        Regex reg = null;
-        /// <summary>
         /// 内码
         /// </summary>
-        private int iFID = 0;
-
+        private int _FID;
         /// <summary>
         /// 类型
         /// </summary>
-        private string strType;
+        private string _Type;
+        /// <summary>
+        /// 正则表达式
+        /// </summary>
+        private Regex _reg;
 
         /// <summary>
         /// 构造函数
@@ -33,7 +32,9 @@ namespace ERPSupport.SupForm.UserCrtl
         public ucLockStock(string pType)
         {
             InitializeComponent();
-            strType = pType;
+            _Type = pType;
+
+            _FID = 0;
         }
         /// <summary>
         /// 窗体加载
@@ -78,7 +79,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void SetDataSource()
         {
-            dgv1.DataSource = CommonFunction.CalculateStock(strType, cbxUseOrg.SelectedIndex, cbxUseOrg.SelectedIndex == 0 ? 0 : int.Parse(cbxUseOrg.SelectedValue.ToString()));
+            dgv1.DataSource = CommonFunction.CalculateStock(_Type, cbxUseOrg.SelectedIndex, cbxUseOrg.SelectedIndex == 0 ? 0 : int.Parse(cbxUseOrg.SelectedValue.ToString()));
             dgv1.Columns[3].Visible = false;
         }
 
@@ -120,18 +121,18 @@ namespace ERPSupport.SupForm.UserCrtl
             strStockNo = strStockNo.Substring(0, strStockNo.IndexOf("|"));//获取仓库名称
 
             //唯一性检查
-            if (CommonFunction.CalculateNumberExists(strType, iSEQ, strStockNo))
+            if (CommonFunction.CalculateNumberExists(_Type, iSEQ, strStockNo))
             {
                 MessageBox.Show("序号或仓库是唯一，不能重复录入。");
                 return;
             }
 
             //新增记录
-            CommonFunction.AddCalculateStock(strType, iSEQ, iStockId, strStockNo, strStockName);
+            CommonFunction.AddCalculateStock(_Type, iSEQ, iStockId, strStockNo, strStockName);
 
             //操作日志
             string OName;
-            if (strType == "LOCKSTOCK")
+            if (_Type == "LOCKSTOCK")
                 OName = "锁库仓库";
             else
                 OName = "运算仓库";
@@ -149,13 +150,13 @@ namespace ERPSupport.SupForm.UserCrtl
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (dgv1.Rows.Count == 0) return;
-            iFID = int.Parse(dgv1.CurrentRow.Cells[3].Value.ToString());
+            _FID = int.Parse(dgv1.CurrentRow.Cells[3].Value.ToString());
 
             //根据序号删除数据
-            CommonFunction.UpdateCalculateStock(iFID);
+            CommonFunction.UpdateCalculateStock(_FID);
             //操作日志
             string OName;
-            if (strType == "LOCKSTOCK")
+            if (_Type == "LOCKSTOCK")
                 OName = "锁库仓库";
             else
                 OName = "运算仓库";
@@ -171,10 +172,10 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void txtSEQ_KeyPress(object sender, KeyPressEventArgs e)
         {
-            reg = new Regex(@"^[1-9]\d*|0$");
+            _reg = new Regex(@"^[1-9]\d*|0$");
             if (e.KeyChar != '\b')
             {
-                if (!reg.IsMatch(e.KeyChar.ToString()))
+                if (!_reg.IsMatch(e.KeyChar.ToString()))
                 {
                     e.Handled = true;
                 }

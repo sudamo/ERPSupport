@@ -58,9 +58,9 @@ namespace ERPSupport.SupForm.UserCrtl
             }
         }
         /// <summary>
-        /// 委托BTN
+        /// 委托 Click
         /// </summary>
-        public event EventHandler pBtnClick;
+        public event EventHandler _BtnClick;
 
         /// <summary>
         /// 构造函数
@@ -89,7 +89,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 _ParentId = int.Parse(Name.Substring(3, 1));
                 _NodeId = int.Parse(Name.Substring(3, 3));
             }
-            pBtnClick?.Invoke(sender, e);
+            _BtnClick?.Invoke(sender, e);
         }
     }
 }

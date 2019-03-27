@@ -26,81 +26,77 @@ namespace ERPSupport.SupForm
         #region Fields,Properties & Constructor
 
         /// <summary>
-        /// 选择状态
-        /// </summary>
-        private bool bSelect;
-        /// <summary>
         /// 导航当前点击行数
         /// </summary>
-        private int iCurrentRow;
+        private int _CurrentRow;
         /// <summary>
         /// 当前一级控件其包含二级控件数
         /// </summary>
-        private int iChildCount;
+        private int _ChildCount;
         /// <summary>
         /// 方案名
         /// </summary>
-        private string strFilterName;
+        private string _FilterName;
         /// <summary>
         /// 业务标识
         /// </summary>
-        private FormID eFormId;
+        private FormID _FormId;
         /// <summary>
         /// 单独进程执行操作的组件
         /// </summary>
-        private BackgroundWorker bgWorker;
+        private BackgroundWorker _bgWorker;
         /// <summary>
         /// 进度条窗体
         /// </summary>
-        private frmProgress frmNotify;
+        private frmProgress _frmNotify;
         /// <summary>
         /// 定时参数
         /// </summary>
-        private TimerParameter TimerPara;
+        private TimerParameter _TimerPara;
         /// <summary>
         /// 订单实体List
         /// </summary>
-        private IList lstOrder;
+        private IList _ListOrder;
         /// <summary>
         /// 所有UC对象
         /// </summary>
-        private List<string> listUC;
+        private List<string> _ListUC;
         /// <summary>
         /// 已经打开的UC对象
         /// </summary>
-        private List<string> listOpenUC;
+        private List<string> _ListOpenUC;
         /// <summary>
         /// 筛选条件
         /// </summary>
-        private List<Filter> lstFilter;
+        private List<Filter> _ListFilter;
         /// <summary>
         /// 勾选状态
         /// </summary>
-        private List<CheckStatus> lstCheckStatus;
+        private List<CheckStatus> _ListCheckStatus;
         /// <summary>
         /// 导航一级控件
         /// </summary>
-        private List<ucNaviga> lstP;
+        private List<ucNaviga> _ListP;
         /// <summary>
         /// 导航二级控件
         /// </summary>
-        private List<ucNaviga> lstC;
+        private List<ucNaviga> _ListC;
         /// <summary>
         /// 查询结果
         /// </summary>
-        private DataTable dtSearch;
+        private DataTable _dtSearch;
         /// <summary>
         /// 计时器
         /// </summary>
-        private System.Timers.Timer tExecute;
+        private System.Timers.Timer _Execute;
         /// <summary>
         /// 程序自动关闭计时器
         /// </summary>
-        private System.Timers.Timer tClose;
+        private System.Timers.Timer _Close;
         /// <summary>
         /// 窗口信息
         /// </summary>
-        private WinMessager msg;
+        private WinMessager _msg;
 
         /// <summary>
         /// 构造函数
@@ -117,14 +113,11 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void frmMain_Load(object sender, EventArgs e)
         {
-            SetDefaultStatus();
+            FromSetting();
             FillLogic();
             FillCondition();
             FillControlList();
             MenuSet();
-
-            GlobalParameter.LocalInf = new LocalInfo(CommonFunction.GetLocalIP(), CommonFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);//配置本地信息
-            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "登录系统", "主窗口", "登录系统", "1");//登录日志
         }
         #endregion
 
@@ -132,57 +125,49 @@ namespace ERPSupport.SupForm
         /// <summary>
         /// 设置初始状态
         /// </summary>
-        private void SetDefaultStatus()
+        private void FromSetting()
         {
-            bSelect = false;
-            iCurrentRow = 0;
-            iChildCount = 0;
-            strFilterName = string.Empty;
-            eFormId = FormID.PRD_INSTOCK;
-            dtSearch = new DataTable();
-            TimerPara = new TimerParameter(0, 20, 0, true, false, "NULL");
+            _CurrentRow = 0;
+            _ChildCount = 0;
+            _FilterName = string.Empty;
+            _FormId = FormID.PRD_INSTOCK;
+            _dtSearch = new DataTable();
+            _ListUC = CommonFunction.GetNavigation();
+            _ListOpenUC = new List<string>();
+            _TimerPara = new TimerParameter(0, 20, 0, true, false, "NULL");
+            //-----
             CheckForIllegalCrossThreadCalls = false;//解决多线程调用控件问题
             //-----
-            bgWorker = new BackgroundWorker();
-            frmNotify = new frmProgress();
-            bgWorker.WorkerReportsProgress = true;
-            bgWorker.WorkerSupportsCancellation = true;
-            bgWorker.DoWork += new DoWorkEventHandler(DoWork);
-            bgWorker.ProgressChanged += new ProgressChangedEventHandler(ProgessChanged);
-            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CompleteWork);
+            _bgWorker = new BackgroundWorker();
+            _frmNotify = new frmProgress();
+            _bgWorker.WorkerReportsProgress = true;
+            _bgWorker.WorkerSupportsCancellation = true;
+            _bgWorker.DoWork += new DoWorkEventHandler(DoWork);
+            _bgWorker.ProgressChanged += new ProgressChangedEventHandler(ProgessChanged);
+            _bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CompleteWork);
+            //-----
+            _msg = new WinMessager();
+            Application.AddMessageFilter(_msg);
+            _Close = new System.Timers.Timer();
+            _Close.Interval = 1000 * 60 * 60;//每60分钟执行一次,也就是60*2分钟没操作就自动关闭程序
+            _Close.Elapsed += new ElapsedEventHandler(tClose_Elapsed);
+            _Close.Start();
             //-----
             DataGridViewCheckBoxColumn newColumn = new DataGridViewCheckBoxColumn();
-            newColumn.HeaderText = "选择";
-            newColumn.Width = 35;
+            newColumn.HeaderText = "";
+            newColumn.Width = 50;
             dgv1.Columns.Add(newColumn);
-            //-----
-            listUC = new List<string>();
-            listOpenUC = new List<string>();
-            //-----
-            msg = new WinMessager();
-            Application.AddMessageFilter(msg);
-            tClose = new System.Timers.Timer();
-            tClose.Interval = 1000 * 60 * 30;//每30分钟执行一次,也就是30*2分钟没操作就自动关闭程序
-            tClose.Elapsed += new ElapsedEventHandler(tClose_Elapsed);
-            tClose.Start();
 
-            //配置
-            listUC.Add("ucStockEdit");
-            listUC.Add("ucPickMTLDepartment");
-            listUC.Add("ucExpressCompany");
-            listUC.Add("ucBillModify");
-            listUC.Add("ucLockStock");
-            listUC.Add("ucUTMTLNumber");
-            //报表
-            listUC.Add("ucReportBom");
-            listUC.Add("ucReportMtl203");
-            //日志
-            listUC.Add("ucERPRecord");
-            listUC.Add("ucPDARecord");
-            listUC.Add("ucOrderRecord");
-            //系统管理
-            listUC.Add("ucUserAcc");
-            listUC.Add("ucUser");
+            CheckBox ckBox = new CheckBox();
+            ckBox.Name = "chb1";
+            ckBox.Size = new Size(16, 16);
+            ckBox.Location = new Point(65, 2);
+            ckBox.Checked = false;
+            ckBox.CheckedChanged += new EventHandler(ckBox_CheckedChanged);
+            dgv1.Controls.Add(ckBox);
+            //-----
+            GlobalParameter.LocalInf = new LocalInfo(CommonFunction.GetLocalIP(), CommonFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);//配置本地信息
+            CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "登录系统", "主窗口", "登录系统", "1");//登录日志
             //-----
             Text = "ERP辅助系统" + " - " + GlobalParameter.K3Inf.UserName;
         }
@@ -269,7 +254,7 @@ namespace ERPSupport.SupForm
             dt.Columns.Add("FName");
             dt.Columns.Add("FValue");
 
-            if (eFormId == FormID.PRD_INSTOCK)
+            if (_FormId == FormID.PRD_INSTOCK)
             {
                 dr = dt.NewRow();
                 dr["FName"] = "";
@@ -293,7 +278,7 @@ namespace ERPSupport.SupForm
                 dr["FValue"] = "MTLL.FNAME";
                 dt.Rows.Add(dr);
             }
-            else if (eFormId == FormID.PRD_PPBOM)
+            else if (_FormId == FormID.PRD_PPBOM)
             {
                 dr = dt.NewRow();
                 dr["FName"] = "";
@@ -305,7 +290,7 @@ namespace ERPSupport.SupForm
                 dr["FValue"] = "BE.FPLANSTARTDATE";
                 dt.Rows.Add(dr);
             }
-            else if (eFormId == FormID.SAL_SALEORDER || eFormId == FormID.SAL_SALEORDERRUN)
+            else if (_FormId == FormID.SAL_SALEORDER || _FormId == FormID.SAL_SALEORDERRUN)
             {
                 dr = dt.NewRow();
                 dr["FName"] = "";
@@ -359,8 +344,8 @@ namespace ERPSupport.SupForm
             new GlobalRights(sRIDs.Trim(), sMIDs.Trim(), sFunctionIds.Trim());
 
             ucNaviga uc;
-            lstP = new List<ucNaviga>();
-            lstC = new List<ucNaviga>();
+            _ListP = new List<ucNaviga>();
+            _ListC = new List<ucNaviga>();
 
             for (int i = 0; i < dtControls.Rows.Count; i++)
             {
@@ -368,28 +353,28 @@ namespace ERPSupport.SupForm
                 {
                     uc = new ucNaviga();
                     uc.Name = "UCP" + dtControls.Rows[i]["NODEID"].ToString();
-                    uc.pBtnClick += new EventHandler(FillNavi);
+                    uc._BtnClick += new EventHandler(FillNavi);
 
                     ((Button)uc.Controls.Find("button1", true)[0]).Text = dtControls.Rows[i]["NODENAME"].ToString();
                     ((Button)uc.Controls.Find("button1", true)[0]).Font = new Font(((Button)uc.Controls.Find("button1", true)[0]).Font.FontFamily, 12, ((Button)uc.Controls.Find("button1", true)[0]).Font.Style);
 
-                    lstP.Add(uc);
+                    _ListP.Add(uc);
                 }
                 else if (int.Parse(dtControls.Rows[i]["LV"].ToString()) == 2)
                 {
                     uc = new ucNaviga();
                     uc.Name = "UCC" + dtControls.Rows[i]["NODEID"].ToString();
-                    uc.pBtnClick += new EventHandler(FillNavi);
+                    uc._BtnClick += new EventHandler(FillNavi);
 
                     ((Button)uc.Controls.Find("button1", true)[0]).Text = "·" + dtControls.Rows[i]["NODENAME"].ToString() + "·";
 
-                    lstC.Add(uc);
+                    _ListC.Add(uc);
                 }
             }
 
             //填装一级控件到导航栏
             int itmp = 0;
-            foreach (ucNaviga ucp in lstP)
+            foreach (ucNaviga ucp in _ListP)
             {
                 ucp.Location = new Point(0, 30 * itmp);
                 sc1.Panel1.Controls.Add(ucp);
@@ -430,7 +415,7 @@ namespace ERPSupport.SupForm
 
             if (uc.Conr == "P")//当点击的是一级控件时，给当前点击的一级控件填装二级控件
             {
-                foreach (ucNaviga ucp in lstP)//移除所有子控件
+                foreach (ucNaviga ucp in _ListP)//移除所有子控件
                 {
                     List<Control> ct = new List<Control>();
 
@@ -445,16 +430,16 @@ namespace ERPSupport.SupForm
                 }
 
                 int iRow = int.Parse(uc.Name.Substring(3, 1));//所在的行数
-                iCurrentRow = iRow;
+                _CurrentRow = iRow;
 
                 //下级分类的个数
-                iChildCount = CommonFunction.ChildNumber(uc.Name.Substring(3, 1));
+                _ChildCount = CommonFunction.ChildNumber(uc.Name.Substring(3, 1));
 
                 //改变控件大小和位置
-                ResetUCSize(lstP, iRow, iChildCount);
+                ResetUCSize(_ListP, iRow, _ChildCount);
 
                 //填装二级控件
-                AddChild(uc, lstC, iRow, iChildCount);
+                AddChild(uc, _ListC, iRow, _ChildCount);
 
                 Text = "ERP辅助系统" + "\\" + ((Button)uc.Controls.Find("button1", true)[0]).Text + " - " + GlobalParameter.K3Inf.UserName;
             }
@@ -465,18 +450,8 @@ namespace ERPSupport.SupForm
                     case 1:
                         {
                             ((Panel)(sc1.Panel2.Controls.Find("panel1", false)[0])).Visible = true;//显示主窗体Panel
-                            HideUC(listOpenUC, "", true);//隐藏所有用户控件
-
-                            //if (uc.NodeId == 101)
-                            //    eFormId = FormID.PRD_INSTOCK;
-                            //else if (uc.NodeId == 102)
-                            //    eFormId = FormID.PRD_PPBOM;
-                            //else if (uc.NodeId == 103)
-                            //    eFormId = FormID.SAL_SALEORDER;
-                            //else if (uc.NodeId == 104)
-                            //    eFormId = FormID.SAL_SALEORDERRUN;
-
-                            eFormId = (FormID)(uc.NodeId % 100);
+                            HideUC(_ListOpenUC, "", true);//隐藏所有用户控件
+                            _FormId = (FormID)(uc.NodeId % 100);
 
                             FormIDChange();
                         }
@@ -487,87 +462,87 @@ namespace ERPSupport.SupForm
 
                             if (uc.NodeId == 201)
                             {
-                                if (!HideUC(listOpenUC, "StockSet", false))
+                                if (!HideUC(_ListOpenUC, "StockSet", false))
                                 {
                                     ucStockEdit UserCtrl = new ucStockEdit();
                                     UserCtrl.Name = "StockSet";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 202)
                             {
-                                if (!HideUC(listOpenUC, "PickMTLDepartment", false))
+                                if (!HideUC(_ListOpenUC, "PickMTLDepartment", false))
                                 {
                                     ucPickMTLDepartment UserCtrl = new ucPickMTLDepartment();
                                     UserCtrl.Name = "PickMTLDepartment";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 203)
                             {
-                                if (!HideUC(listOpenUC, "ExpressCompany", false))
+                                if (!HideUC(_ListOpenUC, "ExpressCompany", false))
                                 {
                                     ucExpressCompany UserCtrl = new ucExpressCompany();
                                     UserCtrl.Name = "ExpressCompany";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 204)
                             {
-                                if (!HideUC(listOpenUC, "BillModify", false))
+                                if (!HideUC(_ListOpenUC, "BillModify", false))
                                 {
                                     ucBillModify UserCtrl = new ucBillModify();
                                     UserCtrl.Name = "BillModify";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 205)
                             {
-                                if (!HideUC(listOpenUC, "LockStock1", false))
+                                if (!HideUC(_ListOpenUC, "LockStock1", false))
                                 {
                                     ucLockStock UserCtrl = new ucLockStock("LOCKSTOCK");
                                     UserCtrl.Name = "LockStock1";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
 
                             else if (uc.NodeId == 206)
                             {
-                                if (!HideUC(listOpenUC, "LockStock2", false))
+                                if (!HideUC(_ListOpenUC, "LockStock2", false))
                                 {
                                     ucLockStock UserCtrl = new ucLockStock("RUNSTOCK");
                                     UserCtrl.Name = "LockStock2";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 207)
                             {
-                                if (!HideUC(listOpenUC, "UTMTLNumber", false))
+                                if (!HideUC(_ListOpenUC, "UTMTLNumber", false))
                                 {
                                     ucUTMTLNumber UserCtrl = new ucUTMTLNumber();
                                     UserCtrl.Name = "UTMTLNumber";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                         }
@@ -578,26 +553,26 @@ namespace ERPSupport.SupForm
 
                             if (uc.NodeId == 301)
                             {
-                                if (!HideUC(listOpenUC, "ReportMtl203", false))
+                                if (!HideUC(_ListOpenUC, "ReportMtl203", false))
                                 {
                                     ucReportMtl203 UserCtrl = new ucReportMtl203();
                                     UserCtrl.Name = "ReportMtl203";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 302)
                             {
-                                if (!HideUC(listOpenUC, "ReportBom", false))
+                                if (!HideUC(_ListOpenUC, "ReportBom", false))
                                 {
                                     ucReportBom UserCtrl = new ucReportBom();
                                     UserCtrl.Name = "ReportBom";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                         }
@@ -608,50 +583,50 @@ namespace ERPSupport.SupForm
 
                             if (uc.NodeId == 401)
                             {
-                                if (!HideUC(listOpenUC, "ERPRecord1", false))
+                                if (!HideUC(_ListOpenUC, "ERPRecord1", false))
                                 {
                                     ucERPRecord UserCtrl = new ucERPRecord("ASSISTANT");
                                     UserCtrl.Name = "ERPRecord1";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 402)
                             {
-                                if (!HideUC(listOpenUC, "ERPRecord2", false))
+                                if (!HideUC(_ListOpenUC, "ERPRecord2", false))
                                 {
                                     ucERPRecord UserCtrl = new ucERPRecord("K3CLOUD");
                                     UserCtrl.Name = "ERPRecord2";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 403)
                             {
-                                if (!HideUC(listOpenUC, "PDARecord", false))
+                                if (!HideUC(_ListOpenUC, "PDARecord", false))
                                 {
                                     ucPDARecord UserCtrl = new ucPDARecord();
                                     UserCtrl.Name = "PDARecord";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 404)
                             {
-                                if (!HideUC(listOpenUC, "OrderRecord", false))
+                                if (!HideUC(_ListOpenUC, "OrderRecord", false))
                                 {
                                     ucOrderRecord UserCtrl = new ucOrderRecord();
                                     UserCtrl.Name = "OrderRecord";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                         }
@@ -662,38 +637,38 @@ namespace ERPSupport.SupForm
 
                             if (uc.NodeId == 501)
                             {
-                                if (!HideUC(listOpenUC, "User", false))
+                                if (!HideUC(_ListOpenUC, "User", false))
                                 {
                                     ucUser UserCtrl = new ucUser();
                                     UserCtrl.Name = "User";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                             else if (uc.NodeId == 502)
                             {
-                                if (!HideUC(listOpenUC, "UserAcc", false))
+                                if (!HideUC(_ListOpenUC, "UserAcc", false))
                                 {
                                     ucUserAcc UserCtrl = new ucUserAcc();
                                     UserCtrl.Name = "UserAcc";
                                     sc1.Panel2.Controls.Add(UserCtrl);
                                     UserCtrl.Dock = DockStyle.Fill;
 
-                                    listOpenUC.Add(UserCtrl.Name);
+                                    _ListOpenUC.Add(UserCtrl.Name);
                                 }
                             }
                         }
                         break;
                     default:
                         {
-                            RemoveChildControls(sc1.Panel2.Controls, listUC);
+                            RemoveChildControls(sc1.Panel2.Controls, _ListUC);
                         }
                         break;
                 }
 
-                ChangeCurrentControlStyle(uc, lstC);
+                ChangeCurrentControlStyle(uc, _ListC);
                 Text = "ERP辅助系统" + "\\" + ((Button)uc.Parent.Controls.Find("button1", true)[0]).Text + "\\" + ((Button)uc.Controls.Find("button1", true)[0]).Text.Replace("·", "") + " - " + GlobalParameter.K3Inf.UserName;
             }
         }
@@ -707,7 +682,7 @@ namespace ERPSupport.SupForm
         {
             FillCondition();
 
-            if (eFormId == FormID.PRD_INSTOCK)
+            if (_FormId == FormID.PRD_INSTOCK)
             {
                 btnCommit.Text = "生成领料单";
                 btnCommit.Enabled = true;
@@ -715,7 +690,6 @@ namespace ERPSupport.SupForm
                 btnCheck.Visible = false;
                 btnSearch.Text = "查找";
                 btnSearch.Enabled = true;
-                btnSelect.Enabled = true;
                 btnFilter.Visible = false;
                 cbxLogic.Enabled = true;
                 cbxCondition.Enabled = true;
@@ -725,7 +699,7 @@ namespace ERPSupport.SupForm
                 cbxLogic.SelectedIndex = 4;
                 dtpDate.Value = DateTime.Now;
             }
-            else if (eFormId == FormID.PRD_PPBOM)
+            else if (_FormId == FormID.PRD_PPBOM)
             {
                 btnCommit.Text = "生成调拨单";
                 btnCommit.Enabled = true;
@@ -733,7 +707,6 @@ namespace ERPSupport.SupForm
                 btnCheck.Visible = true;
                 btnSearch.Text = "汇总";
                 btnSearch.Enabled = false;
-                btnSelect.Enabled = false;
                 btnFilter.Visible = false;
                 cbxLogic.Enabled = false;
                 cbxCondition.Enabled = false;
@@ -743,7 +716,7 @@ namespace ERPSupport.SupForm
                 cbxLogic.SelectedIndex = 1;
                 dtpDate.Value = DateTime.Now;
             }
-            else if (eFormId == FormID.SAL_SALEORDER)
+            else if (_FormId == FormID.SAL_SALEORDER)
             {
                 btnCommit.Text = "锁库";
                 btnCommit.Enabled = true;
@@ -751,7 +724,6 @@ namespace ERPSupport.SupForm
                 btnCheck.Visible = false;
                 btnSearch.Text = "查找";
                 btnSearch.Enabled = true;
-                btnSelect.Enabled = true;
                 btnFilter.Visible = true;
                 cbxLogic.Enabled = true;
                 cbxCondition.Enabled = true;
@@ -761,7 +733,7 @@ namespace ERPSupport.SupForm
                 cbxLogic.SelectedIndex = 4;
                 dtpDate.Value = DateTime.Now.AddDays(-1);
             }
-            else if (eFormId == FormID.SAL_SALEORDERRUN)
+            else if (_FormId == FormID.SAL_SALEORDERRUN)
             {
                 btnCommit.Text = "订单运算";
                 btnCommit.Enabled = true;
@@ -769,7 +741,6 @@ namespace ERPSupport.SupForm
                 btnCheck.Visible = false;
                 btnSearch.Text = "查找";
                 btnSearch.Enabled = true;
-                btnSelect.Enabled = true;
                 btnFilter.Visible = true;
                 cbxLogic.Enabled = true;
                 cbxCondition.Enabled = true;
@@ -781,8 +752,9 @@ namespace ERPSupport.SupForm
             }
 
             txtCondition.Text = "";
-            lstFilter = new List<Filter>();
+            _ListFilter = new List<Filter>();
             dgv1.DataSource = null;
+            ((CheckBox)Controls.Find("chb1", true)[0]).Checked = false;
         }
         #endregion
 
@@ -799,9 +771,9 @@ namespace ERPSupport.SupForm
             //隐藏订单内码
             if (dgv1.Rows.Count > 0)
             {
-                if (eFormId == FormID.SAL_SALEORDER)
+                if (_FormId == FormID.SAL_SALEORDER)
                     dgv1.Columns[18].Visible = false;
-                else if (eFormId == FormID.SAL_SALEORDERRUN)
+                else if (_FormId == FormID.SAL_SALEORDERRUN)
                     dgv1.Columns[19].Visible = false;
 
                 //不允许重新排列
@@ -810,9 +782,6 @@ namespace ERPSupport.SupForm
                     dgv1.Columns[i].SortMode = DataGridViewColumnSortMode.NotSortable;
                 }
             }
-
-            bSelect = false;
-            btnSelect.Text = "勾选";
         }
         #endregion
 
@@ -823,15 +792,16 @@ namespace ERPSupport.SupForm
         private void DataSourceBinding()
         {
             dgv1.DataSource = null;
-            dtSearch = SearchData();
+            ((CheckBox)dgv1.Controls.Find("chb1", true)[0]).Checked = false;
+            _dtSearch = SearchData();
 
             BindingSource bs = new BindingSource();
-            bs.DataSource = dtSearch;
+            bs.DataSource = _dtSearch;
 
             //设置列头过滤功能
-            if (dtSearch != null && dtSearch.Rows.Count > 0)
+            if (_dtSearch != null && _dtSearch.Rows.Count > 0)
             {
-                foreach (DataColumn col in dtSearch.Columns)
+                foreach (DataColumn col in _dtSearch.Columns)
                 {
                     DataGridViewAutoFilterTextBoxColumn filterColumn = new DataGridViewAutoFilterTextBoxColumn();
                     filterColumn.DataPropertyName = col.ColumnName;
@@ -857,12 +827,12 @@ namespace ERPSupport.SupForm
             if (!strFilter.Equals(string.Empty)) strFilter += " AND ";
 
             //根据lstFilter添加过滤条件
-            if (lstFilter != null && lstFilter.Count > 0)
+            if (_ListFilter != null && _ListFilter.Count > 0)
             {
                 strFilter += "(" + GetFilter() + ") AND ";
             }
 
-            return SalOrder.GetDataSource(eFormId, strFilter);
+            return SalOrder.GetDataSource(_FormId, strFilter);
         }
         #endregion
 
@@ -874,13 +844,13 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void btnFilter_Click(object sender, EventArgs e)
         {
-            frmFilter frm = new frmFilter(lstFilter, strFilterName);
+            frmFilter frm = new frmFilter(_ListFilter, _FilterName);
             frm.ShowDialog();
 
             if (frm.DialogResult == DialogResult.OK)
             {
-                lstFilter = frm.lstFilter;
-                strFilterName = frm.strFilterName;
+                _ListFilter = frm.ListFilter;
+                _FilterName = frm.FilterName;
             }
         }
 
@@ -895,14 +865,14 @@ namespace ERPSupport.SupForm
             DataTable dtOrg = CommonFunction.GetOrganization(2);
             DataTable dtBillType = CommonFunction.GetBillType("SAL_SALEORDER");
 
-            for (int i = 0; i < lstFilter.Count; i++)
+            for (int i = 0; i < _ListFilter.Count; i++)
             {
                 sLeft = sField = sCompare = sValue = sRight = sLogic = string.Empty;
 
-                if (lstFilter[i].Validation)
+                if (_ListFilter[i].Validation)
                 {
                     //左括号
-                    switch (lstFilter[i].ParenthesesLeft)
+                    switch (_ListFilter[i].ParenthesesLeft)
                     {
                         case 1:
                             sLeft = "(";
@@ -915,83 +885,83 @@ namespace ERPSupport.SupForm
                             break;
                     }
                     //字段、比较、值
-                    switch (lstFilter[i].Field)
+                    switch (_ListFilter[i].Field)
                     {
                         case 1:
                             sField = "TO_CHAR(A.FDATE,'yyyy-mm-dd')";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 2:
                             sField = "TO_CHAR(A.FAPPROVEDATE,'yyyy-mm-dd')";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 3:
                             sField = "TO_CHAR(AE.FPLANSTARTDATE,'yyyy-mm-dd')";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 4:
                             sField = "A.FBILLNO";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 5:
                             sField = "MTL.FNumber";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
 
                         case 6:
                             sField = "MTLL.FNAME";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 7:
                             sField = "AR.FPURJOINQTY";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 8:
                             sField = "A.FSALEORGID";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 9:
                             sField = "A.F_PAEZ_FACTORGID";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 10:
                             sField = "AE.FSTOCKORGID";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         //
                         case 11:
                             sField = "A.FFULLLOCK";
                             sCompare = " = ";
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 12:
                             sField = "AE.FMRPTERMINATESTATUS";
                             sCompare = " = ";
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 13:
                             sField = "AE.FBATCHFLAG";
                             sCompare = " = ";
-                            sValue = GetValue(lstFilter[i], dtOrg);
+                            sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 14:
                             sField = "A.FBILLTYPEID";
-                            sCompare = GetCompare(lstFilter[i]);
-                            sValue = GetValue(lstFilter[i], dtBillType);
+                            sCompare = GetCompare(_ListFilter[i]);
+                            sValue = GetValue(_ListFilter[i], dtBillType);
                             break;
                     }
                     //右括号
-                    switch (lstFilter[i].ParenthesesRight)
+                    switch (_ListFilter[i].ParenthesesRight)
                     {
                         case 1:
                             sRight = ")";
@@ -1004,7 +974,7 @@ namespace ERPSupport.SupForm
                             break;
                     }
                     //逻辑
-                    switch (lstFilter[i].Logic)
+                    switch (_ListFilter[i].Logic)
                     {
                         case 1:
                             sLogic = "AND";
@@ -1017,7 +987,7 @@ namespace ERPSupport.SupForm
                             break;
                     }
                 }
-                if (i == lstFilter.Count - 1)
+                if (i == _ListFilter.Count - 1)
                     retrunValue += " " + sLeft + " " + sField + " " + sCompare + " " + sValue + " " + sRight + " ";
                 else
                     retrunValue += " " + sLeft + " " + sField + " " + sCompare + " " + sValue + " " + sRight + " " + sLogic + " ";
@@ -1146,7 +1116,7 @@ namespace ERPSupport.SupForm
             if (cbxCondition.SelectedIndex == 0 || cbxLogic.SelectedIndex == 0)//不选择筛选条件
                 return string.Empty;
 
-            if (eFormId == FormID.PRD_INSTOCK || eFormId == FormID.PRD_PPBOM)//倒冲领料、调拨
+            if (_FormId == FormID.PRD_INSTOCK || _FormId == FormID.PRD_PPBOM)//倒冲领料、调拨
             {
                 if (cbxCondition.SelectedIndex == 1)//日期类型
                 {
@@ -1206,7 +1176,7 @@ namespace ERPSupport.SupForm
                     }
                 }
             }
-            else if (eFormId == FormID.SAL_SALEORDER || eFormId == FormID.SAL_SALEORDERRUN)//销售订单锁库、运算
+            else if (_FormId == FormID.SAL_SALEORDER || _FormId == FormID.SAL_SALEORDERRUN)//销售订单锁库、运算
             {
                 if (cbxCondition.SelectedIndex == 1 || cbxCondition.SelectedIndex == 2)//日期类型
                 {
@@ -1271,37 +1241,37 @@ namespace ERPSupport.SupForm
         #endregion
 
         #region 选择/取消选择
-        /// <summary>
-        /// 选择/取消选择
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSelect_Click(object sender, EventArgs e)
-        {
-            if (dgv1.DataSource == null || dgv1.Rows.Count < 1)
-                return;
+        ///// <summary>
+        ///// 选择/取消选择
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void btnSelect_Click(object sender, EventArgs e)
+        //{
+        //    if (dgv1.DataSource == null || dgv1.Rows.Count < 1)
+        //        return;
 
-            if (!bSelect)
-            {
-                foreach (DataGridViewRow dr in dgv1.SelectedRows)
-                {
-                    dr.Cells[0].Value = true;
-                }
+        //    if (!bSelect)
+        //    {
+        //        foreach (DataGridViewRow dr in dgv1.SelectedRows)
+        //        {
+        //            dr.Cells[0].Value = true;
+        //        }
 
-                bSelect = true;
-                btnSelect.Text = "取消勾选";
-            }
-            else
-            {
-                foreach (DataGridViewRow dr in dgv1.SelectedRows)
-                {
-                    dr.Cells[0].Value = false;
-                }
+        //        bSelect = true;
+        //        btnSelect.Text = "取消勾选";
+        //    }
+        //    else
+        //    {
+        //        foreach (DataGridViewRow dr in dgv1.SelectedRows)
+        //        {
+        //            dr.Cells[0].Value = false;
+        //        }
 
-                bSelect = false;
-                btnSelect.Text = "勾选";
-            }
-        }
+        //        bSelect = false;
+        //        btnSelect.Text = "勾选";
+        //    }
+        //}
         #endregion
 
         #region 进度控制
@@ -1313,9 +1283,9 @@ namespace ERPSupport.SupForm
         public void DoWork(object sender, DoWorkEventArgs e)
         {
             //事件处理，指定处理函数
-            if (eFormId == FormID.PRD_PPBOM)
+            if (_FormId == FormID.PRD_PPBOM)
                 e.Result = Trans(sender, e);
-            else if (eFormId == FormID.SAL_SALEORDER)
+            else if (_FormId == FormID.SAL_SALEORDER)
                 e.Result = LockStock(sender, e);
         }
 
@@ -1326,7 +1296,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         public void ProgessChanged(object sender, ProgressChangedEventArgs e)
         {
-            frmNotify.SetNotifyInfo(e.ProgressPercentage, "执行进度:" + Convert.ToString(e.ProgressPercentage) + "%");
+            _frmNotify.SetNotifyInfo(e.ProgressPercentage, "执行进度:" + Convert.ToString(e.ProgressPercentage) + "%");
         }
 
         /// <summary>
@@ -1336,7 +1306,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         public void CompleteWork(object sender, RunWorkerCompletedEventArgs e)
         {
-            frmNotify.Close();
+            _frmNotify.Close();
         }
         #endregion
 
@@ -1348,7 +1318,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void btnCommit_Click(object sender, EventArgs e)
         {
-            if (!TimerPara.PauseStatus && eFormId != FormID.PRD_PPBOM)//排除调拨
+            if (!_TimerPara.PauseStatus && _FormId != FormID.PRD_PPBOM)//排除调拨
             {
                 MessageBox.Show("请先暂停定时器：工具->定时器");
                 return;
@@ -1366,7 +1336,7 @@ namespace ERPSupport.SupForm
             dtResult = new DataTable();
             dtResult.Columns.Add("单号");
 
-            if (eFormId == FormID.PRD_INSTOCK)//根据勾选生成倒冲领料单
+            if (_FormId == FormID.PRD_INSTOCK)//根据勾选生成倒冲领料单
             {
                 //限制单一用户执行倒冲领料
                 DataTable dtLock = CommonFunction.GetLockObjectInfo("PICKMTL");
@@ -1425,7 +1395,7 @@ namespace ERPSupport.SupForm
                 }
                 CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "倒冲领料", "辅助功能\\倒冲领料", BillNos, "1");
             }
-            else if (eFormId == FormID.PRD_PPBOM)//生成直接调拨单
+            else if (_FormId == FormID.PRD_PPBOM)//生成直接调拨单
             {
                 //限制单一用户执行调拨
                 DataTable dtLock = CommonFunction.GetLockObjectInfo("TRANS");
@@ -1446,8 +1416,8 @@ namespace ERPSupport.SupForm
 
                 try
                 {
-                    bgWorker.RunWorkerAsync();
-                    frmNotify.ShowDialog();
+                    _bgWorker.RunWorkerAsync();
+                    _frmNotify.ShowDialog();
                     DataSourceBinding();
                 }
                 catch (Exception ex)
@@ -1459,17 +1429,17 @@ namespace ERPSupport.SupForm
                 //解除调拨占用
                 CommonFunction.UpdateLockStatus(0, "TRANS");
             }
-            else if (eFormId == FormID.SAL_SALEORDER)//锁库
+            else if (_FormId == FormID.SAL_SALEORDER)//锁库
             {
                 //记录勾选状态
-                lstCheckStatus = new List<CheckStatus>();
+                _ListCheckStatus = new List<CheckStatus>();
 
                 for (int i = 0; i < dgv1.Rows.Count; i++)
                 {
-                    lstCheckStatus.Add(new CheckStatus(i, Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value)));
+                    _ListCheckStatus.Add(new CheckStatus(i, Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value)));
                 }
 
-                lstOrder = new ArrayList();
+                _ListOrder = new ArrayList();
                 OrderInfo entry;
 
                 for (int i = 0; i < dgv1.Rows.Count; i++)
@@ -1481,35 +1451,35 @@ namespace ERPSupport.SupForm
                     entry.FBILLTYPEID = dgv1.Rows[i].Cells[2].Value.ToString();//单据类型
                     entry.FMaterialNo = dgv1.Rows[i].Cells[6].Value.ToString();//物料编码
                     entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[18].Value.ToString());//销售订单分录内码
-                    lstOrder.Add(entry);//封装参与锁库的订单实体                        
+                    _ListOrder.Add(entry);//封装参与锁库的订单实体                        
 
                 }
-                if (lstOrder.Count == 0)
+                if (_ListOrder.Count == 0)
                 {
                     MessageBox.Show("没有选择锁库订单！");
                     return;
                 }
 
-                bgWorker.RunWorkerAsync();
-                frmNotify.ShowDialog();
+                _bgWorker.RunWorkerAsync();
+                _frmNotify.ShowDialog();
 
                 //修改批量锁库状态
-                SalOrder.UpdateBatchFlag(lstOrder);
+                SalOrder.UpdateBatchFlag(_ListOrder);
 
                 DataSourceBinding();
 
                 //还原勾选状态
                 for (int i = 0; i < dgv1.Rows.Count; i++)
                 {
-                    dgv1.Rows[i].Cells[0].Value = lstCheckStatus[i].ChStatus;
+                    dgv1.Rows[i].Cells[0].Value = _ListCheckStatus[i].ChStatus;
                 }
 
                 //操作日志
                 CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "锁库", "辅助功能\\锁库", "请查看锁库日志", "1");
             }
-            else if (eFormId == FormID.SAL_SALEORDERRUN)//订单运算
+            else if (_FormId == FormID.SAL_SALEORDERRUN)//订单运算
             {
-                DataTable dtTran = dtSearch.Clone();
+                DataTable dtTran = _dtSearch.Clone();
 
                 for (int i = 0; i < dgv1.Rows.Count; i++)
                 {
@@ -1518,7 +1488,7 @@ namespace ERPSupport.SupForm
                         //排除完全锁库订单或已锁库分录(在运算时排除)
 
                         //dtTran.ImportRow(dtSearch.Rows[i]);
-                        dtTran.ImportRow((dtSearch.Select("订单内码=" + dgv1.Rows[i].Cells[19].Value.ToString()))[0]);
+                        dtTran.ImportRow((_dtSearch.Select("订单内码=" + dgv1.Rows[i].Cells[19].Value.ToString()))[0]);
                     }
                 }
 
@@ -1573,7 +1543,7 @@ namespace ERPSupport.SupForm
                 //运算
                 try
                 {
-                    frmOrderOperation oor = new frmOrderOperation(dtTran);
+                    Bussiness.frmOrderOperation oor = new Bussiness.frmOrderOperation(dtTran);
                     oor.ShowDialog();
                     oor.Dispose();
                 }
@@ -1678,7 +1648,7 @@ namespace ERPSupport.SupForm
                 PrdAllocation.UpdateDirectFields(dtpDate.Value.ToString("yyyy-MM-dd"), list[i]);
 
                 //控制进度条
-                if (bgWorker.CancellationPending)
+                if (_bgWorker.CancellationPending)
                 {
                     e.Cancel = true;
                     return -1;
@@ -1686,7 +1656,7 @@ namespace ERPSupport.SupForm
                 else
                 {
                     // 状态报告  
-                    bgWorker.ReportProgress(i * 100 / (list.Count - 1));
+                    _bgWorker.ReportProgress(i * 100 / (list.Count - 1));
 
                     // 等待，用于UI刷新界面，很重要  
                     Thread.Sleep(1);
@@ -1730,7 +1700,7 @@ namespace ERPSupport.SupForm
             ReturnDT.Columns.Add("仓库");
             ReturnDT.Columns.Add("信息");
 
-            if (lstOrder.Count == 0) goto ShowResult;
+            if (_ListOrder.Count == 0) goto ShowResult;
 
             //占用锁库操作
             DataTable dtLock = CommonFunction.GetLockObjectInfo("LOCKSTOCK");
@@ -1749,38 +1719,38 @@ namespace ERPSupport.SupForm
                 return -1;
             }
 
-            for (int i = 0; i < lstOrder.Count; i++)
+            for (int i = 0; i < _ListOrder.Count; i++)
             {
                 dt = new DataTable();
-                dt = SalOrder.GetOrderLockByFEntryId(((OrderInfo)lstOrder[i]).FEntryId);
+                dt = SalOrder.GetOrderLockByFEntryId(((OrderInfo)_ListOrder[i]).FEntryId);
 
                 if (dt == null || dt.Rows.Count == 0)//锁库失败信息
                 {
                     dr = ReturnDT.NewRow();
                     dr["操作"] = "失败";
-                    dr["销售订单"] = ((OrderInfo)lstOrder[i]).FBillNo;
-                    dr["物料编码"] = ((OrderInfo)lstOrder[i]).FMaterialNo;
+                    dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
+                    dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
                     dr["仓库"] = "";
                     dr["信息"] = "没有库存信息";
                     ReturnDT.Rows.Add(dr);
 
                     //锁库失败记录日志
-                    SalOrder.Log_OrderLock((OrderInfo)lstOrder[i], 1, "没有库存信息");
+                    SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "没有库存信息");
                 }
                 else
                 {
-                    if (((OrderInfo)lstOrder[i]).FBILLTYPEID == "备货销售订单")//备货销售订单不需要锁库
+                    if (((OrderInfo)_ListOrder[i]).FBILLTYPEID == "备货销售订单")//备货销售订单不需要锁库
                     {
                         dr = ReturnDT.NewRow();
                         dr["操作"] = "失败";
-                        dr["销售订单"] = ((OrderInfo)lstOrder[i]).FBillNo;
-                        dr["物料编码"] = ((OrderInfo)lstOrder[i]).FMaterialNo;
+                        dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
                         dr["仓库"] = "";
                         dr["信息"] = "备货销售订单。";
                         ReturnDT.Rows.Add(dr);
 
                         //锁库失败记录日志
-                        SalOrder.Log_OrderLock((OrderInfo)lstOrder[i], 1, "备货销售订单");
+                        SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "备货销售订单");
                         continue;
                     }
 
@@ -1790,14 +1760,14 @@ namespace ERPSupport.SupForm
                     {
                         dr = ReturnDT.NewRow();
                         dr["操作"] = "失败";
-                        dr["销售订单"] = ((OrderInfo)lstOrder[i]).FBillNo;
-                        dr["物料编码"] = ((OrderInfo)lstOrder[i]).FMaterialNo;
+                        dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
                         dr["仓库"] = "";
                         dr["信息"] = "可锁数量小于等于零";
                         ReturnDT.Rows.Add(dr);
 
                         //锁库失败记录日志
-                        SalOrder.Log_OrderLock((OrderInfo)lstOrder[i], 1, "可锁数量小于等于零");
+                        SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "可锁数量小于等于零");
                         continue;
                     }
 
@@ -1812,14 +1782,14 @@ namespace ERPSupport.SupForm
                     {
                         dr = ReturnDT.NewRow();
                         dr["操作"] = "失败";
-                        dr["销售订单"] = ((OrderInfo)lstOrder[i]).FBillNo;
-                        dr["物料编码"] = ((OrderInfo)lstOrder[i]).FMaterialNo;
+                        dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
                         dr["仓库"] = "";
                         dr["信息"] = "库存可用量为零";
                         ReturnDT.Rows.Add(dr);
 
                         //锁库失败记录日志
-                        SalOrder.Log_OrderLock((OrderInfo)lstOrder[i], 1, "库存可用量为零");
+                        SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "库存可用量为零");
                         continue;
                     }
 
@@ -1882,14 +1852,14 @@ namespace ERPSupport.SupForm
                 }
 
                 //进度条
-                if (bgWorker.CancellationPending)
+                if (_bgWorker.CancellationPending)
                 {
                     e.Cancel = true;
                     goto ShowResult;
                 }
                 else
                 {
-                    bgWorker.ReportProgress((i + 1) * 100 / lstOrder.Count);
+                    _bgWorker.ReportProgress((i + 1) * 100 / _ListOrder.Count);
                     Thread.Sleep(1);
                 }
             }
@@ -1921,11 +1891,11 @@ namespace ERPSupport.SupForm
             }
 
             //记录勾选状态
-            lstCheckStatus = new List<CheckStatus>();
+            _ListCheckStatus = new List<CheckStatus>();
 
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
-                lstCheckStatus.Add(new CheckStatus(i, Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value)));
+                _ListCheckStatus.Add(new CheckStatus(i, Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value)));
             }
 
             IList olist = new ArrayList();//销售订单实体
@@ -1960,7 +1930,7 @@ namespace ERPSupport.SupForm
             //还原勾选状态
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
-                dgv1.Rows[i].Cells[0].Value = lstCheckStatus[i].ChStatus;
+                dgv1.Rows[i].Cells[0].Value = _ListCheckStatus[i].ChStatus;
             }
         }
 
@@ -2200,8 +2170,8 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void frmMain_Resize(object sender, EventArgs e)
         {
-            if (iCurrentRow != 0)
-                ResetUCSize(lstP, iCurrentRow, iChildCount);
+            if (_CurrentRow != 0)
+                ResetUCSize(_ListP, _CurrentRow, _ChildCount);
         }
         #endregion
 
@@ -2260,7 +2230,7 @@ namespace ERPSupport.SupForm
             frmSetting st = new frmSetting(2);
             st.ShowDialog();
 
-            if (st.BLogout)
+            if (st.Logout)
             {
                 Dispose();
                 DialogResult = DialogResult.None;
@@ -2405,17 +2375,17 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiTool_Timer_Click(object sender, EventArgs e)
         {
-            frmTimer frmTime = new frmTimer(TimerPara);
+            frmTimer frmTime = new frmTimer(_TimerPara);
 
             if (frmTime.ShowDialog() == DialogResult.OK)
             {
                 //TimerPara = frmTime.TimerPara;
-                TimerPara = new TimerParameter(frmTime.TimerPara.ExeTimes, frmTime.TimerPara.PickMinute, frmTime.TimerPara.RunSeconds, frmTime.TimerPara.PauseStatus, frmTime.TimerPara.IsRunning, frmTime.TimerPara.FuncID);
+                _TimerPara = new TimerParameter(frmTime.TimerPara.ExeTimes, frmTime.TimerPara.PickMinute, frmTime.TimerPara.RunSeconds, frmTime.TimerPara.PauseStatus, frmTime.TimerPara.IsRunning, frmTime.TimerPara.FuncID);
 
-                if (TimerPara.PauseStatus)
+                if (_TimerPara.PauseStatus)
                 {
                     if (tSumSecond != null) tSumSecond.Stop();//停止进行时间累计
-                    if (tExecute != null) tExecute.Stop();//停止方法自动执行
+                    if (_Execute != null) _Execute.Stop();//停止方法自动执行
                 }
                 else
                 {
@@ -2427,11 +2397,11 @@ namespace ERPSupport.SupForm
                     tSumSecond.Start();
 
                     //方法自动执行
-                    tExecute = new System.Timers.Timer();
-                    tExecute.Enabled = true;
-                    tExecute.Interval = 1000 * 60 * TimerPara.PickMinute;//每pMinute分钟执行一次
-                    tExecute.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-                    tExecute.Start();
+                    _Execute = new System.Timers.Timer();
+                    _Execute.Enabled = true;
+                    _Execute.Interval = 1000 * 60 * _TimerPara.PickMinute;//每pMinute分钟执行一次
+                    _Execute.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+                    _Execute.Start();
                 }
 
                 //操作日志
@@ -2495,7 +2465,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void cbxCondition_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (eFormId == FormID.PRD_INSTOCK || eFormId == FormID.PRD_PPBOM)
+            if (_FormId == FormID.PRD_INSTOCK || _FormId == FormID.PRD_PPBOM)
             {
                 if (cbxCondition.SelectedIndex == 1)
                 {
@@ -2510,7 +2480,7 @@ namespace ERPSupport.SupForm
                     dtpDate.Visible = false;
                 }
             }
-            else if (eFormId == FormID.SAL_SALEORDER || eFormId == FormID.SAL_SALEORDERRUN)
+            else if (_FormId == FormID.SAL_SALEORDER || _FormId == FormID.SAL_SALEORDERRUN)
             {
                 if (cbxCondition.SelectedIndex == 1 || cbxCondition.SelectedIndex == 2)
                 {
@@ -2538,10 +2508,29 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void dtpDate_ValueChanged(object sender, EventArgs e)
         {
-            if (eFormId == FormID.PRD_PPBOM)
+            if (_FormId == FormID.PRD_PPBOM)
             {
                 btnSearch.Enabled = false;
             }
+        }
+        #endregion
+
+        #region 勾选
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (dgv1 == null || dgv1.Rows.Count == 0)
+                return;
+
+            foreach (DataGridViewRow dr in dgv1.Rows)
+            {
+                dr.Cells[0].Value = ((CheckBox)sender).Checked;
+            }
+            dgv1.EndEdit();
         }
         #endregion
 
@@ -2580,7 +2569,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tSumSecond_Tick(object sender, EventArgs e)
         {
-            TimerPara.RunSeconds++;
+            _TimerPara.RunSeconds++;
         }
 
         /// <summary>
@@ -2592,7 +2581,7 @@ namespace ERPSupport.SupForm
         {
             DataTable dt = new DataTable();
 
-            TimerPara.IsRunning = true;
+            _TimerPara.IsRunning = true;
 
             try
             {
@@ -2604,12 +2593,12 @@ namespace ERPSupport.SupForm
                     {
                         PrdPick.PickMtl(dt.Rows[i]["FBILLNO"].ToString());
                     }
-                    TimerPara.ExeTimes++;
+                    _TimerPara.ExeTimes++;
                 }
             }
             catch { }
 
-            TimerPara.IsRunning = false;
+            _TimerPara.IsRunning = false;
         }
 
         /// <summary>
@@ -2622,7 +2611,7 @@ namespace ERPSupport.SupForm
             WinMessager.iOperCount++;
             if (WinMessager.iOperCount > 1)
             {
-                //Application.Exit();
+                Application.Exit();
             }
         }
         #endregion

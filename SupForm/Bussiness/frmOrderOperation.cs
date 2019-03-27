@@ -13,7 +13,7 @@ using ERPSupport.SQL.K3Cloud;
 using ERPSupport.Model.Globa;
 using Excel = Microsoft.Office.Interop.Excel;
 
-namespace ERPSupport.SupForm
+namespace ERPSupport.SupForm.Bussiness
 {
     /// <summary>
     /// 订单运算
@@ -25,63 +25,63 @@ namespace ERPSupport.SupForm
         /// <summary>
         /// 订单信息
         /// </summary>
-        private DataTable dtRun;
+        private DataTable _dtRun;
         /// <summary>
         /// 订单信息运算结果
         /// </summary>
-        private DataTable dtRunResult;
+        private DataTable _dtRunResult;
         /// <summary>
         /// 子项明细信息
         /// </summary>
-        private DataTable dtDtl;
+        private DataTable _dtDtl;
         /// <summary>
         /// 子项明细运算结果
         /// </summary>
-        private DataTable dtDtlResult;
+        private DataTable _dtDtlResult;
         /// <summary>
         /// 需要运算的订单分录ID集合
         /// </summary>
-        private List<int> lstRunEntryId;
+        private List<int> _ListRunEntryId;
         /// <summary>
         /// 不需要运算的订单分录ID集合
         /// </summary>
-        private List<int> lstNotRunEntryId;
+        private List<int> _ListNotRunEntryId;
         /// <summary>
         /// 方法标识
         /// </summary>
-        private string FuncID;
+        private string _FuncID;
         /// <summary>
         /// 指定的时间段内总天数
         /// </summary>
-        private int iSumDays = 0;
+        private int _SumDays = 0;
         /// <summary>
         /// 指定的时间段内，除去周日的天数。
         /// </summary>
-        private int iDays = 0;
+        private int _Days = 0;
         /// <summary>
         /// 开始时间
         /// </summary>
-        private DateTime StarTime;
+        private DateTime _StarTime;
         /// <summary>
         /// 结束时间
         /// </summary>
-        private DateTime EndTime;
+        private DateTime _EndTime;
         /// <summary>
         /// 运算是否添加采购生产数量
         /// </summary>
-        private bool bAddJoinQty;
+        private bool _AddJoinQty;
         /// <summary>
         /// 计时器
         /// </summary>
-        private System.Timers.Timer timer;
+        private System.Timers.Timer _timer;
         /// <summary>
         /// 单独进程执行操作的组件
         /// </summary>
-        private BackgroundWorker bgWorker;
+        private BackgroundWorker _bgWorker;
         /// <summary>
         /// 进度条窗体
         /// </summary>
-        private Common.frmProgress frmNotify;
+        private Common.frmProgress _frmNotify;
 
         /// <summary>
         /// 构造函数
@@ -90,7 +90,7 @@ namespace ERPSupport.SupForm
         public frmOrderOperation(DataTable pDT)
         {
             InitializeComponent();
-            dtRun = pDT;
+            _dtRun = pDT;
         }
         #endregion
 
@@ -102,16 +102,15 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void frmOrderOperation_Load(object sender, EventArgs e)
         {
-            //FuncID = "ExpandMTL";
             CheckForIllegalCrossThreadCalls = false;//解决多线程调用控件问题
 
-            frmNotify = new Common.frmProgress();
-            bgWorker = new BackgroundWorker();
-            bgWorker.WorkerReportsProgress = true;
-            bgWorker.WorkerSupportsCancellation = true;
-            bgWorker.DoWork += new DoWorkEventHandler(DoWork);
-            bgWorker.ProgressChanged += new ProgressChangedEventHandler(ProgessChanged);
-            bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CompleteWork);
+            _frmNotify = new Common.frmProgress();
+            _bgWorker = new BackgroundWorker();
+            _bgWorker.WorkerReportsProgress = true;
+            _bgWorker.WorkerSupportsCancellation = true;
+            _bgWorker.DoWork += new DoWorkEventHandler(DoWork);
+            _bgWorker.ProgressChanged += new ProgressChangedEventHandler(ProgessChanged);
+            _bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CompleteWork);
 
             SetDefault();
         }
@@ -123,93 +122,31 @@ namespace ERPSupport.SupForm
         /// </summary>
         private void SetDefault()
         {
-            ////计时
-            //timer = new System.Timers.Timer();
-            //timer.Enabled = true;
-            //timer.Interval = 1000 * 60 * 5;//每5分钟执行一次
-            //timer.Start();
-            //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-
-            ////获取数据源
-            //dgv1.DataSource = dtRun;
-            //dgv1.Columns[18].Visible = false;
-
-            //if (dgv1.DataSource == null || dgv1.Rows.Count == 0) return;
-
-            ////不允许重新排列
-            //DGVSort(dgv1, false);
-
-            //DataTable dtPars = new DataTable();//物料参数信息
-            //SQLiteConnection sqlcnn = new SQLiteConnection("Data Source=" + string.Format(@"{0}", Application.StartupPath + @"\K3AssConfig.db"));
-            //string strSQL = @"SELECT StarTime,EndTime,SumMoonths,AddJoinQty FROM OrderRunParameter WHERE OID = 1";
-
-            //try
-            //{
-            //    sqlcnn.Open();
-            //    SQLiteDataAdapter adp = new SQLiteDataAdapter(strSQL, sqlcnn);
-            //    adp.Fill(dtPars);
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show("数据文件[K3AssConfig.db]错误，程序未能正常运行。\n" + ex.Message);
-            //    DialogResult = DialogResult.None;
-            //    Close();
-            //    btnRun.Enabled = false;
-            //}
-            //finally
-            //{
-            //    sqlcnn.Close();
-            //}
-
-            //if (dtPars.Rows.Count == 0)
-            //{
-            //    MessageBox.Show("表数据错误，程序未能正常运行。");
-            //    DialogResult = DialogResult.None;
-            //    Close();
-            //    btnRun.Enabled = false;
-            //}
-
-            //StarTime = DateTime.Parse(dtPars.Rows[0]["StarTime"].ToString());
-            //EndTime = DateTime.Parse(dtPars.Rows[0]["EndTime"].ToString());
-            //iSumDays = int.Parse(dtPars.Rows[0]["SumMoonths"].ToString());
-            //bAddJoinQty = dtPars.Rows[0]["AddJoinQty"].ToString().Trim() == "0" ? false : true;
-
-            //int itemp = iSumDays;//  循环次数
-            //while (itemp > 0)
-            //{
-            //    if (EndTime.AddDays(-itemp + 1).DayOfWeek != DayOfWeek.Sunday)
-            //        iDays++;
-            //    itemp--;
-            //}
-
-            //20190104
-
             //计时
-            timer = new System.Timers.Timer();
-            timer.Enabled = true;
-            timer.Interval = 1000 * 60 * 5;//每5分钟执行一次
-            timer.Start();
-            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
+            _timer = new System.Timers.Timer();
+            _timer.Enabled = true;
+            _timer.Interval = 1000 * 60 * 5;//每5分钟执行一次
+            _timer.Start();
+            _timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
 
             //获取数据源
-            dgv1.DataSource = dtRun;
+            dgv1.DataSource = _dtRun;
             dgv1.Columns[18].Visible = false;
-
-            if (dgv1.DataSource == null || dgv1.Rows.Count == 0) return;
 
             //不允许重新排列
             DGVSort(dgv1, false);
 
-            StarTime = DateTime.Parse(UserClass.AppConfig.ReadValue("ORP_StarTime", "AppSettings"));
-            EndTime = DateTime.Parse(UserClass.AppConfig.ReadValue("ORP_EndTime", "AppSettings"));
-            iSumDays = int.Parse(UserClass.AppConfig.ReadValue("ORP_SumMoonths", "AppSettings"));
-            bAddJoinQty = UserClass.AppConfig.ReadValue("ORP_AddJoinQty", "AppSettings") == "0" ? false : true;
+            //配置信息
+            _StarTime = DateTime.Parse(UserClass.AppConfig.ReadValue("ORP_StarTime", "AppSettings"));
+            _EndTime = DateTime.Parse(UserClass.AppConfig.ReadValue("ORP_EndTime", "AppSettings"));
+            _SumDays = int.Parse(UserClass.AppConfig.ReadValue("ORP_SumMoonths", "AppSettings"));
+            _AddJoinQty = UserClass.AppConfig.ReadValue("ORP_AddJoinQty", "AppSettings") == "0" ? false : true;
 
-            int itemp = iSumDays;//  循环次数
+            int itemp = _SumDays;
             while (itemp > 0)
             {
-                if (EndTime.AddDays(-itemp + 1).DayOfWeek != DayOfWeek.Sunday)
-                    iDays++;
+                if (_EndTime.AddDays(-itemp + 1).DayOfWeek != DayOfWeek.Sunday)
+                    _Days++;
                 itemp--;
             }
         }
@@ -223,17 +160,9 @@ namespace ERPSupport.SupForm
         /// <param name="pSort"></param>
         private void DGVSort(DataGridView pDGV, bool pSort)
         {
-            DataGridViewColumnSortMode tempMode;
-
-            if (pSort)
-                tempMode = DataGridViewColumnSortMode.Automatic;//Can排序
-            else
-                tempMode = DataGridViewColumnSortMode.NotSortable;//不允许重新排列
-
+            DataGridViewColumnSortMode tempMode = pSort ? DataGridViewColumnSortMode.Automatic : DataGridViewColumnSortMode.NotSortable;
             for (int i = 0; i < pDGV.Columns.Count; i++)
-            {
                 pDGV.Columns[i].SortMode = tempMode;
-            }
         }
         #endregion
 
@@ -245,7 +174,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         public void DoWork(object sender, DoWorkEventArgs e)
         {
-            if (FuncID == "ExpandMTL")
+            if (_FuncID == "ExpandMTL")
                 e.Result = ExpandMTL(e);
             else
                 e.Result = SaveOrderRun(e);
@@ -258,7 +187,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         public void ProgessChanged(object sender, ProgressChangedEventArgs e)
         {
-            frmNotify.SetNotifyInfo(e.ProgressPercentage, "运算进度:" + e.ProgressPercentage + " %");
+            _frmNotify.SetNotifyInfo(e.ProgressPercentage, "运算进度:" + e.ProgressPercentage + " %");
         }
 
         /// <summary>
@@ -268,7 +197,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         public void CompleteWork(object sender, RunWorkerCompletedEventArgs e)
         {
-            frmNotify.Close();
+            _frmNotify.Close();
         }
         #endregion
 
@@ -293,45 +222,45 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void btnRun_Click(object sender, EventArgs e)
         {
-            dtRunResult = SalOrder.OrderRun(dtRun, bAddJoinQty);
+            _dtRunResult = SalOrder.OrderRun(_dtRun, _AddJoinQty);
 
-            if (dtRunResult == null || dtRunResult.Rows.Count == 0)
+            if (_dtRunResult == null || _dtRunResult.Rows.Count == 0)
             {
                 MessageBox.Show("未查询到成品物料信息");
                 return;
             }
 
             dgv1.DataSource = null;
-            dgv1.DataSource = dtRunResult;
+            dgv1.DataSource = _dtRunResult;
             dgv1.Columns[0].Visible = false;
             dgv1.Columns[1].Visible = false;
-            lstRunEntryId = new List<int>();
-            lstNotRunEntryId = new List<int>();
+            _ListRunEntryId = new List<int>();
+            _ListNotRunEntryId = new List<int>();
 
             //不允许重新排列
             DGVSort(dgv1, false);
 
-            for (int i = 0; i < dtRunResult.Rows.Count; i++)
+            for (int i = 0; i < _dtRunResult.Rows.Count; i++)
             {
-                if (dtRunResult.Rows[i]["欠料等级"].ToString() != "无需生产" && dtRunResult.Rows[i]["锁库"].ToString() == "否" && dtRunResult.Rows[i]["完全锁库"].ToString() == "否")
+                if (_dtRunResult.Rows[i]["欠料等级"].ToString() != "无需生产" && _dtRunResult.Rows[i]["锁库"].ToString() == "否" && _dtRunResult.Rows[i]["完全锁库"].ToString() == "否")
                 {
                     dgv1.Rows[i].DefaultCellStyle.BackColor = Color.Orange;//改变需要运算行的颜色
-                    lstRunEntryId.Add(int.Parse(dtRun.Rows[i]["订单内码"].ToString()));//添加分录ID到集合
+                    _ListRunEntryId.Add(int.Parse(_dtRun.Rows[i]["订单内码"].ToString()));//添加分录ID到集合
                 }
                 else
                 {
-                    lstNotRunEntryId.Add(int.Parse(dtRun.Rows[i]["订单内码"].ToString()));
+                    _ListNotRunEntryId.Add(int.Parse(_dtRun.Rows[i]["订单内码"].ToString()));
                 }
             }
 
-            if (lstRunEntryId.Count > 0)
+            if (_ListRunEntryId.Count > 0)
             {
                 dgv2.DataSource = null;
 
                 //子项运算进度
-                FuncID = "ExpandMTL";
-                bgWorker.RunWorkerAsync();
-                frmNotify.ShowDialog();
+                _FuncID = "ExpandMTL";
+                _bgWorker.RunWorkerAsync();
+                _frmNotify.ShowDialog();
 
                 //更新订单分录欠料等级
                 string strTempLL;
@@ -341,9 +270,9 @@ namespace ERPSupport.SupForm
                     {
                         if (dgv1.Rows[i].Cells[19].Value.ToString().Trim().Length > 0)
                         {
-                            strTempLL = LackLevel(int.Parse(dtRun.Rows[i]["订单内码"].ToString()));
+                            strTempLL = LackLevel(int.Parse(_dtRun.Rows[i]["订单内码"].ToString()));
                             dgv1.Rows[i].Cells[22].Value = strTempLL;
-                            dtRunResult.Rows[i]["欠料等级"] = strTempLL;
+                            _dtRunResult.Rows[i]["欠料等级"] = strTempLL;
                         }
                         else
                             dgv1.Rows[i].Cells[22].Value = " ";
@@ -372,10 +301,10 @@ namespace ERPSupport.SupForm
         /// <returns></returns>
         private int ExpandMTL(DoWorkEventArgs e)
         {
-            dtDtl = new DataTable();
-            dtDtl = SalOrder.OrderRun(lstRunEntryId, StarTime, EndTime, bAddJoinQty);
+            _dtDtl = new DataTable();
+            _dtDtl = SalOrder.OrderRun(_ListRunEntryId, _StarTime, _EndTime, _AddJoinQty);
 
-            if (dtDtl == null || dtDtl.Rows.Count == 0)
+            if (_dtDtl == null || _dtDtl.Rows.Count == 0)
             {
                 MessageBox.Show("未查询到子项物料信息");
                 return -1;
@@ -395,124 +324,128 @@ namespace ERPSupport.SupForm
             dtCalulate.Columns.Add("累计占用数量");
             //dtCalulate.Columns.Add("欠料数量");
 
-            dtDtlResult = new DataTable();
+            _dtDtlResult = new DataTable();
             DataRow dr;
             int iCount = 0;//子项明细行数            
             bool bMatched = false;//物料是否已作运算
 
-            dtDtlResult.Columns.Add("订单编号");
-            dtDtlResult.Columns.Add("父项物料");
-            dtDtlResult.Columns.Add("父项名称");
-            dtDtlResult.Columns.Add("物料编码");
-            dtDtlResult.Columns.Add("物料名称");
+            _dtDtlResult.Columns.Add("订单编号");
+            _dtDtlResult.Columns.Add("父项物料");
+            _dtDtlResult.Columns.Add("父项名称");
+            _dtDtlResult.Columns.Add("物料编码");
+            _dtDtlResult.Columns.Add("物料名称");
 
-            dtDtlResult.Columns.Add("单位");
-            dtDtlResult.Columns.Add("BOM");
-            dtDtlResult.Columns.Add("订单数量");
-            dtDtlResult.Columns.Add("锁库数量");
-            dtDtlResult.Columns.Add("子项需求");
+            _dtDtlResult.Columns.Add("单位");
+            _dtDtlResult.Columns.Add("BOM");
+            _dtDtlResult.Columns.Add("订单数量");
+            _dtDtlResult.Columns.Add("锁库数量");
+            _dtDtlResult.Columns.Add("子项需求");
             //1
-            dtDtlResult.Columns.Add("库存数量");
-            dtDtlResult.Columns.Add("库存可用数量");
-            dtDtlResult.Columns.Add("最小库存");
-            dtDtlResult.Columns.Add("最大库存");
-            dtDtlResult.Columns.Add("库存需求");
+            _dtDtlResult.Columns.Add("库存数量");
+            _dtDtlResult.Columns.Add("库存可用数量");
+            _dtDtlResult.Columns.Add("最小库存");
+            _dtDtlResult.Columns.Add("最大库存");
+            _dtDtlResult.Columns.Add("库存需求");
 
-            dtDtlResult.Columns.Add("净需求");
-            dtDtlResult.Columns.Add("领料数量");
-            dtDtlResult.Columns.Add("安全库存");
-            dtDtlResult.Columns.Add("库存可用天数");
-            dtDtlResult.Columns.Add("下单点");
+            _dtDtlResult.Columns.Add("净需求");
+            _dtDtlResult.Columns.Add("领料数量");
+            _dtDtlResult.Columns.Add("安全库存");
+            _dtDtlResult.Columns.Add("库存可用天数");
+            _dtDtlResult.Columns.Add("下单点");
             //2
-            dtDtlResult.Columns.Add("本次占用数量");
-            dtDtlResult.Columns.Add("累计占用数量");
-            dtDtlResult.Columns.Add("欠料数量");
-            dtDtlResult.Columns.Add("欠料等级");
-            dtDtlResult.Columns.Add("物料属性");
-
-            dtDtlResult.Columns.Add("采购在途");
-            dtDtlResult.Columns.Add("生产自制");
-            dtDtlResult.Columns.Add("安全库存天数");
-            dtDtlResult.Columns.Add("物流天数");
-            dtDtlResult.Columns.Add("最低订货量");
+            _dtDtlResult.Columns.Add("本次占用数量");
+            _dtDtlResult.Columns.Add("累计占用数量");
+            _dtDtlResult.Columns.Add("欠料数量");
+            _dtDtlResult.Columns.Add("欠料等级");
+            _dtDtlResult.Columns.Add("物料属性");
+            
+            _dtDtlResult.Columns.Add("客户");
+            _dtDtlResult.Columns.Add("提交人");
+            _dtDtlResult.Columns.Add("采购在途");
+            _dtDtlResult.Columns.Add("生产自制");
+            _dtDtlResult.Columns.Add("安全库存天数");
             //3
-            dtDtlResult.Columns.Add("最小批量");
-            dtDtlResult.Columns.Add("补货量");
-            dtDtlResult.Columns.Add("可用库存");
-            dtDtlResult.Columns.Add("FID");
-            dtDtlResult.Columns.Add("FENTRYID");
+            _dtDtlResult.Columns.Add("物流天数");
+            _dtDtlResult.Columns.Add("最低订货量");
+            _dtDtlResult.Columns.Add("最小批量");
+            _dtDtlResult.Columns.Add("补货量");
+            _dtDtlResult.Columns.Add("可用库存");
 
-            dtDtlResult.Columns.Add("SALORG");
-            dtDtlResult.Columns.Add("FMATERIALID");
+            _dtDtlResult.Columns.Add("FID");
+            _dtDtlResult.Columns.Add("FENTRYID");
+            _dtDtlResult.Columns.Add("SALORG");
+            _dtDtlResult.Columns.Add("FMATERIALID");
             #endregion
 
-            for (int i = 0; i < lstRunEntryId.Count; i++)
+            for (int i = 0; i < _ListRunEntryId.Count; i++)
             {
-                for (int j = 0; j < dtDtl.Rows.Count; j++)
+                for (int j = 0; j < _dtDtl.Rows.Count; j++)
                 {
-                    if (int.Parse(dtDtl.Rows[j]["FENTRYID"].ToString()) == lstRunEntryId[i])
+                    if (int.Parse(_dtDtl.Rows[j]["FENTRYID"].ToString()) == _ListRunEntryId[i])
                     {
                         if (i == 0)//第一个成品的子项添加到dtDetailResult和dtCalulate中
                         {
                             #region if i = 0
-                            dr = dtDtlResult.NewRow();
+                            dr = _dtDtlResult.NewRow();
 
-                            dr["订单编号"] = dtDtl.Rows[j]["FBILLNO"];
-                            dr["父项物料"] = dtDtl.Rows[j]["PFNUMBER"];
-                            dr["父项名称"] = dtDtl.Rows[j]["PFNAME"];
-                            dr["物料编码"] = dtDtl.Rows[j]["FNUMBER"];
-                            dr["物料名称"] = dtDtl.Rows[j]["FNAME"];
+                            dr["订单编号"] = _dtDtl.Rows[j]["FBILLNO"];
+                            dr["父项物料"] = _dtDtl.Rows[j]["PFNUMBER"];
+                            dr["父项名称"] = _dtDtl.Rows[j]["PFNAME"];
+                            dr["物料编码"] = _dtDtl.Rows[j]["FNUMBER"];
+                            dr["物料名称"] = _dtDtl.Rows[j]["FNAME"];
 
-                            dr["单位"] = dtDtl.Rows[j]["UNIT"];
-                            dr["BOM"] = dtDtl.Rows[j]["BOM"];
-                            dr["订单数量"] = dtDtl.Rows[j]["FQTY"];
-                            dr["锁库数量"] = dtDtl.Rows[j]["FLOCKQTY"];
-                            dr["子项需求"] = dtDtl.Rows[j]["FSUBQTY"];
+                            dr["单位"] = _dtDtl.Rows[j]["UNIT"];
+                            dr["BOM"] = _dtDtl.Rows[j]["BOM"];
+                            dr["订单数量"] = _dtDtl.Rows[j]["FQTY"];
+                            dr["锁库数量"] = _dtDtl.Rows[j]["FLOCKQTY"];
+                            dr["子项需求"] = _dtDtl.Rows[j]["FSUBQTY"];
                             //1
-                            dr["库存数量"] = dtDtl.Rows[j]["STOCKQTY"];
-                            dr["可用库存"] = dtDtl.Rows[j]["STOCKAVBQTY"];
+                            dr["库存数量"] = _dtDtl.Rows[j]["STOCKQTY"];
+                            dr["可用库存"] = _dtDtl.Rows[j]["STOCKAVBQTY"];
                             dr["库存可用数量"] = decimal.Parse(dr["可用库存"].ToString()) > decimal.Parse(dr["子项需求"].ToString()) ? decimal.Parse(dr["可用库存"].ToString()) - decimal.Parse(dr["子项需求"].ToString()) : 0;
-                            dr["最小库存"] = dtDtl.Rows[j]["FMINSTOCK"];
-                            dr["最大库存"] = dtDtl.Rows[j]["FMAXSTOCK"];
+                            dr["最小库存"] = _dtDtl.Rows[j]["FMINSTOCK"];
+                            dr["最大库存"] = _dtDtl.Rows[j]["FMAXSTOCK"];
 
                             dr["库存需求"] = decimal.Parse(dr["可用库存"].ToString()) > 0 ? (decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["最小库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["最大库存"].ToString()) - decimal.Parse(dr["可用库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString())) : dr["最大库存"];
                             dr["净需求"] = decimal.Parse(dr["可用库存"].ToString()) > 0 ? (decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["最小库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["最大库存"].ToString()) - decimal.Parse(dr["可用库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString())) : decimal.Parse(dr["最大库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString());
-                            dr["领料数量"] = dtDtl.Rows[j]["FACTUALQTY"];
-                            dr["安全库存天数"] = dtDtl.Rows[j]["F_PAEZ_SAFEDAYS"];
-                            dr["物流天数"] = dtDtl.Rows[j]["F_PAEZ_LOGISTICSDAYS"];
+                            dr["领料数量"] = _dtDtl.Rows[j]["FACTUALQTY"];
+                            dr["安全库存天数"] = _dtDtl.Rows[j]["F_PAEZ_SAFEDAYS"];
+                            dr["物流天数"] = _dtDtl.Rows[j]["F_PAEZ_LOGISTICSDAYS"];
                             //2
-                            dr["安全库存"] = decimal.Parse(dr["领料数量"].ToString()) / iSumDays * int.Parse(dr["安全库存天数"].ToString());
-                            dr["库存可用天数"] = decimal.Parse(dr["领料数量"].ToString()) == 0 ? 0 : decimal.Parse(dr["可用库存"].ToString()) / decimal.Parse(dr["领料数量"].ToString()) / iDays;
-                            dr["下单点"] = decimal.Parse(dr["领料数量"].ToString()) / iDays * (int.Parse(dr["安全库存天数"].ToString()) + int.Parse(dr["物流天数"].ToString()));
+                            dr["安全库存"] = decimal.Parse(dr["领料数量"].ToString()) / _SumDays * int.Parse(dr["安全库存天数"].ToString());
+                            dr["库存可用天数"] = decimal.Parse(dr["领料数量"].ToString()) == 0 ? 0 : decimal.Parse(dr["可用库存"].ToString()) / decimal.Parse(dr["领料数量"].ToString()) / _Days;
+                            dr["下单点"] = decimal.Parse(dr["领料数量"].ToString()) / _Days * (int.Parse(dr["安全库存天数"].ToString()) + int.Parse(dr["物流天数"].ToString()));
                             dr["本次占用数量"] = decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["子项需求"].ToString()) ? dr["子项需求"] : dr["可用库存"];
                             dr["累计占用数量"] = dr["子项需求"];
 
                             dr["欠料数量"] = decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["子项需求"].ToString()) - decimal.Parse(dr["可用库存"].ToString());
-                            dr["欠料等级"] = decimal.Parse(dr["欠料数量"].ToString()) > 0 ? dtDtl.Rows[j]["FGROUPLEVEL"].ToString().Trim() : string.Empty;
-                            dr["物料属性"] = int.Parse(dtDtl.Rows[j]["FERPCLSID"].ToString()) == 1 ? "外购" : "自制";
-                            dr["采购在途"] = dtDtl.Rows[j]["FPOQTY"];
-                            dr["生产自制"] = dtDtl.Rows[j]["FMOQTY"];
+                            dr["欠料等级"] = decimal.Parse(dr["欠料数量"].ToString()) > 0 ? _dtDtl.Rows[j]["FGROUPLEVEL"].ToString().Trim() : string.Empty;
+                            dr["物料属性"] = int.Parse(_dtDtl.Rows[j]["FERPCLSID"].ToString()) == 1 ? "外购" : "自制";
+                            dr["采购在途"] = _dtDtl.Rows[j]["FPOQTY"];
+                            dr["生产自制"] = _dtDtl.Rows[j]["FMOQTY"];
                             //3
-                            dr["最低订货量"] = dtDtl.Rows[j]["F_PAEZ_LOWQTY"];
-                            dr["最小批量"] = dtDtl.Rows[j]["F_PAEZ_MINQTY"];
-                            dr["补货量"] = dtDtl.Rows[j]["F_PAEZ_REPLENISHMENT"];
-                            dr["FID"] = dtDtl.Rows[j]["FID"];
-                            dr["FENTRYID"] = dtDtl.Rows[j]["FENTRYID"];
+                            dr["最低订货量"] = _dtDtl.Rows[j]["F_PAEZ_LOWQTY"];
+                            dr["最小批量"] = _dtDtl.Rows[j]["F_PAEZ_MINQTY"];
+                            dr["补货量"] = _dtDtl.Rows[j]["F_PAEZ_REPLENISHMENT"];
+                            dr["FID"] = _dtDtl.Rows[j]["FID"];
+                            dr["FENTRYID"] = _dtDtl.Rows[j]["FENTRYID"];
 
-                            dr["SALORG"] = dtDtl.Rows[j]["SALORG"];
-                            dr["FMATERIALID"] = dtDtl.Rows[j]["FMATERIALID"];
+                            dr["SALORG"] = _dtDtl.Rows[j]["SALORG"];
+                            dr["FMATERIALID"] = _dtDtl.Rows[j]["FMATERIALID"];
+                            dr["客户"] = _dtDtl.Rows[j]["FCUSTID"];
+                            dr["提交人"] = _dtDtl.Rows[j]["F_PAEZ_SUBMITUSERID"];
 
-                            dtDtlResult.Rows.Add(dr);
+                            _dtDtlResult.Rows.Add(dr);
 
                             //添加数据到dtCalulate
                             dr = dtCalulate.NewRow();
-                            dr["物料编码"] = dtDtlResult.Rows[iCount]["物料编码"];
-                            dr["库存可用数量"] = dtDtlResult.Rows[iCount]["库存可用数量"];
-                            dr["库存需求"] = dtDtlResult.Rows[iCount]["库存需求"];
-                            dr["净需求"] = dtDtlResult.Rows[iCount]["净需求"];
-                            dr["本次占用数量"] = dtDtlResult.Rows[iCount]["本次占用数量"];
+                            dr["物料编码"] = _dtDtlResult.Rows[iCount]["物料编码"];
+                            dr["库存可用数量"] = _dtDtlResult.Rows[iCount]["库存可用数量"];
+                            dr["库存需求"] = _dtDtlResult.Rows[iCount]["库存需求"];
+                            dr["净需求"] = _dtDtlResult.Rows[iCount]["净需求"];
+                            dr["本次占用数量"] = _dtDtlResult.Rows[iCount]["本次占用数量"];
 
-                            dr["累计占用数量"] = dtDtlResult.Rows[iCount]["累计占用数量"];
+                            dr["累计占用数量"] = _dtDtlResult.Rows[iCount]["累计占用数量"];
 
                             dtCalulate.Rows.Add(dr);
                             //累计子项数量
@@ -524,57 +457,59 @@ namespace ERPSupport.SupForm
                             for (int k = 0; k < dtCalulate.Rows.Count; k++)
                             {
                                 bMatched = false;
-                                if (dtDtl.Rows[j]["FNUMBER"].ToString() == dtCalulate.Rows[k]["物料编码"].ToString())//物料是否已作运算，是则做累计运算再添加到dtDtlResult中
+                                if (_dtDtl.Rows[j]["FNUMBER"].ToString() == dtCalulate.Rows[k]["物料编码"].ToString())//物料是否已作运算，是则做累计运算再添加到dtDtlResult中
                                 {
                                     #region if Match Material Number
-                                    dr = dtDtlResult.NewRow();
+                                    dr = _dtDtlResult.NewRow();
 
-                                    dr["订单编号"] = dtDtl.Rows[j]["FBILLNO"];
-                                    dr["父项物料"] = dtDtl.Rows[j]["PFNUMBER"];
-                                    dr["父项名称"] = dtDtl.Rows[j]["PFNAME"];
-                                    dr["物料编码"] = dtDtl.Rows[j]["FNUMBER"];
-                                    dr["物料名称"] = dtDtl.Rows[j]["FNAME"];
+                                    dr["订单编号"] = _dtDtl.Rows[j]["FBILLNO"];
+                                    dr["父项物料"] = _dtDtl.Rows[j]["PFNUMBER"];
+                                    dr["父项名称"] = _dtDtl.Rows[j]["PFNAME"];
+                                    dr["物料编码"] = _dtDtl.Rows[j]["FNUMBER"];
+                                    dr["物料名称"] = _dtDtl.Rows[j]["FNAME"];
 
-                                    dr["单位"] = dtDtl.Rows[j]["UNIT"];
-                                    dr["BOM"] = dtDtl.Rows[j]["BOM"];
-                                    dr["订单数量"] = dtDtl.Rows[j]["FQTY"];
-                                    dr["锁库数量"] = dtDtl.Rows[j]["FLOCKQTY"];
-                                    dr["子项需求"] = dtDtl.Rows[j]["FSUBQTY"];
+                                    dr["单位"] = _dtDtl.Rows[j]["UNIT"];
+                                    dr["BOM"] = _dtDtl.Rows[j]["BOM"];
+                                    dr["订单数量"] = _dtDtl.Rows[j]["FQTY"];
+                                    dr["锁库数量"] = _dtDtl.Rows[j]["FLOCKQTY"];
+                                    dr["子项需求"] = _dtDtl.Rows[j]["FSUBQTY"];
                                     //1
-                                    dr["库存数量"] = dtDtl.Rows[j]["STOCKQTY"];
-                                    dr["可用库存"] = dtDtl.Rows[j]["STOCKAVBQTY"];
+                                    dr["库存数量"] = _dtDtl.Rows[j]["STOCKQTY"];
+                                    dr["可用库存"] = _dtDtl.Rows[j]["STOCKAVBQTY"];
                                     dr["库存可用数量"] = decimal.Parse(dr["可用库存"].ToString()) > decimal.Parse(dr["子项需求"].ToString()) + decimal.Parse(dtCalulate.Rows[k]["累计占用数量"].ToString()) ? decimal.Parse(dr["可用库存"].ToString()) - decimal.Parse(dr["子项需求"].ToString()) - decimal.Parse(dtCalulate.Rows[k]["累计占用数量"].ToString()) : 0;
-                                    dr["最小库存"] = dtDtl.Rows[j]["FMINSTOCK"];
-                                    dr["最大库存"] = dtDtl.Rows[j]["FMAXSTOCK"];
+                                    dr["最小库存"] = _dtDtl.Rows[j]["FMINSTOCK"];
+                                    dr["最大库存"] = _dtDtl.Rows[j]["FMAXSTOCK"];
 
                                     dr["库存需求"] = decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) > 0 ? (decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) >= decimal.Parse(dr["最小库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["最大库存"].ToString()) - decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) + decimal.Parse(dr["子项需求"].ToString())) : dr["最大库存"];
                                     dr["净需求"] = decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) > 0 ? (decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) >= decimal.Parse(dr["最小库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["最大库存"].ToString()) - decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) + decimal.Parse(dr["子项需求"].ToString())) : decimal.Parse(dr["最大库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString());
-                                    dr["领料数量"] = dtDtl.Rows[j]["FACTUALQTY"];
-                                    dr["安全库存天数"] = dtDtl.Rows[j]["F_PAEZ_SAFEDAYS"];
-                                    dr["物流天数"] = dtDtl.Rows[j]["F_PAEZ_LOGISTICSDAYS"];
+                                    dr["领料数量"] = _dtDtl.Rows[j]["FACTUALQTY"];
+                                    dr["安全库存天数"] = _dtDtl.Rows[j]["F_PAEZ_SAFEDAYS"];
+                                    dr["物流天数"] = _dtDtl.Rows[j]["F_PAEZ_LOGISTICSDAYS"];
                                     //2
-                                    dr["安全库存"] = decimal.Parse(dr["领料数量"].ToString()) / iSumDays * int.Parse(dr["安全库存天数"].ToString());
-                                    dr["库存可用天数"] = decimal.Parse(dr["领料数量"].ToString()) == 0 ? 0 : decimal.Parse(dr["可用库存"].ToString()) / decimal.Parse(dr["领料数量"].ToString()) / iDays;
-                                    dr["下单点"] = decimal.Parse(dr["领料数量"].ToString()) / iDays * (int.Parse(dr["安全库存天数"].ToString()) + int.Parse(dr["物流天数"].ToString()));
+                                    dr["安全库存"] = decimal.Parse(dr["领料数量"].ToString()) / _SumDays * int.Parse(dr["安全库存天数"].ToString());
+                                    dr["库存可用天数"] = decimal.Parse(dr["领料数量"].ToString()) == 0 ? 0 : decimal.Parse(dr["可用库存"].ToString()) / decimal.Parse(dr["领料数量"].ToString()) / _Days;
+                                    dr["下单点"] = decimal.Parse(dr["领料数量"].ToString()) / _Days * (int.Parse(dr["安全库存天数"].ToString()) + int.Parse(dr["物流天数"].ToString()));
                                     dr["本次占用数量"] = decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) > 0 ? (decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString()) >= decimal.Parse(dr["子项需求"].ToString()) ? dr["子项需求"] : decimal.Parse(dtCalulate.Rows[k]["库存可用数量"].ToString())) : 0;
                                     dr["累计占用数量"] = decimal.Parse(dtCalulate.Rows[k]["累计占用数量"].ToString()) + decimal.Parse(dr["子项需求"].ToString());
 
                                     dr["欠料数量"] = decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["累计占用数量"].ToString()) ? 0 : decimal.Parse(dr["累计占用数量"].ToString()) - decimal.Parse(dr["可用库存"].ToString());
-                                    dr["欠料等级"] = decimal.Parse(dr["欠料数量"].ToString()) > 0 ? dtDtl.Rows[j]["FGROUPLEVEL"].ToString().Trim() : string.Empty;
-                                    dr["物料属性"] = int.Parse(dtDtl.Rows[j]["FERPCLSID"].ToString()) == 1 ? "外购" : "自制";
-                                    dr["采购在途"] = dtDtl.Rows[j]["FPOQTY"];
-                                    dr["生产自制"] = dtDtl.Rows[j]["FMOQTY"];
+                                    dr["欠料等级"] = decimal.Parse(dr["欠料数量"].ToString()) > 0 ? _dtDtl.Rows[j]["FGROUPLEVEL"].ToString().Trim() : string.Empty;
+                                    dr["物料属性"] = int.Parse(_dtDtl.Rows[j]["FERPCLSID"].ToString()) == 1 ? "外购" : "自制";
+                                    dr["采购在途"] = _dtDtl.Rows[j]["FPOQTY"];
+                                    dr["生产自制"] = _dtDtl.Rows[j]["FMOQTY"];
                                     //3
-                                    dr["最低订货量"] = dtDtl.Rows[j]["F_PAEZ_LOWQTY"];
-                                    dr["最小批量"] = dtDtl.Rows[j]["F_PAEZ_MINQTY"];
-                                    dr["补货量"] = dtDtl.Rows[j]["F_PAEZ_REPLENISHMENT"];
-                                    dr["FID"] = dtDtl.Rows[j]["FID"];
-                                    dr["FENTRYID"] = dtDtl.Rows[j]["FENTRYID"];
+                                    dr["最低订货量"] = _dtDtl.Rows[j]["F_PAEZ_LOWQTY"];
+                                    dr["最小批量"] = _dtDtl.Rows[j]["F_PAEZ_MINQTY"];
+                                    dr["补货量"] = _dtDtl.Rows[j]["F_PAEZ_REPLENISHMENT"];
+                                    dr["FID"] = _dtDtl.Rows[j]["FID"];
+                                    dr["FENTRYID"] = _dtDtl.Rows[j]["FENTRYID"];
 
-                                    dr["SALORG"] = dtDtl.Rows[j]["SALORG"];
-                                    dr["FMATERIALID"] = dtDtl.Rows[j]["FMATERIALID"];
+                                    dr["SALORG"] = _dtDtl.Rows[j]["SALORG"];
+                                    dr["FMATERIALID"] = _dtDtl.Rows[j]["FMATERIALID"];
+                                    dr["客户"] = _dtDtl.Rows[j]["FCUSTID"];
+                                    dr["提交人"] = _dtDtl.Rows[j]["F_PAEZ_SUBMITUSERID"];
 
-                                    dtDtlResult.Rows.Add(dr);
+                                    _dtDtlResult.Rows.Add(dr);
 
                                     //调整dtCalulate数据
                                     dtCalulate.Rows[k]["库存可用数量"] = dr["库存可用数量"];
@@ -595,64 +530,66 @@ namespace ERPSupport.SupForm
                             if (!bMatched)//未做过运算的物料，直接添加到dtDtlResult中
                             {
                                 #region if bMatched is false
-                                dr = dtDtlResult.NewRow();
+                                dr = _dtDtlResult.NewRow();
 
-                                dr["订单编号"] = dtDtl.Rows[j]["FBILLNO"];
-                                dr["父项物料"] = dtDtl.Rows[j]["PFNUMBER"];
-                                dr["父项名称"] = dtDtl.Rows[j]["PFNAME"];
-                                dr["物料编码"] = dtDtl.Rows[j]["FNUMBER"];
-                                dr["物料名称"] = dtDtl.Rows[j]["FNAME"];
+                                dr["订单编号"] = _dtDtl.Rows[j]["FBILLNO"];
+                                dr["父项物料"] = _dtDtl.Rows[j]["PFNUMBER"];
+                                dr["父项名称"] = _dtDtl.Rows[j]["PFNAME"];
+                                dr["物料编码"] = _dtDtl.Rows[j]["FNUMBER"];
+                                dr["物料名称"] = _dtDtl.Rows[j]["FNAME"];
 
-                                dr["单位"] = dtDtl.Rows[j]["UNIT"];
-                                dr["BOM"] = dtDtl.Rows[j]["BOM"];
-                                dr["订单数量"] = dtDtl.Rows[j]["FQTY"];
-                                dr["锁库数量"] = dtDtl.Rows[j]["FLOCKQTY"];
-                                dr["子项需求"] = dtDtl.Rows[j]["FSUBQTY"];
+                                dr["单位"] = _dtDtl.Rows[j]["UNIT"];
+                                dr["BOM"] = _dtDtl.Rows[j]["BOM"];
+                                dr["订单数量"] = _dtDtl.Rows[j]["FQTY"];
+                                dr["锁库数量"] = _dtDtl.Rows[j]["FLOCKQTY"];
+                                dr["子项需求"] = _dtDtl.Rows[j]["FSUBQTY"];
                                 //1
-                                dr["库存数量"] = dtDtl.Rows[j]["STOCKQTY"];
-                                dr["可用库存"] = dtDtl.Rows[j]["STOCKAVBQTY"];
+                                dr["库存数量"] = _dtDtl.Rows[j]["STOCKQTY"];
+                                dr["可用库存"] = _dtDtl.Rows[j]["STOCKAVBQTY"];
                                 dr["库存可用数量"] = decimal.Parse(dr["可用库存"].ToString()) > decimal.Parse(dr["子项需求"].ToString()) ? decimal.Parse(dr["可用库存"].ToString()) - decimal.Parse(dr["子项需求"].ToString()) : 0;
-                                dr["最小库存"] = dtDtl.Rows[j]["FMINSTOCK"];
-                                dr["最大库存"] = dtDtl.Rows[j]["FMAXSTOCK"];
+                                dr["最小库存"] = _dtDtl.Rows[j]["FMINSTOCK"];
+                                dr["最大库存"] = _dtDtl.Rows[j]["FMAXSTOCK"];
 
                                 dr["库存需求"] = decimal.Parse(dr["可用库存"].ToString()) > 0 ? (decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["最小库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["最大库存"].ToString()) - decimal.Parse(dr["可用库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString())) : dr["最大库存"];
                                 dr["净需求"] = decimal.Parse(dr["可用库存"].ToString()) > 0 ? (decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["最小库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["最大库存"].ToString()) - decimal.Parse(dr["可用库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString())) : decimal.Parse(dr["最大库存"].ToString()) + decimal.Parse(dr["子项需求"].ToString());
-                                dr["领料数量"] = dtDtl.Rows[j]["FACTUALQTY"];
-                                dr["安全库存天数"] = dtDtl.Rows[j]["F_PAEZ_SAFEDAYS"];
-                                dr["物流天数"] = dtDtl.Rows[j]["F_PAEZ_LOGISTICSDAYS"];
+                                dr["领料数量"] = _dtDtl.Rows[j]["FACTUALQTY"];
+                                dr["安全库存天数"] = _dtDtl.Rows[j]["F_PAEZ_SAFEDAYS"];
+                                dr["物流天数"] = _dtDtl.Rows[j]["F_PAEZ_LOGISTICSDAYS"];
                                 //2
-                                dr["安全库存"] = decimal.Parse(dr["领料数量"].ToString()) / iSumDays * int.Parse(dr["安全库存天数"].ToString());
-                                dr["库存可用天数"] = decimal.Parse(dr["领料数量"].ToString()) == 0 ? 0 : decimal.Parse(dr["可用库存"].ToString()) / decimal.Parse(dr["领料数量"].ToString()) / iDays;
-                                dr["下单点"] = decimal.Parse(dr["领料数量"].ToString()) / iDays * (int.Parse(dr["安全库存天数"].ToString()) + int.Parse(dr["物流天数"].ToString()));
+                                dr["安全库存"] = decimal.Parse(dr["领料数量"].ToString()) / _SumDays * int.Parse(dr["安全库存天数"].ToString());
+                                dr["库存可用天数"] = decimal.Parse(dr["领料数量"].ToString()) == 0 ? 0 : decimal.Parse(dr["可用库存"].ToString()) / decimal.Parse(dr["领料数量"].ToString()) / _Days;
+                                dr["下单点"] = decimal.Parse(dr["领料数量"].ToString()) / _Days * (int.Parse(dr["安全库存天数"].ToString()) + int.Parse(dr["物流天数"].ToString()));
                                 dr["本次占用数量"] = decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["子项需求"].ToString()) ? dr["子项需求"] : dr["可用库存"];
                                 dr["累计占用数量"] = dr["子项需求"];
 
                                 dr["欠料数量"] = decimal.Parse(dr["可用库存"].ToString()) >= decimal.Parse(dr["子项需求"].ToString()) ? 0 : decimal.Parse(dr["子项需求"].ToString()) - decimal.Parse(dr["可用库存"].ToString());
-                                dr["欠料等级"] = decimal.Parse(dr["欠料数量"].ToString()) > 0 ? dtDtl.Rows[j]["FGROUPLEVEL"].ToString().Trim() : string.Empty;
-                                dr["物料属性"] = int.Parse(dtDtl.Rows[j]["FERPCLSID"].ToString()) == 1 ? "外购" : "自制";
-                                dr["采购在途"] = dtDtl.Rows[j]["FPOQTY"];
-                                dr["生产自制"] = dtDtl.Rows[j]["FMOQTY"];
+                                dr["欠料等级"] = decimal.Parse(dr["欠料数量"].ToString()) > 0 ? _dtDtl.Rows[j]["FGROUPLEVEL"].ToString().Trim() : string.Empty;
+                                dr["物料属性"] = int.Parse(_dtDtl.Rows[j]["FERPCLSID"].ToString()) == 1 ? "外购" : "自制";
+                                dr["采购在途"] = _dtDtl.Rows[j]["FPOQTY"];
+                                dr["生产自制"] = _dtDtl.Rows[j]["FMOQTY"];
                                 //3
-                                dr["最低订货量"] = dtDtl.Rows[j]["F_PAEZ_LOWQTY"];
-                                dr["最小批量"] = dtDtl.Rows[j]["F_PAEZ_MINQTY"];
-                                dr["补货量"] = dtDtl.Rows[j]["F_PAEZ_REPLENISHMENT"];
-                                dr["FID"] = dtDtl.Rows[j]["FID"];
-                                dr["FENTRYID"] = dtDtl.Rows[j]["FENTRYID"];
+                                dr["最低订货量"] = _dtDtl.Rows[j]["F_PAEZ_LOWQTY"];
+                                dr["最小批量"] = _dtDtl.Rows[j]["F_PAEZ_MINQTY"];
+                                dr["补货量"] = _dtDtl.Rows[j]["F_PAEZ_REPLENISHMENT"];
+                                dr["FID"] = _dtDtl.Rows[j]["FID"];
+                                dr["FENTRYID"] = _dtDtl.Rows[j]["FENTRYID"];
 
-                                dr["SALORG"] = dtDtl.Rows[j]["SALORG"];
-                                dr["FMATERIALID"] = dtDtl.Rows[j]["FMATERIALID"];
+                                dr["SALORG"] = _dtDtl.Rows[j]["SALORG"];
+                                dr["FMATERIALID"] = _dtDtl.Rows[j]["FMATERIALID"];
+                                dr["客户"] = _dtDtl.Rows[j]["FCUSTID"];
+                                dr["提交人"] = _dtDtl.Rows[j]["F_PAEZ_SUBMITUSERID"];
 
-                                dtDtlResult.Rows.Add(dr);
+                                _dtDtlResult.Rows.Add(dr);
 
                                 //添加数据到dtCalulate
                                 dr = dtCalulate.NewRow();
-                                dr["物料编码"] = dtDtlResult.Rows[iCount]["物料编码"];
-                                dr["库存可用数量"] = dtDtlResult.Rows[iCount]["库存可用数量"];
-                                dr["库存需求"] = dtDtlResult.Rows[iCount]["库存需求"];
-                                dr["净需求"] = dtDtlResult.Rows[iCount]["净需求"];
-                                dr["本次占用数量"] = dtDtlResult.Rows[iCount]["本次占用数量"];
+                                dr["物料编码"] = _dtDtlResult.Rows[iCount]["物料编码"];
+                                dr["库存可用数量"] = _dtDtlResult.Rows[iCount]["库存可用数量"];
+                                dr["库存需求"] = _dtDtlResult.Rows[iCount]["库存需求"];
+                                dr["净需求"] = _dtDtlResult.Rows[iCount]["净需求"];
+                                dr["本次占用数量"] = _dtDtlResult.Rows[iCount]["本次占用数量"];
 
-                                dr["累计占用数量"] = dtDtlResult.Rows[iCount]["累计占用数量"];
+                                dr["累计占用数量"] = _dtDtlResult.Rows[iCount]["累计占用数量"];
 
                                 dtCalulate.Rows.Add(dr);
                                 //累计子项数量
@@ -663,14 +600,14 @@ namespace ERPSupport.SupForm
                     }
                 }
                 //进度条
-                if (bgWorker.CancellationPending)
+                if (_bgWorker.CancellationPending)
                 {
                     e.Cancel = true;
                     return -1;
                 }
                 else
                 {
-                    bgWorker.ReportProgress((i + 1) * 100 / (lstRunEntryId.Count));
+                    _bgWorker.ReportProgress((i + 1) * 100 / (_ListRunEntryId.Count));
                     Thread.Sleep(1);
                 }
             }
@@ -688,17 +625,17 @@ namespace ERPSupport.SupForm
         {
             string strGroupLeve = string.Empty;
 
-            if (dtDtlResult == null || dtDtlResult.Rows.Count == 0)
+            if (_dtDtlResult == null || _dtDtlResult.Rows.Count == 0)
                 return string.Empty;
 
-            for (int i = 0; i < dtDtlResult.Rows.Count; i++)
+            for (int i = 0; i < _dtDtlResult.Rows.Count; i++)
             {
-                if (int.Parse(dtDtlResult.Rows[i]["FENTRYID"].ToString()) == pFEntryId && dtDtlResult.Rows[i]["欠料等级"] != null)
+                if (int.Parse(_dtDtlResult.Rows[i]["FENTRYID"].ToString()) == pFEntryId && _dtDtlResult.Rows[i]["欠料等级"] != null)
                 {
-                    if (strGroupLeve.Length > 0 && dtDtlResult.Rows[i]["欠料等级"].ToString().Trim().Length > 0)
+                    if (strGroupLeve.Length > 0 && _dtDtlResult.Rows[i]["欠料等级"].ToString().Trim().Length > 0)
                         strGroupLeve += ",";
 
-                    strGroupLeve += dtDtlResult.Rows[i]["欠料等级"].ToString();
+                    strGroupLeve += _dtDtlResult.Rows[i]["欠料等级"].ToString();
                 }
             }
 
@@ -754,15 +691,15 @@ namespace ERPSupport.SupForm
             else//只添加运算缺料分录
             {
                 dgv2.DataSource = null;
-                dgv2.DataSource = GetTableByFEntryId(int.Parse(dtRunResult.Rows[dgv1.CurrentCell.RowIndex]["FENTRYID"].ToString()));
+                dgv2.DataSource = GetTableByFEntryId(int.Parse(_dtRunResult.Rows[dgv1.CurrentCell.RowIndex]["FENTRYID"].ToString()));
 
                 if (dgv2.Rows.Count > 0)
                 {
-                    dgv2.Columns[32].Visible = false;//可用库存
-                    dgv2.Columns[33].Visible = false;//FID
-                    dgv2.Columns[34].Visible = false;//FENTRYID
-                    dgv2.Columns[35].Visible = false;//SALORG
-                    dgv2.Columns[36].Visible = false;//FMATERIALID
+                    dgv2.Columns[34].Visible = false;//可用库存
+                    dgv2.Columns[35].Visible = false;//FID
+                    dgv2.Columns[36].Visible = false;//FENTRYID
+                    dgv2.Columns[37].Visible = false;//SALORG
+                    dgv2.Columns[38].Visible = false;//FMATERIALID
                 }
             }
         }
@@ -775,15 +712,15 @@ namespace ERPSupport.SupForm
         /// <returns></returns>
         private DataTable GetTableByFEntryId(int pFEntryId)
         {
-            if (dtDtlResult == null || dtDtlResult.Rows.Count == 0)
+            if (_dtDtlResult == null || _dtDtlResult.Rows.Count == 0)
                 return new DataTable();
 
-            DataTable dtReturn = dtDtlResult.Clone();
+            DataTable dtReturn = _dtDtlResult.Clone();
 
-            for (int i = 0; i < dtDtlResult.Rows.Count; i++)
+            for (int i = 0; i < _dtDtlResult.Rows.Count; i++)
             {
-                if (int.Parse(dtDtlResult.Rows[i]["FENTRYID"].ToString()) == pFEntryId)
-                    dtReturn.ImportRow(dtDtlResult.Rows[i]);
+                if (int.Parse(_dtDtlResult.Rows[i]["FENTRYID"].ToString()) == pFEntryId)
+                    dtReturn.ImportRow(_dtDtlResult.Rows[i]);
             }
 
             return dtReturn;
@@ -802,15 +739,15 @@ namespace ERPSupport.SupForm
 
             dgv2.DataSource = null;
 
-            if (chbAll.Checked && dtDtlResult.Rows.Count > 0)
+            if (chbAll.Checked && _dtDtlResult.Rows.Count > 0)
             {
-                dgv2.DataSource = dtDtlResult;
+                dgv2.DataSource = _dtDtlResult;
 
-                dgv2.Columns[32].Visible = false;//可用库存
-                dgv2.Columns[33].Visible = false;//FID
-                dgv2.Columns[34].Visible = false;//FENTRYID
-                dgv2.Columns[35].Visible = false;//SALORG
-                dgv2.Columns[36].Visible = false;//FMATERIALID
+                dgv2.Columns[34].Visible = false;//可用库存
+                dgv2.Columns[35].Visible = false;//FID
+                dgv2.Columns[36].Visible = false;//FENTRYID
+                dgv2.Columns[37].Visible = false;//SALORG
+                dgv2.Columns[38].Visible = false;//FMATERIALID
 
                 btnExport.Enabled = true;
             }
@@ -830,7 +767,7 @@ namespace ERPSupport.SupForm
             if (dgv2 == null || dgv2.Rows.Count == 0)
                 return;
 
-            frmOrderSummary os = new frmOrderSummary(dtDtlResult, lstRunEntryId);
+            frmOrderSummary os = new frmOrderSummary(_dtDtlResult, _ListRunEntryId);
             os.ShowDialog();
         }
 
@@ -871,9 +808,9 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            FuncID = "SaveOrderRun";
-            bgWorker.RunWorkerAsync();
-            frmNotify.ShowDialog();
+            _FuncID = "SaveOrderRun";
+            _bgWorker.RunWorkerAsync();
+            _frmNotify.ShowDialog();
         }
         #endregion
 
@@ -889,39 +826,39 @@ namespace ERPSupport.SupForm
             int iSEQ = 0;
             string strSQL = string.Empty, YSBILLNO = "YS" + dtNow.ToString("yyyyMMddHHmmssfff");
 
-            for (int i = 0; i < dtRunResult.Rows.Count; i++)
+            for (int i = 0; i < _dtRunResult.Rows.Count; i++)
             {
-                if (lstRunEntryId.Contains(int.Parse(dtRunResult.Rows[i]["FENTRYID"].ToString())))
+                if (_ListRunEntryId.Contains(int.Parse(_dtRunResult.Rows[i]["FENTRYID"].ToString())))
                 {
                     iSEQ++;
-                    strSQL = "INSERT INTO DM_LOG_ORDERRUN(YSBILLNO,FID,FENTRYID,FBILLNO,FBILLTYPE,FMTLNUMBER,FMTLNAME,FCUSTNAME,FUNIT,FQTY,FLOCKQTY,FDEMANDQTY,BOM,FLACKLEVEL,ISLACK,FSEQ) VALUES('" + YSBILLNO + "'," + dtRunResult.Rows[i]["FID"].ToString() + "," + dtRunResult.Rows[i]["FENTRYID"].ToString() + ",'" + dtRunResult.Rows[i]["单据编号"].ToString() + "','" + dtRunResult.Rows[i]["单据类型"].ToString() + "','" + dtRunResult.Rows[i]["物料编码"].ToString() + "','" + dtRunResult.Rows[i]["物料名称"].ToString() + "','" + dtRunResult.Rows[i]["客户名称"].ToString() + "','" + dtRunResult.Rows[i]["单位"].ToString() + "'," + dtRunResult.Rows[i]["订单数量"].ToString() + "," + dtRunResult.Rows[i]["锁库数量"].ToString() + "," + dtRunResult.Rows[i]["订单需求"].ToString() + ",'" + dtRunResult.Rows[i]["BOM版本"].ToString() + "','" + dtRunResult.Rows[i]["欠料等级"].ToString() + "'," + (dtRunResult.Rows[i]["是否欠料"].ToString() == "是" ? "1" : "0") + "," + iSEQ + ")";
+                    strSQL = "INSERT INTO DM_LOG_ORDERRUN(YSBILLNO,FID,FENTRYID,FBILLNO,FBILLTYPE,FMTLNUMBER,FMTLNAME,FCUSTNAME,F_PAEZ_SUBMITUSERID,FUNIT,FQTY,FLOCKQTY,FDEMANDQTY,BOM,FLACKLEVEL,ISLACK,FSEQ) VALUES('" + YSBILLNO + "'," + _dtRunResult.Rows[i]["FID"].ToString() + "," + _dtRunResult.Rows[i]["FENTRYID"].ToString() + ",'" + _dtRunResult.Rows[i]["单据编号"].ToString() + "','" + _dtRunResult.Rows[i]["单据类型"].ToString() + "','" + _dtRunResult.Rows[i]["物料编码"].ToString() + "','" + _dtRunResult.Rows[i]["物料名称"].ToString() + "','" + _dtRunResult.Rows[i]["客户名称"].ToString() + "','" + _dtRunResult.Rows[i]["提交人"].ToString() + "','" + _dtRunResult.Rows[i]["单位"].ToString() + "'," + _dtRunResult.Rows[i]["订单数量"].ToString() + "," + _dtRunResult.Rows[i]["锁库数量"].ToString() + "," + _dtRunResult.Rows[i]["订单需求"].ToString() + ",'" + _dtRunResult.Rows[i]["BOM版本"].ToString() + "','" + _dtRunResult.Rows[i]["欠料等级"].ToString() + "'," + (_dtRunResult.Rows[i]["是否欠料"].ToString() == "是" ? "1" : "0") + "," + iSEQ + ")";
 
                     SQL.ORAHelper.ExecuteNonQuery(strSQL);
 
                     //保存子项物料运算结果
-                    SaveDetail(dtRunResult.Rows[i]["FENTRYID"].ToString());
+                    SaveDetail(_dtRunResult.Rows[i]["FENTRYID"].ToString());
 
                     //反写运算次数、整单是否欠料和欠料等级
-                    SalOrder.UpdateOrderFields(int.Parse(dtRunResult.Rows[i]["FENTRYID"].ToString()), dtRunResult.Rows[i]["欠料等级"].ToString());
+                    SalOrder.UpdateOrderFields(int.Parse(_dtRunResult.Rows[i]["FENTRYID"].ToString()), _dtRunResult.Rows[i]["欠料等级"].ToString());
                 }
 
                 //进度条
-                if (bgWorker.CancellationPending)
+                if (_bgWorker.CancellationPending)
                 {
                     e.Cancel = true;
                     return -1;
                 }
                 else
                 {
-                    bgWorker.ReportProgress((i + 1) * 100 / (dtRunResult.Rows.Count));
+                    _bgWorker.ReportProgress((i + 1) * 100 / (_dtRunResult.Rows.Count));
                     Thread.Sleep(1);
                 }
             }
 
             //反写无需生产的销售订单
-            for (int i = 0; i < lstNotRunEntryId.Count; i++)
+            for (int i = 0; i < _ListNotRunEntryId.Count; i++)
             {
-                SalOrder.UpdateOrderFields(lstNotRunEntryId[i], "无需生产");
+                SalOrder.UpdateOrderFields(_ListNotRunEntryId[i], "无需生产");
             }
 
             MessageBox.Show("已经保存");
@@ -941,25 +878,21 @@ namespace ERPSupport.SupForm
             int iSEQ = 0;
             string strSQL = "INSERT ALL ";
 
-            for (int i = 0; i < dtDtlResult.Rows.Count; i++)
+            for (int i = 0; i < _dtDtlResult.Rows.Count; i++)
             {
-                if (dtDtlResult.Rows[i]["FENTRYID"].ToString() == pFentryid)
+                if (_dtDtlResult.Rows[i]["FENTRYID"].ToString() == pFentryid)
                 {
                     iSEQ++;
-                    strSQL += " INTO DM_LOG_ORDERRUNSUB(PID,FID,FENTRYID,FPMTLNUMBER,FPMTLNAME,FMTLNUMBER,FMTLNAME,FNUIT,BOM,FQTY,FLOCKQTY,FSUBQTY,FSTOCKQTY,FSTOCKAVBQTY,FSTOCKDEMANDQTY,FNETDEMANDQTY,FPICQTY,FMINSTOCK,FMAXSTOCK,FSAFESTOCK,FSTOCKDAYS,FORDERQTY,FOCCUPYQTY,FOCCUPYSUMQTY,FLACKQTY,FLACKLEVEL,FSEQ) VALUES(" + iPID + "," + dtDtlResult.Rows[i]["FID"].ToString() + "," + dtDtlResult.Rows[i]["FENTRYID"].ToString() + ",'" + dtDtlResult.Rows[i]["父项物料"].ToString() + "','" + dtDtlResult.Rows[i]["父项名称"].ToString() + "','" + dtDtlResult.Rows[i]["物料编码"].ToString() + "','" + dtDtlResult.Rows[i]["物料名称"].ToString() + "','" + dtDtlResult.Rows[i]["单位"].ToString() + "','" + dtDtlResult.Rows[i]["BOM"].ToString() + "'," + dtDtlResult.Rows[i]["订单数量"].ToString() + "," + dtDtlResult.Rows[i]["锁库数量"].ToString() + "," + dtDtlResult.Rows[i]["子项需求"].ToString() + "," + dtDtlResult.Rows[i]["库存数量"].ToString() + "," + dtDtlResult.Rows[i]["库存可用数量"].ToString() + "," + dtDtlResult.Rows[i]["库存需求"].ToString() + "," + dtDtlResult.Rows[i]["净需求"].ToString() + "," + dtDtlResult.Rows[i]["领料数量"].ToString() + "," + dtDtlResult.Rows[i]["最小库存"].ToString() + "," + dtDtlResult.Rows[i]["最大库存"].ToString() + "," + dtDtlResult.Rows[i]["安全库存"].ToString() + "," + dtDtlResult.Rows[i]["库存可用天数"].ToString() + "," + dtDtlResult.Rows[i]["下单点"].ToString() + "," + dtDtlResult.Rows[i]["本次占用数量"].ToString() + "," + dtDtlResult.Rows[i]["累计占用数量"].ToString() + "," + dtDtlResult.Rows[i]["欠料数量"].ToString() + ",'" + dtDtlResult.Rows[i]["欠料等级"].ToString() + "'," + iSEQ + ")";
+                    strSQL += " INTO DM_LOG_ORDERRUNSUB(PID,FID,FENTRYID,FPMTLNUMBER,FPMTLNAME,FMTLNUMBER,FMTLNAME,FNUIT,BOM,FQTY,FLOCKQTY,FSUBQTY,FSTOCKQTY,FSTOCKAVBQTY,FSTOCKDEMANDQTY,FNETDEMANDQTY,FPICQTY,FMINSTOCK,FMAXSTOCK,FSAFESTOCK,FSTOCKDAYS,FORDERQTY,FOCCUPYQTY,FOCCUPYSUMQTY,FLACKQTY,FLACKLEVEL,FSEQ) VALUES(" + iPID + "," + _dtDtlResult.Rows[i]["FID"].ToString() + "," + _dtDtlResult.Rows[i]["FENTRYID"].ToString() + ",'" + _dtDtlResult.Rows[i]["父项物料"].ToString() + "','" + _dtDtlResult.Rows[i]["父项名称"].ToString() + "','" + _dtDtlResult.Rows[i]["物料编码"].ToString() + "','" + _dtDtlResult.Rows[i]["物料名称"].ToString() + "','" + _dtDtlResult.Rows[i]["单位"].ToString() + "','" + _dtDtlResult.Rows[i]["BOM"].ToString() + "'," + _dtDtlResult.Rows[i]["订单数量"].ToString() + "," + _dtDtlResult.Rows[i]["锁库数量"].ToString() + "," + _dtDtlResult.Rows[i]["子项需求"].ToString() + "," + _dtDtlResult.Rows[i]["库存数量"].ToString() + "," + _dtDtlResult.Rows[i]["库存可用数量"].ToString() + "," + _dtDtlResult.Rows[i]["库存需求"].ToString() + "," + _dtDtlResult.Rows[i]["净需求"].ToString() + "," + _dtDtlResult.Rows[i]["领料数量"].ToString() + "," + _dtDtlResult.Rows[i]["最小库存"].ToString() + "," + _dtDtlResult.Rows[i]["最大库存"].ToString() + "," + _dtDtlResult.Rows[i]["安全库存"].ToString() + "," + _dtDtlResult.Rows[i]["库存可用天数"].ToString() + "," + _dtDtlResult.Rows[i]["下单点"].ToString() + "," + _dtDtlResult.Rows[i]["本次占用数量"].ToString() + "," + _dtDtlResult.Rows[i]["累计占用数量"].ToString() + "," + _dtDtlResult.Rows[i]["欠料数量"].ToString() + ",'" + _dtDtlResult.Rows[i]["欠料等级"].ToString() + "'," + iSEQ + ")";
                 }
-
-                if (i == dtDtlResult.Rows.Count - 1)
-                {
-                    SQL.ORAHelper.ExecuteNonQuery(strSQL + " SELECT * FROM DUAL");
-                }
-
-                ////添加预留关系 --不修改库存可用量
-                //if (decimal.Parse(FOCCUPYQTY) > 0)
-                //{
-                //    AddReserveLink(dtDtlResult.Rows[i], decimal.Parse(FOCCUPYQTY));
-                //}
             }
+            SQL.ORAHelper.ExecuteNonQuery(strSQL + " SELECT * FROM DUAL;");
+
+            ////添加预留关系 --不修改库存可用量
+            //if (decimal.Parse(FOCCUPYQTY) > 0)
+            //{
+            //    AddReserveLink(dtDtlResult.Rows[i], decimal.Parse(FOCCUPYQTY));
+            //}
         }
         #endregion
 
@@ -1105,7 +1038,7 @@ namespace ERPSupport.SupForm
         /// </summary>
         private void Export()
         {
-            if (dtDtlResult == null || dtDtlResult.Rows.Count == 0)
+            if (_dtDtlResult == null || _dtDtlResult.Rows.Count == 0)
             {
                 MessageBox.Show("没有数据信息");
                 return;
@@ -1126,12 +1059,12 @@ namespace ERPSupport.SupForm
             xlApp.Visible = false;
             xlApp.DisplayAlerts = false;
             //变量
-            int iRows = dtDtlResult.Rows.Count;//行数
-            int iColumns = 25;//列数
+            int iRows = _dtDtlResult.Rows.Count;//行数
+            int iColumns = 27;//列数
             int colIndex = 0;//序号
             //设置表头样式
             worksheet.Cells[1, 1] = "半成品运算结果";
-            rTitle = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[1, 25]];
+            rTitle = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[1, iColumns]];
             rTitle.Merge();
             rTitle.Interior.Color = Color.FromArgb(26, 180, 240);
             rTitle.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
@@ -1140,7 +1073,7 @@ namespace ERPSupport.SupForm
             rTitle.Font.Size = 24;
             rTitle.Font.Name = "宋体";
             //设置列名样式
-            rcTitle = worksheet.Range[worksheet.Cells[2, 1], worksheet.Cells[2, 25]];
+            rcTitle = worksheet.Range[worksheet.Cells[2, 1], worksheet.Cells[2, iColumns]];
             rcTitle.Interior.Color = Color.FromArgb(135, 165, 175);
             rcTitle.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
             rcTitle.RowHeight = "24";
@@ -1149,7 +1082,7 @@ namespace ERPSupport.SupForm
             (worksheet.Columns["B:B", Type.Missing] as Excel.Range).NumberFormatLocal = "@";
             (worksheet.Columns["D:D", Type.Missing] as Excel.Range).NumberFormatLocal = "@";
             //填充列名
-            foreach (DataColumn col in dtDtlResult.Columns)
+            foreach (DataColumn col in _dtDtlResult.Columns)
             {
                 colIndex++;
                 if (colIndex <= iColumns)
@@ -1162,7 +1095,7 @@ namespace ERPSupport.SupForm
             {
                 for (int c = 0; c < iColumns; c++)
                 {
-                    objData[r, c] = dtDtlResult.Rows[r][c];
+                    objData[r, c] = _dtDtlResult.Rows[r][c];
                 }
             }
             //填充数据

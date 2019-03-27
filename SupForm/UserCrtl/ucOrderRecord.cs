@@ -106,6 +106,12 @@ namespace ERPSupport.SupForm.UserCrtl
                 MessageBox.Show("请选择类型");
                 return;
             }
+            if (cbxType.SelectedIndex == 3 && txtYSD.Text.Trim().Equals(string.Empty))
+            {
+                MessageBox.Show("请输入运算单号");
+                return;
+            }
+
             dgv1.DataSource = null;
             dgv1.DataSource = CommonFunction.Log_OrderLock(cbxType.SelectedIndex, txtFBillNO.Text.Trim(), txtYSD.Text.Trim(), dtpFrom.Value, dtpTO.Value, cbxStatus.SelectedValue.ToString(), txtMaterialNo.Text);
         }

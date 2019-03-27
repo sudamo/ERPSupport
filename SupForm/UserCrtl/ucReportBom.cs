@@ -15,7 +15,6 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <summary>
         /// 构造函数
         /// </summary>
-        /// <param name="pKInfo"></param>
         public ucReportBom()
         {
             InitializeComponent();

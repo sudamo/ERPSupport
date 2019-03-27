@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
 using System.Text.RegularExpressions;
+using ERPSupport.SQL.K3Cloud;
 using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
@@ -13,21 +13,21 @@ namespace ERPSupport.SupForm.UserCrtl
     {
         #region Fields Properties Variable & Constructor
         /// <summary>
-        /// 正则表达式
-        /// </summary>
-        private Regex reg;
-        /// <summary>
         /// 内码
         /// </summary>
-        private int iFID;
+        private int _FID;
         /// <summary>
         /// 匹配状态
         /// </summary>
-        private string strIsMatch;
+        private string _IsMatch;
         /// <summary>
         /// 描述
         /// </summary>
-        private string strDescription;
+        private string _Description;
+        /// <summary>
+        /// 正则表达式
+        /// </summary>
+        private Regex _reg;
 
         /// <summary>
         /// 构造函数
@@ -70,9 +70,9 @@ namespace ERPSupport.SupForm.UserCrtl
                     MessageBox.Show("不能重复设定物料编码。");
                     return;
                 }
-                strIsMatch = rbtMatch.Checked ? "1" : "0";
-                strDescription = rbtMatch.Checked ? "携带出库物料" : "不需携带出库物料";
-                CommonFunction.AddNumberMatch(txtMatchBillno.Text.Trim(), 0, "UTMTL", txtMatchBillno.Text.Trim(), "物料编码前缀", strDescription, strIsMatch);
+                _IsMatch = rbtMatch.Checked ? "1" : "0";
+                _Description = rbtMatch.Checked ? "携带出库物料" : "不需携带出库物料";
+                CommonFunction.AddNumberMatch(txtMatchBillno.Text.Trim(), 0, "UTMTL", txtMatchBillno.Text.Trim(), "物料编码前缀", _Description, _IsMatch);
             }
             catch (Exception ex)
             {
@@ -104,14 +104,14 @@ namespace ERPSupport.SupForm.UserCrtl
             }
             try
             {
-                if (CommonFunction.NumberMatchExists("UTMTL", iFID, txtMatchBillno.Text.Trim()))
+                if (CommonFunction.NumberMatchExists("UTMTL", _FID, txtMatchBillno.Text.Trim()))
                 {
                     MessageBox.Show("物料编码前缀已经存在。");
                     return;
                 }
-                strIsMatch = rbtMatch.Checked ? "1" : "0";
-                strDescription = rbtMatch.Checked ? "携带出库物料" : "不需携带出库物料";
-                CommonFunction.UpdateNumberMatch(iFID, txtMatchBillno.Text.Trim(), strDescription, strIsMatch);
+                _IsMatch = rbtMatch.Checked ? "1" : "0";
+                _Description = rbtMatch.Checked ? "携带出库物料" : "不需携带出库物料";
+                CommonFunction.UpdateNumberMatch(_FID, txtMatchBillno.Text.Trim(), _Description, _IsMatch);
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             try
             {
-                CommonFunction.DelNumberMatch(iFID);
+                CommonFunction.DelNumberMatch(_FID);
             }
             catch (Exception ex)
             {
@@ -159,10 +159,10 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void txtMatchBillno_KeyPress(object sender, KeyPressEventArgs e)
         {
-            reg = new Regex(@"^[1-9]\d*|0$");
+            _reg = new Regex(@"^[1-9]\d*|0$");
             if (e.KeyChar != '\b')
             {
-                if (!reg.IsMatch(e.KeyChar.ToString()))
+                if (!_reg.IsMatch(e.KeyChar.ToString()))
                 {
                     e.Handled = true;
                 }
@@ -180,23 +180,12 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 txtMatchBillno.Text = dgv1.CurrentRow.Cells[1].Value.ToString();
 
-                iFID = int.Parse(dgv1.CurrentRow.Cells[0].Value.ToString());
+                _FID = int.Parse(dgv1.CurrentRow.Cells[0].Value.ToString());
                 rbtMatch.Checked = dgv1.CurrentRow.Cells[2].Value.ToString() == "携带" ? true : false;
                 rbtNotMatch.Checked = dgv1.CurrentRow.Cells[2].Value.ToString() == "排除" ? true : false;
                 btnEdit.Enabled = true;
                 btnDelete.Enabled = true;
             }
         }
-
-        ///// <summary>
-        ///// rbtMatch_CheckedChanged
-        ///// </summary>
-        ///// <param name="sender"></param>
-        ///// <param name="e"></param>
-        //private void rbtMatch_CheckedChanged(object sender, EventArgs e)
-        //{
-        //    strIsMatch = rbtMatch.Checked ? "1" : "0";
-        //    strDescription = rbtMatch.Checked ? "携带出库物料" : "不需携带出库物料";
-        //}
     }
 }

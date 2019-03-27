@@ -1,4 +1,4 @@
-﻿namespace ERPSupport.SupForm
+﻿namespace ERPSupport.SupForm.Bussiness
 {
     partial class frmOrderOperation
     {
@@ -227,6 +227,7 @@
             this.Name = "frmOrderOperation";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "订单运算";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.frmOrderOperation_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv2)).EndInit();

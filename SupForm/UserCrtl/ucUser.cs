@@ -16,23 +16,23 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <summary>
         /// 定位次数
         /// </summary>
-        private int iCount;
+        private int _Count;
         /// <summary>
         /// 定位字符串
         /// </summary>
-        private string strName;
+        private string _Name;
         /// <summary>
         /// 用户ID
         /// </summary>
-        private string sUserId;
+        private string _UserId;
         /// <summary>
         /// 角色Table
         /// </summary>
-        private DataTable dtRole;
+        private DataTable _dtRole;
         /// <summary>
         /// 已分配角色Table
         /// </summary>
-        private DataTable dtOwn;
+        private DataTable _dtOwn;
 
         /// <summary>
         /// 构造函数
@@ -50,18 +50,18 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void ucUser_Load(object sender, EventArgs e)
         {
-            iCount = 0;
-            strName = string.Empty;
-            sUserId = string.Empty;
+            _Count = 0;
+            _Name = string.Empty;
+            _UserId = string.Empty;
             dgv1.DataSource = CommonFunction.User();
             dgv1.Columns[0].Visible = false;
 
             //填充角色到libRole
-            dtRole = new DataTable();
-            dtRole = CommonFunction.Role(0);
-            for (int i = 0; i < dtRole.Rows.Count; i++)
+            _dtRole = new DataTable();
+            _dtRole = CommonFunction.Role(0);
+            for (int i = 0; i < _dtRole.Rows.Count; i++)
             {
-                libRole.Items.Add(dtRole.Rows[i]["RNAME"].ToString());
+                libRole.Items.Add(_dtRole.Rows[i]["RNAME"].ToString());
             }
         }
 
@@ -76,24 +76,24 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 libOwn.Items.Clear();
                 libRole.Items.Clear();
-                for (int i = 0; i < dtRole.Rows.Count; i++)
+                for (int i = 0; i < _dtRole.Rows.Count; i++)
                 {
-                    libRole.Items.Add(dtRole.Rows[i]["RNAME"].ToString());
+                    libRole.Items.Add(_dtRole.Rows[i]["RNAME"].ToString());
                 }
             }
             if (dgv1.Rows.Count > 0)//根据用户权限填充ListBox
             {
                 grbRole.Text = dgv1.CurrentRow.Cells[1].Value.ToString();
-                sUserId = dgv1.CurrentRow.Cells[0].Value.ToString();
-                object o = CommonFunction.GetRIDSByUserId(sUserId);
+                _UserId = dgv1.CurrentRow.Cells[0].Value.ToString();
+                object o = CommonFunction.GetRIDSByUserId(_UserId);
                 if (o != null && o.ToString().Trim() != string.Empty)
                 {
-                    dtOwn = new DataTable();
-                    dtOwn = CommonFunction.GetRoleByRIDS(o.ToString());
-                    for (int i = 0; i < dtOwn.Rows.Count; i++)
+                    _dtOwn = new DataTable();
+                    _dtOwn = CommonFunction.GetRoleByRIDS(o.ToString());
+                    for (int i = 0; i < _dtOwn.Rows.Count; i++)
                     {
-                        libOwn.Items.Add(dtOwn.Rows[i]["RNAME"].ToString());//填充已分配的角色到libOwn
-                        libRole.Items.Remove(dtOwn.Rows[i]["RNAME"].ToString());//从libRole移除已分配的角色
+                        libOwn.Items.Add(_dtOwn.Rows[i]["RNAME"].ToString());//填充已分配的角色到libOwn
+                        libRole.Items.Remove(_dtOwn.Rows[i]["RNAME"].ToString());//从libRole移除已分配的角色
                     }
                 }
             }
@@ -130,7 +130,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (sUserId.Equals(string.Empty)) return;//未选择用户
+            if (_UserId.Equals(string.Empty)) return;//未选择用户
 
             string sRIDS = string.Empty;
             if (libOwn.Items.Count == 0)
@@ -139,25 +139,25 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 for (int i = 0; i < libOwn.Items.Count; i++)
                 {
-                    for (int j = 0; i < dtRole.Rows.Count; j++)
+                    for (int j = 0; i < _dtRole.Rows.Count; j++)
                     {
-                        if (libOwn.Items[i].ToString() == dtRole.Rows[j]["RNAME"].ToString())
+                        if (libOwn.Items[i].ToString() == _dtRole.Rows[j]["RNAME"].ToString())
                         {
                             if (i != 0) sRIDS += ",";
-                            sRIDS += dtRole.Rows[j]["RID"].ToString();
+                            sRIDS += _dtRole.Rows[j]["RID"].ToString();
                             break;
                         }
                     }
                 }
             }
 
-            if (!CommonFunction.User_RoleExists(sUserId))//未曾分配角色，新增
+            if (!CommonFunction.User_RoleExists(_UserId))//未曾分配角色，新增
             {
-                CommonFunction.AddUser_Role(sUserId, sRIDS);
+                CommonFunction.AddUser_Role(_UserId, sRIDS);
             }
             else
             {
-                CommonFunction.UpdateUser_Role(sUserId, sRIDS);
+                CommonFunction.UpdateUser_Role(_UserId, sRIDS);
             }
 
             //操作日志
@@ -187,22 +187,22 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             if (e.KeyChar == 13 && txtName.Text.Trim() != string.Empty && dgv1 != null && dgv1.Rows.Count > 0)
             {
-                if (strName.Equals(string.Empty) || strName != txtName.Text.Trim().ToUpper())//重置strName和iCount
+                if (_Name.Equals(string.Empty) || _Name != txtName.Text.Trim().ToUpper())//重置strName和iCount
                 {
-                    strName = txtName.Text.Trim().ToUpper();
-                    iCount = 0;
+                    _Name = txtName.Text.Trim().ToUpper();
+                    _Count = 0;
                 }
 
-                for (int i = iCount; i < dgv1.Rows.Count; i++)
+                for (int i = _Count; i < dgv1.Rows.Count; i++)
                 {
-                    if (dgv1.Rows[i].Cells[1].Value.ToString().ToUpper().Contains(strName))
+                    if (dgv1.Rows[i].Cells[1].Value.ToString().ToUpper().Contains(_Name))
                     {
                         dgv1.ClearSelection();
                         dgv1.Rows[i].Selected = true;
                         dgv1.CurrentCell = dgv1.Rows[i].Cells[1];
 
                         if (i != dgv1.Rows.Count - 1)
-                            iCount = i + 1;
+                            _Count = i + 1;
 
                         break;
                     }

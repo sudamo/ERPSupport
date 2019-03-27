@@ -37,11 +37,11 @@
     <ProductName>ERP辅助系统</ProductName>
     <PublisherName>广州车邦</PublisherName>
     <SuiteName>Supp</SuiteName>
-    <MinimumRequiredVersion>1.0.3.1</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.5.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>3</ApplicationRevision>
-    <ApplicationVersion>1.0.3.%2a</ApplicationVersion>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -113,6 +113,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bussiness\frmOrderOperation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmOrderOperation.Designer.cs">
+      <DependentUpon>frmOrderOperation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmOrderSummary.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmOrderSummary.Designer.cs">
+      <DependentUpon>frmOrderSummary.cs</DependentUpon>
+    </Compile>
     <Compile Include="Common\frmTimer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -166,18 +178,6 @@
     </Compile>
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmOrderOperation.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmOrderOperation.Designer.cs">
-      <DependentUpon>frmOrderOperation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="frmOrderSummary.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="frmOrderSummary.Designer.cs">
-      <DependentUpon>frmOrderSummary.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\frmParameter.cs">
       <SubType>Form</SubType>
@@ -305,6 +305,12 @@
     <Compile Include="UserCrtl\ucUTMTLNumber.Designer.cs">
       <DependentUpon>ucUTMTLNumber.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Bussiness\frmOrderOperation.resx">
+      <DependentUpon>frmOrderOperation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmOrderSummary.resx">
+      <DependentUpon>frmOrderSummary.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Common\frmTimer.resx">
       <DependentUpon>frmTimer.cs</DependentUpon>
     </EmbeddedResource>
@@ -331,12 +337,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmOrderOperation.resx">
-      <DependentUpon>frmOrderOperation.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="frmOrderSummary.resx">
-      <DependentUpon>frmOrderSummary.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\frmParameter.resx">
       <DependentUpon>frmParameter.cs</DependentUpon>
@@ -427,6 +427,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DLL\DMData.Code.dll" />
     <Content Include="DLL\Kingdee.BOS.WebApi.Client.dll" />
     <Content Include="DLL\Newtonsoft.Json.dll" />
     <Content Include="DLL\Oracle.ManagedDataAccess.dll" />
@@ -483,14 +484,6 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DALFactory\DALFactory.csproj">
-      <Project>{73986a07-2165-4e44-86f9-0411cc534337}</Project>
-      <Name>DALFactory</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\IDAL\IDAL.csproj">
-      <Project>{c4401e2c-f1ee-45b1-b565-e2399568a50b}</Project>
-      <Name>IDAL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{94fad769-72f9-44ce-8b93-204462fa3679}</Project>
       <Name>Model</Name>
