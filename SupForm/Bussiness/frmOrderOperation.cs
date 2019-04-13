@@ -53,11 +53,11 @@ namespace ERPSupport.SupForm.Bussiness
         /// <summary>
         /// 指定的时间段内总天数
         /// </summary>
-        private int _SumDays = 0;
+        private int _SumDays;
         /// <summary>
         /// 指定的时间段内，除去周日的天数。
         /// </summary>
-        private int _Days = 0;
+        private int _Days;
         /// <summary>
         /// 开始时间
         /// </summary>
@@ -143,6 +143,7 @@ namespace ERPSupport.SupForm.Bussiness
             _AddJoinQty = UserClass.AppConfig.ReadValue("ORP_AddJoinQty", "AppSettings") == "0" ? false : true;
 
             int itemp = _SumDays;
+            _Days = 0;
             while (itemp > 0)
             {
                 if (_EndTime.AddDays(-itemp + 1).DayOfWeek != DayOfWeek.Sunday)
@@ -201,7 +202,7 @@ namespace ERPSupport.SupForm.Bussiness
         }
         #endregion
 
-        #region 定时器        
+        #region 定时器
         /// <summary>
         /// 定时执行事件
         /// </summary>

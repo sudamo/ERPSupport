@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.5.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -83,21 +83,18 @@
     <SignManifests>false</SignManifests>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DMData.Code, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>DLL\DMData.Code.dll</HintPath>
+    <Reference Include="DMData.Code">
+      <HintPath>D:\vs\DLL\DMData.Code.dll</HintPath>
     </Reference>
-    <Reference Include="Kingdee.BOS.WebApi.Client, Version=6.1.316.5, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Kingdee.BOS.WebApi.Client.dll</HintPath>
+    <Reference Include="Kingdee.BOS.WebApi.Client">
+      <HintPath>D:\vs\DLL\Kingdee.BOS.WebApi.Client.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>D:\vs\DLL\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Oracle.ManagedDataAccess, Version=4.121.2.0, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Oracle.ManagedDataAccess.dll</HintPath>
+      <HintPath>D:\vs\DLL\Oracle.ManagedDataAccess.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -427,11 +424,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DLL\DMData.Code.dll" />
-    <Content Include="DLL\Kingdee.BOS.WebApi.Client.dll" />
-    <Content Include="DLL\Newtonsoft.Json.dll" />
-    <Content Include="DLL\Oracle.ManagedDataAccess.dll" />
-    <Content Include="DLL\System.Data.SQLite.dll" />
     <Content Include="ICON\gzcb.ico" />
     <Content Include="ICON\gzcb48.ico" />
     <Content Include="ICON\kk.ico" />

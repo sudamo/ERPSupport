@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Collections;
+using System.Collections.Generic;
 using ERPSupport.Model.Globa;
 using Newtonsoft.Json.Linq;
 using Kingdee.BOS.WebApi.Client;
@@ -13,16 +14,16 @@ namespace ERPSupport.SQL.K3Cloud
     public static class PrdAllocation
     {
         #region STATIC
-        private static string strSQL;
-        private static object obj;
+        private static string _SQL;
+        private static object _obj;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         static PrdAllocation()
         {
-            strSQL = string.Empty;
-            obj = new object();
+            _SQL = string.Empty;
+            _obj = new object();
         }
         #endregion
 
@@ -34,7 +35,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetTransferDirectDt(string pFNeedDate, string pDeptNos)
         {
-            strSQL = @"SELECT ORG.FNUMBER 调入库存组织, NVL(ORG2.FNUMBER, 'HN02') 货主, AC.FOWNERTYPEID 货主类型, MTL.FNUMBER 物料编码,UNT.FNUMBER 单位
+            _SQL = @"SELECT ORG.FNUMBER 调入库存组织, NVL(ORG2.FNUMBER, 'HN02') 货主, AC.FOWNERTYPEID 货主类型, MTL.FNUMBER 物料编码,UNT.FNUMBER 单位
                 , STK.FNUMBER 调入仓库, STK2.FNUMBER 调出仓库, DEP.FNUMBER 领料部门, SUM(AE.FMUSTQTY) 调拨数量
             FROM T_PRD_PPBOM A
             INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID
@@ -53,7 +54,7 @@ namespace ERPSupport.SQL.K3Cloud
             WHERE A.FDOCUMENTSTATUS = 'C' AND AE.FPAEZHAVEDIRECT = 0 AND STK.FNUMBER <> STK2.FNUMBER AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + "' AND DEP.FNUMBER IN(" + pDeptNos + @")--用料清单未生成过调拨单、调入仓不等于调出仓
             GROUP BY ORG.FNUMBER, ORG2.FNUMBER, AC.FOWNERTYPEID, MTL.FNUMBER, UNT.FNUMBER, STK.FNUMBER, STK2.FNUMBER,DEP.FNUMBER";
 
-            return ORAHelper.ExecuteTable(strSQL);
+            return ORAHelper.ExecuteTable(_SQL);
         }
 
         /// <summary>
@@ -185,26 +186,55 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFNeedDate">需求日期</param>
         /// <param name="pDeptNos">部门</param>
-        public static void UpdateDirectFields(string pFNeedDate, string pDeptNos)
+        /// <param name="pList">根据调出仓排除更新</param>
+        public static void UpdateDirectFields(string pFNeedDate, string pDeptNos, List<string> pList)
         {
-            strSQL = @"UPDATE T_PRD_PPBOMENTRY
-            SET FPAEZHAVEDIRECT = 1
-            WHERE FPAEZHAVEDIRECT = 0 AND FENTRYID IN
-            (SELECT A.FENTRYID
-            FROM T_PRD_PPBOMENTRY A
-            INNER JOIN T_PRD_PPBOM E ON A.FID = E.FID AND E.FDOCUMENTSTATUS = 'C'
-            INNER JOIN T_PRD_MOENTRY G ON A.FMOENTRYID = G.FENTRYID AND TO_CHAR(G.FPLANSTARTDATE,'yyyy-MM-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-MM-dd')
-            INNER JOIN T_PRD_MO H ON G.FID = H.FID AND H.FDOCUMENTSTATUS = 'C'
-            INNER JOIN T_PRD_MOENTRY_A I ON A.FMOENTRYID = I.FENTRYID AND I.FSTATUS IN(3,4)
-            INNER JOIN T_BD_MATERIAL J ON A.FMATERIALID = J.FMATERIALID AND J.FUSEORGID = 100508
-            INNER JOIN T_BD_DEPARTMENT L ON G.FWORKSHOPID = L.FDEPTID
-            INNER JOIN T_BD_STOCK M ON L.FINSTOCKID = M.FSTOCKID
-            INNER JOIN T_AUTO_MSTOCKSETTING N ON A.FMATERIALID = N.FMATERIALID AND L.FDEPTID = N.FDEPTID
-            INNER JOIN T_BD_STOCK O ON N.FSTOCKID = O.FSTOCKID
-            WHERE A.FPAEZHAVEDIRECT = 0 AND M.FNUMBER <> O.FNUMBER AND TO_CHAR(A.FNEEDDATE,'yyyy-MM-dd') = '" + pFNeedDate + "' AND L.FNUMBER IN(" + pDeptNos + @")
-            GROUP BY J.FNUMBER, M.FNUMBER, O.FNUMBER, L.FNUMBER, A.FENTRYID)";
+            if (pList.Count > 0)
+            {
+                string strOutStock = string.Empty;
 
-            ORAHelper.ExecuteNonQuery(strSQL);
+                for (int i = 0; i < pList.Count; i++)
+                {
+                    strOutStock += "'" + pList[i] + "',";
+                }
+                strOutStock = strOutStock.Substring(0, strOutStock.Length - 1);
+
+                _SQL = @"UPDATE T_PRD_PPBOMENTRY
+                SET FPAEZHAVEDIRECT = 1
+                WHERE FPAEZHAVEDIRECT = 0 AND FENTRYID IN
+                (SELECT AE.FENTRYID
+                FROM T_PRD_PPBOMENTRY AE
+                INNER JOIN T_PRD_PPBOM A ON AE.FID = A.FID AND A.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE, 'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE, 'yyyy-mm-dd')
+                INNER JOIN T_PRD_MO MO ON MOE.FID = MO.FID AND MO.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY_A MOA ON AE.FMOENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3, 4)
+                INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+                INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+                INNER JOIN T_BD_STOCK STK ON DEP.FINSTOCKID = STK.FSTOCKID
+                INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID
+                INNER JOIN T_BD_STOCK STK2 ON MST.FSTOCKID = STK2.FSTOCKID
+                WHERE AE.FPAEZHAVEDIRECT = 0 AND STK.FNUMBER <> STK2.FNUMBER AND TO_CHAR(AE.FNEEDDATE, 'yyyy-MM-dd') = '" + pFNeedDate + "' AND DEP.FNUMBER IN(" + pDeptNos + ") AND STK2.FNUMBER NOT IN(" + strOutStock + @")
+                GROUP BY MTL.FNUMBER,STK.FNUMBER,STK2.FNUMBER,DEP.FNUMBER,AE.FENTRYID)";
+            }
+            else
+                _SQL = @"UPDATE T_PRD_PPBOMENTRY
+                SET FPAEZHAVEDIRECT = 1
+                WHERE FPAEZHAVEDIRECT = 0 AND FENTRYID IN
+                (SELECT AE.FENTRYID
+                FROM T_PRD_PPBOMENTRY AE
+                INNER JOIN T_PRD_PPBOM A ON AE.FID = A.FID AND A.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE, 'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE, 'yyyy-mm-dd')
+                INNER JOIN T_PRD_MO MO ON MOE.FID = MO.FID AND MO.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY_A MOA ON AE.FMOENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3, 4)
+                INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+                INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+                INNER JOIN T_BD_STOCK STK ON DEP.FINSTOCKID = STK.FSTOCKID
+                INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID
+                INNER JOIN T_BD_STOCK STK2 ON MST.FSTOCKID = STK2.FSTOCKID
+                WHERE AE.FPAEZHAVEDIRECT = 0 AND STK.FNUMBER <> STK2.FNUMBER AND TO_CHAR(AE.FNEEDDATE,'yyyy-MM-dd') = '" + pFNeedDate + "' AND DEP.FNUMBER IN(" + pDeptNos + @")
+                GROUP BY MTL.FNUMBER,STK.FNUMBER,STK2.FNUMBER,DEP.FNUMBER,AE.FENTRYID)";
+
+            ORAHelper.ExecuteNonQuery(_SQL);
         }
 
         /// <summary>
@@ -214,7 +244,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static bool SetDefaultStock(DateTime pDateTime)
         {
-            strSQL = @"SELECT COUNT(*)
+            _SQL = @"SELECT COUNT(*)
             FROM T_PRD_MO A
             INNER JOIN T_PRD_MOENTRY AE ON A.FID = AE.FID
             INNER JOIN T_PRD_MOENTRY_A AA ON AE.FENTRYID = AA.FENTRYID AND AA.FSTATUS IN(3,4)
@@ -224,9 +254,9 @@ namespace ERPSupport.SQL.K3Cloud
             LEFT JOIN T_AUTO_MSTOCKSETTING MST ON MTL.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID
             WHERE (MST.FMATERIALID IS NULL OR MST.FSTOCKID IS NULL) AND A.FDOCUMENTSTATUS = 'C' AND A.FPRDORGID = 100508 AND TO_CHAR(AE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + pDateTime.ToString("yyyy-MM-dd") + "'";
 
-            obj = ORAHelper.ExecuteScalar(strSQL);
+            _obj = ORAHelper.ExecuteScalar(_SQL);
 
-            if (obj == null || int.Parse(obj.ToString()) != 0)
+            if (_obj == null || int.Parse(_obj.ToString()) != 0)
                 return false;
             else
                 return true;
@@ -240,14 +270,14 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static int Asyn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo)
         {
-            strSQL = @"SELECT COUNT(BE.FENTRYID)
+            _SQL = @"SELECT COUNT(BE.FENTRYID)
             FROM T_PRD_PPBOM A
             INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID
             LEFT JOIN T_PRD_MOENTRY BE ON AE.FMOENTRYID = BE.FENTRYID
             LEFT JOIN T_PRD_MO B ON BE.FID = B.FID
             WHERE TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') <> TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') AND BE.FPLANSTARTDATE BETWEEN TO_DATE('" + pFrom.ToString("yyyy-MM-dd") + "','yyyy-mm-dd') AND TO_DATE('" + pTo.ToString("yyyy-MM-dd") + "','yyyy-mm-dd')";
 
-            return int.Parse(ORAHelper.ExecuteScalar(strSQL).ToString());
+            return int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString());
         }
 
         /// <summary>
@@ -257,7 +287,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pTo">结束时间</param>
         public static void Syn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo)
         {
-            strSQL = @"UPDATE T_PRD_PPBOMENTRY AE SET FNEEDDATE = 
+            _SQL = @"UPDATE T_PRD_PPBOMENTRY AE SET FNEEDDATE = 
             (
             SELECT FPLANSTARTDATE FROM T_PRD_MOENTRY BE WHERE AE.FMOENTRYID = BE.FENTRYID AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') <> TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') AND BE.FPLANSTARTDATE BETWEEN TO_DATE('" + pFrom.ToString("yyyy-MM-dd") + "','yyyy-mm-dd') AND TO_DATE('" + pTo.ToString("yyyy-MM-dd") + @"','yyyy-mm-dd')
             )
@@ -265,7 +295,7 @@ namespace ERPSupport.SQL.K3Cloud
             (
             SELECT 1 FROM T_PRD_MOENTRY BE WHERE AE.FMOENTRYID = BE.FENTRYID AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') <> TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') AND BE.FPLANSTARTDATE BETWEEN TO_DATE('" + pFrom.ToString("yyyy-MM-dd") + "','yyyy-mm-dd') AND TO_DATE('" + pTo.ToString("yyyy-MM-dd") + @"','yyyy-mm-dd')
             )";
-            ORAHelper.ExecuteNonQuery(strSQL);
+            ORAHelper.ExecuteNonQuery(_SQL);
         }
     }
 }

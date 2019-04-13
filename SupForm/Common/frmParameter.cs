@@ -68,9 +68,9 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            string LockType = rbtNumber.Checked.ToString().ToUpper() == "TRUE" ? "1" : "2";
-            string IsUse = chbIsUse.Checked.ToString().ToUpper() == "TRUE" ? "1" : "0";
-            string AddJoinQty = chbJoin.Checked.ToString().ToUpper() == "TRUE" ? "1" : "0";
+            string LockType = rbtNumber.Checked ? "1" : "2";
+            string IsUse = chbIsUse.Checked ? "1" : "0";
+            string AddJoinQty = chbJoin.Checked ? "1" : "0";
 
             UserClass.AppConfig.WriteValue("LSP_LockType", LockType);
             UserClass.AppConfig.WriteValue("LSP_IsUse", IsUse);

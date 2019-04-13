@@ -49,7 +49,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void FillDepartment()
         {
-            cbxDepartment.DataSource = CommonFunction.GetDepartment(cbxUseOrg.SelectedValue.ToString());
+            cbxDepartment.DataSource = CommonFunction.GetDepartment(int.Parse(cbxUseOrg.SelectedValue.ToString()), 100508, "");
             cbxDepartment.DisplayMember = "FName";
             cbxDepartment.ValueMember = "FValue";
         }

@@ -503,11 +503,11 @@ namespace ERPSupport.SupForm.Common
                 return;
             }
 
-            Common.frmAddFilter frm = new Common.frmAddFilter(ListFilter);
+            frmAddFilter frm = new frmAddFilter(ListFilter);
             frm.ShowDialog();
             if (frm.DialogResult == DialogResult.OK)
             {
-                _FilterName = frm.StrFilterName;
+                _FilterName = frm.FilterName;
                 MessageBox.Show("保存成功");
                 SetDataSource();
                 SeletRow();

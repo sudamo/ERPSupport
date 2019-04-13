@@ -146,12 +146,15 @@ namespace ERPSupport.SupForm
             _bgWorker.ProgressChanged += new ProgressChangedEventHandler(ProgessChanged);
             _bgWorker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CompleteWork);
             //-----
-            _msg = new WinMessager();
-            Application.AddMessageFilter(_msg);
-            _Close = new System.Timers.Timer();
-            _Close.Interval = 1000 * 60 * 60;//每60分钟执行一次,也就是60*2分钟没操作就自动关闭程序
-            _Close.Elapsed += new ElapsedEventHandler(tClose_Elapsed);
-            _Close.Start();
+            if (System.Configuration.ConfigurationManager.AppSettings["LS_AutoExit"] == "1")
+            {
+                _msg = new WinMessager();
+                Application.AddMessageFilter(_msg);
+                _Close = new System.Timers.Timer();
+                _Close.Interval = 1000 * 60 * 60;//每60分钟执行一次,也就是60*2分钟没操作就自动关闭程序
+                _Close.Elapsed += new ElapsedEventHandler(tClose_Elapsed);
+                _Close.Start();
+            }
             //-----
             DataGridViewCheckBoxColumn newColumn = new DataGridViewCheckBoxColumn();
             newColumn.HeaderText = "";
@@ -290,7 +293,7 @@ namespace ERPSupport.SupForm
                 dr["FValue"] = "BE.FPLANSTARTDATE";
                 dt.Rows.Add(dr);
             }
-            else if (_FormId == FormID.SAL_SALEORDER || _FormId == FormID.SAL_SALEORDERRUN)
+            else if (_FormId == FormID.SAL_SaleOrder || _FormId == FormID.SAL_SaleOrderRun)
             {
                 dr = dt.NewRow();
                 dr["FName"] = "";
@@ -716,7 +719,7 @@ namespace ERPSupport.SupForm
                 cbxLogic.SelectedIndex = 1;
                 dtpDate.Value = DateTime.Now;
             }
-            else if (_FormId == FormID.SAL_SALEORDER)
+            else if (_FormId == FormID.SAL_SaleOrder)
             {
                 btnCommit.Text = "锁库";
                 btnCommit.Enabled = true;
@@ -733,7 +736,7 @@ namespace ERPSupport.SupForm
                 cbxLogic.SelectedIndex = 4;
                 dtpDate.Value = DateTime.Now.AddDays(-1);
             }
-            else if (_FormId == FormID.SAL_SALEORDERRUN)
+            else if (_FormId == FormID.SAL_SaleOrderRun)
             {
                 btnCommit.Text = "订单运算";
                 btnCommit.Enabled = true;
@@ -771,9 +774,9 @@ namespace ERPSupport.SupForm
             //隐藏订单内码
             if (dgv1.Rows.Count > 0)
             {
-                if (_FormId == FormID.SAL_SALEORDER)
+                if (_FormId == FormID.SAL_SaleOrder)
                     dgv1.Columns[18].Visible = false;
-                else if (_FormId == FormID.SAL_SALEORDERRUN)
+                else if (_FormId == FormID.SAL_SaleOrderRun)
                     dgv1.Columns[19].Visible = false;
 
                 //不允许重新排列
@@ -1176,7 +1179,7 @@ namespace ERPSupport.SupForm
                     }
                 }
             }
-            else if (_FormId == FormID.SAL_SALEORDER || _FormId == FormID.SAL_SALEORDERRUN)//销售订单锁库、运算
+            else if (_FormId == FormID.SAL_SaleOrder || _FormId == FormID.SAL_SaleOrderRun)//销售订单锁库、运算
             {
                 if (cbxCondition.SelectedIndex == 1 || cbxCondition.SelectedIndex == 2)//日期类型
                 {
@@ -1285,7 +1288,7 @@ namespace ERPSupport.SupForm
             //事件处理，指定处理函数
             if (_FormId == FormID.PRD_PPBOM)
                 e.Result = Trans(sender, e);
-            else if (_FormId == FormID.SAL_SALEORDER)
+            else if (_FormId == FormID.SAL_SaleOrder)
                 e.Result = LockStock(sender, e);
         }
 
@@ -1429,7 +1432,7 @@ namespace ERPSupport.SupForm
                 //解除调拨占用
                 CommonFunction.UpdateLockStatus(0, "TRANS");
             }
-            else if (_FormId == FormID.SAL_SALEORDER)//锁库
+            else if (_FormId == FormID.SAL_SaleOrder)//锁库
             {
                 //记录勾选状态
                 _ListCheckStatus = new List<CheckStatus>();
@@ -1477,7 +1480,7 @@ namespace ERPSupport.SupForm
                 //操作日志
                 CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "锁库", "辅助功能\\锁库", "请查看锁库日志", "1");
             }
-            else if (_FormId == FormID.SAL_SALEORDERRUN)//订单运算
+            else if (_FormId == FormID.SAL_SaleOrderRun)//订单运算
             {
                 DataTable dtTran = _dtSearch.Clone();
 
@@ -1568,10 +1571,10 @@ namespace ERPSupport.SupForm
             string strBillNos, tmp;
 
             List<string> list;
-            List<string> lstOutStock;
+            List<string> lstOutStock, lstOutStock_Fault;
 
             DataTable dt;
-            DataTable dtDept = CommonFunction.GetPickMtlDepartment();
+            DataTable dtDept = CommonFunction.GetDepartment(4, -1, "");
 
             if (dtDept == null || dtDept.Rows.Count == 0)
                 return -1;
@@ -1622,6 +1625,7 @@ namespace ERPSupport.SupForm
 
                 //根据不同调出仓分批生产单据
                 DataTable dt2;
+                lstOutStock_Fault = new List<string>();//统计生成失败的调出仓
 
                 for (int j = 0; j < lstOutStock.Count; j++)
                 {
@@ -1641,11 +1645,13 @@ namespace ERPSupport.SupForm
 
                         if (tmp != "")
                             strBillNos += "[" + tmp + "]";
+                        if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
+                            lstOutStock_Fault.Add(tmp);
                     }
                 }
 
                 //更新【已经生成调拨单】状态
-                PrdAllocation.UpdateDirectFields(dtpDate.Value.ToString("yyyy-MM-dd"), list[i]);
+                PrdAllocation.UpdateDirectFields(dtpDate.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
 
                 //控制进度条
                 if (_bgWorker.CancellationPending)
@@ -2217,6 +2223,14 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            //如果自动领料正在执行，关闭自动领料
+            if (_Execute != null)
+            {
+                _Execute.Close();
+                CommonFunction.UpdateLockStatus(0, "LOCKPICKMTL");
+            }
+
+            //日志
             CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "退出系统", "主窗口", "关闭主窗体并退出系统", "1");//日志
         }
 
@@ -2480,7 +2494,7 @@ namespace ERPSupport.SupForm
                     dtpDate.Visible = false;
                 }
             }
-            else if (_FormId == FormID.SAL_SALEORDER || _FormId == FormID.SAL_SALEORDERRUN)
+            else if (_FormId == FormID.SAL_SaleOrder || _FormId == FormID.SAL_SaleOrderRun)
             {
                 if (cbxCondition.SelectedIndex == 1 || cbxCondition.SelectedIndex == 2)
                 {

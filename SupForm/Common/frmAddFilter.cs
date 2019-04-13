@@ -12,20 +12,20 @@ namespace ERPSupport.SupForm.Common
     /// </summary>
     public partial class frmAddFilter : Form
     {
-        private string _strFilterName;
+        private string _FilterName;
         /// <summary>
         /// 方案名称
         /// </summary>
-        public string StrFilterName
+        public string FilterName
         {
             get
             {
-                return _strFilterName;
+                return _FilterName;
             }
 
             set
             {
-                _strFilterName = value;
+                _FilterName = value;
             }
         }
         /// <summary>
@@ -88,7 +88,7 @@ namespace ERPSupport.SupForm.Common
             if (sContent.Equals(string.Empty)) sContent = " ";
 
             CommonFunction.SaveSolution(txtName.Text, chbShare.Checked, sContent, iRows);
-            _strFilterName = txtName.Text;
+            _FilterName = txtName.Text;
             DialogResult = DialogResult.OK;
             Close();
         }

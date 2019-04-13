@@ -8,16 +8,16 @@ namespace ERPSupport.SQL.K3Cloud
     public static class PrdOutstock
     {
         #region STATIC
-        private static string strSQL;
-        private static object obj;
+        private static string _SQL;
+        //private static object _obj;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         static PrdOutstock()
         {
-            strSQL = string.Empty;
-            obj = new object();
+            _SQL = string.Empty;
+            //_obj = new object();
         }
         #endregion
 
@@ -32,7 +32,7 @@ namespace ERPSupport.SQL.K3Cloud
                 return null;
 
             if (pBillNo.Contains("XSCKD"))
-                strSQL = @"SELECT A.FID 内码,A.FBILLNO 单号,ORGL.FNAME 销售组织,CUSL.FNAME 客户,CUSL2.FNAME 结算方,CUSL3.FNAME 收款方,CUSL4.FNAME 付款方
+                _SQL = @"SELECT A.FID 内码,A.FBILLNO 单号,ORGL.FNAME 销售组织,CUSL.FNAME 客户,CUSL2.FNAME 结算方,CUSL3.FNAME 收款方,CUSL4.FNAME 付款方
                 FROM T_SAL_OUTSTOCK A
                 INNER
                 JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FSALEORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
@@ -44,7 +44,7 @@ namespace ERPSupport.SQL.K3Cloud
             else if (pBillNo.Contains("AR"))
                 return null;
             else
-                strSQL = @"SELECT A.FID 内码,A.FBILLNO 单号,ORGL.FNAME 销售组织,CUSL.FNAME 客户,CUSL2.FNAME 结算方,CUSL3.FNAME 收款方,CUSL4.FNAME 付款方
+                _SQL = @"SELECT A.FID 内码,A.FBILLNO 单号,ORGL.FNAME 销售组织,CUSL.FNAME 客户,CUSL2.FNAME 结算方,CUSL3.FNAME 收款方,CUSL4.FNAME 付款方
                 FROM T_SAL_ORDER A
                 INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FSALEORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
                 INNER JOIN T_BD_CUSTOMER_L CUSL ON A.FCUSTID = CUSL.FCUSTID AND CUSL.FLOCALEID = 2052
@@ -53,7 +53,7 @@ namespace ERPSupport.SQL.K3Cloud
                 INNER JOIN T_BD_CUSTOMER_L CUSL4 ON A.FCHARGEID = CUSL4.FCUSTID AND CUSL4.FLOCALEID = 2052
                 WHERE A.FBILLNO LIKE '" + pBillNo + "%'";
 
-            return ORAHelper.ExecuteTable(strSQL);
+            return ORAHelper.ExecuteTable(_SQL);
         }
 
         /// <summary>
@@ -64,17 +64,13 @@ namespace ERPSupport.SQL.K3Cloud
         public static void UpdateData(string pBillNo, int pUseOrgId)
         {
             if (pBillNo.Contains("XSCKD"))
-                strSQL = @"UPDATE T_SAL_OUTSTOCK
-                SET FCUSTOMERID = " + pUseOrgId.ToString() + ", FSETTLEID = " + pUseOrgId.ToString() + ", FRECEIVERID = " + pUseOrgId.ToString() + ", FPAYERID = " + pUseOrgId.ToString() + @"
-                WHERE FBILLNO = '" + pBillNo + "'";
+                _SQL = "UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pUseOrgId.ToString() + ", FSETTLEID = " + pUseOrgId.ToString() + ", FRECEIVERID = " + pUseOrgId.ToString() + ", FPAYERID = " + pUseOrgId.ToString() + " WHERE FBILLNO = '" + pBillNo + "'";
             else if (pBillNo.Contains("AR"))
-                strSQL = "";
+                _SQL = "";
             else
-                strSQL = @"UPDATE T_SAL_ORDER
-                SET FCUSTID = " + pUseOrgId.ToString() + ", FSETTLEID = " + pUseOrgId.ToString() + ", FRECEIVEID = " + pUseOrgId.ToString() + ", FCHARGEID = " + pUseOrgId.ToString() + @"
-                WHERE FBILLNO = '" + pBillNo + "'";
+                _SQL = "UPDATE T_SAL_ORDER SET FCUSTID = " + pUseOrgId.ToString() + ", FSETTLEID = " + pUseOrgId.ToString() + ", FRECEIVEID = " + pUseOrgId.ToString() + ", FCHARGEID = " + pUseOrgId.ToString() + " WHERE FBILLNO = '" + pBillNo + "'";
 
-            ORAHelper.ExecuteNonQuery(strSQL);
+            ORAHelper.ExecuteNonQuery(_SQL);
         }
     }
 }

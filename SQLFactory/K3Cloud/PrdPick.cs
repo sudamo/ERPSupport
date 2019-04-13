@@ -14,16 +14,16 @@ namespace ERPSupport.SQL.K3Cloud
     public static class PrdPick
     {
         #region STATIC
-        private static string strSQL;
-        private static object obj;
+        private static string _SQL;
+        //private static object _obj;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         static PrdPick()
         {
-            strSQL = string.Empty;
-            obj = new object();
+            _SQL = string.Empty;
+            //_obj = new object();
         }
         #endregion
 
@@ -46,7 +46,7 @@ namespace ERPSupport.SQL.K3Cloud
             if (pBillNO.Trim().Length == 0)
                 return "";
 
-            strSQL = @"SELECT DISTINCT NVL(ORG.FNUMBER,'HN02') FPRDORGID,NVL(ORG2.FNUMBER,ORG.FNUMBER) FSUPPLYORG,NVL(DEP.FNUMBER, ' ') FWORKSHOPID,NVL(STK.FNUMBER,' ') FINSTOCKID,NVL(STS.FNUMBER,'KCZT01_SYS') FSTOCKSTATUSID
+            _SQL = @"SELECT DISTINCT NVL(ORG.FNUMBER,'HN02') FPRDORGID,NVL(ORG2.FNUMBER,ORG.FNUMBER) FSUPPLYORG,NVL(DEP.FNUMBER, ' ') FWORKSHOPID,NVL(STK.FNUMBER,' ') FINSTOCKID,NVL(STS.FNUMBER,'KCZT01_SYS') FSTOCKSTATUSID
                     ,MTLH.FNUMBER FMATERIALID, ROUND((PBE.FNEEDQTY-PBQ.FSELPICKEDQTY),4) FNEEDQTY,ROUND((PBE.FMUSTQTY*AE.FREALQTY/MO.FQTY),4) FMUSTQTY,NVL(UNT.FNUMBER,' ') FUNITID,NVL(ORG3.FNUMBER,ORG.FNUMBER) FOWNERID
                     ,A.FBILLNO INSTOCKBILLNO,A.FID INSTOCKFID,AE.FENTRYID INSTOCKFENTRYID,AE.FSEQ INSTOCKSEQ
                     ,AE.FMOBILLNO MOBILLNO,MO.FID MOFID,MO.FENTRYID MOFENTRYID,MO.FSEQ MOSEQ
@@ -69,7 +69,7 @@ namespace ERPSupport.SQL.K3Cloud
             LEFT JOIN T_BD_STOCK STK ON DEP.FINSTOCKID = STK.FSTOCKID
             LEFT JOIN T_BD_UNIT UNT ON PBE.FUNITID = UNT.FUNITID
             LEFT JOIN T_BD_STOCKSTATUS STS ON PBC.FSTOCKSTATUSID = STS.FSTOCKSTATUSID
-            LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON A.FBILLNO = PICA.FSRCBIZBILLNO
+            LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON AE.FENTRYID = PICA.FSRCBIZENTRYID --A.FBILLNO = PICA.FSRCBIZBILLNO
             WHERE A.FBILLNO = '" + pBillNO + "' AND PICA.FSRCBIZBILLNO IS NULL AND PBC.FISSUETYPE = 2";//用料清单的发料方式为直接倒冲。1、直接领料；2、直接倒冲；3、调拨领料；4、调拨倒冲；7、不发料。
 
             dt = new DataTable();
@@ -113,7 +113,7 @@ namespace ERPSupport.SQL.K3Cloud
             {
                 OrclConn.Open();
                 OracleCommand cmd = OrclConn.CreateCommand();
-                cmd.CommandText = strSQL;
+                cmd.CommandText = _SQL;
 
                 using (OracleDataReader rdr = cmd.ExecuteReader())
                 {
@@ -369,12 +369,12 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns>DataTable</returns>
         public static DataTable GetInstockBillNo(DateTime pDateTime)
         {
-            strSQL = @"SELECT DISTINCT A.FBILLNO
+            _SQL = @"SELECT DISTINCT A.FBILLNO
             FROM T_PRD_INSTOCK A
             LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON A.FID = PICA.FSRCBIZINTERID
             WHERE TO_CHAR(A.FDATE, 'yyyy-MM-dd') >= '" + pDateTime.ToString("yyyy-MM-dd") + "' AND  A.FDOCUMENTSTATUS = 'C' AND PICA.FSRCBIZBILLNO IS NULL";
 
-            return ORAHelper.ExecuteTable(strSQL);
+            return ORAHelper.ExecuteTable(_SQL);
         }
     }
 }

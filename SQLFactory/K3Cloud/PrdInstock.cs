@@ -8,16 +8,16 @@ namespace ERPSupport.SQL.K3Cloud
     public static class PrdInstock
     {
         #region STATIC
-        private static string strSQL;
-        private static object obj;
+        private static string _SQL;
+        //private static object _obj;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         static PrdInstock()
         {
-            strSQL = string.Empty;
-            obj = new object();
+            _SQL = string.Empty;
+            //_obj = new object();
         }
         #endregion
 
@@ -28,7 +28,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetInfo(string pBillNo)
         {
-            strSQL = @"SELECT DISTINCT C.BARCODE 条码,C.CREATEDATE 日期,D.FNUMBER 物料编码,DL.FNAME 物料名称
+            _SQL = @"SELECT DISTINCT C.BARCODE 条码,C.CREATEDATE 日期,D.FNUMBER 物料编码,DL.FNAME 物料名称
             FROM T_PRD_INSTOCK A
             INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID
             INNER JOIN C##BARCODE2.PM_PRODUCETASK B ON AE.FMOENTRYID = B.FENTRYID
@@ -37,7 +37,7 @@ namespace ERPSupport.SQL.K3Cloud
             INNER JOIN T_BD_MATERIAL_L DL ON D.FMATERIALID = DL.FMATERIALID AND DL.FLOCALEID = 2052
             WHERE A.FBILLNO = '" + pBillNo + "' AND C.INSTOCKSTATUS = 0 AND KDINSTOCKID IS NULL";
 
-            return ORAHelper.ExecuteTable(strSQL);
+            return ORAHelper.ExecuteTable(_SQL);
         }
 
 
@@ -47,22 +47,17 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pBillNo">入库单编号</param>
         public static void UpdateBarcode(string pBillNo)
         {
-            strSQL = @"UPDATE C##BARCODE2.PM_BARCODE
-            SET KDINSTOCKID = 
-            (
-            SELECT FID FROM T_PRD_INSTOCK WHERE FBILLNO = '" + pBillNo + @"'
-            ),INSTOCKSTATUS = 1
+            _SQL = @"UPDATE C##BARCODE2.PM_BARCODE
+            SET KDINSTOCKID = (SELECT FID FROM T_PRD_INSTOCK WHERE FBILLNO = '" + pBillNo + @"'),INSTOCKSTATUS = 1
             WHERE BARCODE IN
-            (
-            SELECT DISTINCT C.BARCODE
+            (SELECT DISTINCT C.BARCODE
             FROM T_PRD_INSTOCK A
             INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID
             INNER JOIN C##BARCODE2.PM_PRODUCETASK B ON AE.FMOENTRYID = B.FENTRYID
             INNER JOIN C##BARCODE2.PM_BARCODE C ON B.ID = C.TASKID
-            WHERE A.FBILLNO = '" + pBillNo + @"' AND C.INSTOCKSTATUS = 0 AND KDINSTOCKID IS NULL
-            )";
+            WHERE A.FBILLNO = '" + pBillNo + "' AND C.INSTOCKSTATUS = 0 AND KDINSTOCKID IS NULL)";
 
-            ORAHelper.ExecuteNonQuery(strSQL);
+            ORAHelper.ExecuteNonQuery(_SQL);
         }
 
         /// <summary>
@@ -72,7 +67,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetMo(string pPlanStartDate)
         {
-            strSQL = @"SELECT DISTINCT MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, DEP.FNUMBER 部门编码, DEPL.FNAME 部门--, MST.FSTOCKID 仓库
+            _SQL = @"SELECT DISTINCT MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, DEP.FNUMBER 部门编码, DEPL.FNAME 部门--, MST.FSTOCKID 仓库
             FROM T_PRD_MO A
             INNER JOIN T_PRD_MOENTRY AE ON A.FID = AE.FID
             INNER JOIN T_PRD_MOENTRY_A AA ON AE.FENTRYID = AA.FENTRYID AND AA.FSTATUS IN(3,4)
@@ -82,9 +77,9 @@ namespace ERPSupport.SQL.K3Cloud
             INNER JOIN T_BD_MATERIAL MTL ON PBE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
             INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
             LEFT JOIN T_AUTO_MSTOCKSETTING MST ON MTL.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID
-            WHERE (MST.FMATERIALID IS NULL OR MST.FSTOCKID IS NULL) AND A.FDOCUMENTSTATUS = 'C' AND A.FPRDORGID = 100508 AND TO_CHAR(AE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + pPlanStartDate + "' ";
+            WHERE (MST.FMATERIALID IS NULL OR MST.FSTOCKID IS NULL) AND A.FDOCUMENTSTATUS = 'C' AND A.FPRDORGID = 100508 AND TO_CHAR(AE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + pPlanStartDate + "'";
 
-            return ORAHelper.ExecuteTable(strSQL);
+            return ORAHelper.ExecuteTable(_SQL);
         }
     }
 }

@@ -48,7 +48,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
             dr = dt.NewRow();
             dr["FName"] = "销售订单";
-            dr["FValue"] = "SAL_ORDER";
+            dr["FValue"] = "SAL_SaleOrder";
             dt.Rows.Add(dr);
             dr = dt.NewRow();
             dr["FName"] = "生产订单";
@@ -88,13 +88,13 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void DataBind()
         {
-            string strFormID = cbxType.SelectedValue.ToString(), strFBillNo = txtBillNo.Text.Trim();
-            DateTime dtFrom = dtpFrom.Value, dtTo = dtpTo.Value;
+            //string strFormID = cbxType.SelectedValue.ToString(), strFBillNo = txtBillNo.Text.Trim();
+            //DateTime dtFrom = dtpFrom.Value, dtTo = dtpTo.Value;
 
-            if (strFBillNo == string.Empty)
-                dgv1.DataSource = SalOrder.GetBillInfo(strFormID, dtFrom, dtTo);
-            else
-                dgv1.DataSource = SalOrder.GetBillInfo(strFormID, strFBillNo, dtFrom, dtTo);
+            //if (strFBillNo == string.Empty)
+            //    dgv1.DataSource = SalOrder.GetBillInfo(Model.Enum.FormID.SAL_SaleOrder, dtFrom, dtTo);
+            //else
+            //    dgv1.DataSource = SalOrder.GetBillInfo(strFormID, strFBillNo, dtFrom, dtTo);
         }
 
         /// <summary>
