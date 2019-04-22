@@ -158,7 +158,7 @@ namespace ERPSupport.SupForm.UserCrtl
             else
                 btnSyn.Visible = false;
 
-            if (cbxType.SelectedValue.ToString() == "SAL_ORDER" && GlobalParameter.K3Inf.DepartmentID == 619615)
+            if (cbxType.SelectedValue.ToString() == "SAL_SaleOrder" && GlobalParameter.K3Inf.DepartmentID == 619615)
             {
                 pl2.Visible = true;
                 dgv1.Location = new System.Drawing.Point(new System.Drawing.Size(5, 75));
