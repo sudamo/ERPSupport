@@ -7,7 +7,7 @@ namespace ERPSupport.SupForm.Common
     /// <summary>
     /// 设置配置信息
     /// </summary>
-    public partial class frmSetting : Form
+    public partial class frmMenu_Tool_Setting : Form
     {
         #region Fields,Properties & Constructor
         /// <summary>
@@ -61,7 +61,7 @@ namespace ERPSupport.SupForm.Common
         /// 构造函数
         /// </summary>
         /// <param name="pEntry">加载方式：1、从登陆界面加载；2、从菜单加载</param>
-        public frmSetting(int pEntry)
+        public frmMenu_Tool_Setting(int pEntry)
         {
             InitializeComponent();
             _Entry = pEntry;

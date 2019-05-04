@@ -26,21 +26,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void ucStockEdit_Load(object sender, EventArgs e)
         {
-            DataTable dtp = CommonFunction.GetStock(3, 0);
-            DataTable dt = null;
-            DataRow dr = null;
-            dt = new DataTable();
-            dt.Columns.Add("FName");
-            dt.Columns.Add("FValue");
-            dr = dt.NewRow();
-            dr["FName"] = "请选择";
-            dr["FValue"] = "";
-            dt.Rows.Add(dr);
-            for (int i = 0; i < dtp.Rows.Count; i++)
-            {
-                dt.ImportRow(dtp.Rows[i]);
-            }
-            cbxStock.DataSource = dt;
+            cbxStock.DataSource = CommonFunction.GetStock(3, null);
             cbxStock.DisplayMember = "FName";
             cbxStock.ValueMember = "FValue";
         }

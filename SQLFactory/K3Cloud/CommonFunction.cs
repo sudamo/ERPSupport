@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
 using Oracle.ManagedDataAccess.Client;
+using ERPSupport.Model.Enum;
 using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SQL.K3Cloud
@@ -116,28 +117,6 @@ namespace ERPSupport.SQL.K3Cloud
             return ORAHelper.ExecuteTable(_SQL);
         }
 
-        ///// <summary>
-        ///// 单据类型
-        ///// </summary>
-        ///// <param name="pType">获取信息类型 0：所有数据；1、销售订单 销售出库单或应收单</param>
-        ///// <returns>DataTable</returns>
-        //public static DataTable GetBillType(int pType)
-        //{
-        //    if (pType == 1)
-        //        _SQL = @"SELECT A.FBILLTYPEID FVALUE,AL.FNAME
-        //        FROM T_BAS_BILLTYPE A
-        //        INNER JOIN T_BAS_BILLTYPE_L AL ON A.FBILLTYPEID = AL.FBILLTYPEID AND AL.FLOCALEID = 2052
-        //        WHERE UPPER(A.FBILLFORMID) IN('AR_RECEIVABLE','SAL_SALEORDER','SAL_OUTSTOCK')
-        //        ORDER BY A.FNUMBER";
-        //    else
-        //        _SQL = @"SELECT A.FBILLTYPEID FVALUE,AL.FNAME
-        //        FROM T_BAS_BILLTYPE A
-        //        INNER JOIN T_BAS_BILLTYPE_L AL ON A.FBILLTYPEID = AL.FBILLTYPEID AND AL.FLOCALEID = 2052
-        //        ORDER BY A.FNUMBER";
-
-        //    return ORAHelper.ExecuteTable(_SQL);
-        //}
-
         /// <summary>
         /// 单据类型
         /// </summary>
@@ -145,7 +124,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetBillType(string pFbillFormId)
         {
-            _SQL = @"SELECT A.FBILLTYPEID FValue,AL.FNAME FName
+            _SQL = @"SELECT A.FBILLTYPEID FValue,AL.FNAME
             FROM T_BAS_BILLTYPE A
             INNER JOIN T_BAS_BILLTYPE_L AL ON A.FBILLTYPEID = AL.FBILLTYPEID AND AL.FLOCALEID = 2052
             WHERE UPPER(FBILLFORMID) = '" + pFbillFormId.ToUpper() + @"' AND FDOCUMENTSTATUS = 'C' AND FFORBIDSTATUS = 'A'
@@ -153,25 +132,6 @@ namespace ERPSupport.SQL.K3Cloud
 
             return ORAHelper.ExecuteTable(_SQL);
         }
-
-        ///// <summary>
-        ///// 客户
-        ///// </summary>
-        ///// <param name="pUseOrgId">使用组织</param>
-        ///// <returns>DataTable</returns>
-        //public static DataTable GetCustomer(int pUseOrgId)
-        //{
-        //    if (pUseOrgId == 0)
-        //        _SQL = "SELECT -1 FValue,'请选择单据' FName FROM DUAL";
-        //    else
-        //        _SQL = @"SELECT CUS.FCUSTID FValue,CUSL.FNAME FName
-        //        FROM T_BD_CUSTOMER CUS
-        //        INNER JOIN T_BD_CUSTOMER_L CUSL ON CUS.FCUSTID = CUSL.FCUSTID AND CUSL.FLOCALEID = 2052
-        //        WHERE CUS.FDOCUMENTSTATUS = 'C' AND CUS.FFORBIDSTATUS = 'A' AND CUS.FUSEORGID = " + pUseOrgId.ToString() + @"
-        //        ORDER BY CUSL.FNAME";
-
-        //    return ORAHelper.ExecuteTable(_SQL);
-        //}
 
         /// <summary>
         /// 获取部门ID
@@ -223,7 +183,7 @@ namespace ERPSupport.SQL.K3Cloud
                         FROM T_BD_DEPARTMENT A
                         INNER JOIN T_BD_DEPARTMENT_L AL ON A.FDEPTID = AL.FDEPTID AND AL.FLOCALEID = 2052
                         WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND A.FUSEORGID = " + pUseOrgId + " ORDER BY A.FNUMBER";
-                    else//基本生产部门
+                    else//
                         _SQL = @"SELECT N'-1' FVALUE,N'请选择' FNAME FROM DUAL
                         UNION ALL
                         SELECT A.FNUMBER||'|'||A.FDEPTID FVALUE,AL.FNAME
@@ -249,6 +209,15 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
+        /// 获取领料部门信息
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetPickMtlDepartment()
+        {
+            return ORAHelper.ExecuteTable("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' ORDER BY FNUMBER");
+        }
+
+        /// <summary>
         /// 获取仓库ID
         /// </summary>
         /// <param name="pFUseOrgId">使用组织</param>
@@ -271,9 +240,9 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型</param>
         /// <param name="pUserOrgId">使用组织</param>
         /// <returns></returns>
-        public static DataTable GetStock(int pType, int pUserOrgId)
+        public static DataTable GetStock(int pType, int? pUserOrgId)
         {
-            switch(pType)
+            switch (pType)
             {
                 case 0:
                     _SQL = @"SELECT SK.FNUMBER FVALUE, SKL.FNAME
@@ -298,18 +267,20 @@ namespace ERPSupport.SQL.K3Cloud
                     ORDER BY SK.FNUMBER";
                     break;
                 case 3:
+                    _SQL = @"SELECT N'-1' FVALUE,N'请选择' FNAME FROM DUAL
+                    UNION ALL
+                    SELECT SK.FNUMBER||'|'||SK.FSTOCKID FVALUE,SKL.FNAME
+                    FROM T_BD_STOCK SK
+                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
+                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FDEFSTOCKSTATUSID = 10000 --AND SK.FALLOWSUM = '0'
+                    ORDER BY FVALUE";
+                    break;
+                default:
                     _SQL = @"SELECT SK.FNUMBER FVALUE, SKL.FNAME
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
                     WHERE SK.FDOCUMENTSTATUS = 'C' AND (SKG.FNUMBER LIKE 'H1%' OR SKG.FNUMBER LIKE 'H2%') AND SK.FFORBIDSTATUS = 'A'
-                    ORDER BY SKL.FNAME";
-                    break;
-                default:
-                    _SQL = @"SELECT SK.FNUMBER FVALUE,SKL.FNAME
-                    FROM T_BD_STOCK SK
-                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A'
                     ORDER BY SKL.FNAME";
                     break;
             }
@@ -351,6 +322,21 @@ namespace ERPSupport.SQL.K3Cloud
                 FROM T_ORG_ORGANIZATIONS ORG
                 INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
                 WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A'";
+
+            return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 根据类别FID获取辅助资料信息
+        /// </summary>
+        /// <param name="pFID"></param>
+        /// <returns></returns>
+        public static DataTable GetAssistantDataEntryByFID(string pFID)
+        {
+            _SQL = @"SELECT ASS.FENTRYID FVALUE,ASSL.FDATAVALUE FNAME
+            FROM T_BAS_ASSISTANTDATAENTRY ASS
+            INNER JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL ON ASS.FENTRYID = ASSL.FENTRYID AND ASSL.FLOCALEID = 2052
+            WHERE ASS.FID = '" + pFID + "'";
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -404,7 +390,9 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 根据用户权限获取功能模块
         /// </summary>
-        /// <param name="pK3Inf">配置</param>
+        /// <param name="pRIDs">用户角色</param>
+        /// <param name="pMIDs">模块</param>
+        /// <param name="pFunctionIds">功能</param>
         /// <returns></returns>
         public static DataTable GetNavigation(out string pRIDs, out string pMIDs, out string pFunctionIds)
         {
@@ -561,9 +549,9 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取方案信息
         /// </summary>
         /// <returns></returns>
-        public static DataTable GetSolution()
+        public static DataTable GetSolution(FormID pFormID)
         {
-            _SQL = "SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION where ISSHARE = '1' OR CREATOR = '" + Model.Globa.GlobalParameter.K3Inf.UserName + "' ORDER BY SNAME";
+            _SQL = "SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'" + pFormID + "') > 0 AND (ISSHARE = '1' OR CREATOR = '" + Model.Globa.GlobalParameter.K3Inf.UserName + "') ORDER BY SNAME";
             return ORAHelper.ExecuteTable(_SQL);
         }
 
@@ -574,7 +562,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetSolution(string pName)
         {
-            _SQL = "SELECT SCONTENT,SROWS FROM DM_FILTER_SOLUTION WHERE SNAME = '" + pName + "'";
+            _SQL = "SELECT SCONTENT,SROWS,CREATOR FROM DM_FILTER_SOLUTION WHERE SNAME = '" + pName + "'";
             return ORAHelper.ExecuteTable(_SQL);
         }
 
@@ -585,9 +573,13 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pIsShare">是否共享</param>
         /// <param name="pContent">内文</param>
         /// <param name="pRows">条件数</param>
-        public static void SaveSolution(string pName, bool pIsShare, string pContent, int pRows)
+        /// <param name="pFromID">业务标识</param>
+        public static void SaveSolution(string pName, bool pIsShare, string pContent, int pRows, FormID pFromID)
         {
-            _SQL = "INSERT INTO DM_FILTER_SOLUTION(SNAME, CREATOR, ISSHARE, SCONTENT, SROWS) VALUES('" + pName + "', '" + Model.Globa.GlobalParameter.K3Inf.UserName + "', '" + (pIsShare ? "1" : "0") + "', '" + pContent + "', " + pRows.ToString() + ")";
+            if (pFromID == FormID.SAL_SaleOrder)
+                pFromID = FormID.SAL_SaleOrderRun;//公用方案
+
+            _SQL = "INSERT INTO DM_FILTER_SOLUTION(SNAME,CREATOR,ISSHARE,SCONTENT,SROWS,FORMID) VALUES('" + pName + "','" + Model.Globa.GlobalParameter.K3Inf.UserName + "','" + (pIsShare ? "1" : "0") + "','" + pContent + "'," + pRows.ToString() + ",'" + pFromID + "')";
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 

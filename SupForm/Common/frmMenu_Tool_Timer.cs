@@ -11,7 +11,7 @@ namespace ERPSupport.SupForm.Common
     /// <summary>
     /// 定时器设置
     /// </summary>
-    public partial class frmTimer : Form
+    public partial class frmMenu_Tool_Timer : Form
     {
         /// <summary>
         /// 进行时间累计(秒)
@@ -43,7 +43,7 @@ namespace ERPSupport.SupForm.Common
         /// 构造函数
         /// </summary>
         /// <param name="pTimerPara"></param>
-        public frmTimer(TimerParameter pTimerPara)
+        public frmMenu_Tool_Timer(TimerParameter pTimerPara)
         {
             InitializeComponent();
 
@@ -79,6 +79,8 @@ namespace ERPSupport.SupForm.Common
             txtPickMinute.Text = _TimerPara.PickMinute.ToString();
             lblTimes.Text = _TimerPara.ExeTimes.ToString();
             cbxFnuction.SelectedIndex = _TimerPara.FuncID == "ALL" ? 0 : 1;
+
+            chbExit.Checked = System.Configuration.ConfigurationManager.AppSettings["LS_AutoExit"] == "1";
 
             ShowTime();
         }
@@ -198,7 +200,7 @@ namespace ERPSupport.SupForm.Common
 
             if (GlobalParameter.K3Inf.UserName != dt.Rows[0]["FUSER"].ToString())//本客户端还未占用自动领料的情况下，判断自动领料功能是否被他人占用。
             {
-                if (dt.Rows[0]["FSTATUS"].ToString() != "0")
+                if (dt.Rows[0]["FSTATUS"].ToString() != "0" && !_TimerPara.PauseStatus)
                 {
                     MessageBox.Show("[" + dt.Rows[0]["FUSER"].ToString() + "]正在执行自动领料，请勿重复设置。");
                     return;
@@ -233,6 +235,9 @@ namespace ERPSupport.SupForm.Common
             {
                 CommonFunction.UpdateLockStatus(1, "LOCKPICKMTL");
             }
+
+            string AutoExit = chbExit.Checked ? "1" : "0";
+            UserClass.AppConfig.WriteValue("LS_AutoExit", AutoExit);
 
             DialogResult = DialogResult.OK;
             Close();

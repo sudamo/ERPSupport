@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ERPSupport.SQL.K3Cloud;
+using ERPSupport.Model.Enum;
 using ERPSupport.Model.Globa;
 using ERPSupport.Model.K3Cloud;
 
@@ -34,13 +35,19 @@ namespace ERPSupport.SupForm.Common
         public List<Filter> _ListFilter;
 
         /// <summary>
+        /// 业务标识
+        /// </summary>
+        private FormID _FormID;
+
+        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="pListFilter"></param>
-        public frmAddFilter(List<Filter> pListFilter)
+        public frmAddFilter(List<Filter> pListFilter, FormID pFromID)
         {
             InitializeComponent();
             _ListFilter = pListFilter;
+            _FormID = pFromID;
         }
 
         /// <summary>
@@ -87,7 +94,7 @@ namespace ERPSupport.SupForm.Common
             }
             if (sContent.Equals(string.Empty)) sContent = " ";
 
-            CommonFunction.SaveSolution(txtName.Text, chbShare.Checked, sContent, iRows);
+            CommonFunction.SaveSolution(txtName.Text, chbShare.Checked, sContent, iRows, _FormID);
             _FilterName = txtName.Text;
             DialogResult = DialogResult.OK;
             Close();

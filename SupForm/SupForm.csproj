@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.5.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>11</ApplicationRevision>
     <ApplicationVersion>1.0.5.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -122,11 +122,23 @@
     <Compile Include="Bussiness\frmOrderSummary.Designer.cs">
       <DependentUpon>frmOrderSummary.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmTimer.cs">
+    <Compile Include="Common\frmCPDB.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmTimer.Designer.cs">
-      <DependentUpon>frmTimer.cs</DependentUpon>
+    <Compile Include="Common\frmCPDB.Designer.cs">
+      <DependentUpon>frmCPDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmMenu_Pro_Dir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmMenu_Pro_Dir.Designer.cs">
+      <DependentUpon>frmMenu_Pro_Dir.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Common\frmMenu_Tool_Timer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Common\frmMenu_Tool_Timer.Designer.cs">
+      <DependentUpon>frmMenu_Tool_Timer.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\frmAddFilter.cs">
       <SubType>Form</SubType>
@@ -146,11 +158,11 @@
     <Compile Include="Common\frmFilter.Designer.cs">
       <DependentUpon>frmFilter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmHelp.cs">
+    <Compile Include="Common\frmMenu_Help.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmHelp.Designer.cs">
-      <DependentUpon>frmHelp.cs</DependentUpon>
+    <Compile Include="Common\frmMenu_Help.Designer.cs">
+      <DependentUpon>frmMenu_Help.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\frmInstockSynchr.cs">
       <SubType>Form</SubType>
@@ -176,11 +188,11 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmParameter.cs">
+    <Compile Include="Common\frmMenu_Tool_Parameter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmParameter.Designer.cs">
-      <DependentUpon>frmParameter.cs</DependentUpon>
+    <Compile Include="Common\frmMenu_Tool_Parameter.Designer.cs">
+      <DependentUpon>frmMenu_Tool_Parameter.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\frmProgress.cs">
       <SubType>Form</SubType>
@@ -194,11 +206,11 @@
     <Compile Include="Common\frmResult.Designer.cs">
       <DependentUpon>frmResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmSetting.cs">
+    <Compile Include="Common\frmMenu_Tool_Setting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmSetting.Designer.cs">
-      <DependentUpon>frmSetting.cs</DependentUpon>
+    <Compile Include="Common\frmMenu_Tool_Setting.Designer.cs">
+      <DependentUpon>frmMenu_Tool_Setting.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -308,8 +320,14 @@
     <EmbeddedResource Include="Bussiness\frmOrderSummary.resx">
       <DependentUpon>frmOrderSummary.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmTimer.resx">
-      <DependentUpon>frmTimer.cs</DependentUpon>
+    <EmbeddedResource Include="Common\frmCPDB.resx">
+      <DependentUpon>frmCPDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmMenu_Pro_Dir.resx">
+      <DependentUpon>frmMenu_Pro_Dir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Common\frmMenu_Tool_Timer.resx">
+      <DependentUpon>frmMenu_Tool_Timer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\frmAddFilter.resx">
       <DependentUpon>frmAddFilter.cs</DependentUpon>
@@ -320,8 +338,8 @@
     <EmbeddedResource Include="Common\frmFilter.resx">
       <DependentUpon>frmFilter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmHelp.resx">
-      <DependentUpon>frmHelp.cs</DependentUpon>
+    <EmbeddedResource Include="Common\frmMenu_Help.resx">
+      <DependentUpon>frmMenu_Help.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\frmInstockSynchr.resx">
       <DependentUpon>frmInstockSynchr.cs</DependentUpon>
@@ -335,8 +353,8 @@
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmParameter.resx">
-      <DependentUpon>frmParameter.cs</DependentUpon>
+    <EmbeddedResource Include="Common\frmMenu_Tool_Parameter.resx">
+      <DependentUpon>frmMenu_Tool_Parameter.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>
@@ -344,8 +362,8 @@
     <EmbeddedResource Include="Common\frmResult.resx">
       <DependentUpon>frmResult.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmSetting.resx">
-      <DependentUpon>frmSetting.cs</DependentUpon>
+    <EmbeddedResource Include="Common\frmMenu_Tool_Setting.resx">
+      <DependentUpon>frmMenu_Tool_Setting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

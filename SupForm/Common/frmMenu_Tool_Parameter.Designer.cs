@@ -1,6 +1,6 @@
 ﻿namespace ERPSupport.SupForm.Common
 {
-    partial class frmParameter
+    partial class frmMenu_Tool_Parameter
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmParameter));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu_Tool_Parameter));
             this.gbxOrderRun = new System.Windows.Forms.GroupBox();
             this.plOther = new System.Windows.Forms.Panel();
             this.chbJoin = new System.Windows.Forms.CheckBox();

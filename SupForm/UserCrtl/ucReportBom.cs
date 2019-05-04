@@ -113,8 +113,8 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            dgv1.DataSource = CommonFunction.BOMQuery(rbtBom.Checked, rbtBOMChild.Checked, rbtReplaceGroup.Checked, cbxUseOrg.SelectedIndex, cbxUseOrg.SelectedValue.ToString(), cbxLogic.SelectedValue.ToString(), cbxTimes.SelectedValue.ToString());
-            btnReport.Enabled = true;
+            //dgv1.DataSource = CommonFunction.BOMQuery(rbtBom.Checked, rbtBOMChild.Checked, rbtReplaceGroup.Checked, cbxUseOrg.SelectedIndex, cbxUseOrg.SelectedValue.ToString(), cbxLogic.SelectedValue.ToString(), cbxTimes.SelectedValue.ToString());
+            //btnReport.Enabled = true;
         }
 
         /// <summary>

@@ -20,7 +20,14 @@ namespace ERPSupport.SupForm.UserClass
         public static string ReadValue(string pKey, string pType)
         {
             if (pType == "AppSettings")
+            {
+                if(pKey.Contains("_PWD"))
+                {
+                    string strValue = ConfigurationManager.AppSettings[pKey];
+                    return DMData.Code.DataEncoder.DecryptData(strValue);
+                }
                 return ConfigurationManager.AppSettings[pKey];
+            }
             return ConfigurationManager.ConnectionStrings[pKey].ToString();
         }
 

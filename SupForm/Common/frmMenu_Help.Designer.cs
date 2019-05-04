@@ -1,6 +1,6 @@
 ﻿namespace ERPSupport.SupForm.Common
 {
-    partial class frmHelp
+    partial class frmMenu_Help
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmHelp));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu_Help));
             this.rtbContext = new System.Windows.Forms.RichTextBox();
             this.btnOK = new System.Windows.Forms.Button();
             this.btnSay = new System.Windows.Forms.Button();

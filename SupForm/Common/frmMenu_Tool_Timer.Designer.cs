@@ -1,6 +1,6 @@
 ﻿namespace ERPSupport.SupForm.Common
 {
-    partial class frmTimer
+    partial class frmMenu_Tool_Timer
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmTimer));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu_Tool_Timer));
             this.btnStar = new System.Windows.Forms.Button();
             this.btnPause = new System.Windows.Forms.Button();
             this.txtPickMinute = new System.Windows.Forms.TextBox();
@@ -48,6 +48,7 @@
             this.lblFunction = new System.Windows.Forms.Label();
             this.cbxFnuction = new System.Windows.Forms.ComboBox();
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.chbExit = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnStar
@@ -161,7 +162,7 @@
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(10, 232);
+            this.btnOK.Location = new System.Drawing.Point(91, 232);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 6;
@@ -220,12 +221,24 @@
             this.cbxFnuction.TabIndex = 2;
             this.tt.SetToolTip(this.cbxFnuction, "选择自动执行功能。");
             // 
+            // chbExit
+            // 
+            this.chbExit.AutoSize = true;
+            this.chbExit.Location = new System.Drawing.Point(10, 236);
+            this.chbExit.Name = "chbExit";
+            this.chbExit.Size = new System.Drawing.Size(72, 16);
+            this.chbExit.TabIndex = 8;
+            this.chbExit.Text = "定时关闭";
+            this.tt.SetToolTip(this.chbExit, "无操作定时关闭程序");
+            this.chbExit.UseVisualStyleBackColor = true;
+            // 
             // frmTimer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(259, 262);
             this.ControlBox = false;
+            this.Controls.Add(this.chbExit);
             this.Controls.Add(this.cbxFnuction);
             this.Controls.Add(this.lblTimes);
             this.Controls.Add(this.lblDays);
@@ -275,5 +288,6 @@
         private System.Windows.Forms.Label lblFunction;
         private System.Windows.Forms.ComboBox cbxFnuction;
         private System.Windows.Forms.ToolTip tt;
+        private System.Windows.Forms.CheckBox chbExit;
     }
 }

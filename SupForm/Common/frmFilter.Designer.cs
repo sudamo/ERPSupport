@@ -1563,6 +1563,7 @@
             this.dgv1.ShowEditingIcon = false;
             this.dgv1.Size = new System.Drawing.Size(260, 412);
             this.dgv1.TabIndex = 19;
+            this.dgv1.Click += new System.EventHandler(this.dgv1_Click);
             this.dgv1.DoubleClick += new System.EventHandler(this.dgv1_DoubleClick);
             // 
             // plTop

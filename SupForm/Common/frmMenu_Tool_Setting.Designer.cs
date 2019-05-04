@@ -1,6 +1,6 @@
 ﻿namespace ERPSupport.SupForm.Common
 {
-    partial class frmSetting
+    partial class frmMenu_Tool_Setting
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSetting));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMenu_Tool_Setting));
             this.lblERPADDRESS = new System.Windows.Forms.Label();
             this.lblOwner = new System.Windows.Forms.Label();
             this.lblZTID = new System.Windows.Forms.Label();

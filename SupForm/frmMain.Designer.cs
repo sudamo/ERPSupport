@@ -72,6 +72,8 @@
             this.tsmiHelp_About = new System.Windows.Forms.ToolStripMenuItem();
             this.tSumSecond = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
+            this.tsmiPro = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Dir = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.sc1)).BeginInit();
             this.sc1.Panel2.SuspendLayout();
             this.sc1.SuspendLayout();
@@ -191,7 +193,7 @@
             this.btnUnLock.Location = new System.Drawing.Point(679, 5);
             this.btnUnLock.Margin = new System.Windows.Forms.Padding(2);
             this.btnUnLock.Name = "btnUnLock";
-            this.btnUnLock.Size = new System.Drawing.Size(60, 20);
+            this.btnUnLock.Size = new System.Drawing.Size(80, 20);
             this.btnUnLock.TabIndex = 10;
             this.btnUnLock.Text = "解锁";
             this.tt.SetToolTip(this.btnUnLock, "销售订单解除锁库");
@@ -259,6 +261,7 @@
             this.msMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiFile,
             this.tsmiTool,
+            this.tsmiPro,
             this.tsmiHelp});
             this.msMain.Location = new System.Drawing.Point(0, 0);
             this.msMain.Name = "msMain";
@@ -359,40 +362,40 @@
             // smiTool_Occupy_PickMtl
             // 
             this.smiTool_Occupy_PickMtl.Name = "smiTool_Occupy_PickMtl";
-            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(130, 22);
+            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(152, 22);
             this.smiTool_Occupy_PickMtl.Text = "倒冲领料";
             this.smiTool_Occupy_PickMtl.Click += new System.EventHandler(this.smiTool_Occupy_PickMtl_Click);
             // 
             // smiTool_Occupy_Trans
             // 
             this.smiTool_Occupy_Trans.Name = "smiTool_Occupy_Trans";
-            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(130, 22);
+            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(152, 22);
             this.smiTool_Occupy_Trans.Text = "调拨";
             this.smiTool_Occupy_Trans.Click += new System.EventHandler(this.smiTool_Occupy_Trans_Click);
             // 
             // tsmiTool_Occupy_LockStock
             // 
             this.tsmiTool_Occupy_LockStock.Name = "tsmiTool_Occupy_LockStock";
-            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(130, 22);
+            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy_LockStock.Text = "锁库";
             this.tsmiTool_Occupy_LockStock.Click += new System.EventHandler(this.tsmiTool_Occupy_LockStock_Click);
             // 
             // tsmiTool_Occupy_OrderRun
             // 
             this.tsmiTool_Occupy_OrderRun.Name = "tsmiTool_Occupy_OrderRun";
-            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(130, 22);
+            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy_OrderRun.Text = "订单运算";
             this.tsmiTool_Occupy_OrderRun.Click += new System.EventHandler(this.tsmiTool_Occupy_OrderRun_Click);
             // 
             // tssTool_Occupy_1
             // 
             this.tssTool_Occupy_1.Name = "tssTool_Occupy_1";
-            this.tssTool_Occupy_1.Size = new System.Drawing.Size(127, 6);
+            this.tssTool_Occupy_1.Size = new System.Drawing.Size(149, 6);
             // 
             // tsmiTool_Occupy_LockPickMtl
             // 
             this.tsmiTool_Occupy_LockPickMtl.Name = "tsmiTool_Occupy_LockPickMtl";
-            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(130, 22);
+            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy_LockPickMtl.Text = "自动领料";
             this.tsmiTool_Occupy_LockPickMtl.Click += new System.EventHandler(this.tsmiTool_Occupy_LockPickMtl_Click);
             // 
@@ -456,6 +459,21 @@
             // tSumSecond
             // 
             this.tSumSecond.Interval = 1000;
+            // 
+            // tsmiPro
+            // 
+            this.tsmiPro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiPro_Dir});
+            this.tsmiPro.Name = "tsmiPro";
+            this.tsmiPro.Size = new System.Drawing.Size(68, 20);
+            this.tsmiPro.Text = "项目(&P)";
+            // 
+            // tsmiPro_Dir
+            // 
+            this.tsmiPro_Dir.Name = "tsmiPro_Dir";
+            this.tsmiPro_Dir.Size = new System.Drawing.Size(165, 22);
+            this.tsmiPro_Dir.Text = "调拨单设置(&D)";
+            this.tsmiPro_Dir.Click += new System.EventHandler(this.tsmiPro_Dir_Click);
             // 
             // frmMain
             // 
@@ -530,5 +548,7 @@
         private System.Windows.Forms.ToolStripMenuItem smiTool_Occupy_PickMtl;
         private System.Windows.Forms.ToolStripMenuItem smiTool_Occupy_Trans;
         private System.Windows.Forms.ToolStripSeparator tssTool_Occupy_1;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_Dir;
     }
 }

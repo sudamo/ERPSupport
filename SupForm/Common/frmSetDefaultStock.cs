@@ -119,7 +119,7 @@ namespace ERPSupport.SupForm.Common
                 dgvcbxc.HeaderText = "仓库";
                 dgvcbxc.AutoComplete = true;
                 dgvcbxc.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-                dgvcbxc.DataSource = CommonFunction.GetStock(3, 0);
+                dgvcbxc.DataSource = CommonFunction.GetStock(-1, null);
                 dgvcbxc.DisplayMember = "FName";
                 dgvcbxc.ValueMember = "FValue";
                 dgv1.Columns.Add(dgvcbxc);

@@ -8,7 +8,7 @@ namespace ERPSupport.SupForm.Common
     /// <summary>
     /// 程序信息
     /// </summary>
-    public partial class frmHelp : Form
+    public partial class frmMenu_Help : Form
     {
         /// <summary>
         /// 类型
@@ -23,7 +23,7 @@ namespace ERPSupport.SupForm.Common
         /// 构造函数
         /// </summary>
         /// <param name="pType"></param>
-        public frmHelp(int pType)
+        public frmMenu_Help(int pType)
         {
             InitializeComponent();
             _Type = pType;

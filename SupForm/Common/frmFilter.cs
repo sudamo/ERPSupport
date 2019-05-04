@@ -3,6 +3,7 @@ using System.Data;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using ERPSupport.SQL.K3Cloud;
+using ERPSupport.Model.Enum;
 using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SupForm.Common
@@ -52,15 +53,21 @@ namespace ERPSupport.SupForm.Common
         }
 
         /// <summary>
+        /// 业务标识
+        /// </summary>
+        private FormID _FormID;
+
+        /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="pListFilter">筛选条件</param>
         /// <param name="pFilterName">方案名称</param>
-        public frmFilter(List<Filter> pListFilter, string pFilterName)
+        public frmFilter(List<Filter> pListFilter, string pFilterName, FormID pFormID)
         {
             InitializeComponent();
             _FilterName = pFilterName;
             _ListFilter = pListFilter;
+            _FormID = pFormID;
 
             _Check = true;
         }
@@ -83,7 +90,7 @@ namespace ERPSupport.SupForm.Common
         /// </summary>
         private void SetDataSource()
         {
-            dgv1.DataSource = CommonFunction.GetSolution();
+            dgv1.DataSource = CommonFunction.GetSolution(_FormID);
         }
 
         /// <summary>
@@ -153,73 +160,144 @@ namespace ERPSupport.SupForm.Common
                 }
                 else if (ctl.Name.Contains("cbxField"))
                 {
-                    dtField = new DataTable();
-                    dtField.Columns.Add("FName");
-                    dtField.Columns.Add("FValue");
+                    switch(_FormID)
+                    {
+                        case FormID.SAL_SaleOrder:
+                        case FormID.SAL_SaleOrderRun://销售订单
+                            {
+                                dtField = new DataTable();
+                                dtField.Columns.Add("FName");
+                                dtField.Columns.Add("FValue");
 
-                    dr = dtField.NewRow();
-                    dr["FName"] = "";
-                    dr["FValue"] = "-1";
-                    dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "";
+                                dr["FValue"] = "-1";
+                                dtField.Rows.Add(dr);
 
-                    dr = dtField.NewRow();
-                    dr["FName"] = "日期";
-                    dr["FValue"] = "A.FDATE";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "审核日期";
-                    dr["FValue"] = "A.FAPPROVEDATE";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "计划开工日期";
-                    dr["FValue"] = "AE.FPLANSTARTDATE";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "单据编号";
-                    dr["FValue"] = "A.FBILLNO";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "物料编码";
-                    dr["FValue"] = "MTL.FNumber";
-                    dtField.Rows.Add(dr);//5
+                                dr = dtField.NewRow();
+                                dr["FName"] = "日期";
+                                dr["FValue"] = "A.FDATE";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "审核日期";
+                                dr["FValue"] = "A.FAPPROVEDATE";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "计划开工日期";
+                                dr["FValue"] = "AE.FPLANSTARTDATE";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "单据编号";
+                                dr["FValue"] = "A.FBILLNO";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "物料编码";
+                                dr["FValue"] = "MTL.FNumber";
+                                dtField.Rows.Add(dr);//5
 
-                    dr = dtField.NewRow();
-                    dr["FName"] = "物料名称";
-                    dr["FValue"] = "MTLL.FNAME";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "关联采购/生产数量";
-                    dr["FValue"] = "AR.FPURJOINQTY";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "销售组织";
-                    dr["FValue"] = "A.FSALEORGID";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "生产组织";
-                    dr["FValue"] = "A.F_PAEZ_FACTORGID";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "库存组织";
-                    dr["FValue"] = "AE.FSTOCKORGID";
-                    dtField.Rows.Add(dr);//10
+                                dr = dtField.NewRow();
+                                dr["FName"] = "物料名称";
+                                dr["FValue"] = "MTLL.FNAME";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "关联采购/生产数量";
+                                dr["FValue"] = "AR.FPURJOINQTY";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "销售组织";
+                                dr["FValue"] = "A.FSALEORGID";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "生产组织";
+                                dr["FValue"] = "A.F_PAEZ_FACTORGID";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "库存组织";
+                                dr["FValue"] = "AE.FSTOCKORGID";
+                                dtField.Rows.Add(dr);//10
 
-                    dr = dtField.NewRow();
-                    dr["FName"] = "完全锁库";
-                    dr["FValue"] = "A.FFULLLOCK";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "业务终止";
-                    dr["FValue"] = "AE.FMRPTERMINATESTATUS";
-                    dtField.Rows.Add(dr);
-                    dr = dtField.NewRow();
-                    dr["FName"] = "批量锁库标识";
-                    dr["FValue"] = "AE.FBATCHFLAG";
-                    dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "完全锁库";
+                                dr["FValue"] = "A.FFULLLOCK";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "业务终止";
+                                dr["FValue"] = "AE.FMRPTERMINATESTATUS";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "批量锁库标识";
+                                dr["FValue"] = "AE.FBATCHFLAG";
+                                dtField.Rows.Add(dr);
 
-                    ((ComboBox)ctl).DataSource = dtField;
-                    ((ComboBox)ctl).DisplayMember = "FName";
-                    ((ComboBox)ctl).ValueMember = "FValue";
+                                ((ComboBox)ctl).DataSource = dtField;
+                                ((ComboBox)ctl).DisplayMember = "FName";
+                                ((ComboBox)ctl).ValueMember = "FValue";
+                            }
+                            break;
+                        case FormID.STK_TransferDirect://调拨单
+                            {
+                                dtField = new DataTable();
+                                dtField.Columns.Add("FName");
+                                dtField.Columns.Add("FValue");
+
+                                dr = dtField.NewRow();
+                                dr["FName"] = "";
+                                dr["FValue"] = "-1";
+                                dtField.Rows.Add(dr);
+
+                                dr = dtField.NewRow();
+                                dr["FName"] = "日期";
+                                dr["FValue"] = "O.FDATE";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "审核日期";
+                                dr["FValue"] = "O.FAPPROVEDATE";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "单据编号";
+                                dr["FValue"] = "O.FBILLNO";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "销售组织";
+                                dr["FValue"] = "O.FSALEORGID";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "单据类型";
+                                dr["FValue"] = "O.FBILLTYPEID";
+                                dtField.Rows.Add(dr);
+
+                                dr = dtField.NewRow();
+                                dr["FName"] = "发货类别";
+                                dr["FValue"] = "O.FHEADDELIVERYWAY";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "物料代码";
+                                dr["FValue"] = "MTL.FNUMBER";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "物料名称";
+                                dr["FValue"] = "MTLL.FNAME";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "完全锁库";
+                                dr["FValue"] = "O.FFULLLOCK";
+                                dtField.Rows.Add(dr);
+                                dr = dtField.NewRow();
+                                dr["FName"] = "通知单数>锁库调拨数";
+                                dr["FValue"] = "OER.FBASEDELIQTY>OE.F_PAEZ_LOCKALLOTQTY";
+                                dtField.Rows.Add(dr);
+
+                                ((ComboBox)ctl).DataSource = dtField;
+                                ((ComboBox)ctl).DisplayMember = "FName";
+                                ((ComboBox)ctl).ValueMember = "FValue";
+                            }
+                            break;
+                        default:
+                            {
+                                //默认
+                            }
+                            break;
+                    }
                 }
                 else if (ctl.Name.Contains("cbxCompare"))
                 {
@@ -410,7 +488,7 @@ namespace ERPSupport.SupForm.Common
 
                 entry.FilterValue = new FilterValue(((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1).ToString(), false)[0]).Text.Trim(), ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1).ToString(), false)[0]).Value, ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1).ToString(), false)[0]).SelectedIndex, ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1).ToString(), false)[0]).Checked);
 
-                if ((entry.Field > 0 && entry.Compare > 0) || (entry.Field > 10 && entry.Field < 14))//复选框可以没有比较逻辑
+                if ((entry.Field > 0 && entry.Compare > 0) || (entry.Field == 9 || entry.Field == 10))//复选框可以没有比较逻辑
                 {
                     iLeft += entry.ParenthesesLeft;
                     iRight += entry.ParenthesesRight;
@@ -503,7 +581,7 @@ namespace ERPSupport.SupForm.Common
                 return;
             }
 
-            frmAddFilter frm = new frmAddFilter(ListFilter);
+            frmAddFilter frm = new frmAddFilter(ListFilter, _FormID);
             frm.ShowDialog();
             if (frm.DialogResult == DialogResult.OK)
             {
@@ -525,6 +603,14 @@ namespace ERPSupport.SupForm.Common
             _FilterName = dgv1.CurrentRow.Cells[0].Value.ToString();
             if (MessageBox.Show("是否删除方案：" + _FilterName, "删除方案", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
+                //添加限制，不能删除他人的方案。
+                string strCreator = CommonFunction.GetSolution(_FilterName).Rows[0]["Creator"].ToString();
+                if (Model.Globa.GlobalParameter.K3Inf.UserName != "Administrator" && Model.Globa.GlobalParameter.K3Inf.UserName != strCreator)
+                {
+                    MessageBox.Show("只能删除自己创建的方案。");
+                    return;
+                }
+
                 CommonFunction.DelSolution(_FilterName);
                 SetDataSource();
                 _FilterName = string.Empty;
@@ -540,89 +626,200 @@ namespace ERPSupport.SupForm.Common
         private void Field_SelectedIndexChanged(object sender, EventArgs e)
         {
             int iSeq = int.Parse((((ComboBox)sender).Name.Substring(8)));
-            switch (((ComboBox)sender).SelectedIndex)
+            switch (_FormID)
             {
-                case 1:
-                case 2:
-                case 3:
+                case FormID.SAL_SaleOrder:
+                case FormID.SAL_SaleOrderRun://销售订单
                     {
-                        //日期
-                        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = true;
+                        switch (((ComboBox)sender).SelectedIndex)
+                        {
+                            case 1:
+                            case 2:
+                            case 3:
+                                {
+                                    //日期
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = true;
 
-                        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
-                        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
 
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 4:
+                            case 5:
+                            case 6:
+                            case 7:
+                                {
+                                    //文本
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 8:
+                            case 9:
+                            case 10:
+                                {
+                                    //组织下拉框
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommonFunction.GetOrganization(2);
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 11:
+                            case 12:
+                            case 13:
+                                {
+                                    //复选框
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = false;
+                                }
+                                break;
+                            case 14:
+                                {
+                                    //单据类型下拉框
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommonFunction.GetBillType("SAL_SALEORDER");
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            default:
+                                {
+                                    //文本
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                        }
                     }
                     break;
-                case 4:
-                case 5:
-                case 6:
-                case 7:
+                case FormID.STK_TransferDirect://调拨单
                     {
-                        //文本
-                        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = true;
+                        switch (((ComboBox)sender).SelectedIndex)
+                        {
+                            case 1:
+                            case 2:
+                                {
+                                    //日期
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = true;
 
-                        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
-                        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
 
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
-                    }
-                    break;
-                case 8:
-                case 9:
-                case 10:
-                    {
-                        //组织下拉框
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommonFunction.GetOrganization(2);
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 3:
+                            case 7:
+                            case 8:
+                                {
+                                    //文本
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = true;
 
-                        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
-                        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
-                        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
 
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
-                    }
-                    break;
-                case 11:
-                case 12:
-                case 13:
-                    {
-                        //复选框
-                        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = true;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 4:
+                                {
+                                    //组织下拉框
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommonFunction.GetOrganization(2);
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
-                        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
-                        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
 
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = false;
-                    }
-                    break;
-                case 14:
-                    {
-                        //单据条件下拉框
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommonFunction.GetBillType("SAL_SALEORDER");
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 5:
+                                {
+                                    //单据类型下拉框
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommonFunction.GetBillType("SAL_SALEORDER");
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
-                        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
-                        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
-                        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
 
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 6:
+                                {
+                                    //发货类别下拉框
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommonFunction.GetAssistantDataEntryByFID("801e1892b8824299936cb07c1fd1694d");
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                            case 9:
+                            case 10:
+                                {
+                                    //复选框
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = false;
+                                }
+                                break;
+                            default:
+                                {
+                                    //文本
+                                    ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = true;
+
+                                    ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
+                                    ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
+
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
+                                }
+                                break;
+                        }
                     }
                     break;
                 default:
                     {
-                        //文本
-                        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = true;
 
-                        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = false;
-                        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = false;
-
-                        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
                     }
                     break;
             }
@@ -696,6 +893,75 @@ namespace ERPSupport.SupForm.Common
         /// <param name="e"></param>
         private void dgv1_DoubleClick(object sender, EventArgs e)
         {
+            //DataTable dtContent = new DataTable();
+            //_FilterName = dgv1.CurrentRow.Cells[0].Value.ToString();//获取方案名
+
+            //dtContent = CommonFunction.GetSolution(_FilterName);
+            //int iRows = int.Parse(dtContent.Rows[0]["SROWS"].ToString());
+            //string sContent = dtContent.Rows[0]["SCONTENT"].ToString(), tmp;
+
+            //if (iRows == 0) return;//没有过滤条件
+
+            //for (int i = 0; i < 15; i++)
+            //{
+            //    if (i < iRows)//根据方案填充过滤条件
+            //    {
+            //        tmp = sContent.Substring(1, sContent.IndexOf("]") - 1);
+
+            //        //左括号
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLeft" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, 1));
+            //        tmp = tmp.Substring(2);
+            //        //字段
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxField" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, tmp.IndexOf("|")));
+            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
+            //        //比较
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, tmp.IndexOf("|")));
+            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
+            //        //值
+            //        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1), false)[0]).Value = DateTime.Parse(tmp.Substring(0, tmp.IndexOf("|")));
+            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
+            //        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1), false)[0]).Text = tmp.Substring(0, tmp.IndexOf("|"));
+            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, tmp.IndexOf("|")));
+            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
+            //        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1), false)[0]).Checked = tmp.Substring(0, tmp.IndexOf("|")) == "1" ? true : false;
+            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
+            //        //右括号
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxRight" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, 1));
+            //        tmp = tmp.Substring(2);
+            //        //逻辑
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLogic" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp);
+
+            //        sContent = sContent.Substring(sContent.IndexOf("]") + 1);
+            //    }
+            //    else//删除多余的过滤条件
+            //    {
+            //        //左括号
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLeft" + (i + 1), false)[0]).SelectedIndex = 0;
+            //        //字段
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxField" + (i + 1), false)[0]).SelectedIndex = 0;
+            //        //比较
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + (i + 1), false)[0]).SelectedIndex = 0;
+            //        //值
+            //        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1), false)[0]).Value = DateTime.Now;
+            //        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1), false)[0]).Text = string.Empty;
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1), false)[0]).SelectedIndex = 0;
+            //        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1), false)[0]).Checked = false;
+            //        //右括号
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxRight" + (i + 1), false)[0]).SelectedIndex = 0;
+            //        //逻辑
+            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLogic" + (i + 1), false)[0]).SelectedIndex = 0;
+            //    }
+            //}
+
+            //Text = "过滤条件 - " + _FilterName;
+        }
+
+        private void dgv1_Click(object sender, EventArgs e)
+        {
+            if (dgv1 == null || dgv1.Rows.Count == 0)
+                return;
+
             DataTable dtContent = new DataTable();
             _FilterName = dgv1.CurrentRow.Cells[0].Value.ToString();//获取方案名
 

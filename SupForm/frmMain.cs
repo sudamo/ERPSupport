@@ -704,7 +704,7 @@ namespace ERPSupport.SupForm
             }
             else if (_FormId == FormID.PRD_PPBOM)
             {
-                btnCommit.Text = "生成调拨单";
+                btnCommit.Text = "材料调拨";
                 btnCommit.Enabled = true;
 
                 btnCheck.Visible = true;
@@ -713,11 +713,20 @@ namespace ERPSupport.SupForm
                 btnFilter.Visible = false;
                 cbxLogic.Enabled = false;
                 cbxCondition.Enabled = false;
-                btnUnLock.Visible = false;
 
                 cbxCondition.SelectedIndex = 1;
                 cbxLogic.SelectedIndex = 1;
                 dtpDate.Value = DateTime.Now;
+
+                if (GlobalParameter.Tmp_Params != null && GlobalParameter.Tmp_Params.ToString() == "1")
+                {
+                    btnUnLock.Visible = false;
+                }
+                else
+                {
+                    btnUnLock.Visible = true;
+                    btnUnLock.Text = "成品调拨";
+                }
             }
             else if (_FormId == FormID.SAL_SaleOrder)
             {
@@ -731,6 +740,7 @@ namespace ERPSupport.SupForm
                 cbxLogic.Enabled = true;
                 cbxCondition.Enabled = true;
                 btnUnLock.Visible = true;
+                btnUnLock.Text = "解锁";
 
                 cbxCondition.SelectedIndex = 1;
                 cbxLogic.SelectedIndex = 4;
@@ -847,7 +857,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void btnFilter_Click(object sender, EventArgs e)
         {
-            frmFilter frm = new frmFilter(_ListFilter, _FilterName);
+            frmFilter frm = new frmFilter(_ListFilter, _FilterName, _FormId);
             frm.ShowDialog();
 
             if (frm.DialogResult == DialogResult.OK)
@@ -892,53 +902,53 @@ namespace ERPSupport.SupForm
                     {
                         case 1:
                             sField = "TO_CHAR(A.FDATE,'yyyy-mm-dd')";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], false);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 2:
                             sField = "TO_CHAR(A.FAPPROVEDATE,'yyyy-mm-dd')";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], false);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 3:
                             sField = "TO_CHAR(AE.FPLANSTARTDATE,'yyyy-mm-dd')";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], false);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 4:
                             sField = "A.FBILLNO";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], false);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 5:
                             sField = "MTL.FNumber";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], false);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
 
                         case 6:
                             sField = "MTLL.FNAME";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], false);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 7:
                             sField = "AR.FPURJOINQTY";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], false);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 8:
                             sField = "A.FSALEORGID";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], true);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 9:
                             sField = "A.F_PAEZ_FACTORGID";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], true);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         case 10:
                             sField = "AE.FSTOCKORGID";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], true);
                             sValue = GetValue(_ListFilter[i], dtOrg);
                             break;
                         //
@@ -959,7 +969,7 @@ namespace ERPSupport.SupForm
                             break;
                         case 14:
                             sField = "A.FBILLTYPEID";
-                            sCompare = GetCompare(_ListFilter[i]);
+                            sCompare = GetCompare(_ListFilter[i], true);
                             sValue = GetValue(_ListFilter[i], dtBillType);
                             break;
                     }
@@ -1007,43 +1017,51 @@ namespace ERPSupport.SupForm
         /// </summary>
         /// <param name="pFilter"></param>
         /// <returns></returns>
-        private string GetCompare(Filter pFilter)
+        private string GetCompare(Filter pFilter, bool pIsComboBox)
         {
             string retrunValue = string.Empty;
 
-            switch (pFilter.Compare)
+            if (pIsComboBox)
             {
-                case 1:
-                    retrunValue = " = ";
-                    break;
-                case 2:
+                if (pFilter.Compare == 2)
                     retrunValue = " <> ";
-                    break;
-                case 3:
-                    retrunValue = " > ";
-                    break;
-                case 4:
-                    retrunValue = " >= ";
-                    break;
-                case 5:
-                    retrunValue = " < ";
-                    break;
-
-                case 6:
-                    retrunValue = " <= ";
-                    break;
-                case 7:
-                case 8:
-                case 9:
-                    retrunValue = " LIKE ";
-                    break;
-                case 10:
-                    retrunValue = " NOT LIKE ";
-                    break;
-                default:
+                else
                     retrunValue = " = ";
-                    break;
             }
+            else
+                switch (pFilter.Compare)
+                {
+                    case 1:
+                        retrunValue = " = ";
+                        break;
+                    case 2:
+                        retrunValue = " <> ";
+                        break;
+                    case 3:
+                        retrunValue = " > ";
+                        break;
+                    case 4:
+                        retrunValue = " >= ";
+                        break;
+                    case 5:
+                        retrunValue = " < ";
+                        break;
+
+                    case 6:
+                        retrunValue = " <= ";
+                        break;
+                    case 7:
+                    case 8:
+                    case 9:
+                        retrunValue = " LIKE ";
+                        break;
+                    case 10:
+                        retrunValue = " NOT LIKE ";
+                        break;
+                    default:
+                        retrunValue = " = ";
+                        break;
+                }
 
             return retrunValue;
         }
@@ -1287,7 +1305,12 @@ namespace ERPSupport.SupForm
         {
             //事件处理，指定处理函数
             if (_FormId == FormID.PRD_PPBOM)
-                e.Result = Trans(sender, e);
+            {
+                if (GlobalParameter.Tmp_Params != null && GlobalParameter.Tmp_Params.ToString() == "1")
+                    e.Result = Trans(sender, e);
+                else
+                    Trans2(sender, e);
+            }
             else if (_FormId == FormID.SAL_SaleOrder)
                 e.Result = LockStock(sender, e);
         }
@@ -1564,7 +1587,7 @@ namespace ERPSupport.SupForm
 
         #region 直接调拨单
         /// <summary>
-        /// 直接调拨单
+        /// 直接调拨单ERP
         /// </summary>
         private int Trans(object sender, DoWorkEventArgs e)
         {
@@ -1609,7 +1632,7 @@ namespace ERPSupport.SupForm
                 lstOutStock = new List<string>();
 
                 //获取调拨单数据
-                dt = PrdAllocation.GetTransferDirectDt(dtpDate.Value.ToString("yyyy-MM-dd"), list[i]);
+                dt = PrdAllocation.GetTrans(dtpDate.Value.ToString("yyyy-MM-dd"), list[i]);
 
                 if (dt.Rows.Count == 0)
                     continue;
@@ -1641,7 +1664,7 @@ namespace ERPSupport.SupForm
                     if (dt2.Rows.Count > 0)
                     {
                         //生成单据
-                        tmp = PrdAllocation.TransferDirect(dt2, dtpDate.Value);
+                        tmp = PrdAllocation.TransferDir(dt2, dtpDate.Value);
 
                         if (tmp != "")
                             strBillNos += "[" + tmp + "]";
@@ -1651,7 +1674,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //更新【已经生成调拨单】状态
-                PrdAllocation.UpdateDirectFields(dtpDate.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
+                PrdAllocation.UpdateDirFields(dtpDate.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
 
                 //控制进度条
                 if (_bgWorker.CancellationPending)
@@ -1684,6 +1707,101 @@ namespace ERPSupport.SupForm
             CommonFunction.DM_Log_Local(GlobalParameter.K3Inf, GlobalParameter.LocalInf, "调拨单", "辅助功能\\调拨", strBillNos, sFlag);
 
             return -1;
+        }
+
+        /// <summary>
+        /// 直接调拨单WMS
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Trans2(object sender, DoWorkEventArgs e)
+        {
+            string strBillNos, tmp;
+            List<string> lstDep;//领料部门List
+            List<string> lstOutStock;//调出仓编码List
+            List<string> lstType;//调拨类型
+            DataTable dt = PrdAllocation.GetTrans2(dtpDate.Value.ToString("yyyy-MM-dd"));
+            DataTable dtDep = CommonFunction.GetPickMtlDepartment();
+
+            if (dtDep == null || dtDep.Rows.Count == 0 || dt == null || dt.Rows.Count == 0)
+                return;
+
+            strBillNos = string.Empty;
+            lstOutStock = new List<string>();
+            lstType = new List<string>();
+            lstDep = new List<string>();
+            for (int i = 0; i < dtDep.Rows.Count; i++)
+            {
+                lstDep.Add(dtDep.Rows[i]["FNUMBER"].ToString()); ;
+            }
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (!lstOutStock.Contains(dt.Rows[i]["调出仓库编码"].ToString()))
+                    lstOutStock.Add(dt.Rows[i]["调出仓库编码"].ToString());
+                if (!lstType.Contains(dt.Rows[i]["调拨类型"].ToString()))
+                    lstType.Add(dt.Rows[i]["调拨类型"].ToString());
+            }
+
+            for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
+            {
+                DataTable dt_2 = dt.Clone();
+                for (int j = 0; j < dt.Rows.Count; j++)
+                {
+                    if (lstOutStock[i] == dt.Rows[j]["调出仓库编码"].ToString())
+                        dt_2.ImportRow(dt.Rows[j]);
+                }
+                if (dt_2.Rows.Count > 0)
+                {
+                    for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
+                    {
+                        DataTable dt_3 = dt.Clone();
+                        for (int n = 0; n < dt_2.Rows.Count; n++)
+                        {
+                            if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
+                                dt_3.ImportRow(dt_2.Rows[n]);
+                        }
+                        if (dt_3.Rows.Count > 0)
+                        {
+                            for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
+                            {
+                                DataTable dt_4 = dt.Clone();
+                                for (int q = 0; q < dt_3.Rows.Count; q++)
+                                {
+                                    if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
+                                        dt_4.ImportRow(dt_3.Rows[q]);
+                                }
+
+                                if (dt_4.Rows.Count > 0)
+                                {
+                                    tmp = PrdAllocation.TransferDir(dt_4, dtpDate.Value.ToString("yyyy-MM-dd"));
+                                    if (tmp != "")
+                                        strBillNos += "[" + tmp + "]";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                //控制进度条
+                if (_bgWorker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                else
+                {
+                    _bgWorker.ReportProgress(i * 100 / (lstOutStock.Count));//状态报告                      
+                    Thread.Sleep(1);//等待，用于UI刷新界面，很重要  
+                }
+            }
+
+            if (strBillNos != "")
+            {
+                PrdAllocation.UpdateDirFields2(dtpDate.Value.ToString("yyyy-MM-dd"), new List<string>());//更新【已经生成调拨单】状态
+                MessageBox.Show("直接调拨单：" + strBillNos);
+            }
+            else
+                MessageBox.Show("没有数据或者源单据未审核！");
         }
         #endregion
 
@@ -1882,7 +2000,7 @@ namespace ERPSupport.SupForm
         }
         #endregion
 
-        #region 解锁
+        #region 解锁/成品调拨
         /// <summary>
         /// btnUnLock_Click
         /// </summary>
@@ -1890,53 +2008,61 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void btnUnLock_Click(object sender, EventArgs e)
         {
-            if (dgv1.DataSource == null || dgv1.Rows.Count < 1)
+            if (_FormId == FormID.PRD_PPBOM)//成品调拨
             {
-                MessageBox.Show("没有数据！");
-                return;
+                frmCPDB frm = new frmCPDB();
+                frm.ShowDialog();
             }
-
-            //记录勾选状态
-            _ListCheckStatus = new List<CheckStatus>();
-
-            for (int i = 0; i < dgv1.Rows.Count; i++)
+            else if (_FormId == FormID.SAL_SaleOrder)//销售订单解锁
             {
-                _ListCheckStatus.Add(new CheckStatus(i, Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value)));
-            }
-
-            IList olist = new ArrayList();//销售订单实体
-            OrderInfo entry;
-
-            for (int i = 0; i < dgv1.Rows.Count; i++)
-            {
-                if (dgv1.Rows[i].Cells[0].Value != null && Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value))
+                if (dgv1.DataSource == null || dgv1.Rows.Count < 1)
                 {
-                    entry = new OrderInfo();
-                    entry.FBillNo = dgv1.Rows[i].Cells[1].Value.ToString();
-                    entry.FMaterialNo = dgv1.Rows[i].Cells[6].Value.ToString();
-                    entry.FLockQTY = double.Parse(dgv1.Rows[i].Cells[10].Value.ToString());
-                    entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[18].Value.ToString());
-                    entry.FStockOrgNumber = dgv1.Rows[i].Cells[5].Value.ToString();
-                    entry.FUnitNumber = dgv1.Rows[i].Cells[8].Value.ToString();
-                    olist.Add(entry);//封装实体
+                    MessageBox.Show("没有数据！");
+                    return;
                 }
-            }
 
-            if (olist.Count == 0)
-            {
-                MessageBox.Show("没有选择订单");
-                return;
-            }
+                //记录勾选状态
+                _ListCheckStatus = new List<CheckStatus>();
 
-            frmLockStockResult lsr = new frmLockStockResult(UnLockStock(olist));
-            lsr.ShowDialog();
+                for (int i = 0; i < dgv1.Rows.Count; i++)
+                {
+                    _ListCheckStatus.Add(new CheckStatus(i, Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value)));
+                }
 
-            DataSourceBinding();
+                IList olist = new ArrayList();//销售订单实体
+                OrderInfo entry;
 
-            //还原勾选状态
-            for (int i = 0; i < dgv1.Rows.Count; i++)
-            {
-                dgv1.Rows[i].Cells[0].Value = _ListCheckStatus[i].ChStatus;
+                for (int i = 0; i < dgv1.Rows.Count; i++)
+                {
+                    if (dgv1.Rows[i].Cells[0].Value != null && Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value))
+                    {
+                        entry = new OrderInfo();
+                        entry.FBillNo = dgv1.Rows[i].Cells[1].Value.ToString();
+                        entry.FMaterialNo = dgv1.Rows[i].Cells[6].Value.ToString();
+                        entry.FLockQTY = double.Parse(dgv1.Rows[i].Cells[10].Value.ToString());
+                        entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[18].Value.ToString());
+                        entry.FStockOrgNumber = dgv1.Rows[i].Cells[5].Value.ToString();
+                        entry.FUnitNumber = dgv1.Rows[i].Cells[8].Value.ToString();
+                        olist.Add(entry);//封装实体
+                    }
+                }
+
+                if (olist.Count == 0)
+                {
+                    MessageBox.Show("没有选择订单");
+                    return;
+                }
+
+                frmLockStockResult lsr = new frmLockStockResult(UnLockStock(olist));
+                lsr.ShowDialog();
+
+                DataSourceBinding();
+
+                //还原勾选状态
+                for (int i = 0; i < dgv1.Rows.Count; i++)
+                {
+                    dgv1.Rows[i].Cells[0].Value = _ListCheckStatus[i].ChStatus;
+                }
             }
         }
 
@@ -2241,7 +2367,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiTool_Config_Click(object sender, EventArgs e)
         {
-            frmSetting st = new frmSetting(2);
+            frmMenu_Tool_Setting st = new frmMenu_Tool_Setting(2);
             st.ShowDialog();
 
             if (st.Logout)
@@ -2258,7 +2384,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiTool_Parameter_Click(object sender, EventArgs e)
         {
-            frmParameter frm = new frmParameter();
+            frmMenu_Tool_Parameter frm = new frmMenu_Tool_Parameter();
             frm.ShowDialog();
         }
 
@@ -2389,7 +2515,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiTool_Timer_Click(object sender, EventArgs e)
         {
-            frmTimer frmTime = new frmTimer(_TimerPara);
+            frmMenu_Tool_Timer frmTime = new frmMenu_Tool_Timer(_TimerPara);
 
             if (frmTime.ShowDialog() == DialogResult.OK)
             {
@@ -2425,13 +2551,24 @@ namespace ERPSupport.SupForm
         }
 
         /// <summary>
+        /// 调拨单设置
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsmiPro_Dir_Click(object sender, EventArgs e)
+        {
+            frmMenu_Pro_Dir frm = new frmMenu_Pro_Dir();
+            frm.ShowDialog();
+        }
+
+        /// <summary>
         /// 注册
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void tsmiHelp_Regedit_Click(object sender, EventArgs e)
         {
-            frmHelp frmH = new frmHelp(1);
+            frmMenu_Help frmH = new frmMenu_Help(1);
             frmH.ShowDialog();
         }
 
@@ -2442,7 +2579,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiHelp_View_Click(object sender, EventArgs e)
         {
-            frmHelp frmH = new frmHelp(2);
+            frmMenu_Help frmH = new frmMenu_Help(2);
             frmH.ShowDialog();
         }
 
@@ -2453,7 +2590,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiHelp_Version_Click(object sender, EventArgs e)
         {
-            frmHelp frmH = new frmHelp(3);
+            frmMenu_Help frmH = new frmMenu_Help(3);
             frmH.ShowDialog();
         }
 
@@ -2464,7 +2601,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiHelp_About_Click(object sender, EventArgs e)
         {
-            frmHelp frmH = new frmHelp(4);
+            frmMenu_Help frmH = new frmMenu_Help(4);
             frmH.ShowDialog();
         }
         #endregion

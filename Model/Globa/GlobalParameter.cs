@@ -62,7 +62,7 @@ namespace ERPSupport.Model.Globa
             _SQLInf = pSQLInf;
         }
 
-
+        private static object _Tmp_Params;
         private static K3Setting _K3Inf;
         private static SQLConfig _SQLInf;
         private static LocalInfo _LocalInf;
@@ -130,6 +130,19 @@ namespace ERPSupport.Model.Globa
             set
             {
                 _OperationInf = value;
+            }
+        }
+
+        public static object Tmp_Params
+        {
+            get
+            {
+                return _Tmp_Params;
+            }
+
+            set
+            {
+                _Tmp_Params = value;
             }
         }
     }

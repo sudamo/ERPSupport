@@ -159,6 +159,7 @@ namespace ERPSupport.SupForm
 
             //全局参数
             new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, C_USERNAME, C_PASSWORD, C_ORCLADDRESS, userId, userName, PWD, DateTime.Now, RIDS, MIDS, departmentId, departmentNumber, departmentName, phone), new SQLConfig(IP, Port, UserName, Password, Catalog));
+            GlobalParameter.Tmp_Params = ConfigurationManager.AppSettings["TMP_DirType"];
             #endregion
 
             //主窗体
@@ -168,7 +169,7 @@ namespace ERPSupport.SupForm
                 Visible = false;
                 fMain.ShowDialog();
             }
-            catch { }
+            catch (Exception ex){ }
             finally
             {
                 fMain.Dispose();
@@ -191,7 +192,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void llbSetting_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Common.frmSetting st = new Common.frmSetting(1);
+            Common.frmMenu_Tool_Setting st = new Common.frmMenu_Tool_Setting(1);
             st.ShowDialog();
         }
     }

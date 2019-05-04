@@ -1,17 +1,17 @@
 ﻿using System;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.K3Cloud;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Excel = Microsoft.Office.Interop.Excel;
 using ERPSupport.Model.Globa;
+using ERPSupport.SQL.K3Cloud;
+using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SupForm.Common
 {
     /// <summary>
     /// 物料参数设置
     /// </summary>
-    public partial class frmParameter : Form
+    public partial class frmMenu_Tool_Parameter : Form
     {
         #region Variable & Constructor
         /// <summary>
@@ -22,7 +22,7 @@ namespace ERPSupport.SupForm.Common
         /// <summary>
         /// 构造函数
         /// </summary>
-        public frmParameter()
+        public frmMenu_Tool_Parameter()
         {
             InitializeComponent();
         }

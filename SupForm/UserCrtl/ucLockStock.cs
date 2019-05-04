@@ -66,7 +66,7 @@ namespace ERPSupport.SupForm.UserCrtl
         private void FillStock()
         {
             if (cbxUseOrg.SelectedIndex == 0)
-                cbxStock.DataSource = CommonFunction.GetStock(1, 0);
+                cbxStock.DataSource = CommonFunction.GetStock(1, null);
             else
                 cbxStock.DataSource = CommonFunction.GetStock(2, int.Parse(cbxUseOrg.SelectedValue.ToString()));
 
