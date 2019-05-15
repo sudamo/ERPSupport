@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="K3Cloud\CommonFunction.cs" />
+    <Compile Include="K3Cloud\CommFunction.cs" />
     <Compile Include="K3Cloud\FileSetting.cs" />
     <Compile Include="K3Cloud\PrdAllocation.cs" />
     <Compile Include="K3Cloud\PrdInstock.cs" />

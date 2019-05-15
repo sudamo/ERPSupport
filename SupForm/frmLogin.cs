@@ -98,7 +98,7 @@ namespace ERPSupport.SupForm
             }
 
             //数据库连接检验
-            int iDBStatus = CommonFunction.DB_Connection(C_ORCLADDRESS);
+            int iDBStatus = CommFunction.DB_Connection(C_ORCLADDRESS);
             if (iDBStatus == -1)
             {
                 MessageBox.Show("数据库连接失败，请联系管理员。");
@@ -112,7 +112,7 @@ namespace ERPSupport.SupForm
             #endregion
 
             #region 判断程序是否启用
-            int iFlag = CommonFunction.ApplicationFlag(C_ORCLADDRESS, "ERPSupport.SupForm");
+            int iFlag = CommFunction.ApplicationFlag(C_ORCLADDRESS, "ERPSupport.SupForm");
             switch (iFlag)
             {
                 case -1:
@@ -141,7 +141,7 @@ namespace ERPSupport.SupForm
             #endregion
 
             #region 设置信息
-            DataTable dtTempUser = CommonFunction.GetUserInfoByName(C_ORCLADDRESS, userName);
+            DataTable dtTempUser = CommFunction.GetUserInfoByName(C_ORCLADDRESS, userName);
 
             if (dtTempUser == null || dtTempUser.Rows.Count == 0)
             {
@@ -169,7 +169,8 @@ namespace ERPSupport.SupForm
                 Visible = false;
                 fMain.ShowDialog();
             }
-            catch (Exception ex){ }
+            catch (Exception ex)
+            { }
             finally
             {
                 fMain.Dispose();
@@ -192,7 +193,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void llbSetting_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Common.frmMenu_Tool_Setting st = new Common.frmMenu_Tool_Setting(1);
+            Menu.frmTool_Setting st = new Menu.frmTool_Setting(1);
             st.ShowDialog();
         }
     }

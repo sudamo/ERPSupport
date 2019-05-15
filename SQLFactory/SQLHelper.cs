@@ -30,6 +30,7 @@ namespace ERPSupport.SQL
     using System.Data;
     using System.Data.SqlClient;
     using Model.Globa;
+    using System;
 
     /// <summary>
     /// 自定义SQLHelper
@@ -198,7 +199,7 @@ namespace ERPSupport.SQL
                 o = cmd.ExecuteScalar();
                 cmd.Parameters.Clear();
             }
-            catch { return null; }
+            catch (Exception ex){ return null; }
             finally
             {
                 conn.Close();

@@ -37,11 +37,11 @@
     <ProductName>ERP辅助系统</ProductName>
     <PublisherName>广州车邦</PublisherName>
     <SuiteName>Supp</SuiteName>
-    <MinimumRequiredVersion>1.0.5.0</MinimumRequiredVersion>
+    <MinimumRequiredVersion>1.0.6.1</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>11</ApplicationRevision>
-    <ApplicationVersion>1.0.5.%2a</ApplicationVersion>
+    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationVersion>1.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -110,6 +110,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bussiness\frmAddFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmAddFilter.Designer.cs">
+      <DependentUpon>frmAddFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmBillModify.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmBillModify.Designer.cs">
+      <DependentUpon>frmBillModify.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmCPDB.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmCPDB.Designer.cs">
+      <DependentUpon>frmCPDB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmFilter.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmFilter.Designer.cs">
+      <DependentUpon>frmFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmInstockSynchr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmInstockSynchr.Designer.cs">
+      <DependentUpon>frmInstockSynchr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmLockStockResult.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmLockStockResult.Designer.cs">
+      <DependentUpon>frmLockStockResult.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bussiness\frmOrderOperation.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -122,59 +158,41 @@
     <Compile Include="Bussiness\frmOrderSummary.Designer.cs">
       <DependentUpon>frmOrderSummary.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmCPDB.cs">
+    <Compile Include="Bussiness\frmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmCPDB.Designer.cs">
-      <DependentUpon>frmCPDB.cs</DependentUpon>
+    <Compile Include="Bussiness\frmProgress.Designer.cs">
+      <DependentUpon>frmProgress.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmMenu_Pro_Dir.cs">
+    <Compile Include="Bussiness\frmResult.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmMenu_Pro_Dir.Designer.cs">
-      <DependentUpon>frmMenu_Pro_Dir.cs</DependentUpon>
+    <Compile Include="Bussiness\frmResult.Designer.cs">
+      <DependentUpon>frmResult.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmMenu_Tool_Timer.cs">
+    <Compile Include="Bussiness\frmSetDefaultStock.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmMenu_Tool_Timer.Designer.cs">
-      <DependentUpon>frmMenu_Tool_Timer.cs</DependentUpon>
+    <Compile Include="Bussiness\frmSetDefaultStock.Designer.cs">
+      <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmAddFilter.cs">
+    <Compile Include="Menu\frmPro_Dir.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmAddFilter.Designer.cs">
-      <DependentUpon>frmAddFilter.cs</DependentUpon>
+    <Compile Include="Menu\frmPro_Dir.Designer.cs">
+      <DependentUpon>frmPro_Dir.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmBillModify.cs">
+    <Compile Include="Menu\frmTool_Timer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmBillModify.Designer.cs">
-      <DependentUpon>frmBillModify.cs</DependentUpon>
+    <Compile Include="Menu\frmTool_Timer.Designer.cs">
+      <DependentUpon>frmTool_Timer.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmFilter.cs">
+    <Compile Include="Menu\frmHelp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmFilter.Designer.cs">
-      <DependentUpon>frmFilter.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\frmMenu_Help.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\frmMenu_Help.Designer.cs">
-      <DependentUpon>frmMenu_Help.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\frmInstockSynchr.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\frmInstockSynchr.Designer.cs">
-      <DependentUpon>frmInstockSynchr.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\frmLockStockResult.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\frmLockStockResult.Designer.cs">
-      <DependentUpon>frmLockStockResult.cs</DependentUpon>
+    <Compile Include="Menu\frmHelp.Designer.cs">
+      <DependentUpon>frmHelp.cs</DependentUpon>
     </Compile>
     <Compile Include="frmLogin.cs">
       <SubType>Form</SubType>
@@ -188,65 +206,50 @@
     <Compile Include="frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmMenu_Tool_Parameter.cs">
+    <Compile Include="Menu\frmTool_Parameter.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmMenu_Tool_Parameter.Designer.cs">
-      <DependentUpon>frmMenu_Tool_Parameter.cs</DependentUpon>
+    <Compile Include="Menu\frmTool_Parameter.Designer.cs">
+      <DependentUpon>frmTool_Parameter.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\frmProgress.cs">
+    <Compile Include="Menu\frmTool_Setting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Common\frmProgress.Designer.cs">
-      <DependentUpon>frmProgress.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\frmResult.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\frmResult.Designer.cs">
-      <DependentUpon>frmResult.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\frmMenu_Tool_Setting.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\frmMenu_Tool_Setting.Designer.cs">
-      <DependentUpon>frmMenu_Tool_Setting.cs</DependentUpon>
+    <Compile Include="Menu\frmTool_Setting.Designer.cs">
+      <DependentUpon>frmTool_Setting.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Common\frmSetDefaultStock.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\frmSetDefaultStock.Designer.cs">
-      <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserClass\AppConfig.cs" />
     <Compile Include="UserClass\DataGridViewAutoFilterColumnHeaderCell.cs" />
     <Compile Include="UserClass\DataGridViewAutoFilterTextBoxColumn.cs" />
     <Compile Include="UserClass\WinMessager.cs" />
-    <Compile Include="UserCrtl\ucBillModify.cs">
+    <Compile Include="UserCrtl\ToolStripDateTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\ucCS_BillEdit.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucBillModify.Designer.cs">
-      <DependentUpon>ucBillModify.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucCS_BillEdit.Designer.cs">
+      <DependentUpon>ucCS_BillEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucERPRecord.cs">
+    <Compile Include="UserCrtl\ucRC_System.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucERPRecord.Designer.cs">
-      <DependentUpon>ucERPRecord.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucRC_System.Designer.cs">
+      <DependentUpon>ucRC_System.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucExpressCompany.cs">
+    <Compile Include="UserCrtl\ucCS_ExpCompany.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucExpressCompany.Designer.cs">
-      <DependentUpon>ucExpressCompany.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucCS_ExpCompany.Designer.cs">
+      <DependentUpon>ucCS_ExpCompany.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucLockStock.cs">
+    <Compile Include="UserCrtl\ucCS_LockStock.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucLockStock.Designer.cs">
-      <DependentUpon>ucLockStock.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucCS_LockStock.Designer.cs">
+      <DependentUpon>ucCS_LockStock.cs</DependentUpon>
     </Compile>
     <Compile Include="UserCrtl\ucLogin.cs">
       <SubType>UserControl</SubType>
@@ -254,17 +257,17 @@
     <Compile Include="UserCrtl\ucLogin.Designer.cs">
       <DependentUpon>ucLogin.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucOrderRecord.cs">
+    <Compile Include="UserCrtl\ucRC_Order.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucOrderRecord.Designer.cs">
-      <DependentUpon>ucOrderRecord.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucRC_Order.Designer.cs">
+      <DependentUpon>ucRC_Order.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucReportMtl203.cs">
+    <Compile Include="UserCrtl\ucRP_Mtl203.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucReportMtl203.Designer.cs">
-      <DependentUpon>ucReportMtl203.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucRP_Mtl203.Designer.cs">
+      <DependentUpon>ucRP_Mtl203.cs</DependentUpon>
     </Compile>
     <Compile Include="UserCrtl\ucNaviga.cs">
       <SubType>UserControl</SubType>
@@ -272,80 +275,89 @@
     <Compile Include="UserCrtl\ucNaviga.Designer.cs">
       <DependentUpon>ucNaviga.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucPDARecord.cs">
+    <Compile Include="UserCrtl\ucRC_PDA.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucPDARecord.Designer.cs">
-      <DependentUpon>ucPDARecord.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucRC_PDA.Designer.cs">
+      <DependentUpon>ucRC_PDA.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucPickMTLDepartment.cs">
+    <Compile Include="UserCrtl\ucCS_PickDepartment.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucPickMTLDepartment.Designer.cs">
-      <DependentUpon>ucPickMTLDepartment.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucCS_PickDepartment.Designer.cs">
+      <DependentUpon>ucCS_PickDepartment.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucReportBom.cs">
+    <Compile Include="UserCrtl\ucRP_Bom.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucReportBom.Designer.cs">
-      <DependentUpon>ucReportBom.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucRP_Bom.Designer.cs">
+      <DependentUpon>ucRP_Bom.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucStockEdit.cs">
+    <Compile Include="UserCrtl\ucCS_DefaultStock.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucStockEdit.Designer.cs">
-      <DependentUpon>ucStockEdit.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucCS_DefaultStock.Designer.cs">
+      <DependentUpon>ucCS_DefaultStock.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucUser.cs">
+    <Compile Include="UserCrtl\ucSM_User.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucUser.Designer.cs">
-      <DependentUpon>ucUser.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucSM_User.Designer.cs">
+      <DependentUpon>ucSM_User.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucUserAcc.cs">
+    <Compile Include="UserCrtl\ucSM_UserAcc.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucUserAcc.Designer.cs">
-      <DependentUpon>ucUserAcc.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucSM_UserAcc.Designer.cs">
+      <DependentUpon>ucSM_UserAcc.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserCrtl\ucUTMTLNumber.cs">
+    <Compile Include="UserCrtl\ucCS_OutStockMaterial.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserCrtl\ucUTMTLNumber.Designer.cs">
-      <DependentUpon>ucUTMTLNumber.cs</DependentUpon>
+    <Compile Include="UserCrtl\ucCS_OutStockMaterial.Designer.cs">
+      <DependentUpon>ucCS_OutStockMaterial.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Bussiness\frmAddFilter.resx">
+      <DependentUpon>frmAddFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmBillModify.resx">
+      <DependentUpon>frmBillModify.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmCPDB.resx">
+      <DependentUpon>frmCPDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmFilter.resx">
+      <DependentUpon>frmFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmInstockSynchr.resx">
+      <DependentUpon>frmInstockSynchr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmLockStockResult.resx">
+      <DependentUpon>frmLockStockResult.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmOrderOperation.resx">
       <DependentUpon>frmOrderOperation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmOrderSummary.resx">
       <DependentUpon>frmOrderSummary.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmCPDB.resx">
-      <DependentUpon>frmCPDB.cs</DependentUpon>
+    <EmbeddedResource Include="Bussiness\frmProgress.resx">
+      <DependentUpon>frmProgress.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmMenu_Pro_Dir.resx">
-      <DependentUpon>frmMenu_Pro_Dir.cs</DependentUpon>
+    <EmbeddedResource Include="Bussiness\frmResult.resx">
+      <DependentUpon>frmResult.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmMenu_Tool_Timer.resx">
-      <DependentUpon>frmMenu_Tool_Timer.cs</DependentUpon>
+    <EmbeddedResource Include="Bussiness\frmSetDefaultStock.resx">
+      <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmAddFilter.resx">
-      <DependentUpon>frmAddFilter.cs</DependentUpon>
+    <EmbeddedResource Include="Menu\frmPro_Dir.resx">
+      <DependentUpon>frmPro_Dir.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmBillModify.resx">
-      <DependentUpon>frmBillModify.cs</DependentUpon>
+    <EmbeddedResource Include="Menu\frmTool_Timer.resx">
+      <DependentUpon>frmTool_Timer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmFilter.resx">
-      <DependentUpon>frmFilter.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmMenu_Help.resx">
-      <DependentUpon>frmMenu_Help.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmInstockSynchr.resx">
-      <DependentUpon>frmInstockSynchr.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmLockStockResult.resx">
-      <DependentUpon>frmLockStockResult.cs</DependentUpon>
+    <EmbeddedResource Include="Menu\frmHelp.resx">
+      <DependentUpon>frmHelp.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="frmLogin.resx">
       <DependentUpon>frmLogin.cs</DependentUpon>
@@ -353,17 +365,11 @@
     <EmbeddedResource Include="frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmMenu_Tool_Parameter.resx">
-      <DependentUpon>frmMenu_Tool_Parameter.cs</DependentUpon>
+    <EmbeddedResource Include="Menu\frmTool_Parameter.resx">
+      <DependentUpon>frmTool_Parameter.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmProgress.resx">
-      <DependentUpon>frmProgress.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmResult.resx">
-      <DependentUpon>frmResult.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\frmMenu_Tool_Setting.resx">
-      <DependentUpon>frmMenu_Tool_Setting.cs</DependentUpon>
+    <EmbeddedResource Include="Menu\frmTool_Setting.resx">
+      <DependentUpon>frmTool_Setting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -375,53 +381,50 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Common\frmSetDefaultStock.resx">
-      <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucCS_BillEdit.resx">
+      <DependentUpon>ucCS_BillEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucBillModify.resx">
-      <DependentUpon>ucBillModify.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucRC_System.resx">
+      <DependentUpon>ucRC_System.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucERPRecord.resx">
-      <DependentUpon>ucERPRecord.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucCS_ExpCompany.resx">
+      <DependentUpon>ucCS_ExpCompany.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucExpressCompany.resx">
-      <DependentUpon>ucExpressCompany.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucLockStock.resx">
-      <DependentUpon>ucLockStock.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucCS_LockStock.resx">
+      <DependentUpon>ucCS_LockStock.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserCrtl\ucLogin.resx">
       <DependentUpon>ucLogin.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucOrderRecord.resx">
-      <DependentUpon>ucOrderRecord.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucRC_Order.resx">
+      <DependentUpon>ucRC_Order.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucReportMtl203.resx">
-      <DependentUpon>ucReportMtl203.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucRP_Mtl203.resx">
+      <DependentUpon>ucRP_Mtl203.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserCrtl\ucNaviga.resx">
       <DependentUpon>ucNaviga.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucPDARecord.resx">
-      <DependentUpon>ucPDARecord.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucRC_PDA.resx">
+      <DependentUpon>ucRC_PDA.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucPickMTLDepartment.resx">
-      <DependentUpon>ucPickMTLDepartment.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucCS_PickDepartment.resx">
+      <DependentUpon>ucCS_PickDepartment.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucReportBom.resx">
-      <DependentUpon>ucReportBom.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucRP_Bom.resx">
+      <DependentUpon>ucRP_Bom.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucStockEdit.resx">
-      <DependentUpon>ucStockEdit.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucCS_DefaultStock.resx">
+      <DependentUpon>ucCS_DefaultStock.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucUser.resx">
-      <DependentUpon>ucUser.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucSM_User.resx">
+      <DependentUpon>ucSM_User.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucUserAcc.resx">
-      <DependentUpon>ucUserAcc.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucSM_UserAcc.resx">
+      <DependentUpon>ucSM_UserAcc.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserCrtl\ucUTMTLNumber.resx">
-      <DependentUpon>ucUTMTLNumber.cs</DependentUpon>
+    <EmbeddedResource Include="UserCrtl\ucCS_OutStockMaterial.resx">
+      <DependentUpon>ucCS_OutStockMaterial.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -445,6 +448,50 @@
     <Content Include="ICON\gzcb.ico" />
     <Content Include="ICON\gzcb48.ico" />
     <Content Include="ICON\kk.ico" />
+    <Content Include="ICON\PNG\32.32\accept.png" />
+    <Content Include="ICON\PNG\32.32\add.png" />
+    <Content Include="ICON\PNG\32.32\arrow_refresh.png" />
+    <Content Include="ICON\PNG\32.32\ask_and_answer.png" />
+    <Content Include="ICON\PNG\32.32\change_password.png" />
+    <Content Include="ICON\PNG\32.32\comment.png" />
+    <Content Include="ICON\PNG\32.32\comment_add.png" />
+    <Content Include="ICON\PNG\32.32\comment_delete.png" />
+    <Content Include="ICON\PNG\32.32\control_eject.png" />
+    <Content Include="ICON\PNG\32.32\control_eject_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_end.png" />
+    <Content Include="ICON\PNG\32.32\control_end_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_equalizer.png" />
+    <Content Include="ICON\PNG\32.32\control_equalizer_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_fastforward.png" />
+    <Content Include="ICON\PNG\32.32\control_fastforward_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_pause.png" />
+    <Content Include="ICON\PNG\32.32\control_pause_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_play.png" />
+    <Content Include="ICON\PNG\32.32\control_play2.png" />
+    <Content Include="ICON\PNG\32.32\control_play2_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_play_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_repeat.png" />
+    <Content Include="ICON\PNG\32.32\control_repeat_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_rewind.png" />
+    <Content Include="ICON\PNG\32.32\control_rewind_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_start.png" />
+    <Content Include="ICON\PNG\32.32\control_start_blue.png" />
+    <Content Include="ICON\PNG\32.32\control_stop.png" />
+    <Content Include="ICON\PNG\32.32\control_stop_blue.png" />
+    <Content Include="ICON\PNG\32.32\direction.png" />
+    <Content Include="ICON\PNG\32.32\report_magnify.png" />
+    <Content Include="ICON\PNG\32.32\resultset_first.png" />
+    <Content Include="ICON\PNG\32.32\resultset_last.png" />
+    <Content Include="ICON\PNG\32.32\resultset_next.png" />
+    <Content Include="ICON\PNG\32.32\resultset_previous.png" />
+    <Content Include="ICON\PNG\32.32\save_as.png" />
+    <Content Include="ICON\PNG\32.32\setting_tools.png" />
+    <Content Include="ICON\PNG\32.32\time.png" />
+    <Content Include="ICON\PNG\32.32\time_add.png" />
+    <Content Include="ICON\PNG\32.32\tire.png" />
+    <Content Include="ICON\PNG\32.32\wrench.png" />
+    <Content Include="ICON\PNG\32.32\zoom.png" />
+    <Content Include="ICON\PNG\32.32\zootool.png" />
     <Content Include="ICON\Timer.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -502,6 +549,9 @@
       <Project>{062daca4-1a17-4ec9-b722-2f6ece41f060}</Project>
       <Name>SQL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Comm\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

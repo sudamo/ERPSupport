@@ -81,7 +81,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// <summary>
         /// 进度条窗体
         /// </summary>
-        private Common.frmProgress _frmNotify;
+        private frmProgress _frmNotify;
 
         /// <summary>
         /// 构造函数
@@ -104,7 +104,7 @@ namespace ERPSupport.SupForm.Bussiness
         {
             CheckForIllegalCrossThreadCalls = false;//解决多线程调用控件问题
 
-            _frmNotify = new Common.frmProgress();
+            _frmNotify = new frmProgress();
             _bgWorker = new BackgroundWorker();
             _bgWorker.WorkerReportsProgress = true;
             _bgWorker.WorkerSupportsCancellation = true;
@@ -211,7 +211,7 @@ namespace ERPSupport.SupForm.Bussiness
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             //每5分钟更新一次正在使用时间
-            CommonFunction.UpdateLockStatus(1, "ORDERRUN");
+            CommFunction.UpdateLockStatus(1, "ORDERRUN");
         }
         #endregion
 

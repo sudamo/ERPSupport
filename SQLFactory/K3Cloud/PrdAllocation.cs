@@ -399,13 +399,13 @@ namespace ERPSupport.SQL.K3Cloud
         {
             _SQL = @"SELECT O.* FROM
             (
-            SELECT * FROM OPENQUERY(ERP_ORACLE2,
+            SELECT * FROM OPENQUERY(ERP_ORACLE,
             '";
             string strOra = @"
             SELECT DISTINCT A.FBILLNO 订单编号,O.FDATE 订单日期,A.FOWNERID 货主ID,ORG.FNUMBER 货主代码,ORGL.FNAME 货主名称,A.FOWNERTYPEID 货主类型,A.FSTOCKORGID 库存组织ID,ORG2.FNUMBER 库存组织代码,ORGL2.FNAME 库存组织名称
                 ,A.FMATERIALID 物料ID,MTL.FNUMBER 物料代码,MTLL.FNAME 物料名称,A.FBASEUNITID 单位ID,UNT.FNUMBER 单位代码,UNTL.FNAME 单位名称,SUM(A.FLOCKQTY) 锁库数量,OE.F_PAEZ_LOCKALLOTQTY 锁库调拨数量,OER.FBASEDELIQTY 发货通知数量
                 ,MTL.F_PAEZ_SENDPERCENT 发料百分比,MTLS.F_PAEZ_FMINSENDQTY 最小发出数量,A.FSTOCKID 调出仓库ID,STK.FNUMBER 调出仓库代码,STKL.FNAME 调出仓库名称,CUST.FNUMBER 客户代码,CUSTL.FNAME 客户名称
-                , NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,NVL(ASSL4.FDATAVALUE,' ') 发货类别,NVL(ASSL5.FDATAVALUE,' ') 品牌,NVL(ASSL6.FDATAVALUE,' ') 系列,NVL(ASSL7.FDATAVALUE,' ') 商品名,NVL(ASSL8.FDATAVALUE,' ') 颜色
+                ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,NVL(ASSL4.FDATAVALUE,' ') 发货类别,NVL(ASSL5.FDATAVALUE,' ') 品牌,NVL(ASSL6.FDATAVALUE,' ') 系列,NVL(ASSL7.FDATAVALUE,' ') 商品名,NVL(ASSL8.FDATAVALUE,' ') 颜色
                 ,NVL(ASSL9.FDATAVALUE,' ') 车系,NVL(ASSL10.FDATAVALUE,' ') 车型,O.FID,OE.FENTRYID
             FROM V_PLN_LOCKSTOCK A
             INNER JOIN T_SAL_ORDERENTRY OE ON A.FBILLDETAILID = OE.FENTRYID AND OE.FQTY - OE.F_PAEZ_LOCKALLOTQTY > 0
@@ -442,7 +442,8 @@ namespace ERPSupport.SQL.K3Cloud
             ')
             ) O
             LEFT JOIN t_StkTransferOutEntry AE ON O.FENTRYID = AE.orderEntryId
-            WHERE O.锁库数量 + O.锁库调拨数量 - ISNULL(AE.FQTY,0) > 0";
+            GROUP BY O.订单编号,O.订单日期,O.货主ID,O.货主代码,O.货主名称,O.货主类型,O.库存组织ID,O.库存组织代码,O.库存组织名称,O.物料ID,O.物料代码,O.物料名称,O.单位ID,O.单位代码,O.单位名称,O.锁库数量,O.锁库调拨数量,O.发货通知数量,O.发料百分比,O.最小发出数量,O.调出仓库ID,O.调出仓库代码,O.调出仓库名称,O.客户代码,O.客户名称,O.调拨类型,O.启用批次,O.启用序列号,O.发货类别,O.品牌,O.系列,O.商品名,O.颜色,O.车系,O.车型,O.FID,O.FENTRYID
+            HAVING O.锁库数量 + O.锁库调拨数量 - SUM(ISNULL(AE.FQTY,0)) > 0";
 
             return SQLHelper.ExecuteTable(_SQL);
         }
@@ -497,14 +498,14 @@ namespace ERPSupport.SQL.K3Cloud
                 }
                 SqlParameter[] parms = new SqlParameter[]
                 {
-                new SqlParameter("@BillNo", SqlDbType.VarChar),
-                new SqlParameter("@PickDepartId", SqlDbType.Int),
-                new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
-                new SqlParameter("@PickDepartName", SqlDbType.VarChar),
-                new SqlParameter("@OwnerInId", SqlDbType.Int),
+                    new SqlParameter("@BillNo", SqlDbType.VarChar),
+                    new SqlParameter("@PickDepartId", SqlDbType.Int),
+                    new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
+                    new SqlParameter("@PickDepartName", SqlDbType.VarChar),
+                    new SqlParameter("@OwnerInId", SqlDbType.Int),
 
-                new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
-                new SqlParameter("@OwnerInName", SqlDbType.VarChar),
+                    new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
+                    new SqlParameter("@OwnerInName", SqlDbType.VarChar)
                 };
                 parms[0].Value = strBillNo;
                 parms[1].Value = int.Parse(pList[0]);

@@ -214,7 +214,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         private void FillDepartment()
         {
-            cbxWorkShop.DataSource = CommonFunction.GetDepartment(2,100508, "基本生产部门");
+            cbxWorkShop.DataSource = CommFunction.GetDepartment(2,100508, "基本生产部门");
             cbxWorkShop.DisplayMember = "FName";
             cbxWorkShop.ValueMember = "FValue";
         }

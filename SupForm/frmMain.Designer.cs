@@ -33,16 +33,25 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.sc1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.btnShowAll = new System.Windows.Forms.Button();
             this.dtpDate = new System.Windows.Forms.DateTimePicker();
-            this.btnFilter = new System.Windows.Forms.Button();
-            this.btnCheck = new System.Windows.Forms.Button();
-            this.cbxCondition = new System.Windows.Forms.ComboBox();
-            this.txtCondition = new System.Windows.Forms.TextBox();
-            this.btnUnLock = new System.Windows.Forms.Button();
-            this.cbxLogic = new System.Windows.Forms.ComboBox();
-            this.btnCommit = new System.Windows.Forms.Button();
-            this.btnSearch = new System.Windows.Forms.Button();
+            this.lblDate = new System.Windows.Forms.Label();
+            this.bnBottom = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnB_cbxPageSize = new System.Windows.Forms.ToolStripComboBox();
+            this.bnB_lblPageSize = new System.Windows.Forms.ToolStripLabel();
+            this.bnB_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnB_btnGoto = new System.Windows.Forms.ToolStripButton();
+            this.bnB_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnB_lblRecordCount = new System.Windows.Forms.ToolStripLabel();
+            this.bnB_tss3 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnB_tss4 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnTop_btnFilter = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop_btnCheck = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnSearch = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnShowAll = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnCommit = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnUnLock = new System.Windows.Forms.ToolStripButton();
             this.dgv1 = new System.Windows.Forms.DataGridView();
             this.msMain = new System.Windows.Forms.MenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,6 +73,8 @@
             this.tsmiTool_Occupy_LockPickMtl = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiTool_tss2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiTool_Timer = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Dir = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp_Regedit = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp_tss1 = new System.Windows.Forms.ToolStripSeparator();
@@ -72,14 +83,26 @@
             this.tsmiHelp_About = new System.Windows.Forms.ToolStripMenuItem();
             this.tSumSecond = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.tsmiPro = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Dir = new System.Windows.Forms.ToolStripMenuItem();
+            this.bs1 = new System.Windows.Forms.BindingSource(this.components);
+            this.bnB_lblSeparate = new System.Windows.Forms.ToolStripLabel();
+            this.bnB_lblThe = new System.Windows.Forms.ToolStripLabel();
+            this.bnB_lblPageCount = new System.Windows.Forms.ToolStripLabel();
+            this.bnB_txtCurrentPage = new System.Windows.Forms.ToolStripTextBox();
+            this.bnB_btnFirst = new System.Windows.Forms.ToolStripButton();
+            this.bnB_btnPrevious = new System.Windows.Forms.ToolStripButton();
+            this.bnB_btnNext = new System.Windows.Forms.ToolStripButton();
+            this.bnB_btnLast = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.sc1)).BeginInit();
             this.sc1.Panel2.SuspendLayout();
             this.sc1.SuspendLayout();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).BeginInit();
+            this.bnBottom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
+            this.bnTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             this.msMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bs1)).BeginInit();
             this.SuspendLayout();
             // 
             // sc1
@@ -105,16 +128,10 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.btnShowAll);
             this.panel1.Controls.Add(this.dtpDate);
-            this.panel1.Controls.Add(this.btnFilter);
-            this.panel1.Controls.Add(this.btnCheck);
-            this.panel1.Controls.Add(this.cbxCondition);
-            this.panel1.Controls.Add(this.txtCondition);
-            this.panel1.Controls.Add(this.btnUnLock);
-            this.panel1.Controls.Add(this.cbxLogic);
-            this.panel1.Controls.Add(this.btnCommit);
-            this.panel1.Controls.Add(this.btnSearch);
+            this.panel1.Controls.Add(this.lblDate);
+            this.panel1.Controls.Add(this.bnBottom);
+            this.panel1.Controls.Add(this.bnTop);
             this.panel1.Controls.Add(this.dgv1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -123,116 +140,201 @@
             this.panel1.TabIndex = 0;
             this.panel1.Visible = false;
             // 
-            // btnShowAll
-            // 
-            this.btnShowAll.Location = new System.Drawing.Point(510, 5);
-            this.btnShowAll.Name = "btnShowAll";
-            this.btnShowAll.Size = new System.Drawing.Size(80, 20);
-            this.btnShowAll.TabIndex = 19;
-            this.btnShowAll.Text = "重置筛选";
-            this.tt.SetToolTip(this.btnShowAll, "清除所有列筛选状态。");
-            this.btnShowAll.UseVisualStyleBackColor = true;
-            this.btnShowAll.Click += new System.EventHandler(this.btnShowAll_Click);
-            // 
             // dtpDate
             // 
-            this.dtpDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpDate.Location = new System.Drawing.Point(248, 5);
-            this.dtpDate.Margin = new System.Windows.Forms.Padding(2);
+            this.dtpDate.Location = new System.Drawing.Point(86, 4);
             this.dtpDate.Name = "dtpDate";
-            this.dtpDate.Size = new System.Drawing.Size(120, 21);
-            this.dtpDate.TabIndex = 4;
+            this.dtpDate.Size = new System.Drawing.Size(125, 21);
+            this.dtpDate.TabIndex = 23;
             this.dtpDate.ValueChanged += new System.EventHandler(this.dtpDate_ValueChanged);
             // 
-            // btnFilter
+            // lblDate
             // 
-            this.btnFilter.Location = new System.Drawing.Point(11, 5);
-            this.btnFilter.Margin = new System.Windows.Forms.Padding(2);
-            this.btnFilter.Name = "btnFilter";
-            this.btnFilter.Size = new System.Drawing.Size(37, 20);
-            this.btnFilter.TabIndex = 6;
-            this.btnFilter.Text = "过滤";
-            this.tt.SetToolTip(this.btnFilter, "根据需求构造更复杂的过滤条件");
-            this.btnFilter.UseVisualStyleBackColor = true;
-            this.btnFilter.Visible = false;
-            this.btnFilter.Click += new System.EventHandler(this.btnFilter_Click);
+            this.lblDate.AutoSize = true;
+            this.lblDate.Location = new System.Drawing.Point(3, 10);
+            this.lblDate.Name = "lblDate";
+            this.lblDate.Size = new System.Drawing.Size(77, 12);
+            this.lblDate.TabIndex = 22;
+            this.lblDate.Text = "计划开工日期";
             // 
-            // btnCheck
+            // bnBottom
             // 
-            this.btnCheck.Location = new System.Drawing.Point(380, 5);
-            this.btnCheck.Name = "btnCheck";
-            this.btnCheck.Size = new System.Drawing.Size(60, 20);
-            this.btnCheck.TabIndex = 8;
-            this.btnCheck.Text = "检查";
-            this.tt.SetToolTip(this.btnCheck, "检查物料是否指定了调出仓库");
-            this.btnCheck.UseVisualStyleBackColor = true;
-            this.btnCheck.Visible = false;
-            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
+            this.bnBottom.AddNewItem = null;
+            this.bnBottom.CountItem = null;
+            this.bnBottom.CountItemFormat = " @总页数";
+            this.bnBottom.DeleteItem = null;
+            this.bnBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.bnBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnB_cbxPageSize,
+            this.bnB_lblPageSize,
+            this.bnB_btnFirst,
+            this.bnB_btnPrevious,
+            this.bnB_tss1,
+            this.bnB_btnGoto,
+            this.bnB_lblThe,
+            this.bnB_txtCurrentPage,
+            this.bnB_lblSeparate,
+            this.bnB_lblPageCount,
+            this.bnB_tss2,
+            this.bnB_lblRecordCount,
+            this.bnB_tss3,
+            this.bnB_btnNext,
+            this.bnB_btnLast,
+            this.bnB_tss4});
+            this.bnBottom.Location = new System.Drawing.Point(0, 686);
+            this.bnBottom.MoveFirstItem = null;
+            this.bnBottom.MoveLastItem = null;
+            this.bnBottom.MoveNextItem = null;
+            this.bnBottom.MovePreviousItem = null;
+            this.bnBottom.Name = "bnBottom";
+            this.bnBottom.PositionItem = null;
+            this.bnBottom.Size = new System.Drawing.Size(883, 25);
+            this.bnBottom.TabIndex = 21;
+            this.bnBottom.Text = "bnBottom";
+            this.bnBottom.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnBottom_ItemClicked);
             // 
-            // cbxCondition
+            // bnB_cbxPageSize
             // 
-            this.cbxCondition.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxCondition.FormattingEnabled = true;
-            this.cbxCondition.Location = new System.Drawing.Point(52, 6);
-            this.cbxCondition.Margin = new System.Windows.Forms.Padding(2);
-            this.cbxCondition.Name = "cbxCondition";
-            this.cbxCondition.Size = new System.Drawing.Size(110, 20);
-            this.cbxCondition.TabIndex = 2;
-            this.cbxCondition.SelectedIndexChanged += new System.EventHandler(this.cbxCondition_SelectedIndexChanged);
+            this.bnB_cbxPageSize.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.bnB_cbxPageSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.bnB_cbxPageSize.Name = "bnB_cbxPageSize";
+            this.bnB_cbxPageSize.Size = new System.Drawing.Size(80, 25);
+            this.bnB_cbxPageSize.SelectedIndexChanged += new System.EventHandler(this.bnB_cbxPageSize_SelectedIndexChanged);
             // 
-            // txtCondition
+            // bnB_lblPageSize
             // 
-            this.txtCondition.Location = new System.Drawing.Point(248, 5);
-            this.txtCondition.Margin = new System.Windows.Forms.Padding(2);
-            this.txtCondition.Name = "txtCondition";
-            this.txtCondition.Size = new System.Drawing.Size(120, 21);
-            this.txtCondition.TabIndex = 1;
+            this.bnB_lblPageSize.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.bnB_lblPageSize.Name = "bnB_lblPageSize";
+            this.bnB_lblPageSize.Size = new System.Drawing.Size(56, 22);
+            this.bnB_lblPageSize.Text = "每页显示";
+            this.bnB_lblPageSize.ToolTipText = "每页显示行数";
             // 
-            // btnUnLock
+            // bnB_tss1
             // 
-            this.btnUnLock.Location = new System.Drawing.Point(679, 5);
-            this.btnUnLock.Margin = new System.Windows.Forms.Padding(2);
-            this.btnUnLock.Name = "btnUnLock";
-            this.btnUnLock.Size = new System.Drawing.Size(80, 20);
-            this.btnUnLock.TabIndex = 10;
-            this.btnUnLock.Text = "解锁";
-            this.tt.SetToolTip(this.btnUnLock, "销售订单解除锁库");
-            this.btnUnLock.UseVisualStyleBackColor = true;
-            this.btnUnLock.Click += new System.EventHandler(this.btnUnLock_Click);
+            this.bnB_tss1.Name = "bnB_tss1";
+            this.bnB_tss1.Size = new System.Drawing.Size(6, 25);
             // 
-            // cbxLogic
+            // bnB_btnGoto
             // 
-            this.cbxLogic.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxLogic.FormattingEnabled = true;
-            this.cbxLogic.Location = new System.Drawing.Point(168, 6);
-            this.cbxLogic.Margin = new System.Windows.Forms.Padding(2);
-            this.cbxLogic.Name = "cbxLogic";
-            this.cbxLogic.Size = new System.Drawing.Size(76, 20);
-            this.cbxLogic.TabIndex = 3;
+            this.bnB_btnGoto.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnGoto.Image = global::ERPSupport.SupForm.Properties.Resources.control_repeat_blue;
+            this.bnB_btnGoto.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnGoto.Name = "bnB_btnGoto";
+            this.bnB_btnGoto.Size = new System.Drawing.Size(23, 22);
+            this.bnB_btnGoto.Tag = "3";
+            this.bnB_btnGoto.Text = "跳到";
+            this.bnB_btnGoto.ToolTipText = "跳到指定页";
             // 
-            // btnCommit
+            // bnB_tss2
             // 
-            this.btnCommit.Location = new System.Drawing.Point(595, 5);
-            this.btnCommit.Margin = new System.Windows.Forms.Padding(2);
-            this.btnCommit.Name = "btnCommit";
-            this.btnCommit.Size = new System.Drawing.Size(80, 20);
-            this.btnCommit.TabIndex = 10;
-            this.btnCommit.Text = "提交";
-            this.tt.SetToolTip(this.btnCommit, "执行操作");
-            this.btnCommit.UseVisualStyleBackColor = true;
-            this.btnCommit.Click += new System.EventHandler(this.btnCommit_Click);
+            this.bnB_tss2.Name = "bnB_tss2";
+            this.bnB_tss2.Size = new System.Drawing.Size(6, 25);
             // 
-            // btnSearch
+            // bnB_lblRecordCount
             // 
-            this.btnSearch.Location = new System.Drawing.Point(445, 5);
-            this.btnSearch.Margin = new System.Windows.Forms.Padding(2);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(60, 20);
-            this.btnSearch.TabIndex = 7;
-            this.btnSearch.Text = "查找";
-            this.tt.SetToolTip(this.btnSearch, "查询数据");
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.bnB_lblRecordCount.Name = "bnB_lblRecordCount";
+            this.bnB_lblRecordCount.Size = new System.Drawing.Size(20, 22);
+            this.bnB_lblRecordCount.Text = "行";
+            // 
+            // bnB_tss3
+            // 
+            this.bnB_tss3.Name = "bnB_tss3";
+            this.bnB_tss3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // bnB_tss4
+            // 
+            this.bnB_tss4.Name = "bnB_tss4";
+            this.bnB_tss4.Size = new System.Drawing.Size(6, 25);
+            // 
+            // bnTop
+            // 
+            this.bnTop.AddNewItem = null;
+            this.bnTop.CountItem = null;
+            this.bnTop.DeleteItem = null;
+            this.bnTop.Dock = System.Windows.Forms.DockStyle.None;
+            this.bnTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnTop_btnFilter,
+            this.bnTop_tss1,
+            this.bnTop_btnCheck,
+            this.bnTop_btnSearch,
+            this.bnTop_btnShowAll,
+            this.bnTop_btnCommit,
+            this.bnTop_btnUnLock});
+            this.bnTop.Location = new System.Drawing.Point(214, 3);
+            this.bnTop.MoveFirstItem = null;
+            this.bnTop.MoveLastItem = null;
+            this.bnTop.MoveNextItem = null;
+            this.bnTop.MovePreviousItem = null;
+            this.bnTop.Name = "bnTop";
+            this.bnTop.PositionItem = null;
+            this.bnTop.Size = new System.Drawing.Size(330, 25);
+            this.bnTop.TabIndex = 20;
+            this.bnTop.Text = "bnTop";
+            this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
+            // 
+            // bnTop_btnFilter
+            // 
+            this.bnTop_btnFilter.Image = global::ERPSupport.SupForm.Properties.Resources.add;
+            this.bnTop_btnFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnFilter.Name = "bnTop_btnFilter";
+            this.bnTop_btnFilter.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnFilter.Tag = "1";
+            this.bnTop_btnFilter.Text = "筛选";
+            this.bnTop_btnFilter.ToolTipText = "设置过滤条件";
+            // 
+            // bnTop_tss1
+            // 
+            this.bnTop_tss1.Name = "bnTop_tss1";
+            this.bnTop_tss1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // bnTop_btnCheck
+            // 
+            this.bnTop_btnCheck.Image = global::ERPSupport.SupForm.Properties.Resources.zootool;
+            this.bnTop_btnCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnCheck.Name = "bnTop_btnCheck";
+            this.bnTop_btnCheck.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnCheck.Tag = "2";
+            this.bnTop_btnCheck.Text = "检查";
+            this.bnTop_btnCheck.ToolTipText = "检查物料是否已经设置默认调出仓库";
+            // 
+            // bnTop_btnSearch
+            // 
+            this.bnTop_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
+            this.bnTop_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnSearch.Name = "bnTop_btnSearch";
+            this.bnTop_btnSearch.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnSearch.Tag = "3";
+            this.bnTop_btnSearch.Text = "查询";
+            this.bnTop_btnSearch.ToolTipText = "查询数据";
+            // 
+            // bnTop_btnShowAll
+            // 
+            this.bnTop_btnShowAll.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
+            this.bnTop_btnShowAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnShowAll.Name = "bnTop_btnShowAll";
+            this.bnTop_btnShowAll.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnShowAll.Tag = "4";
+            this.bnTop_btnShowAll.Text = "重置";
+            this.bnTop_btnShowAll.ToolTipText = "清空列筛选";
+            // 
+            // bnTop_btnCommit
+            // 
+            this.bnTop_btnCommit.Image = global::ERPSupport.SupForm.Properties.Resources.accept;
+            this.bnTop_btnCommit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnCommit.Name = "bnTop_btnCommit";
+            this.bnTop_btnCommit.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnCommit.Tag = "5";
+            this.bnTop_btnCommit.Text = "提交";
+            // 
+            // bnTop_btnUnLock
+            // 
+            this.bnTop_btnUnLock.Image = global::ERPSupport.SupForm.Properties.Resources.change_password;
+            this.bnTop_btnUnLock.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnUnLock.Name = "bnTop_btnUnLock";
+            this.bnTop_btnUnLock.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnUnLock.Tag = "6";
+            this.bnTop_btnUnLock.Text = "解锁";
+            this.bnTop_btnUnLock.ToolTipText = "库存解锁";
             // 
             // dgv1
             // 
@@ -250,7 +352,7 @@
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader;
             this.dgv1.RowTemplate.Height = 27;
             this.dgv1.ShowEditingIcon = false;
-            this.dgv1.Size = new System.Drawing.Size(879, 679);
+            this.dgv1.Size = new System.Drawing.Size(879, 654);
             this.dgv1.TabIndex = 18;
             this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
             // 
@@ -330,21 +432,21 @@
             // tsmiTool_Config
             // 
             this.tsmiTool_Config.Name = "tsmiTool_Config";
-            this.tsmiTool_Config.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Config.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Config.Text = "系统配置(&C)";
             this.tsmiTool_Config.Click += new System.EventHandler(this.tsmiTool_Config_Click);
             // 
             // tsmiTool_Parameter
             // 
             this.tsmiTool_Parameter.Name = "tsmiTool_Parameter";
-            this.tsmiTool_Parameter.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Parameter.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Parameter.Text = "参数(&P)";
             this.tsmiTool_Parameter.Click += new System.EventHandler(this.tsmiTool_Parameter_Click);
             // 
             // tsmiTool_tss1
             // 
             this.tsmiTool_tss1.Name = "tsmiTool_tss1";
-            this.tsmiTool_tss1.Size = new System.Drawing.Size(149, 6);
+            this.tsmiTool_tss1.Size = new System.Drawing.Size(148, 6);
             // 
             // tsmiTool_Occupy
             // 
@@ -356,60 +458,75 @@
             this.tssTool_Occupy_1,
             this.tsmiTool_Occupy_LockPickMtl});
             this.tsmiTool_Occupy.Name = "tsmiTool_Occupy";
-            this.tsmiTool_Occupy.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Occupy.Text = "占用解除(&O)";
             // 
             // smiTool_Occupy_PickMtl
             // 
             this.smiTool_Occupy_PickMtl.Name = "smiTool_Occupy_PickMtl";
-            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(152, 22);
+            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(130, 22);
             this.smiTool_Occupy_PickMtl.Text = "倒冲领料";
             this.smiTool_Occupy_PickMtl.Click += new System.EventHandler(this.smiTool_Occupy_PickMtl_Click);
             // 
             // smiTool_Occupy_Trans
             // 
             this.smiTool_Occupy_Trans.Name = "smiTool_Occupy_Trans";
-            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(152, 22);
+            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(130, 22);
             this.smiTool_Occupy_Trans.Text = "调拨";
             this.smiTool_Occupy_Trans.Click += new System.EventHandler(this.smiTool_Occupy_Trans_Click);
             // 
             // tsmiTool_Occupy_LockStock
             // 
             this.tsmiTool_Occupy_LockStock.Name = "tsmiTool_Occupy_LockStock";
-            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_LockStock.Text = "锁库";
             this.tsmiTool_Occupy_LockStock.Click += new System.EventHandler(this.tsmiTool_Occupy_LockStock_Click);
             // 
             // tsmiTool_Occupy_OrderRun
             // 
             this.tsmiTool_Occupy_OrderRun.Name = "tsmiTool_Occupy_OrderRun";
-            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_OrderRun.Text = "订单运算";
             this.tsmiTool_Occupy_OrderRun.Click += new System.EventHandler(this.tsmiTool_Occupy_OrderRun_Click);
             // 
             // tssTool_Occupy_1
             // 
             this.tssTool_Occupy_1.Name = "tssTool_Occupy_1";
-            this.tssTool_Occupy_1.Size = new System.Drawing.Size(149, 6);
+            this.tssTool_Occupy_1.Size = new System.Drawing.Size(127, 6);
             // 
             // tsmiTool_Occupy_LockPickMtl
             // 
             this.tsmiTool_Occupy_LockPickMtl.Name = "tsmiTool_Occupy_LockPickMtl";
-            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_LockPickMtl.Text = "自动领料";
             this.tsmiTool_Occupy_LockPickMtl.Click += new System.EventHandler(this.tsmiTool_Occupy_LockPickMtl_Click);
             // 
             // tsmiTool_tss2
             // 
             this.tsmiTool_tss2.Name = "tsmiTool_tss2";
-            this.tsmiTool_tss2.Size = new System.Drawing.Size(149, 6);
+            this.tsmiTool_tss2.Size = new System.Drawing.Size(148, 6);
             // 
             // tsmiTool_Timer
             // 
             this.tsmiTool_Timer.Name = "tsmiTool_Timer";
-            this.tsmiTool_Timer.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Timer.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Timer.Text = "定时器(&T)";
             this.tsmiTool_Timer.Click += new System.EventHandler(this.tsmiTool_Timer_Click);
+            // 
+            // tsmiPro
+            // 
+            this.tsmiPro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiPro_Dir});
+            this.tsmiPro.Name = "tsmiPro";
+            this.tsmiPro.Size = new System.Drawing.Size(68, 20);
+            this.tsmiPro.Text = "项目(&P)";
+            // 
+            // tsmiPro_Dir
+            // 
+            this.tsmiPro_Dir.Name = "tsmiPro_Dir";
+            this.tsmiPro_Dir.Size = new System.Drawing.Size(165, 22);
+            this.tsmiPro_Dir.Text = "调拨单设置(&D)";
+            this.tsmiPro_Dir.Click += new System.EventHandler(this.tsmiPro_Dir_Click);
             // 
             // tsmiHelp
             // 
@@ -460,20 +577,64 @@
             // 
             this.tSumSecond.Interval = 1000;
             // 
-            // tsmiPro
+            // bnB_lblSeparate
             // 
-            this.tsmiPro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiPro_Dir});
-            this.tsmiPro.Name = "tsmiPro";
-            this.tsmiPro.Size = new System.Drawing.Size(68, 20);
-            this.tsmiPro.Text = "项目(&P)";
+            this.bnB_lblSeparate.Name = "bnB_lblSeparate";
+            this.bnB_lblSeparate.Size = new System.Drawing.Size(45, 22);
+            this.bnB_lblSeparate.Text = "页 / 共";
             // 
-            // tsmiPro_Dir
+            // bnB_lblThe
             // 
-            this.tsmiPro_Dir.Name = "tsmiPro_Dir";
-            this.tsmiPro_Dir.Size = new System.Drawing.Size(165, 22);
-            this.tsmiPro_Dir.Text = "调拨单设置(&D)";
-            this.tsmiPro_Dir.Click += new System.EventHandler(this.tsmiPro_Dir_Click);
+            this.bnB_lblThe.Name = "bnB_lblThe";
+            this.bnB_lblThe.Size = new System.Drawing.Size(20, 22);
+            this.bnB_lblThe.Text = "第";
+            // 
+            // bnB_lblPageCount
+            // 
+            this.bnB_lblPageCount.Name = "bnB_lblPageCount";
+            this.bnB_lblPageCount.Size = new System.Drawing.Size(20, 22);
+            this.bnB_lblPageCount.Text = "页";
+            // 
+            // bnB_txtCurrentPage
+            // 
+            this.bnB_txtCurrentPage.Name = "bnB_txtCurrentPage";
+            this.bnB_txtCurrentPage.Size = new System.Drawing.Size(40, 25);
+            // 
+            // bnB_btnFirst
+            // 
+            this.bnB_btnFirst.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnFirst.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_first;
+            this.bnB_btnFirst.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnFirst.Name = "bnB_btnFirst";
+            this.bnB_btnFirst.Size = new System.Drawing.Size(23, 22);
+            this.bnB_btnFirst.Tag = "1";
+            // 
+            // bnB_btnPrevious
+            // 
+            this.bnB_btnPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnPrevious.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_previous;
+            this.bnB_btnPrevious.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnPrevious.Name = "bnB_btnPrevious";
+            this.bnB_btnPrevious.Size = new System.Drawing.Size(23, 22);
+            this.bnB_btnPrevious.Tag = "2";
+            // 
+            // bnB_btnNext
+            // 
+            this.bnB_btnNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnNext.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_next;
+            this.bnB_btnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnNext.Name = "bnB_btnNext";
+            this.bnB_btnNext.Size = new System.Drawing.Size(23, 22);
+            this.bnB_btnNext.Tag = "4";
+            // 
+            // bnB_btnLast
+            // 
+            this.bnB_btnLast.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnLast.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_last;
+            this.bnB_btnLast.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnLast.Name = "bnB_btnLast";
+            this.bnB_btnLast.Size = new System.Drawing.Size(23, 22);
+            this.bnB_btnLast.Tag = "5";
             // 
             // frmMain
             // 
@@ -497,9 +658,16 @@
             this.sc1.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).EndInit();
+            this.bnBottom.ResumeLayout(false);
+            this.bnBottom.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).EndInit();
+            this.bnTop.ResumeLayout(false);
+            this.bnTop.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).EndInit();
             this.msMain.ResumeLayout(false);
             this.msMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bs1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -509,16 +677,7 @@
 
         private System.Windows.Forms.SplitContainer sc1;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Button btnCheck;
-        private System.Windows.Forms.DateTimePicker dtpDate;
-        private System.Windows.Forms.Button btnFilter;
-        private System.Windows.Forms.ComboBox cbxCondition;
-        private System.Windows.Forms.TextBox txtCondition;
-        private System.Windows.Forms.ComboBox cbxLogic;
         private System.Windows.Forms.DataGridView dgv1;
-        private System.Windows.Forms.Button btnCommit;
-        private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.Button btnUnLock;
         private System.Windows.Forms.MenuStrip msMain;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile;
         private System.Windows.Forms.ToolStripMenuItem tsmiFile_Exit;
@@ -539,7 +698,6 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Parameter;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Occupy_LockStock;
         private System.Windows.Forms.ToolStripMenuItem tsmiTool_Occupy_OrderRun;
-        private System.Windows.Forms.Button btnShowAll;
         private System.Windows.Forms.Timer tSumSecond;
         private System.Windows.Forms.ToolStripMenuItem tsmiHelp_Regedit;
         private System.Windows.Forms.ToolStripSeparator tsmiTool_tss2;
@@ -550,5 +708,33 @@
         private System.Windows.Forms.ToolStripSeparator tssTool_Occupy_1;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_Dir;
+        private System.Windows.Forms.BindingNavigator bnTop;
+        private System.Windows.Forms.ToolStripButton bnTop_btnFilter;
+        private System.Windows.Forms.ToolStripSeparator bnTop_tss1;
+        private System.Windows.Forms.ToolStripButton bnTop_btnCheck;
+        private System.Windows.Forms.ToolStripButton bnTop_btnSearch;
+        private System.Windows.Forms.ToolStripButton bnTop_btnShowAll;
+        private System.Windows.Forms.ToolStripButton bnTop_btnCommit;
+        private System.Windows.Forms.ToolStripButton bnTop_btnUnLock;
+        private System.Windows.Forms.BindingNavigator bnBottom;
+        private System.Windows.Forms.ToolStripSeparator bnB_tss1;
+        private System.Windows.Forms.ToolStripSeparator bnB_tss2;
+        private System.Windows.Forms.ToolStripSeparator bnB_tss4;
+        private System.Windows.Forms.ToolStripComboBox bnB_cbxPageSize;
+        private System.Windows.Forms.ToolStripLabel bnB_lblPageSize;
+        private System.Windows.Forms.ToolStripLabel bnB_lblRecordCount;
+        private System.Windows.Forms.ToolStripSeparator bnB_tss3;
+        private System.Windows.Forms.ToolStripButton bnB_btnGoto;
+        private System.Windows.Forms.DateTimePicker dtpDate;
+        private System.Windows.Forms.Label lblDate;
+        private System.Windows.Forms.BindingSource bs1;
+        private System.Windows.Forms.ToolStripLabel bnB_lblSeparate;
+        private System.Windows.Forms.ToolStripLabel bnB_lblThe;
+        private System.Windows.Forms.ToolStripTextBox bnB_txtCurrentPage;
+        private System.Windows.Forms.ToolStripLabel bnB_lblPageCount;
+        private System.Windows.Forms.ToolStripButton bnB_btnFirst;
+        private System.Windows.Forms.ToolStripButton bnB_btnPrevious;
+        private System.Windows.Forms.ToolStripButton bnB_btnNext;
+        private System.Windows.Forms.ToolStripButton bnB_btnLast;
     }
 }
