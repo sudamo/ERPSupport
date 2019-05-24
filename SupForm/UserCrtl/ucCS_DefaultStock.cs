@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Data;
 using System.Windows.Forms;
 using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -11,6 +9,11 @@ namespace ERPSupport.SupForm.UserCrtl
     /// </summary>
     public partial class ucCS_DefaultStock : UserControl
     {
+        private int _SearchCount;
+        /// <summary>
+        /// 
+        /// </summary>
+        private DataGridViewComboBoxColumn _ComboBoxCol;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -19,55 +22,108 @@ namespace ERPSupport.SupForm.UserCrtl
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ucCS_DefaultStock_Load(object sender, EventArgs e)
         {
-            cbxStock.DataSource = CommFunction.GetStock(3, null);
-            cbxStock.DisplayMember = "FName";
-            cbxStock.ValueMember = "FValue";
+            _SearchCount = 0;
         }
 
         /// <summary>
-        /// 数据查询
+        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            dgv1.DataSource = null;
-            dgv1.DataSource = CommFunction.MStockSetting(txtMaterialNO.Text.Trim());
+            if (e.ClickedItem.Tag == null)
+                return;
 
-            if (dgv1.DataSource != null && dgv1.Rows.Count > 0)
-                btnSave.Enabled = true;
-            else
-                btnSave.Enabled = false;
+            switch (e.ClickedItem.Tag.ToString())
+            {
+                case "1":
+                    Search();
+                    break;
+                case "2":
+                    BatchFill();
+                    break;
+                case "3":
+                    Save();
+                    break;
+                case "4":
+                    ClearNullStock();
+                    break;
+            }
         }
 
-        /// <summary>
-        /// 保存仓库设置
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSave_Click(object sender, EventArgs e)
+        private void Search()
         {
-            if (cbxStock.SelectedIndex == 0) return;
-            if (dgv1.Rows.Count == 0) return;
-            string FID = dgv1.CurrentRow.Cells[0].Value.ToString();
-            string STOCKNUMBER = cbxStock.SelectedValue.ToString();
+            _SearchCount++;
+            dgv1.DataSource = CommFunction.MStockSetting(bnTop_txtNumber.Text.Trim());
 
-            CommFunction.UpdateMStockSetting(STOCKNUMBER, int.Parse(FID));
-            btnSearch_Click(null, null);
-            cbxStock.SelectedIndex = 0;
+            if (dgv1 == null || dgv1.Rows.Count == 0)
+                return;
 
-            //操作日志
-            CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", txtMaterialNO.Text + ":" + cbxStock.Text, "1");
+            if (dgv1.Columns.Count <= 6)
+            {
+                _ComboBoxCol = new DataGridViewComboBoxColumn();
+                _ComboBoxCol.HeaderText = "修改仓库";
+                _ComboBoxCol.AutoComplete = true;
+                _ComboBoxCol.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                _ComboBoxCol.DataSource = CommFunction.GetStock(-1, null);
+                _ComboBoxCol.DisplayMember = "FName";
+                _ComboBoxCol.ValueMember = "FValue";
+
+                dgv1.Columns.Add(_ComboBoxCol);
+            }
         }
+        private void BatchFill()
+        {
+            if (dgv1 == null)
+                return;
 
-        /// <summary>
-        /// 清除空值仓库
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnDelete_Click(object sender, EventArgs e)
+            string strStockValue = string.Empty;
+            int iCol = _SearchCount == 1 ? 6 : 0;
+
+            for (int i = 0; i < dgv1.Rows.Count; i++)
+            {
+                if (dgv1.Rows[i].Selected)
+                {
+                    if (strStockValue == string.Empty)
+                        strStockValue = dgv1.Rows[i].Cells[iCol].Value.ToString();
+
+                    dgv1.Rows[i].Cells[iCol].Value = strStockValue; ;
+                }
+            }
+        }
+        private void Save()
+        {
+            if (dgv1 == null)
+                return;
+
+            string FID, StockNumber;
+            int iCol = _SearchCount == 1 ? 6 : 0;
+
+            for (int i = 0; i < dgv1.Rows.Count; i++)
+            {
+                if (dgv1.Rows[i].Cells[iCol].Value == null)
+                    continue;
+
+                FID = dgv1.Rows[i].Cells[0].Value.ToString();
+                StockNumber = dgv1.Rows[i].Cells[iCol].Value.ToString();
+
+                CommFunction.UpdateMStockSetting(StockNumber, int.Parse(FID));
+
+                //操作日志
+                CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", bnTop_txtNumber.Text + ":" + dgv1.Rows[i].Cells[iCol].Value, "1");
+            }
+
+            Search();
+        }
+        private void ClearNullStock()
         {
             CommFunction.DelMStockSetting();
 
@@ -76,34 +132,5 @@ namespace ERPSupport.SupForm.UserCrtl
 
             MessageBox.Show("清除完成");
         }
-
-        #region 响应事件
-        /// <summary>
-        /// dgv1_Click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgv1_Click(object sender, EventArgs e)
-        {
-            if (dgv1.Rows.Count > 0)
-            {
-                txtMaterialNO.Text = dgv1.CurrentRow.Cells[1].Value.ToString();
-                lblMaterialName.Text = "物料名称：" + dgv1.CurrentRow.Cells[2].Value.ToString();
-                lblDepartment.Text = "部门名称：" + dgv1.CurrentRow.Cells[3].Value.ToString();
-                cbxStock.SelectedValue = dgv1.CurrentRow.Cells[4].Value.ToString();
-            }
-        }
-
-        /// <summary>
-        /// txtMaterialNO_KeyPress
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void txtMaterialNO_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == 13)
-                btnSearch_Click(null, null);
-        }
-        #endregion
     }
 }

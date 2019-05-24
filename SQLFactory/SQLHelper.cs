@@ -27,10 +27,10 @@
 
 namespace ERPSupport.SQL
 {
+    using System;
     using System.Data;
     using System.Data.SqlClient;
     using Model.Globa;
-    using System;
 
     /// <summary>
     /// 自定义SQLHelper
@@ -292,11 +292,12 @@ namespace ERPSupport.SQL
             DataSet ds = new DataSet("root");
             SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
             SqlDataAdapter adp = new SqlDataAdapter();
+            SqlCommand cmd = conn.CreateCommand();
 
             try
             {
                 conn.Open();
-                adp.SelectCommand.Connection = conn;
+                adp.SelectCommand = cmd;
                 adp.SelectCommand.CommandText = pCommandText;
                 adp.SelectCommand.CommandType = pCommandType;
 
@@ -328,13 +329,14 @@ namespace ERPSupport.SQL
         {
             DataSet ds = new DataSet();
             SqlDataAdapter adp = new SqlDataAdapter();
+            SqlCommand cmd = pConnection.CreateCommand();
 
             try
             {
                 if (pConnection.State != ConnectionState.Open)
                     pConnection.Open();
 
-                adp.SelectCommand.Connection = pConnection;
+                adp.SelectCommand = cmd;
                 adp.SelectCommand.CommandText = pCommandText;
                 adp.SelectCommand.CommandType = pCommandType;
 

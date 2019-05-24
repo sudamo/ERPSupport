@@ -28,51 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSetDefaultStock));
-            this.lblMaterialName = new System.Windows.Forms.Label();
-            this.btnSave = new System.Windows.Forms.Button();
-            this.txtMaterialName = new System.Windows.Forms.TextBox();
-            this.btnBatFill = new System.Windows.Forms.Button();
             this.dgv1 = new System.Windows.Forms.DataGridView();
+            this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnTop_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop_btnBatchFill = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnSave = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
+            this.bnTop.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // lblMaterialName
-            // 
-            this.lblMaterialName.AutoSize = true;
-            this.lblMaterialName.Location = new System.Drawing.Point(12, 12);
-            this.lblMaterialName.Name = "lblMaterialName";
-            this.lblMaterialName.Size = new System.Drawing.Size(53, 12);
-            this.lblMaterialName.TabIndex = 0;
-            this.lblMaterialName.Text = "物料名称";
-            // 
-            // btnSave
-            // 
-            this.btnSave.Location = new System.Drawing.Point(510, 8);
-            this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
-            this.btnSave.TabIndex = 2;
-            this.btnSave.Text = "保存";
-            this.btnSave.UseVisualStyleBackColor = true;
-            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
-            // 
-            // txtMaterialName
-            // 
-            this.txtMaterialName.Location = new System.Drawing.Point(70, 8);
-            this.txtMaterialName.Name = "txtMaterialName";
-            this.txtMaterialName.ReadOnly = true;
-            this.txtMaterialName.Size = new System.Drawing.Size(354, 21);
-            this.txtMaterialName.TabIndex = 3;
-            // 
-            // btnBatFill
-            // 
-            this.btnBatFill.Location = new System.Drawing.Point(430, 8);
-            this.btnBatFill.Name = "btnBatFill";
-            this.btnBatFill.Size = new System.Drawing.Size(75, 23);
-            this.btnBatFill.TabIndex = 2;
-            this.btnBatFill.Text = "批量填充";
-            this.btnBatFill.UseVisualStyleBackColor = true;
-            this.btnBatFill.Click += new System.EventHandler(this.btnBatFill_Click);
             // 
             // dgv1
             // 
@@ -81,42 +47,84 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv1.Location = new System.Drawing.Point(2, 37);
+            this.dgv1.Location = new System.Drawing.Point(2, 28);
             this.dgv1.Name = "dgv1";
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dgv1.RowTemplate.Height = 23;
-            this.dgv1.Size = new System.Drawing.Size(597, 395);
+            this.dgv1.Size = new System.Drawing.Size(597, 404);
             this.dgv1.TabIndex = 4;
             this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
-            this.dgv1.Click += new System.EventHandler(this.dgv1_Click);
+            // 
+            // bnTop
+            // 
+            this.bnTop.AddNewItem = null;
+            this.bnTop.CountItem = null;
+            this.bnTop.DeleteItem = null;
+            this.bnTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnTop_tss,
+            this.bnTop_btnBatchFill,
+            this.bnTop_btnSave});
+            this.bnTop.Location = new System.Drawing.Point(0, 0);
+            this.bnTop.MoveFirstItem = null;
+            this.bnTop.MoveLastItem = null;
+            this.bnTop.MoveNextItem = null;
+            this.bnTop.MovePreviousItem = null;
+            this.bnTop.Name = "bnTop";
+            this.bnTop.PositionItem = null;
+            this.bnTop.Size = new System.Drawing.Size(604, 25);
+            this.bnTop.TabIndex = 5;
+            this.bnTop.Text = "bindingNavigator1";
+            this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
+            // 
+            // bnTop_tss
+            // 
+            this.bnTop_tss.Name = "bnTop_tss";
+            this.bnTop_tss.Size = new System.Drawing.Size(6, 25);
+            // 
+            // bnTop_btnBatchFill
+            // 
+            this.bnTop_btnBatchFill.Image = global::ERPSupport.SupForm.Properties.Resources.accept;
+            this.bnTop_btnBatchFill.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnBatchFill.Name = "bnTop_btnBatchFill";
+            this.bnTop_btnBatchFill.Size = new System.Drawing.Size(76, 22);
+            this.bnTop_btnBatchFill.Tag = "1";
+            this.bnTop_btnBatchFill.Text = "批量填充";
+            // 
+            // bnTop_btnSave
+            // 
+            this.bnTop_btnSave.Image = global::ERPSupport.SupForm.Properties.Resources.save_as;
+            this.bnTop_btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnSave.Name = "bnTop_btnSave";
+            this.bnTop_btnSave.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnSave.Tag = "2";
+            this.bnTop_btnSave.Text = "保存";
             // 
             // frmSetDefaultStock
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(604, 437);
+            this.Controls.Add(this.bnTop);
             this.Controls.Add(this.dgv1);
-            this.Controls.Add(this.txtMaterialName);
-            this.Controls.Add(this.btnBatFill);
-            this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.lblMaterialName);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmSetDefaultStock";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "物料默认仓库设置";
             this.Load += new System.EventHandler(this.frmSetDefaultStock_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).EndInit();
+            this.bnTop.ResumeLayout(false);
+            this.bnTop.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lblMaterialName;
-        private System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.TextBox txtMaterialName;
-        private System.Windows.Forms.Button btnBatFill;
         private System.Windows.Forms.DataGridView dgv1;
+        private System.Windows.Forms.BindingNavigator bnTop;
+        private System.Windows.Forms.ToolStripSeparator bnTop_tss;
+        private System.Windows.Forms.ToolStripButton bnTop_btnBatchFill;
+        private System.Windows.Forms.ToolStripButton bnTop_btnSave;
     }
 }

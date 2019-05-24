@@ -10,15 +10,14 @@ namespace ERPSupport.SupForm.Bussiness
     public partial class frmSetDefaultStock : Form
     {
         #region Variable & Constructor
-
-        /// <summary>
-        /// 初次加载
-        /// </summary>
-        private bool _Load;
         /// <summary>
         /// 计划开工日期
         /// </summary>
         private string _PlanStartDate;
+        /// <summary>
+        /// 
+        /// </summary>
+        private DataGridViewComboBoxColumn _ComboBoxCol;
 
         /// <summary>
         /// 构造函数
@@ -27,9 +26,8 @@ namespace ERPSupport.SupForm.Bussiness
         public frmSetDefaultStock(string pFPlanStartDate)
         {
             InitializeComponent();
-            _PlanStartDate = pFPlanStartDate;
 
-            _Load = false;
+            _PlanStartDate = pFPlanStartDate;
         }
         #endregion
 
@@ -40,22 +38,41 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void frmSetDefaultStock_Load(object sender, EventArgs e)
         {
-            CheckStock();
+            dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
+
+            _ComboBoxCol = new DataGridViewComboBoxColumn();
+            _ComboBoxCol.HeaderText = "仓库";
+            _ComboBoxCol.AutoComplete = true;
+            _ComboBoxCol.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            _ComboBoxCol.DataSource = CommFunction.GetStock(-1, null);
+            _ComboBoxCol.DisplayMember = "FName";
+            _ComboBoxCol.ValueMember = "FValue";
+
+            dgv1.Columns.Add(_ComboBoxCol);
         }
 
+        private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Tag == null)
+                return;
 
-        /// <summary>
-        /// 批量填充
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnBatFill_Click(object sender, EventArgs e)
+            switch (e.ClickedItem.Tag.ToString())
+            {
+                case "1":
+                    BatchFill();
+                    break;
+                case "2":
+                    Save();
+                    break;
+            }
+        }
+        private void BatchFill()
         {
             string strStockValue = string.Empty;
 
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
-                if(dgv1.Rows[i].Selected)
+                if (dgv1.Rows[i].Selected)
                 {
                     if (strStockValue == string.Empty && dgv1.Rows[i].Cells[4].Value != null)
                         strStockValue = dgv1.Rows[i].Cells[4].Value.ToString();
@@ -64,13 +81,7 @@ namespace ERPSupport.SupForm.Bussiness
                 }
             }
         }
-
-        /// <summary>
-        /// 保存
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSave_Click(object sender, EventArgs e)
+        private void Save()
         {
             if (dgv1.Rows.Count < 1)
             {
@@ -98,46 +109,12 @@ namespace ERPSupport.SupForm.Bussiness
                     strStockID = CommFunction.GetStockIdByNumber(100508, dgv1.Rows[i].Cells[4].Value.ToString()).ToString();
 
                     if (strStockID == null) continue;
-                    
+
                     CommFunction.AddMStockSetting(strMaterialID, strMaterialNumber, strDeptID, strDeptNumber, strStockID, strStockNumber);
                 }
             }
 
-            CheckStock();
-        }
-
-        /// <summary>
-        /// 查找数据
-        /// </summary>
-        private void CheckStock()
-        {
             dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
-
-            if (!_Load)
-            {
-                DataGridViewComboBoxColumn dgvcbxc = new DataGridViewComboBoxColumn();
-                dgvcbxc.HeaderText = "仓库";
-                dgvcbxc.AutoComplete = true;
-                dgvcbxc.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-                dgvcbxc.DataSource = CommFunction.GetStock(-1, null);
-                dgvcbxc.DisplayMember = "FName";
-                dgvcbxc.ValueMember = "FValue";
-                dgv1.Columns.Add(dgvcbxc);
-                _Load = true;
-            }
-        }
-
-        /// <summary>
-        /// dgv1_Click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgv1_Click(object sender, EventArgs e)
-        {
-            if (dgv1.Rows.Count > 0)
-            {
-                txtMaterialName.Text = dgv1.CurrentRow.Cells[1].Value.ToString();
-            }
         }
 
         /// <summary>
