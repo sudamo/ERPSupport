@@ -131,6 +131,14 @@ namespace ERPSupport.SupForm
         /// Regex
         /// </summary>
         private Regex _reg;
+        /// <summary>
+        /// 表头复选框
+        /// </summary>
+        CheckBox _chb;
+        /// <summary>
+        /// 表体复选框
+        /// </summary>
+        private DataGridViewCheckBoxColumn _col;
 
         /// <summary>
         /// 构造函数
@@ -188,22 +196,18 @@ namespace ERPSupport.SupForm
                 _Close.Start();
             }
             //-----
-            DataGridViewCheckBoxColumn newColumn = new DataGridViewCheckBoxColumn();
-            newColumn.HeaderText = "";
-            newColumn.Width = 50;
-            dgv1.Columns.Add(newColumn);
+            _col = new DataGridViewCheckBoxColumn();
+            _col.Width = 30;
+            dgv1.Columns.Add(_col);
 
-            CheckBox ckBox = new CheckBox();
-            ckBox.Name = "chb1";
-            ckBox.Size = new Size(16, 16);
-            ckBox.Location = new Point(65, 2);
-            ckBox.Checked = false;
-            ckBox.CheckedChanged += new EventHandler(ckBox_CheckedChanged);
-            dgv1.Controls.Add(ckBox);
+            _chb = new CheckBox();
+            _chb.Size = new Size(16, 16);
+            _chb.CheckedChanged += new EventHandler(ckBox_CheckedChanged);
+            dgv1.Controls.Add(_chb);
 
             //-----
             GlobalParameter.LocalInf = new LocalInfo(CommFunction.GetLocalIP(), CommFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);//配置本地信息
-            CommFunction.DM_Log_Local("登录系统", "主窗口", "登录系统", "1");//登录日志
+            //CommFunction.DM_Log_Local("登录系统", "主窗口", "登录系统", "1");//登录日志
             //-----
             Text = "ERP辅助系统" + " - " + GlobalParameter.K3Inf.UserName;
         }
@@ -326,9 +330,9 @@ namespace ERPSupport.SupForm
         }
         #endregion
 
-        #region 委托导航栏点击事件
+        #region 导航栏点击事件
         /// <summary>
-        /// 委托导航栏点击事件
+        /// 导航栏点击事件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -603,9 +607,12 @@ namespace ERPSupport.SupForm
         /// </summary>
         private void FormIDChange()
         {
+            _col.Visible = false;
+            _chb.Visible = false;
+            _chb.Checked = false;
+
             _ListFilter = new List<Filter>();
             dgv1.DataSource = null;
-            ((CheckBox)Controls.Find("chb1", true)[0]).Checked = false;
 
             if (_FormId == FormID.PRD_INSTOCK)
             {
@@ -622,6 +629,8 @@ namespace ERPSupport.SupForm
                 lblDate.Visible = true;
                 lblDate.Location = new Point(51, 10);
                 dtpDate.Visible = true;
+
+                bnTop.Location = new Point(210, 0);
             }
             else if (_FormId == FormID.PRD_PPBOM)
             {
@@ -635,8 +644,10 @@ namespace ERPSupport.SupForm
 
                 lblDate.Text = "计划开工日期";
                 lblDate.Visible = true;
-                lblDate.Location = new Point(3, 10);
+                lblDate.Location = new Point(2, 10);
                 dtpDate.Visible = true;
+
+                bnTop.Location = new Point(210, 0);
 
                 if (GlobalParameter.Tmp_Params != null && GlobalParameter.Tmp_Params.ToString() == "1")
                 {
@@ -666,6 +677,8 @@ namespace ERPSupport.SupForm
 
                 lblDate.Visible = false;
                 dtpDate.Visible = false;
+
+                bnTop.Location = new Point(2, 0);
             }
             else if (_FormId == FormID.SAL_SaleOrderRun)
             {
@@ -680,6 +693,8 @@ namespace ERPSupport.SupForm
 
                 lblDate.Visible = false;
                 dtpDate.Visible = false;
+
+                bnTop.Location = new Point(2, 0);
             }
         }
         #endregion
@@ -690,8 +705,6 @@ namespace ERPSupport.SupForm
         /// </summary>
         private void DataSourceBinding(int pType)
         {
-            ((CheckBox)dgv1.Controls.Find("chb1", true)[0]).Checked = false;
-
             if (pType == 1)//重新加载数据源
             {
                 string strFilter = string.Empty;
@@ -761,6 +774,18 @@ namespace ERPSupport.SupForm
 
                 bnBottom.BindingSource = bs1;
                 dgv1.DataSource = bs1;
+
+                _col.Visible = true;
+                _chb.Visible = true;
+                _chb.Checked = false;
+                _chb.Location = new Point(dgv1.Rows[0].HeaderCell.Size.Width + 8, 2);
+            }
+            else
+            {
+                _col.Visible = false;
+                _chb.Visible = false;
+
+                dgv1.DataSource = null;
             }
         }
         #endregion
@@ -2040,19 +2065,6 @@ namespace ERPSupport.SupForm
         }
         #endregion
 
-        #region 主窗口大小改变时发生
-        /// <summary>
-        /// 主窗口大小改变时发生
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void frmMain_Resize(object sender, EventArgs e)
-        {
-            if (_CurrentRow != 0)
-                ResetUCSize(_ListP, _CurrentRow, _ChildCount);
-        }
-        #endregion
-
         #region 菜单
 
         /// <summary>
@@ -2082,24 +2094,6 @@ namespace ERPSupport.SupForm
             {
                 Application.Exit();
             }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //如果自动领料正在执行，关闭自动领料
-            if (_Execute != null)
-            {
-                _Execute.Close();
-                CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
-            }
-
-            //日志
-            CommFunction.DM_Log_Local("退出系统", "主窗口", "关闭主窗体并退出系统", "1");//日志
         }
 
         /// <summary>
@@ -2350,6 +2344,19 @@ namespace ERPSupport.SupForm
 
         #region 事件
 
+        #region 主窗口大小改变时发生
+        /// <summary>
+        /// 主窗口大小改变时发生
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmMain_Resize(object sender, EventArgs e)
+        {
+            if (_CurrentRow != 0)
+                ResetUCSize(_ListP, _CurrentRow, _ChildCount);
+        }
+        #endregion
+
         #region 日期值变化
         /// <summary>
         /// 日期值变化
@@ -2395,6 +2402,35 @@ namespace ERPSupport.SupForm
             e.Row.HeaderCell.Value = string.Format("{0}", e.Row.Index + 1);
         }
         #endregion
+
+        /// <summary>
+        /// 自动调整chb1.Location
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv1_RowHeadersWidthChanged(object sender, EventArgs e)
+        {
+            if (_chb != null && dgv1 != null && dgv1.Rows.Count > 0)
+                _chb.Location = new Point(dgv1.Rows[0].HeaderCell.Size.Width + 8, 2);
+        }
+
+        /// <summary>
+        /// 窗口关闭
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void frmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //如果自动领料正在执行，关闭自动领料
+            if (_Execute != null)
+            {
+                _Execute.Close();
+                CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
+            }
+
+            //日志
+            //CommFunction.DM_Log_Local("退出系统", "主窗口", "关闭主窗体并退出系统", "1");//日志
+        }
 
         #region 定时器事件
         /// <summary>
