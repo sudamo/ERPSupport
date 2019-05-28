@@ -33,8 +33,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.sc1 = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.dtpDate = new System.Windows.Forms.DateTimePicker();
-            this.lblDate = new System.Windows.Forms.Label();
             this.bnBottom = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnB_cbxPageSize = new System.Windows.Forms.ToolStripComboBox();
             this.bnB_lblPageSize = new System.Windows.Forms.ToolStripLabel();
@@ -92,6 +90,8 @@
             this.tSumSecond = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.bs1 = new System.Windows.Forms.BindingSource(this.components);
+            this.bnTop_lblDate = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_lblTo = new System.Windows.Forms.ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)(this.sc1)).BeginInit();
             this.sc1.Panel2.SuspendLayout();
             this.sc1.SuspendLayout();
@@ -110,8 +110,7 @@
             this.sc1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sc1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.sc1.IsSplitterFixed = true;
-            this.sc1.Location = new System.Drawing.Point(0, 26);
-            this.sc1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sc1.Location = new System.Drawing.Point(0, 24);
             this.sc1.Name = "sc1";
             // 
             // sc1.Panel1
@@ -123,44 +122,21 @@
             // sc1.Panel2
             // 
             this.sc1.Panel2.Controls.Add(this.panel1);
-            this.sc1.Size = new System.Drawing.Size(1396, 893);
+            this.sc1.Size = new System.Drawing.Size(1047, 711);
             this.sc1.SplitterDistance = 160;
-            this.sc1.SplitterWidth = 5;
             this.sc1.TabIndex = 0;
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.dtpDate);
-            this.panel1.Controls.Add(this.lblDate);
             this.panel1.Controls.Add(this.bnBottom);
             this.panel1.Controls.Add(this.bnTop);
             this.panel1.Controls.Add(this.dgv1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1231, 893);
+            this.panel1.Size = new System.Drawing.Size(883, 711);
             this.panel1.TabIndex = 0;
             this.panel1.Visible = false;
-            // 
-            // dtpDate
-            // 
-            this.dtpDate.Location = new System.Drawing.Point(110, 5);
-            this.dtpDate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.dtpDate.Name = "dtpDate";
-            this.dtpDate.Size = new System.Drawing.Size(165, 25);
-            this.dtpDate.TabIndex = 23;
-            this.dtpDate.ValueChanged += new System.EventHandler(this.dtpDate_ValueChanged);
-            // 
-            // lblDate
-            // 
-            this.lblDate.AutoSize = true;
-            this.lblDate.Location = new System.Drawing.Point(2, 10);
-            this.lblDate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(97, 15);
-            this.lblDate.TabIndex = 22;
-            this.lblDate.Text = "计划开工日期";
             // 
             // bnBottom
             // 
@@ -187,14 +163,14 @@
             this.bnB_btnNext,
             this.bnB_btnLast,
             this.bnB_tss4});
-            this.bnBottom.Location = new System.Drawing.Point(0, 865);
+            this.bnBottom.Location = new System.Drawing.Point(0, 684);
             this.bnBottom.MoveFirstItem = null;
             this.bnBottom.MoveLastItem = null;
             this.bnBottom.MoveNextItem = null;
             this.bnBottom.MovePreviousItem = null;
             this.bnBottom.Name = "bnBottom";
             this.bnBottom.PositionItem = null;
-            this.bnBottom.Size = new System.Drawing.Size(1231, 28);
+            this.bnBottom.Size = new System.Drawing.Size(883, 27);
             this.bnBottom.TabIndex = 21;
             this.bnBottom.Text = "bnBottom";
             this.bnBottom.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnBottom_ItemClicked);
@@ -204,14 +180,14 @@
             this.bnB_cbxPageSize.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.bnB_cbxPageSize.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bnB_cbxPageSize.Name = "bnB_cbxPageSize";
-            this.bnB_cbxPageSize.Size = new System.Drawing.Size(105, 28);
+            this.bnB_cbxPageSize.Size = new System.Drawing.Size(80, 27);
             this.bnB_cbxPageSize.SelectedIndexChanged += new System.EventHandler(this.bnB_cbxPageSize_SelectedIndexChanged);
             // 
             // bnB_lblPageSize
             // 
             this.bnB_lblPageSize.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.bnB_lblPageSize.Name = "bnB_lblPageSize";
-            this.bnB_lblPageSize.Size = new System.Drawing.Size(69, 25);
+            this.bnB_lblPageSize.Size = new System.Drawing.Size(56, 24);
             this.bnB_lblPageSize.Text = "每页显示";
             this.bnB_lblPageSize.ToolTipText = "每页显示行数";
             // 
@@ -221,7 +197,7 @@
             this.bnB_btnFirst.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_first;
             this.bnB_btnFirst.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnB_btnFirst.Name = "bnB_btnFirst";
-            this.bnB_btnFirst.Size = new System.Drawing.Size(24, 25);
+            this.bnB_btnFirst.Size = new System.Drawing.Size(24, 24);
             this.bnB_btnFirst.Tag = "1";
             // 
             // bnB_btnPrevious
@@ -230,13 +206,13 @@
             this.bnB_btnPrevious.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_previous;
             this.bnB_btnPrevious.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnB_btnPrevious.Name = "bnB_btnPrevious";
-            this.bnB_btnPrevious.Size = new System.Drawing.Size(24, 25);
+            this.bnB_btnPrevious.Size = new System.Drawing.Size(24, 24);
             this.bnB_btnPrevious.Tag = "2";
             // 
             // bnB_tss1
             // 
             this.bnB_tss1.Name = "bnB_tss1";
-            this.bnB_tss1.Size = new System.Drawing.Size(6, 28);
+            this.bnB_tss1.Size = new System.Drawing.Size(6, 27);
             // 
             // bnB_btnGoto
             // 
@@ -244,7 +220,7 @@
             this.bnB_btnGoto.Image = global::ERPSupport.SupForm.Properties.Resources.control_repeat_blue;
             this.bnB_btnGoto.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnB_btnGoto.Name = "bnB_btnGoto";
-            this.bnB_btnGoto.Size = new System.Drawing.Size(24, 25);
+            this.bnB_btnGoto.Size = new System.Drawing.Size(24, 24);
             this.bnB_btnGoto.Tag = "3";
             this.bnB_btnGoto.Text = "跳到";
             this.bnB_btnGoto.ToolTipText = "跳到指定页";
@@ -252,41 +228,41 @@
             // bnB_lblThe
             // 
             this.bnB_lblThe.Name = "bnB_lblThe";
-            this.bnB_lblThe.Size = new System.Drawing.Size(24, 25);
+            this.bnB_lblThe.Size = new System.Drawing.Size(20, 24);
             this.bnB_lblThe.Text = "第";
             // 
             // bnB_txtCurrentPage
             // 
             this.bnB_txtCurrentPage.Name = "bnB_txtCurrentPage";
-            this.bnB_txtCurrentPage.Size = new System.Drawing.Size(52, 28);
+            this.bnB_txtCurrentPage.Size = new System.Drawing.Size(40, 27);
             // 
             // bnB_lblSeparate
             // 
             this.bnB_lblSeparate.Name = "bnB_lblSeparate";
-            this.bnB_lblSeparate.Size = new System.Drawing.Size(53, 25);
+            this.bnB_lblSeparate.Size = new System.Drawing.Size(45, 24);
             this.bnB_lblSeparate.Text = "页 / 共";
             // 
             // bnB_lblPageCount
             // 
             this.bnB_lblPageCount.Name = "bnB_lblPageCount";
-            this.bnB_lblPageCount.Size = new System.Drawing.Size(24, 25);
+            this.bnB_lblPageCount.Size = new System.Drawing.Size(20, 24);
             this.bnB_lblPageCount.Text = "页";
             // 
             // bnB_tss2
             // 
             this.bnB_tss2.Name = "bnB_tss2";
-            this.bnB_tss2.Size = new System.Drawing.Size(6, 28);
+            this.bnB_tss2.Size = new System.Drawing.Size(6, 27);
             // 
             // bnB_lblRecordCount
             // 
             this.bnB_lblRecordCount.Name = "bnB_lblRecordCount";
-            this.bnB_lblRecordCount.Size = new System.Drawing.Size(24, 25);
+            this.bnB_lblRecordCount.Size = new System.Drawing.Size(20, 24);
             this.bnB_lblRecordCount.Text = "行";
             // 
             // bnB_tss3
             // 
             this.bnB_tss3.Name = "bnB_tss3";
-            this.bnB_tss3.Size = new System.Drawing.Size(6, 28);
+            this.bnB_tss3.Size = new System.Drawing.Size(6, 27);
             // 
             // bnB_btnNext
             // 
@@ -294,7 +270,7 @@
             this.bnB_btnNext.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_next;
             this.bnB_btnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnB_btnNext.Name = "bnB_btnNext";
-            this.bnB_btnNext.Size = new System.Drawing.Size(24, 25);
+            this.bnB_btnNext.Size = new System.Drawing.Size(24, 24);
             this.bnB_btnNext.Tag = "4";
             // 
             // bnB_btnLast
@@ -303,22 +279,23 @@
             this.bnB_btnLast.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_last;
             this.bnB_btnLast.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnB_btnLast.Name = "bnB_btnLast";
-            this.bnB_btnLast.Size = new System.Drawing.Size(24, 25);
+            this.bnB_btnLast.Size = new System.Drawing.Size(24, 24);
             this.bnB_btnLast.Tag = "5";
             // 
             // bnB_tss4
             // 
             this.bnB_tss4.Name = "bnB_tss4";
-            this.bnB_tss4.Size = new System.Drawing.Size(6, 28);
+            this.bnB_tss4.Size = new System.Drawing.Size(6, 27);
             // 
             // bnTop
             // 
             this.bnTop.AddNewItem = null;
             this.bnTop.CountItem = null;
             this.bnTop.DeleteItem = null;
-            this.bnTop.Dock = System.Windows.Forms.DockStyle.None;
             this.bnTop.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.bnTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnTop_lblDate,
+            this.bnTop_lblTo,
             this.bnTop_btnFilter,
             this.bnTop_tss1,
             this.bnTop_btnCheck,
@@ -326,14 +303,14 @@
             this.bnTop_btnShowAll,
             this.bnTop_btnCommit,
             this.bnTop_btnUnLock});
-            this.bnTop.Location = new System.Drawing.Point(280, 0);
+            this.bnTop.Location = new System.Drawing.Point(0, 0);
             this.bnTop.MoveFirstItem = null;
             this.bnTop.MoveLastItem = null;
             this.bnTop.MoveNextItem = null;
             this.bnTop.MovePreviousItem = null;
             this.bnTop.Name = "bnTop";
             this.bnTop.PositionItem = null;
-            this.bnTop.Size = new System.Drawing.Size(396, 27);
+            this.bnTop.Size = new System.Drawing.Size(883, 27);
             this.bnTop.TabIndex = 20;
             this.bnTop.Text = "bnTop";
             this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
@@ -343,7 +320,7 @@
             this.bnTop_btnFilter.Image = global::ERPSupport.SupForm.Properties.Resources.add;
             this.bnTop_btnFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnFilter.Name = "bnTop_btnFilter";
-            this.bnTop_btnFilter.Size = new System.Drawing.Size(63, 24);
+            this.bnTop_btnFilter.Size = new System.Drawing.Size(56, 24);
             this.bnTop_btnFilter.Tag = "1";
             this.bnTop_btnFilter.Text = "筛选";
             this.bnTop_btnFilter.ToolTipText = "设置过滤条件";
@@ -358,7 +335,7 @@
             this.bnTop_btnCheck.Image = global::ERPSupport.SupForm.Properties.Resources.zootool;
             this.bnTop_btnCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnCheck.Name = "bnTop_btnCheck";
-            this.bnTop_btnCheck.Size = new System.Drawing.Size(63, 24);
+            this.bnTop_btnCheck.Size = new System.Drawing.Size(56, 24);
             this.bnTop_btnCheck.Tag = "2";
             this.bnTop_btnCheck.Text = "检查";
             this.bnTop_btnCheck.ToolTipText = "检查物料是否已经设置默认调出仓库";
@@ -368,7 +345,7 @@
             this.bnTop_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
             this.bnTop_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnSearch.Name = "bnTop_btnSearch";
-            this.bnTop_btnSearch.Size = new System.Drawing.Size(63, 24);
+            this.bnTop_btnSearch.Size = new System.Drawing.Size(56, 24);
             this.bnTop_btnSearch.Tag = "3";
             this.bnTop_btnSearch.Text = "查询";
             this.bnTop_btnSearch.ToolTipText = "查询数据";
@@ -378,7 +355,7 @@
             this.bnTop_btnShowAll.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
             this.bnTop_btnShowAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnShowAll.Name = "bnTop_btnShowAll";
-            this.bnTop_btnShowAll.Size = new System.Drawing.Size(63, 24);
+            this.bnTop_btnShowAll.Size = new System.Drawing.Size(56, 24);
             this.bnTop_btnShowAll.Tag = "4";
             this.bnTop_btnShowAll.Text = "重置";
             this.bnTop_btnShowAll.ToolTipText = "清空列筛选";
@@ -388,16 +365,16 @@
             this.bnTop_btnCommit.Image = global::ERPSupport.SupForm.Properties.Resources.accept;
             this.bnTop_btnCommit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnCommit.Name = "bnTop_btnCommit";
-            this.bnTop_btnCommit.Size = new System.Drawing.Size(63, 24);
+            this.bnTop_btnCommit.Size = new System.Drawing.Size(56, 24);
             this.bnTop_btnCommit.Tag = "5";
             this.bnTop_btnCommit.Text = "提交";
             // 
             // bnTop_btnUnLock
             // 
-            this.bnTop_btnUnLock.Image = global::ERPSupport.SupForm.Properties.Resources.change_password;
+            this.bnTop_btnUnLock.Image = global::ERPSupport.SupForm.Properties.Resources.key;
             this.bnTop_btnUnLock.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnUnLock.Name = "bnTop_btnUnLock";
-            this.bnTop_btnUnLock.Size = new System.Drawing.Size(63, 24);
+            this.bnTop_btnUnLock.Size = new System.Drawing.Size(56, 24);
             this.bnTop_btnUnLock.Tag = "6";
             this.bnTop_btnUnLock.Text = "解锁";
             this.bnTop_btnUnLock.ToolTipText = "库存解锁";
@@ -412,13 +389,13 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgv1.Location = new System.Drawing.Point(3, 35);
-            this.dgv1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.dgv1.Location = new System.Drawing.Point(2, 29);
+            this.dgv1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.dgv1.Name = "dgv1";
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dgv1.RowTemplate.Height = 27;
             this.dgv1.ShowEditingIcon = false;
-            this.dgv1.Size = new System.Drawing.Size(1226, 825);
+            this.dgv1.Size = new System.Drawing.Size(880, 656);
             this.dgv1.TabIndex = 18;
             this.dgv1.RowHeadersWidthChanged += new System.EventHandler(this.dgv1_RowHeadersWidthChanged);
             this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
@@ -435,8 +412,7 @@
             this.tsmiHelp});
             this.msMain.Location = new System.Drawing.Point(0, 0);
             this.msMain.Name = "msMain";
-            this.msMain.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.msMain.Size = new System.Drawing.Size(1396, 26);
+            this.msMain.Size = new System.Drawing.Size(1047, 24);
             this.msMain.TabIndex = 1;
             this.msMain.Text = "主菜单";
             // 
@@ -449,39 +425,39 @@
             this.tsmiFile_L,
             this.tsmiFile_Exit});
             this.tsmiFile.Name = "tsmiFile";
-            this.tsmiFile.Size = new System.Drawing.Size(83, 22);
+            this.tsmiFile.Size = new System.Drawing.Size(68, 20);
             this.tsmiFile.Text = "文件(&F)";
             // 
             // tsmiFile_New
             // 
             this.tsmiFile_New.Enabled = false;
             this.tsmiFile_New.Name = "tsmiFile_New";
-            this.tsmiFile_New.Size = new System.Drawing.Size(217, 26);
+            this.tsmiFile_New.Size = new System.Drawing.Size(179, 22);
             this.tsmiFile_New.Text = "新建模板(&N)";
             // 
             // tsmiFile_Open
             // 
             this.tsmiFile_Open.Enabled = false;
             this.tsmiFile_Open.Name = "tsmiFile_Open";
-            this.tsmiFile_Open.Size = new System.Drawing.Size(217, 26);
+            this.tsmiFile_Open.Size = new System.Drawing.Size(179, 22);
             this.tsmiFile_Open.Text = "打开模板(&O)";
             // 
             // tsmiFile_tss1
             // 
             this.tsmiFile_tss1.Name = "tsmiFile_tss1";
-            this.tsmiFile_tss1.Size = new System.Drawing.Size(214, 6);
+            this.tsmiFile_tss1.Size = new System.Drawing.Size(176, 6);
             // 
             // tsmiFile_L
             // 
             this.tsmiFile_L.Name = "tsmiFile_L";
-            this.tsmiFile_L.Size = new System.Drawing.Size(217, 26);
+            this.tsmiFile_L.Size = new System.Drawing.Size(179, 22);
             this.tsmiFile_L.Text = "注销(&L)";
             this.tsmiFile_L.Click += new System.EventHandler(this.tsmiFile_L_Click);
             // 
             // tsmiFile_Exit
             // 
             this.tsmiFile_Exit.Name = "tsmiFile_Exit";
-            this.tsmiFile_Exit.Size = new System.Drawing.Size(217, 26);
+            this.tsmiFile_Exit.Size = new System.Drawing.Size(179, 22);
             this.tsmiFile_Exit.Text = "退出(&E)  ALT+F4";
             this.tsmiFile_Exit.Click += new System.EventHandler(this.tsmiFile_Exit_Click);
             // 
@@ -495,27 +471,27 @@
             this.tsmiTool_tss2,
             this.tsmiTool_Timer});
             this.tsmiTool.Name = "tsmiTool";
-            this.tsmiTool.Size = new System.Drawing.Size(83, 22);
+            this.tsmiTool.Size = new System.Drawing.Size(68, 20);
             this.tsmiTool.Text = "工具(&T)";
             // 
             // tsmiTool_Config
             // 
             this.tsmiTool_Config.Name = "tsmiTool_Config";
-            this.tsmiTool_Config.Size = new System.Drawing.Size(181, 26);
+            this.tsmiTool_Config.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Config.Text = "系统配置(&C)";
             this.tsmiTool_Config.Click += new System.EventHandler(this.tsmiTool_Config_Click);
             // 
             // tsmiTool_Parameter
             // 
             this.tsmiTool_Parameter.Name = "tsmiTool_Parameter";
-            this.tsmiTool_Parameter.Size = new System.Drawing.Size(181, 26);
+            this.tsmiTool_Parameter.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Parameter.Text = "参数(&P)";
             this.tsmiTool_Parameter.Click += new System.EventHandler(this.tsmiTool_Parameter_Click);
             // 
             // tsmiTool_tss1
             // 
             this.tsmiTool_tss1.Name = "tsmiTool_tss1";
-            this.tsmiTool_tss1.Size = new System.Drawing.Size(178, 6);
+            this.tsmiTool_tss1.Size = new System.Drawing.Size(148, 6);
             // 
             // tsmiTool_Occupy
             // 
@@ -527,58 +503,58 @@
             this.tssTool_Occupy_1,
             this.tsmiTool_Occupy_LockPickMtl});
             this.tsmiTool_Occupy.Name = "tsmiTool_Occupy";
-            this.tsmiTool_Occupy.Size = new System.Drawing.Size(181, 26);
+            this.tsmiTool_Occupy.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Occupy.Text = "占用解除(&O)";
             // 
             // smiTool_Occupy_PickMtl
             // 
             this.smiTool_Occupy_PickMtl.Name = "smiTool_Occupy_PickMtl";
-            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(154, 26);
+            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(130, 22);
             this.smiTool_Occupy_PickMtl.Text = "倒冲领料";
             this.smiTool_Occupy_PickMtl.Click += new System.EventHandler(this.smiTool_Occupy_PickMtl_Click);
             // 
             // smiTool_Occupy_Trans
             // 
             this.smiTool_Occupy_Trans.Name = "smiTool_Occupy_Trans";
-            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(154, 26);
+            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(130, 22);
             this.smiTool_Occupy_Trans.Text = "调拨";
             this.smiTool_Occupy_Trans.Click += new System.EventHandler(this.smiTool_Occupy_Trans_Click);
             // 
             // tsmiTool_Occupy_LockStock
             // 
             this.tsmiTool_Occupy_LockStock.Name = "tsmiTool_Occupy_LockStock";
-            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(154, 26);
+            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_LockStock.Text = "锁库";
             this.tsmiTool_Occupy_LockStock.Click += new System.EventHandler(this.tsmiTool_Occupy_LockStock_Click);
             // 
             // tsmiTool_Occupy_OrderRun
             // 
             this.tsmiTool_Occupy_OrderRun.Name = "tsmiTool_Occupy_OrderRun";
-            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(154, 26);
+            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_OrderRun.Text = "订单运算";
             this.tsmiTool_Occupy_OrderRun.Click += new System.EventHandler(this.tsmiTool_Occupy_OrderRun_Click);
             // 
             // tssTool_Occupy_1
             // 
             this.tssTool_Occupy_1.Name = "tssTool_Occupy_1";
-            this.tssTool_Occupy_1.Size = new System.Drawing.Size(151, 6);
+            this.tssTool_Occupy_1.Size = new System.Drawing.Size(127, 6);
             // 
             // tsmiTool_Occupy_LockPickMtl
             // 
             this.tsmiTool_Occupy_LockPickMtl.Name = "tsmiTool_Occupy_LockPickMtl";
-            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(154, 26);
+            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_LockPickMtl.Text = "自动领料";
             this.tsmiTool_Occupy_LockPickMtl.Click += new System.EventHandler(this.tsmiTool_Occupy_LockPickMtl_Click);
             // 
             // tsmiTool_tss2
             // 
             this.tsmiTool_tss2.Name = "tsmiTool_tss2";
-            this.tsmiTool_tss2.Size = new System.Drawing.Size(178, 6);
+            this.tsmiTool_tss2.Size = new System.Drawing.Size(148, 6);
             // 
             // tsmiTool_Timer
             // 
             this.tsmiTool_Timer.Name = "tsmiTool_Timer";
-            this.tsmiTool_Timer.Size = new System.Drawing.Size(181, 26);
+            this.tsmiTool_Timer.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Timer.Text = "定时器(&T)";
             this.tsmiTool_Timer.Click += new System.EventHandler(this.tsmiTool_Timer_Click);
             // 
@@ -587,13 +563,13 @@
             this.tsmiPro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiPro_Dir});
             this.tsmiPro.Name = "tsmiPro";
-            this.tsmiPro.Size = new System.Drawing.Size(83, 22);
+            this.tsmiPro.Size = new System.Drawing.Size(68, 20);
             this.tsmiPro.Text = "项目(&P)";
             // 
             // tsmiPro_Dir
             // 
             this.tsmiPro_Dir.Name = "tsmiPro_Dir";
-            this.tsmiPro_Dir.Size = new System.Drawing.Size(199, 26);
+            this.tsmiPro_Dir.Size = new System.Drawing.Size(165, 22);
             this.tsmiPro_Dir.Text = "调拨单设置(&D)";
             this.tsmiPro_Dir.Click += new System.EventHandler(this.tsmiPro_Dir_Click);
             // 
@@ -606,39 +582,39 @@
             this.tsmiHelp_Version,
             this.tsmiHelp_About});
             this.tsmiHelp.Name = "tsmiHelp";
-            this.tsmiHelp.Size = new System.Drawing.Size(83, 22);
+            this.tsmiHelp.Size = new System.Drawing.Size(68, 20);
             this.tsmiHelp.Text = "帮助(&H)";
             // 
             // tsmiHelp_Regedit
             // 
             this.tsmiHelp_Regedit.Name = "tsmiHelp_Regedit";
-            this.tsmiHelp_Regedit.Size = new System.Drawing.Size(217, 26);
+            this.tsmiHelp_Regedit.Size = new System.Drawing.Size(179, 22);
             this.tsmiHelp_Regedit.Text = "注册(&R)";
             this.tsmiHelp_Regedit.Click += new System.EventHandler(this.tsmiHelp_Regedit_Click);
             // 
             // tsmiHelp_tss1
             // 
             this.tsmiHelp_tss1.Name = "tsmiHelp_tss1";
-            this.tsmiHelp_tss1.Size = new System.Drawing.Size(214, 6);
+            this.tsmiHelp_tss1.Size = new System.Drawing.Size(176, 6);
             // 
             // tsmiHelp_View
             // 
             this.tsmiHelp_View.Name = "tsmiHelp_View";
-            this.tsmiHelp_View.Size = new System.Drawing.Size(217, 26);
+            this.tsmiHelp_View.Size = new System.Drawing.Size(179, 22);
             this.tsmiHelp_View.Text = "查看帮助(&L)";
             this.tsmiHelp_View.Click += new System.EventHandler(this.tsmiHelp_View_Click);
             // 
             // tsmiHelp_Version
             // 
             this.tsmiHelp_Version.Name = "tsmiHelp_Version";
-            this.tsmiHelp_Version.Size = new System.Drawing.Size(217, 26);
+            this.tsmiHelp_Version.Size = new System.Drawing.Size(179, 22);
             this.tsmiHelp_Version.Text = "版本号(&V)";
             this.tsmiHelp_Version.Click += new System.EventHandler(this.tsmiHelp_Version_Click);
             // 
             // tsmiHelp_About
             // 
             this.tsmiHelp_About.Name = "tsmiHelp_About";
-            this.tsmiHelp_About.Size = new System.Drawing.Size(217, 26);
+            this.tsmiHelp_About.Size = new System.Drawing.Size(179, 22);
             this.tsmiHelp_About.Text = "关于辅助系统(&A)";
             this.tsmiHelp_About.Click += new System.EventHandler(this.tsmiHelp_About_Click);
             // 
@@ -646,17 +622,28 @@
             // 
             this.tSumSecond.Interval = 1000;
             // 
+            // bnTop_lblDate
+            // 
+            this.bnTop_lblDate.Name = "bnTop_lblDate";
+            this.bnTop_lblDate.Size = new System.Drawing.Size(92, 24);
+            this.bnTop_lblDate.Text = "计划开工日期：";
+            // 
+            // bnTop_lblTo
+            // 
+            this.bnTop_lblTo.Name = "bnTop_lblTo";
+            this.bnTop_lblTo.Size = new System.Drawing.Size(13, 24);
+            this.bnTop_lblTo.Text = "-";
+            // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1396, 919);
+            this.ClientSize = new System.Drawing.Size(1047, 735);
             this.Controls.Add(this.sc1);
             this.Controls.Add(this.msMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.msMain;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.MinimumSize = new System.Drawing.Size(1358, 946);
+            this.MinimumSize = new System.Drawing.Size(1022, 764);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "ERP辅助系统";
@@ -736,8 +723,6 @@
         private System.Windows.Forms.ToolStripLabel bnB_lblRecordCount;
         private System.Windows.Forms.ToolStripSeparator bnB_tss3;
         private System.Windows.Forms.ToolStripButton bnB_btnGoto;
-        private System.Windows.Forms.DateTimePicker dtpDate;
-        private System.Windows.Forms.Label lblDate;
         private System.Windows.Forms.BindingSource bs1;
         private System.Windows.Forms.ToolStripLabel bnB_lblSeparate;
         private System.Windows.Forms.ToolStripLabel bnB_lblThe;
@@ -747,5 +732,7 @@
         private System.Windows.Forms.ToolStripButton bnB_btnPrevious;
         private System.Windows.Forms.ToolStripButton bnB_btnNext;
         private System.Windows.Forms.ToolStripButton bnB_btnLast;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblDate;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblTo;
     }
 }

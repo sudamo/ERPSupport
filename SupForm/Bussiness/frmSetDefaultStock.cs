@@ -14,10 +14,6 @@ namespace ERPSupport.SupForm.Bussiness
         /// 计划开工日期
         /// </summary>
         private string _PlanStartDate;
-        /// <summary>
-        /// 
-        /// </summary>
-        private DataGridViewComboBoxColumn _ComboBoxCol;
 
         /// <summary>
         /// 构造函数
@@ -40,11 +36,10 @@ namespace ERPSupport.SupForm.Bussiness
         {
             dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
 
-            _ComboBoxCol = new DataGridViewComboBoxColumn();
-            _ComboBoxCol.HeaderText = "仓库";
-            _ComboBoxCol.AutoComplete = true;
+            DataGridViewComboBoxColumn _ComboBoxCol = new DataGridViewComboBoxColumn();
+            _ComboBoxCol.HeaderText = "默认仓库";
             _ComboBoxCol.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            _ComboBoxCol.DataSource = CommFunction.GetStock(-1, null);
+            _ComboBoxCol.DataSource = CommFunction.GetStock();
             _ComboBoxCol.DisplayMember = "FName";
             _ComboBoxCol.ValueMember = "FValue";
 
@@ -114,7 +109,9 @@ namespace ERPSupport.SupForm.Bussiness
                 }
             }
 
-            dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
+            //dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
+            MessageBox.Show("保存成功");
+            Close();
         }
 
         /// <summary>

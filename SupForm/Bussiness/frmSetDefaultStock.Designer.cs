@@ -92,7 +92,7 @@
             // 
             // bnTop_btnSave
             // 
-            this.bnTop_btnSave.Image = global::ERPSupport.SupForm.Properties.Resources.save_as;
+            this.bnTop_btnSave.Image = global::ERPSupport.SupForm.Properties.Resources.save;
             this.bnTop_btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnSave.Name = "bnTop_btnSave";
             this.bnTop_btnSave.Size = new System.Drawing.Size(52, 22);

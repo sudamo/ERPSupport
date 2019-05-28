@@ -488,7 +488,7 @@ namespace ERPSupport.SupForm.Bussiness
 
                 entry.FilterValue = new FilterValue(((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1).ToString(), false)[0]).Text.Trim(), ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1).ToString(), false)[0]).Value, ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1).ToString(), false)[0]).SelectedIndex, ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1).ToString(), false)[0]).Checked);
 
-                if ((entry.Field > 0 && entry.Compare > 0) || (entry.Field == 9 || entry.Field == 10))//复选框可以没有比较逻辑
+                if ((entry.Field > 0 && entry.Compare > 0) || entry.Field > 10)//复选框可以没有比较逻辑
                 {
                     iLeft += entry.ParenthesesLeft;
                     iRight += entry.ParenthesesRight;
@@ -887,76 +887,10 @@ namespace ERPSupport.SupForm.Bussiness
         #endregion
 
         /// <summary>
-        /// 双击方案填充过滤条件
+        /// 单击方案填充过滤条件
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void dgv1_DoubleClick(object sender, EventArgs e)
-        {
-            //DataTable dtContent = new DataTable();
-            //_FilterName = dgv1.CurrentRow.Cells[0].Value.ToString();//获取方案名
-
-            //dtContent = CommonFunction.GetSolution(_FilterName);
-            //int iRows = int.Parse(dtContent.Rows[0]["SROWS"].ToString());
-            //string sContent = dtContent.Rows[0]["SCONTENT"].ToString(), tmp;
-
-            //if (iRows == 0) return;//没有过滤条件
-
-            //for (int i = 0; i < 15; i++)
-            //{
-            //    if (i < iRows)//根据方案填充过滤条件
-            //    {
-            //        tmp = sContent.Substring(1, sContent.IndexOf("]") - 1);
-
-            //        //左括号
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLeft" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, 1));
-            //        tmp = tmp.Substring(2);
-            //        //字段
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxField" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, tmp.IndexOf("|")));
-            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
-            //        //比较
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, tmp.IndexOf("|")));
-            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
-            //        //值
-            //        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1), false)[0]).Value = DateTime.Parse(tmp.Substring(0, tmp.IndexOf("|")));
-            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
-            //        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1), false)[0]).Text = tmp.Substring(0, tmp.IndexOf("|"));
-            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, tmp.IndexOf("|")));
-            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
-            //        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1), false)[0]).Checked = tmp.Substring(0, tmp.IndexOf("|")) == "1" ? true : false;
-            //        tmp = tmp.Substring(tmp.IndexOf("|") + 1);
-            //        //右括号
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxRight" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp.Substring(0, 1));
-            //        tmp = tmp.Substring(2);
-            //        //逻辑
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLogic" + (i + 1), false)[0]).SelectedIndex = int.Parse(tmp);
-
-            //        sContent = sContent.Substring(sContent.IndexOf("]") + 1);
-            //    }
-            //    else//删除多余的过滤条件
-            //    {
-            //        //左括号
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLeft" + (i + 1), false)[0]).SelectedIndex = 0;
-            //        //字段
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxField" + (i + 1), false)[0]).SelectedIndex = 0;
-            //        //比较
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + (i + 1), false)[0]).SelectedIndex = 0;
-            //        //值
-            //        ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1), false)[0]).Value = DateTime.Now;
-            //        ((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1), false)[0]).Text = string.Empty;
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1), false)[0]).SelectedIndex = 0;
-            //        ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1), false)[0]).Checked = false;
-            //        //右括号
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxRight" + (i + 1), false)[0]).SelectedIndex = 0;
-            //        //逻辑
-            //        ((ComboBox)sc1.Panel2.Controls.Find("cbxLogic" + (i + 1), false)[0]).SelectedIndex = 0;
-            //    }
-            //}
-
-            //Text = "过滤条件 - " + _FilterName;
-        }
-
         private void dgv1_Click(object sender, EventArgs e)
         {
             if (dgv1 == null || dgv1.Rows.Count == 0)

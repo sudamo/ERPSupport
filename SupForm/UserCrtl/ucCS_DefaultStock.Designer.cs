@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgv1 = new System.Windows.Forms.DataGridView();
             this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnTop_lblNumber = new System.Windows.Forms.ToolStripLabel();
@@ -51,8 +51,8 @@
             this.dgv1.AllowUserToDeleteRows = false;
             this.dgv1.AllowUserToResizeColumns = false;
             this.dgv1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
-            this.dgv1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
+            this.dgv1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             this.dgv1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -127,7 +127,7 @@
             // 
             // bnTop_btnSave
             // 
-            this.bnTop_btnSave.Image = global::ERPSupport.SupForm.Properties.Resources.save_as;
+            this.bnTop_btnSave.Image = global::ERPSupport.SupForm.Properties.Resources.save;
             this.bnTop_btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnSave.Name = "bnTop_btnSave";
             this.bnTop_btnSave.Size = new System.Drawing.Size(52, 22);
@@ -136,7 +136,7 @@
             // 
             // bnTop_btnClear
             // 
-            this.bnTop_btnClear.Image = global::ERPSupport.SupForm.Properties.Resources.comment_delete;
+            this.bnTop_btnClear.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
             this.bnTop_btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnClear.Name = "bnTop_btnClear";
             this.bnTop_btnClear.Size = new System.Drawing.Size(100, 22);

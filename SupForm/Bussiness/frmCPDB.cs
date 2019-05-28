@@ -117,7 +117,7 @@ namespace ERPSupport.SupForm.Bussiness
                     bnTop_cbxDep.ComboBox.SelectedIndex = 3;
                 }
             }
-            dtComboBox = CommFunction.GetStock(3, null);
+            dtComboBox = CommFunction.GetStock(3);
             if (dtComboBox != null && dtComboBox.Rows.Count != 0)
             {
                 bnTop_cbxInStock.ComboBox.DataSource = dtComboBox;

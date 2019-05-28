@@ -9,11 +9,10 @@ namespace ERPSupport.SupForm.UserCrtl
     /// </summary>
     public partial class ucCS_DefaultStock : UserControl
     {
-        private int _SearchCount;
         /// <summary>
-        /// 
+        /// 查询次数
         /// </summary>
-        private DataGridViewComboBoxColumn _ComboBoxCol;
+        private int _SearchCount;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -69,11 +68,10 @@ namespace ERPSupport.SupForm.UserCrtl
 
             if (dgv1.Columns.Count <= 6)
             {
-                _ComboBoxCol = new DataGridViewComboBoxColumn();
+                DataGridViewComboBoxColumn _ComboBoxCol = new DataGridViewComboBoxColumn();
                 _ComboBoxCol.HeaderText = "修改仓库";
-                _ComboBoxCol.AutoComplete = true;
                 _ComboBoxCol.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-                _ComboBoxCol.DataSource = CommFunction.GetStock(-1, null);
+                _ComboBoxCol.DataSource = CommFunction.GetStock();
                 _ComboBoxCol.DisplayMember = "FName";
                 _ComboBoxCol.ValueMember = "FValue";
 
@@ -92,7 +90,7 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 if (dgv1.Rows[i].Selected)
                 {
-                    if (strStockValue == string.Empty)
+                    if (strStockValue == string.Empty && dgv1.Rows[i].Cells[iCol].Value != null)
                         strStockValue = dgv1.Rows[i].Cells[iCol].Value.ToString();
 
                     dgv1.Rows[i].Cells[iCol].Value = strStockValue; ;

@@ -128,7 +128,7 @@ namespace ERPSupport.SupForm
         /// </summary>
         private WinMessager _msg;
         /// <summary>
-        /// Regex
+        /// 正则表达式判断
         /// </summary>
         private Regex _reg;
         /// <summary>
@@ -139,6 +139,14 @@ namespace ERPSupport.SupForm
         /// 表体复选框
         /// </summary>
         private DataGridViewCheckBoxColumn _col;
+        /// <summary>
+        /// ToolStrip日期从
+        /// </summary>
+        private ToolStripDateTimePicker _datefrom;
+        /// <summary>
+        /// ToolStrip日期到
+        /// </summary>
+        private ToolStripDateTimePicker _dateto;
 
         /// <summary>
         /// 构造函数
@@ -204,6 +212,36 @@ namespace ERPSupport.SupForm
             _chb.Size = new Size(16, 16);
             _chb.CheckedChanged += new EventHandler(ckBox_CheckedChanged);
             dgv1.Controls.Add(_chb);
+
+            //-----
+            _datefrom = new ToolStripDateTimePicker();
+            _datefrom.Size = new Size(120, 21);
+            
+            _dateto = new ToolStripDateTimePicker();
+            _dateto.Size = new Size(120, 21);
+
+            bnTop.Items.Add(_datefrom);
+            bnTop.Items.Add(_dateto);
+
+            //重新排列Items
+            List<ToolStripItem> list = new List<ToolStripItem>();
+            list.Add(bnTop.Items[0]);
+            list.Add(bnTop.Items[9]);
+            list.Add(bnTop.Items[1]);
+            list.Add(bnTop.Items[10]);
+            list.Add(bnTop.Items[2]);
+            list.Add(bnTop.Items[3]);
+            list.Add(bnTop.Items[4]);
+            list.Add(bnTop.Items[5]);
+            list.Add(bnTop.Items[6]);
+            list.Add(bnTop.Items[7]);
+            list.Add(bnTop.Items[8]);
+
+            bnTop.Items.Clear();
+            foreach (ToolStripItem item in list)
+            {
+                bnTop.Items.Add(item);
+            }
 
             //-----
             GlobalParameter.LocalInf = new LocalInfo(CommFunction.GetLocalIP(), CommFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);//配置本地信息
@@ -618,6 +656,7 @@ namespace ERPSupport.SupForm
             {
                 bnTop_btnCommit.Text = "领料";
                 bnTop_btnCommit.Enabled = true;
+                bnTop_btnCommit.Image = Properties.Resources.accept;
 
                 bnTop_btnCheck.Visible = false;
                 bnTop_btnSearch.Text = "查找";
@@ -625,27 +664,31 @@ namespace ERPSupport.SupForm
                 bnTop_btnFilter.Visible = false;
                 bnTop_btnUnLock.Visible = false;
 
-                lblDate.Text = "日期";
-                lblDate.Visible = true;
-                lblDate.Location = new Point(51, 10);
-                dtpDate.Visible = true;
-
-                bnTop.Location = new Point(210, 0);
+                bnTop_lblDate.Text = "日期:";
+                bnTop_lblDate.Visible = true;
+                bnTop_lblTo.Visible = true;
+                _datefrom.Visible = true;
+                _datefrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                _dateto.Visible = true;
+                _dateto.Text = DateTime.Now.ToString("yyyy-MM-dd");
             }
             else if (_FormId == FormID.PRD_PPBOM)
             {
                 bnTop_btnCommit.Text = "材料调拨";
                 bnTop_btnCommit.Enabled = true;
+                bnTop_btnCommit.Image = Properties.Resources.accept;
 
                 bnTop_btnCheck.Visible = true;
                 bnTop_btnSearch.Text = "汇总";
                 bnTop_btnSearch.Enabled = false;
                 bnTop_btnFilter.Visible = false;
 
-                lblDate.Text = "计划开工日期";
-                lblDate.Visible = true;
-                lblDate.Location = new Point(2, 10);
-                dtpDate.Visible = true;
+                bnTop_lblDate.Text = "计划开工日期:";
+                bnTop_lblDate.Visible = true;
+                bnTop_lblTo.Visible = false;
+                _datefrom.Visible = true;
+                _datefrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                _dateto.Visible = false;
 
                 bnTop.Location = new Point(210, 0);
 
@@ -665,6 +708,7 @@ namespace ERPSupport.SupForm
             {
                 bnTop_btnCommit.Text = "锁库";
                 bnTop_btnCommit.Enabled = true;
+                bnTop_btnCommit.Image = Properties.Resources._lock;
 
                 bnTop_btnCheck.Visible = false;
                 bnTop_btnSearch.Text = "查找";
@@ -673,10 +717,12 @@ namespace ERPSupport.SupForm
                 bnTop_btnUnLock.Visible = true;
                 bnTop_btnUnLock.Text = "解锁";
                 bnTop_btnUnLock.ToolTipText = "库存解锁";
-                bnTop_btnUnLock.Image = Properties.Resources.change_password;
+                bnTop_btnUnLock.Image = Properties.Resources.key;
 
-                lblDate.Visible = false;
-                dtpDate.Visible = false;
+                bnTop_lblDate.Visible = false;
+                bnTop_lblTo.Visible = false;
+                _datefrom.Visible = false;
+                _dateto.Visible = false;
 
                 bnTop.Location = new Point(2, 0);
             }
@@ -684,6 +730,7 @@ namespace ERPSupport.SupForm
             {
                 bnTop_btnCommit.Text = "订单运算";
                 bnTop_btnCommit.Enabled = true;
+                bnTop_btnCommit.Image = Properties.Resources.accept;
 
                 bnTop_btnCheck.Visible = false;
                 bnTop_btnSearch.Text = "查找";
@@ -691,10 +738,10 @@ namespace ERPSupport.SupForm
                 bnTop_btnFilter.Visible = true;
                 bnTop_btnUnLock.Visible = false;
 
-                lblDate.Visible = false;
-                dtpDate.Visible = false;
-
-                bnTop.Location = new Point(2, 0);
+                bnTop_lblDate.Visible = false;
+                bnTop_lblTo.Visible = false;
+                _datefrom.Visible = false;
+                _dateto.Visible = false;
             }
         }
         #endregion
@@ -710,9 +757,9 @@ namespace ERPSupport.SupForm
                 string strFilter = string.Empty;
 
                 if (_FormId == FormID.PRD_INSTOCK)
-                    strFilter += "TO_CHAR(A.FDATE,'yyyy-mm-dd') = '" + dtpDate.Value.ToString("yyyy-MM-dd") + "' AND";
+                    strFilter += "TO_CHAR(A.FDATE,'yyyy-mm-dd') BETWEEN '" + _datefrom.Value.ToString("yyyy-MM-dd") + "' AND '" + _dateto.Value.ToString("yyyy-MM-dd") + "' AND";
                 else if (_FormId == FormID.PRD_PPBOM)
-                    strFilter += "TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + dtpDate.Value.ToString("yyyy-MM-dd") + "' AND";
+                    strFilter += "TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + _datefrom.Value.ToString("yyyy-MM-dd") + "' AND";
                 else if (_ListFilter != null && _ListFilter.Count > 0)
                     strFilter += "(" + GetFilter() + ") AND ";
                 else
@@ -807,7 +854,7 @@ namespace ERPSupport.SupForm
         {
             dgv1.DataSource = null;
 
-            if (PrdAllocation.SetDefaultStock(dtpDate.Value))
+            if (PrdAllocation.SetDefaultStock(_datefrom.Value))
             {
                 bnTop_btnSearch.Enabled = true;
                 MessageBox.Show("所有物料已经设置默认仓库，可以做调拨单！");
@@ -816,7 +863,7 @@ namespace ERPSupport.SupForm
             else
             {
                 bnTop_btnSearch.Enabled = false;
-                frmSetDefaultStock frmSS = new frmSetDefaultStock(dtpDate.Value.ToString("yyyy-MM-dd"));
+                frmSetDefaultStock frmSS = new frmSetDefaultStock(_datefrom.Value.ToString("yyyy-MM-dd"));
                 frmSS.ShowDialog();
             }
         }
@@ -1498,7 +1545,7 @@ namespace ERPSupport.SupForm
                 lstOutStock = new List<string>();
 
                 //获取调拨单数据
-                dt = PrdAllocation.GetTrans(dtpDate.Value.ToString("yyyy-MM-dd"), list[i]);
+                dt = PrdAllocation.GetTrans(_datefrom.Value.ToString("yyyy-MM-dd"), list[i]);
 
                 if (dt.Rows.Count == 0)
                     continue;
@@ -1530,7 +1577,7 @@ namespace ERPSupport.SupForm
                     if (dt2.Rows.Count > 0)
                     {
                         //生成单据
-                        tmp = PrdAllocation.TransferDir(dt2, dtpDate.Value);
+                        tmp = PrdAllocation.TransferDir(dt2, _datefrom.Value);
 
                         if (tmp != "")
                             strBillNos += "[" + tmp + "]";
@@ -1540,7 +1587,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //更新【已经生成调拨单】状态
-                PrdAllocation.UpdateDirFields(dtpDate.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
+                PrdAllocation.UpdateDirFields(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
 
                 //控制进度条
                 if (_Worker.CancellationPending)
@@ -1586,7 +1633,7 @@ namespace ERPSupport.SupForm
             List<string> lstDep;//领料部门List
             List<string> lstOutStock;//调出仓编码List
             List<string> lstType;//调拨类型
-            DataTable dt = PrdAllocation.GetTrans2(dtpDate.Value.ToString("yyyy-MM-dd"));
+            DataTable dt = PrdAllocation.GetTrans2(_datefrom.Value.ToString("yyyy-MM-dd"));
             DataTable dtDep = CommFunction.GetPickMtlDepartment();
 
             if (dtDep == null || dtDep.Rows.Count == 0 || dt == null || dt.Rows.Count == 0)
@@ -1639,7 +1686,7 @@ namespace ERPSupport.SupForm
 
                                 if (dt_4.Rows.Count > 0)
                                 {
-                                    tmp = PrdAllocation.TransferDir(dt_4, dtpDate.Value.ToString("yyyy-MM-dd"));
+                                    tmp = PrdAllocation.TransferDir(dt_4, _datefrom.Value.ToString("yyyy-MM-dd"));
                                     if (tmp != "")
                                         strBillNos += "[" + tmp + "]";
                                 }
@@ -1663,7 +1710,7 @@ namespace ERPSupport.SupForm
 
             if (strBillNos != "")
             {
-                PrdAllocation.UpdateDirFields2(dtpDate.Value.ToString("yyyy-MM-dd"), new List<string>());//更新【已经生成调拨单】状态
+                PrdAllocation.UpdateDirFields2(_datefrom.Value.ToString("yyyy-MM-dd"), new List<string>());//更新【已经生成调拨单】状态
                 MessageBox.Show("直接调拨单：" + strBillNos);
             }
             else
@@ -2508,6 +2555,9 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
+            if (e.ClickedItem.Tag == null)
+                return;
+
             switch (e.ClickedItem.Tag.ToString())
             {
                 case "1":

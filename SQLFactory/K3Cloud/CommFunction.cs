@@ -241,12 +241,12 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型</param>
         /// <param name="pUserOrgId">使用组织</param>
         /// <returns></returns>
-        public static DataTable GetStock(int pType, int? pUserOrgId)
+        public static DataTable GetStock(int pType = -1, int pUserOrgId = 100508)
         {
             switch (pType)
             {
                 case 0:
-                    _SQL = @"SELECT SK.FNUMBER FVALUE, SKL.FNAME
+                    _SQL = @"SELECT SK.FNUMBER FVALUE,SKL.FNAME
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
@@ -277,12 +277,12 @@ namespace ERPSupport.SQL.K3Cloud
                     ORDER BY FVALUE";
                     break;
                 default:
-                    _SQL = @"SELECT SK.FNUMBER FVALUE, SKL.FNAME
+                    _SQL = @"SELECT SK.FNUMBER FValue,SKL.FNAME FName
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND (SKG.FNUMBER LIKE 'H1%' OR SKG.FNUMBER LIKE 'H2%') AND SK.FFORBIDSTATUS = 'A'
-                    ORDER BY SKL.FNAME";
+                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2')
+                    ORDER BY SK.FNUMBER";
                     break;
             }
 
