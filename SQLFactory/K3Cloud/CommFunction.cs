@@ -248,7 +248,7 @@ namespace ERPSupport.SQL.K3Cloud
                 case 0:
                     _SQL = @"SELECT SK.FNUMBER FVALUE,SKL.FNAME
                     FROM T_BD_STOCK SK
-                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID
+                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
                     WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A'
                     ORDER BY SKL.FNAME";
@@ -279,7 +279,7 @@ namespace ERPSupport.SQL.K3Cloud
                 default:
                     _SQL = @"SELECT SK.FNUMBER FValue,SKL.FNAME FName
                     FROM T_BD_STOCK SK
-                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID
+                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
                     WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2')
                     ORDER BY SK.FNUMBER";
@@ -287,6 +287,22 @@ namespace ERPSupport.SQL.K3Cloud
             }
 
             return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 根据仓库名称获取编码
+        /// </summary>
+        /// <param name="pFName"></param>
+        /// <returns></returns>
+        public static string GetStockNumber(string pFName)
+        {
+            _SQL = "SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE AL.FNAME = '" + pFName + "'";
+            _obj = ORAHelper.ExecuteScalar(_SQL);
+
+            if (_obj != null)
+                return _obj.ToString();
+            else
+                return "";
         }
 
         /// <summary>

@@ -36,14 +36,15 @@ namespace ERPSupport.SupForm.Bussiness
         {
             dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
 
-            DataGridViewComboBoxColumn _ComboBoxCol = new DataGridViewComboBoxColumn();
-            _ComboBoxCol.HeaderText = "默认仓库";
-            _ComboBoxCol.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            _ComboBoxCol.DataSource = CommFunction.GetStock();
-            _ComboBoxCol.DisplayMember = "FName";
-            _ComboBoxCol.ValueMember = "FValue";
-
-            dgv1.Columns.Add(_ComboBoxCol);
+            DataGridViewComboBoxColumn colcbx = new DataGridViewComboBoxColumn();
+            colcbx.HeaderText = "默认仓库";
+            colcbx.AutoComplete = true;
+            colcbx.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+            colcbx.DataSource = CommFunction.GetStock();
+            dgv1.Columns.Add(colcbx);
+            colcbx.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+            colcbx.DisplayMember = "FName";
+            colcbx.ValueMember = "FValue";
         }
 
         private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -69,8 +70,9 @@ namespace ERPSupport.SupForm.Bussiness
             {
                 if (dgv1.Rows[i].Selected)
                 {
-                    if (strStockValue == string.Empty && dgv1.Rows[i].Cells[4].Value != null)
-                        strStockValue = dgv1.Rows[i].Cells[4].Value.ToString();
+                    string FName = (dgv1.Rows[i].Cells[4]).EditedFormattedValue.ToString();
+                    if (strStockValue == string.Empty && (dgv1.Rows[i].Cells[4]).EditedFormattedValue != null && FName != string.Empty)
+                        strStockValue = CommFunction.GetStockNumber(FName);
 
                     dgv1.Rows[i].Cells[4].Value = strStockValue;
                 }
@@ -94,16 +96,18 @@ namespace ERPSupport.SupForm.Bussiness
 
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
-                if (dgv1.Rows[i].Cells[4].Value != null && dgv1.Rows[i].Cells[4].Value.ToString() != string.Empty)
+                if ((dgv1.Rows[i].Cells[4]).EditedFormattedValue != null && (dgv1.Rows[i].Cells[4]).EditedFormattedValue.ToString() != string.Empty)
                 {
+                    string FName = (dgv1.Rows[i].Cells[4]).EditedFormattedValue.ToString();
+
                     strMaterialNumber = dgv1.Rows[i].Cells[0].Value.ToString();
                     strMaterialID = CommFunction.GetMTLIDByNumber(100508, dgv1.Rows[i].Cells[0].Value.ToString()).ToString();
                     strDeptNumber = dgv1.Rows[i].Cells[2].Value.ToString();
                     strDeptID = CommFunction.GetDepartIdByNumber(100508, dgv1.Rows[i].Cells[2].Value.ToString()).ToString();
-                    strStockNumber = dgv1.Rows[i].Cells[4].Value.ToString();
-                    strStockID = CommFunction.GetStockIdByNumber(100508, dgv1.Rows[i].Cells[4].Value.ToString()).ToString();
+                    strStockNumber = CommFunction.GetStockNumber(FName);
+                    strStockID = CommFunction.GetStockIdByNumber(100508, strStockNumber).ToString();
 
-                    if (strStockID == null) continue;
+                    if (strStockID == null || strStockID == "-1") continue;
 
                     CommFunction.AddMStockSetting(strMaterialID, strMaterialNumber, strDeptID, strDeptNumber, strStockID, strStockNumber);
                 }

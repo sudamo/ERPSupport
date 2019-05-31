@@ -68,14 +68,25 @@ namespace ERPSupport.SupForm.UserCrtl
 
             if (dgv1.Columns.Count <= 6)
             {
-                DataGridViewComboBoxColumn _ComboBoxCol = new DataGridViewComboBoxColumn();
-                _ComboBoxCol.HeaderText = "修改仓库";
-                _ComboBoxCol.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-                _ComboBoxCol.DataSource = CommFunction.GetStock();
-                _ComboBoxCol.DisplayMember = "FName";
-                _ComboBoxCol.ValueMember = "FValue";
+                //DataGridViewComboBoxColumn colcbx = new DataGridViewComboBoxColumn();
+                //colcbx.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                //colcbx.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                //colcbx.DataSource = CommFunction.GetStock();
+                //colcbx.HeaderText = "修改仓库";
+                //colcbx.DisplayMember = "FName";
+                //colcbx.ValueMember = "FValue";
 
-                dgv1.Columns.Add(_ComboBoxCol);
+                //dgv1.Columns.Add(colcbx);
+
+                DataGridViewComboBoxColumn colcbx = new DataGridViewComboBoxColumn();
+                colcbx.HeaderText = "修改仓库";
+                colcbx.AutoComplete = true;
+                colcbx.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
+                colcbx.DataSource = CommFunction.GetStock();
+                dgv1.Columns.Add(colcbx);
+                colcbx.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                colcbx.DisplayMember = "FName";
+                colcbx.ValueMember = "FValue";
             }
         }
         private void BatchFill()
@@ -90,8 +101,10 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 if (dgv1.Rows[i].Selected)
                 {
-                    if (strStockValue == string.Empty && dgv1.Rows[i].Cells[iCol].Value != null)
-                        strStockValue = dgv1.Rows[i].Cells[iCol].Value.ToString();
+                    string FName = (dgv1.Rows[i].Cells[iCol]).EditedFormattedValue.ToString();
+
+                    if (strStockValue == string.Empty && FName != string.Empty)
+                        strStockValue = CommFunction.GetStockNumber(FName);
 
                     dgv1.Rows[i].Cells[iCol].Value = strStockValue; ;
                 }
@@ -107,11 +120,12 @@ namespace ERPSupport.SupForm.UserCrtl
 
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
-                if (dgv1.Rows[i].Cells[iCol].Value == null)
+                string FName = (dgv1.Rows[i].Cells[iCol]).EditedFormattedValue.ToString();
+                if (FName == string.Empty)
                     continue;
 
                 FID = dgv1.Rows[i].Cells[0].Value.ToString();
-                StockNumber = dgv1.Rows[i].Cells[iCol].Value.ToString();
+                StockNumber = CommFunction.GetStockNumber(FName);
 
                 CommFunction.UpdateMStockSetting(StockNumber, int.Parse(FID));
 
