@@ -34,7 +34,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFNeedDate">需求日期</param>
         /// <param name="pDeptNos">部门</param>
         /// <returns></returns>
-        public static DataTable GetTrans(string pFNeedDate, string pDeptNos)
+        public static DataTable GetTransERP(string pFNeedDate, string pDeptNos)
         {
             _SQL = @"SELECT ORG.FNUMBER 调入库存组织, NVL(ORG2.FNUMBER, 'HN02') 货主, AC.FOWNERTYPEID 货主类型, MTL.FNUMBER 物料编码,UNT.FNUMBER 单位
                 , STK.FNUMBER 调入仓库, STK2.FNUMBER 调出仓库, DEP.FNUMBER 领料部门, SUM(AE.FMUSTQTY) 调拨数量
@@ -63,9 +63,10 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFNeedDate"></param>
         /// <returns></returns>
-        public static DataTable GetTrans2(string pFNeedDate)//根据仓库属性-是否汇总 判断汇总信息。
+        public static DataTable GetTransWMS(string pFNeedDate)//根据仓库属性-是否汇总 判断汇总信息。
         {
-            _SQL = @"SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
+            _SQL = @"SELECT * FROM (
+            SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
               ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称
               ,AC.FSUPPLYORG 调入库存组织,NVL(ORG2.FNUMBER,' ') 调入库存组织编码,NVL(ORGL2.FNAME,' ') 调入库存组织名称,DEP.FINSTOCKID 调入仓库,STK2.FNUMBER 调入仓库编码,STKL2.FNAME 调入仓库名称,STK2.FDEFSTOCKSTATUSID 调入库存状态,STT2.FNUMBER 调入库存状态编码,STTL2.FNAME 调入库存状态名称
               ,AC.FSRCTRANSORGID 调出库存组织,NVL(ORG3.FNUMBER,' ') 调出库存组织编码,NVL(ORGL3.FNAME,' ') 调出库存组织名称,MST.FSTOCKID 调出仓库,STK3.FNUMBER 调出仓库编码,STKL3.FNAME 调出仓库名称,STK3.FDEFSTOCKSTATUSID 调出库存状态,STT3.FNUMBER 调出库存状态编码,STTL3.FNAME 调出库存状态名称
@@ -106,6 +107,7 @@ namespace ERPSupport.SQL.K3Cloud
             INNER JOIN T_BD_STOCKSTATUS STT3 ON STK3.FDEFSTOCKSTATUSID = STT3.FSTOCKSTATUSID
             INNER JOIN T_BD_STOCKSTATUS_L STTL3 ON STT3.FSTOCKSTATUSID = STTL3.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
             WHERE A.FDOCUMENTSTATUS = 'C' AND AE.FPAEZHAVEDIRECT = 0 AND STK2.FNUMBER <> STK3.FNUMBER AND STK3.FALLOWSUM = '0' AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + @"'
+            ORDER BY MOE.FPRODUCTIONSEQ) a
             UNION ALL
             SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
               ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称
@@ -159,7 +161,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDataTable">数据表</param>
         /// <param name="pDate">日期</param>
         /// <returns></returns>
-        public static string TransferDir(DataTable pDataTable, DateTime pDate)
+        public static string TransferDirERP(DataTable pDataTable, DateTime pDate)
         {
             if (pDataTable.Rows.Count <= 0)
                 return "";
@@ -281,8 +283,9 @@ namespace ERPSupport.SQL.K3Cloud
         /// 半成品调拨WMS
         /// </summary>
         /// <param name="pDataTable"></param>
+        /// <param name="pDate"></param>
         /// <returns></returns>
-        public static string TransferDir(DataTable pDataTable, string pDate)
+        public static string TransferDirWMS(DataTable pDataTable, string pDate)
         {
             if (pDataTable == null || pDataTable.Rows.Count <= 0)
                 return "";
@@ -449,7 +452,7 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 成品直接调拨单
+        /// 成品直接调拨单WMS
         /// </summary>
         /// <param name="pDataTable"></param>
         /// <param name="pList"></param>
@@ -616,7 +619,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 更新已经生成调拨单字段状态（半成品）WMS
         /// </summary>
         /// <param name="pFNeedDate"></param>
-        public static void UpdateDirFields2(string pFNeedDate, List<string> pList)
+        public static void UpdateDirFieldsWMS(string pFNeedDate, List<string> pList)
         {
             _SQL = @"UPDATE T_PRD_PPBOMENTRY
             SET FPAEZHAVEDIRECT = 1
@@ -640,7 +643,7 @@ namespace ERPSupport.SQL.K3Cloud
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
-        public static void UpdateDirFields2(DataTable pDataTable)
+        public static void UpdateDirFieldsWMS(DataTable pDataTable)
         {
             _SQL = "BEGIN";
             for (int i = 0; i < pDataTable.Rows.Count; i++)
