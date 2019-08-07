@@ -159,7 +159,7 @@ namespace ERPSupport.SupForm
 
             //全局参数
             new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, C_USERNAME, C_PASSWORD, C_ORCLADDRESS, userId, userName, PWD, DateTime.Now, RIDS, MIDS, departmentId, departmentNumber, departmentName, phone), new SQLConfig(IP, Port, UserName, Password, Catalog));
-            GlobalParameter.Tmp_Params = ConfigurationManager.AppSettings["TMP_DirType"];
+            GlobalParameter.Tmp_Params = ConfigurationManager.AppSettings["DIR_DirType"];
             #endregion
 
             //主窗体

@@ -97,7 +97,7 @@ namespace ERPSupport.SQL.K3Cloud
             LEFT JOIN T_BD_STAFF STF ON STFL.FSTAFFID = STF.FSTAFFID
             LEFT JOIN T_BD_DEPARTMENT DEP ON STF.FDEPTID = DEP.FDEPTID
             LEFT JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID
-            WHERE US.FNAME = '" + pUserName + @"'
+            WHERE US.FNAME = '" + pUserName + "' OR US.FUSERACCOUNT = '" + pUserName + @"'
             GROUP BY US.FUSERID,UR.RIDS,US.FPHONE,DEP.FDEPTID,DEP.FNUMBER,DEPL.FNAME";
 
             return ORAHelper.ExecuteTable(pConnectionString, _SQL);
