@@ -50,10 +50,42 @@ namespace ERPSupport.SQL.K3Cloud
             INNER JOIN T_BD_UNIT UNT ON AE.FUNITID = UNT.FUNITID
             INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
             INNER JOIN T_BD_STOCK STK ON DEP.FINSTOCKID = STK.FSTOCKID
-            INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID
+            INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID AND MST.FTRANSTOCKID = 0
             INNER JOIN T_BD_STOCK STK2 ON MST.FSTOCKID = STK2.FSTOCKID
             WHERE A.FDOCUMENTSTATUS = 'C' AND AE.FPAEZHAVEDIRECT = 0 AND STK.FNUMBER <> STK2.FNUMBER AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + "' AND DEP.FNUMBER IN(" + pDeptNos + @")--用料清单未生成过调拨单、调入仓不等于调出仓
             GROUP BY ORG.FNUMBER, ORG2.FNUMBER, AC.FOWNERTYPEID, MTL.FNUMBER, UNT.FNUMBER, STK.FNUMBER, STK2.FNUMBER,DEP.FNUMBER";
+
+            return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 获取调拨单数据ERP-物料设置中间仓调拨
+        /// </summary>
+        /// <param name="pFNeedDate"></param>
+        /// <param name="pDeptNos"></param>
+        /// <param name="pTransit"></param>
+        /// <returns></returns>
+        public static DataTable GetTransERP(string pFNeedDate, string pDeptNos, bool? pTransit = true)
+        {
+            _SQL = @"SELECT ORG.FNUMBER 调入库存组织,NVL(ORG2.FNUMBER, 'HN02') 货主,AC.FOWNERTYPEID 货主类型,MTL.FNUMBER 物料编码,UNT.FNUMBER 单位
+                ,STK.FNUMBER 调入仓库,STK2.FNUMBER 调出仓库,STK3.FNUMBER 中间仓库,DEP.FNUMBER 领料部门,SUM(AE.FMUSTQTY) 调拨数量
+            FROM T_PRD_PPBOM A
+            INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID
+            INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
+            INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-MM-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-MM-dd')
+            INNER JOIN T_PRD_MO MO ON MO.FID = MOE.FID AND MO.FDOCUMENTSTATUS = 'C'
+            INNER JOIN T_PRD_MOENTRY_A MOA ON MOE.FENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3,4)
+            INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+            INNER JOIN T_ORG_ORGANIZATIONS ORG ON AC.FSUPPLYORG = ORG.FORGID
+            LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON AC.FOWNERID = ORG2.FORGID
+            INNER JOIN T_BD_UNIT UNT ON AE.FUNITID = UNT.FUNITID
+            INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+            INNER JOIN T_BD_STOCK STK ON DEP.FINSTOCKID = STK.FSTOCKID
+            INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID AND MST.FTRANSTOCKID != 0
+            INNER JOIN T_BD_STOCK STK2 ON MST.FSTOCKID = STK2.FSTOCKID
+            INNER JOIN T_BD_STOCK STK3 ON MST.FTRANSTOCKID = STK3.FSTOCKID
+            WHERE A.FDOCUMENTSTATUS = 'C' AND AE.FPAEZHAVEDIRECT = 0 AND STK.FNUMBER <> STK2.FNUMBER AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + "' AND DEP.FNUMBER IN(" + pDeptNos + @")--用料清单未生成过调拨单、调入仓不等于调出仓
+            GROUP BY ORG.FNUMBER,ORG2.FNUMBER,AC.FOWNERTYPEID,MTL.FNUMBER,UNT.FNUMBER,STK.FNUMBER,STK2.FNUMBER,STK3.FNUMBER,DEP.FNUMBER";
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -274,6 +306,237 @@ namespace ERPSupport.SQL.K3Cloud
                 {
                     strPMBillNO = jo["Result"]["Number"].Value<string>();
                 }
+            }
+
+            return strPMBillNO;
+        }
+
+        /// <summary>
+        /// 半成品调拨ERP-物料设置中间仓调拨
+        /// </summary>
+        /// <param name="pDataTable">数据表</param>
+        /// <param name="pDate">日期</param>
+        /// <returns></returns>
+        public static string TransferDirERP(DataTable pDataTable, DateTime pDate, bool? pTransit = true)
+        {
+            if (pDataTable.Rows.Count <= 0)
+                return "";
+
+            string strPMBillNO = string.Empty;
+
+            K3CloudApiClient client = new K3CloudApiClient(GlobalParameter.K3Inf.C_ERPADDRESS);
+            var bLogin = client.Login(GlobalParameter.K3Inf.C_ZTID, GlobalParameter.K3Inf.UserName, GlobalParameter.K3Inf.UserPWD, 2052);
+
+            if (bLogin)
+            {
+                //Bill_1
+                JObject jsonRoot = new JObject();
+                jsonRoot.Add("Creator", "MANUAL");
+                jsonRoot.Add("NeedUpDateFields", new JArray(""));
+
+                JObject model = new JObject();
+                jsonRoot.Add("Model", model);
+                model.Add("FID", 0);
+
+                JObject basedata = new JObject();
+                basedata.Add("FNumber", "ZJDB01_SYS");
+                model.Add("FBillTypeID", basedata);
+
+                model.Add("FTransferDirect", "GENERAL");
+                model.Add("FTransferBizType", "InnerOrgTransfer");
+
+                basedata = new JObject();
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                model.Add("FSettleOrgId", basedata);
+                basedata = new JObject();
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                model.Add("FSaleOrgId", basedata);
+                basedata = new JObject();
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                model.Add("FStockOutOrgId", basedata);
+                basedata = new JObject();
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                model.Add("FStockOrgId", basedata);
+                basedata = new JObject();
+                basedata.Add("FNumber", pDataTable.Rows[0]["领料部门"].ToString());
+                model.Add("F_PickDepart", basedata);
+                basedata = new JObject();
+                basedata.Add("FNumber", "PRE001");
+                model.Add("FSETTLECURRID", basedata);
+                basedata = new JObject();
+                basedata.Add("FNumber", "PRE001");
+                model.Add("FBaseCurrId", basedata);
+
+                model.Add("FDate", pDate);
+
+                JArray entryRows = new JArray();
+                string entityKey = "FBillEntry";
+                model.Add(entityKey, entryRows);
+                for (int i = 0; i < pDataTable.Rows.Count; i++)
+                {
+                    JObject entryRow = new JObject();
+                    entryRows.Add(entryRow);
+                    entryRow.Add("FEntryID", 0);
+
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["物料编码"].ToString());
+                    entryRow.Add("FMaterialId", basedata);
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["物料编码"].ToString());
+                    entryRow.Add("FDestMaterialId", basedata);
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                    entryRow.Add("FUnitID", basedata);
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                    entryRow.Add("FBaseUnitId", basedata);
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                    entryRow.Add("FPriceUnitID", basedata);
+
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["调出仓库"].ToString());
+                    entryRow.Add("FSrcStockId", basedata);
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["中间仓库"].ToString());
+                    entryRow.Add("FDestStockId", basedata);
+
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+                    entryRow.Add("FOwnerId", basedata);
+                    entryRow.Add("FOwnerTypeId", "BD_OwnerOrg");
+                    basedata = new JObject();
+                    basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+                    entryRow.Add("FOwnerOutId", basedata);
+                    entryRow.Add("FOwnerTypeOutId", "BD_OwnerOrg");
+
+                    entryRow.Add("FQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                    entryRow.Add("FPAEZAskQty", 0);
+                    entryRow.Add("FBaseQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                    entryRow.Add("FActQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                    entryRow.Add("FPriceQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                    entryRow.Add("FPriceBaseQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                }
+                // 调用Web API接口服务，保存领料单
+                strPMBillNO = client.Save("STK_TransferDirect", jsonRoot.ToString());
+                JObject jo = JObject.Parse(strPMBillNO);
+
+                if (!jo["Result"]["ResponseStatus"]["IsSuccess"].Value<bool>())
+                {
+                    strPMBillNO = "生成失败:";
+                    for (int i = 0; i < ((IList)jo["Result"]["ResponseStatus"]["Errors"]).Count; i++)
+                        strPMBillNO += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
+                }
+                else
+                {
+                    strPMBillNO = jo["Result"]["Number"].Value<string>();
+                }
+
+                ////Bill_2
+                //jsonRoot = new JObject();
+                //jsonRoot.Add("Creator", "MANUAL");
+                //jsonRoot.Add("NeedUpDateFields", new JArray(""));
+
+                //model = new JObject();
+                //jsonRoot.Add("Model", model);
+                //model.Add("FID", 0);
+
+                //basedata = new JObject();
+                //basedata.Add("FNumber", "ZJDB01_SYS");
+                //model.Add("FBillTypeID", basedata);
+
+                //model.Add("FTransferDirect", "GENERAL");
+                //model.Add("FTransferBizType", "InnerOrgTransfer");
+
+                //basedata = new JObject();
+                //basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                //model.Add("FSettleOrgId", basedata);
+                //basedata = new JObject();
+                //basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                //model.Add("FSaleOrgId", basedata);
+                //basedata = new JObject();
+                //basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                //model.Add("FStockOutOrgId", basedata);
+                //basedata = new JObject();
+                //basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                //model.Add("FStockOrgId", basedata);
+                //basedata = new JObject();
+                //basedata.Add("FNumber", pDataTable.Rows[0]["领料部门"].ToString());
+                //model.Add("F_PickDepart", basedata);
+                //basedata = new JObject();
+                //basedata.Add("FNumber", "PRE001");
+                //model.Add("FSETTLECURRID", basedata);
+                //basedata = new JObject();
+                //basedata.Add("FNumber", "PRE001");
+                //model.Add("FBaseCurrId", basedata);
+
+                //model.Add("FDate", pDate);
+
+                //entryRows = new JArray();
+                //entityKey = "FBillEntry";
+                //model.Add(entityKey, entryRows);
+                //for (int i = 0; i < pDataTable.Rows.Count; i++)
+                //{
+                //    JObject entryRow = new JObject();
+                //    entryRows.Add(entryRow);
+                //    entryRow.Add("FEntryID", 0);
+
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["物料编码"].ToString());
+                //    entryRow.Add("FMaterialId", basedata);
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["物料编码"].ToString());
+                //    entryRow.Add("FDestMaterialId", basedata);
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                //    entryRow.Add("FUnitID", basedata);
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                //    entryRow.Add("FBaseUnitId", basedata);
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                //    entryRow.Add("FPriceUnitID", basedata);
+
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["中间仓库"].ToString());
+                //    entryRow.Add("FSrcStockId", basedata);
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["调入仓库"].ToString());
+                //    entryRow.Add("FDestStockId", basedata);
+
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+                //    entryRow.Add("FOwnerId", basedata);
+                //    entryRow.Add("FOwnerTypeId", "BD_OwnerOrg");
+                //    basedata = new JObject();
+                //    basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+                //    entryRow.Add("FOwnerOutId", basedata);
+                //    entryRow.Add("FOwnerTypeOutId", "BD_OwnerOrg");
+
+                //    entryRow.Add("FQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                //    entryRow.Add("FPAEZAskQty", 0);
+                //    entryRow.Add("FBaseQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                //    entryRow.Add("FActQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                //    entryRow.Add("FPriceQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                //    entryRow.Add("FPriceBaseQty", pDataTable.Rows[i]["调拨数量"].ToString());
+                //}
+                //// 调用Web API接口服务，保存领料单
+                //string strPMBillNOTemp = client.Save("STK_TransferDirect", jsonRoot.ToString());
+                //jo = JObject.Parse(strPMBillNOTemp);
+
+                //if (!jo["Result"]["ResponseStatus"]["IsSuccess"].Value<bool>())
+                //{
+                //    strPMBillNOTemp = "生成失败:";
+                //    for (int i = 0; i < ((IList)jo["Result"]["ResponseStatus"]["Errors"]).Count; i++)
+                //        strPMBillNOTemp += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
+                //}
+                //else
+                //{
+                //    strPMBillNOTemp = jo["Result"]["Number"].Value<string>();
+                //}
+                //strPMBillNO += "|" + strPMBillNO;
+
+
             }
 
             return strPMBillNO;

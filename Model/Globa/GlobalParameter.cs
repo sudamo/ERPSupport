@@ -1,8 +1,10 @@
-﻿using ERPSupport.Model.Basic;
-using ERPSupport.Model.K3Cloud;
+﻿using System;
 
 namespace ERPSupport.Model.Globa
 {
+    using Basic;
+    using K3Cloud;
+
     /// <summary>
     /// 全局参数实体
     /// </summary>
@@ -62,6 +64,7 @@ namespace ERPSupport.Model.Globa
             _SQLInf = pSQLInf;
         }
 
+        private static bool _IsJournal;
         private static object _Tmp_Params;
         private static K3Setting _K3Inf;
         private static SQLConfig _SQLInf;
@@ -133,6 +136,9 @@ namespace ERPSupport.Model.Globa
             }
         }
 
+        /// <summary>
+        /// 通用参数
+        /// </summary>
         public static object Tmp_Params
         {
             get
@@ -143,6 +149,22 @@ namespace ERPSupport.Model.Globa
             set
             {
                 _Tmp_Params = value;
+            }
+        }
+
+        /// <summary>
+        /// 是否记录操作日志
+        /// </summary>
+        public static bool IsJournal
+        {
+            get
+            {
+                return _IsJournal;
+            }
+
+            set
+            {
+                _IsJournal = value;
             }
         }
     }

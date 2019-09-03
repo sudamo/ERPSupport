@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dgv1 = new System.Windows.Forms.DataGridView();
             this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnTop_lblNumber = new System.Windows.Forms.ToolStripLabel();
@@ -40,6 +40,7 @@
             this.bnTop_btnSave = new System.Windows.Forms.ToolStripButton();
             this.bnTop_btnClear = new System.Windows.Forms.ToolStripButton();
             this.bnTop_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop_btnDel = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
             this.bnTop.SuspendLayout();
@@ -49,13 +50,13 @@
             // 
             this.dgv1.AllowUserToAddRows = false;
             this.dgv1.AllowUserToDeleteRows = false;
-            this.dgv1.AllowUserToResizeColumns = false;
             this.dgv1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = System.Drawing.Color.White;
-            this.dgv1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.White;
+            this.dgv1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.dgv1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgv1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv1.Location = new System.Drawing.Point(5, 27);
             this.dgv1.Margin = new System.Windows.Forms.Padding(2);
@@ -64,6 +65,7 @@
             this.dgv1.RowTemplate.Height = 27;
             this.dgv1.Size = new System.Drawing.Size(793, 571);
             this.dgv1.TabIndex = 11;
+            this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
             // 
             // bnTop
             // 
@@ -77,6 +79,7 @@
             this.bnTop_btnSearch,
             this.bnTop_btnBatchFill,
             this.bnTop_btnSave,
+            this.bnTop_btnDel,
             this.bnTop_btnClear,
             this.bnTop_tss2});
             this.bnTop.Location = new System.Drawing.Point(0, 0);
@@ -101,6 +104,7 @@
             // 
             this.bnTop_txtNumber.Name = "bnTop_txtNumber";
             this.bnTop_txtNumber.Size = new System.Drawing.Size(130, 25);
+            this.bnTop_txtNumber.Text = "201010803059";
             // 
             // bnTop_tss
             // 
@@ -136,17 +140,26 @@
             // 
             // bnTop_btnClear
             // 
-            this.bnTop_btnClear.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
+            this.bnTop_btnClear.Image = global::ERPSupport.SupForm.Properties.Resources.comment_delete;
             this.bnTop_btnClear.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnClear.Name = "bnTop_btnClear";
             this.bnTop_btnClear.Size = new System.Drawing.Size(100, 22);
-            this.bnTop_btnClear.Tag = "4";
+            this.bnTop_btnClear.Tag = "5";
             this.bnTop_btnClear.Text = "清除空值仓库";
             // 
             // bnTop_tss2
             // 
             this.bnTop_tss2.Name = "bnTop_tss2";
             this.bnTop_tss2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // bnTop_btnDel
+            // 
+            this.bnTop_btnDel.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
+            this.bnTop_btnDel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnDel.Name = "bnTop_btnDel";
+            this.bnTop_btnDel.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnDel.Tag = "4";
+            this.bnTop_btnDel.Text = "删除";
             // 
             // ucCS_DefaultStock
             // 
@@ -177,5 +190,6 @@
         private System.Windows.Forms.ToolStripButton bnTop_btnSave;
         private System.Windows.Forms.ToolStripButton bnTop_btnClear;
         private System.Windows.Forms.ToolStripButton bnTop_btnBatchFill;
+        private System.Windows.Forms.ToolStripButton bnTop_btnDel;
     }
 }

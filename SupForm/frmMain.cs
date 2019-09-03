@@ -216,7 +216,7 @@ namespace ERPSupport.SupForm
             //-----
             _datefrom = new ToolStripDateTimePicker();
             _datefrom.Size = new Size(120, 21);
-            
+
             _dateto = new ToolStripDateTimePicker();
             _dateto.Size = new Size(120, 21);
 
@@ -985,6 +985,7 @@ namespace ERPSupport.SupForm
                 {
                     BillNos += "[" + dtResult.Rows[i]["单号"].ToString() + "]";
                 }
+
                 CommFunction.DM_Log_Local("倒冲领料", "辅助功能\\倒冲领料", BillNos, "1");
             }
             #endregion
@@ -1648,6 +1649,173 @@ namespace ERPSupport.SupForm
             CommFunction.DM_Log_Local("调拨单", "辅助功能\\调拨", strBillNos, sFlag);
 
             return -1;
+
+            ////20190812
+            //string strBillNos, tmp;
+
+            //List<string> list;
+            //List<string> lstOutStock, lstOutStock_Fault;
+
+            //DataTable dt;
+            //DataTable dtDept = CommFunction.GetDepartment(4, -1, "");
+
+            //if (dtDept == null || dtDept.Rows.Count == 0)
+            //    return -1;
+
+            ////根据具体部门汇总分组情况指定锯齿数组值
+            //string[][] DepNo = new string[dtDept.Rows.Count][];
+            //strBillNos = string.Empty;
+            //tmp = string.Empty;
+            //list = new List<string>();
+
+            //for (int i = 0; i < dtDept.Rows.Count; i++)
+            //{
+            //    DepNo[i] = new string[] { dtDept.Rows[i]["FNUMBER"].ToString() };
+            //}
+
+            //for (int i = 0; i < DepNo.Length; i++)
+            //{
+            //    tmp = string.Empty;
+
+            //    for (int j = 0; j < DepNo[i].Length; j++)
+            //    {
+            //        if (j > 0) tmp += ",";
+            //        tmp += "'" + DepNo[i][j] + "'";
+            //    }
+
+            //    list.Add(tmp);
+            //}
+
+            //for (int i = 0; i < list.Count; i++)
+            //{
+            //    #region 处理没有中间仓
+            //    dt = new DataTable();
+            //    lstOutStock = new List<string>();
+            //    lstOutStock_Fault = new List<string>();//统计生成失败的调出仓
+
+            //    //获取调拨单数据
+            //    dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i]);
+
+            //    if (dt == null || dt.Rows.Count == 0)
+            //        goto Transit;
+
+            //    //统计调出仓库
+            //    for (int j = 0; j < dt.Rows.Count; j++)
+            //    {
+            //        if (j == 0)
+            //            lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
+            //        else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
+            //            lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
+            //    }
+
+            //    //根据不同调出仓分批生产单据
+            //    DataTable dt2;
+
+            //    for (int j = 0; j < lstOutStock.Count; j++)
+            //    {
+            //        dt2 = new DataTable();
+            //        dt2 = dt.Clone();
+
+            //        for (int m = 0; m < dt.Rows.Count; m++)
+            //        {
+            //            if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
+            //                dt2.ImportRow(dt.Rows[m]);
+            //        }
+
+            //        if (dt2.Rows.Count > 0)
+            //        {
+            //            //生成单据
+            //            tmp = PrdAllocation.TransferDirERP(dt2, _datefrom.Value);
+
+            //            if (tmp != "")
+            //                strBillNos += "[" + tmp + "]";
+            //            if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
+            //                lstOutStock_Fault.Add(tmp);
+            //        }
+            //    }
+            //    #endregion
+
+            //    Transit:
+            //    #region 处理有中间仓
+            //    dt = new DataTable();
+            //    lstOutStock = new List<string>();
+
+            //    //获取调拨单数据
+            //    dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], true);
+
+            //    if (dt == null || dt.Rows.Count == 0)
+            //        continue;
+
+            //    //统计调出仓库
+            //    for (int j = 0; j < dt.Rows.Count; j++)
+            //    {
+            //        if (j == 0)
+            //            lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
+            //        else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
+            //            lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
+            //    }
+
+            //    //根据不同调出仓分批生产单据
+            //    DataTable dt2_Tr;
+
+            //    for (int j = 0; j < lstOutStock.Count; j++)
+            //    {
+            //        dt2_Tr = new DataTable();
+            //        dt2_Tr = dt.Clone();
+
+            //        for (int m = 0; m < dt.Rows.Count; m++)
+            //        {
+            //            if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
+            //                dt2_Tr.ImportRow(dt.Rows[m]);
+            //        }
+
+            //        if (dt2_Tr.Rows.Count > 0)
+            //        {
+            //            //生成单据
+            //            tmp = PrdAllocation.TransferDirERP(dt2_Tr, _datefrom.Value, true);
+
+            //            if (tmp != "")
+            //                strBillNos += "[" + tmp + "]";
+            //            if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
+            //                lstOutStock_Fault.Add(tmp);
+            //        }
+            //    }
+            //    #endregion
+
+            //    //更新【已经生成调拨单】状态
+            //    PrdAllocation.UpdateDirFields(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
+
+            //    //控制进度条
+            //    if (_Worker.CancellationPending)
+            //    {
+            //        e.Cancel = true;
+            //        return -1;
+            //    }
+            //    else
+            //    {
+            //        // 状态报告  
+            //        _Worker.ReportProgress(i * 100 / (list.Count - 1));
+
+            //        // 等待，用于UI刷新界面，很重要  
+            //        Thread.Sleep(1);
+            //    }
+            //}
+
+            //string sFlag = "1";
+            //if (strBillNos != "")
+            //{
+            //    MessageBox.Show("生成直接调拨单：" + strBillNos);
+            //}
+            //else
+            //{
+            //    MessageBox.Show("没有数据可以生成直接调拨单！\n\r 或者源单据未审核！");
+            //    sFlag = "0";
+            //}
+
+            ////操作日志
+            //CommFunction.DM_Log_Local("调拨单", "辅助功能\\调拨", strBillNos, sFlag);
+
+            //return -1;
         }
 
         /// <summary>

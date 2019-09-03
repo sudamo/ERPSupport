@@ -3,13 +3,14 @@ using System.Data;
 using System.Windows.Forms;
 using System.Configuration;
 using Kingdee.BOS.WebApi.Client;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Globa;
-using ERPSupport.Model.Basic;
-using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SupForm
 {
+    using SQL.K3Cloud;
+    using Model.Globa;
+    using Model.Basic;
+    using Model.K3Cloud;
+
     /// <summary>
     /// 登陆窗口
     /// </summary>
@@ -160,6 +161,7 @@ namespace ERPSupport.SupForm
             //全局参数
             new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, C_USERNAME, C_PASSWORD, C_ORCLADDRESS, userId, userName, PWD, DateTime.Now, RIDS, MIDS, departmentId, departmentNumber, departmentName, phone), new SQLConfig(IP, Port, UserName, Password, Catalog));
             GlobalParameter.Tmp_Params = ConfigurationManager.AppSettings["DIR_DirType"];
+            GlobalParameter.IsJournal = ConfigurationManager.AppSettings["GLO_IsJournal"] == "1" ? true : false;//是否记录操作日志
             #endregion
 
             //主窗体

@@ -1130,7 +1130,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pMids">Mids</param>
         public static void AddRole(string pRName, string pMids, string pFunctionIds)
         {
-            _SQL = "INSERT INTO DM_ROLE(RNAME,MIDS,FUNCTIONID,CREATOR) VALUES('" + pRName + "','" + pMids + "','" + pFunctionIds + "','" + Model.Globa.GlobalParameter.K3Inf.UserName + "')";
+            _SQL = "INSERT INTO DM_ROLE(RNAME,MIDS,FUNCTIONID,CREATOR) VALUES('" + pRName + "','" + pMids + "','" + pFunctionIds + "','" + GlobalParameter.K3Inf.UserName + "')";
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -1141,7 +1141,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pMids">Mids</param>
         public static void UpdateRole(string pRName, string pMids, string pFunctionIds)
         {
-            _SQL = "UPDATE DM_ROLE SET MIDS = '" + pMids + "',FUNCTIONID = '" + pFunctionIds + "',MODIFIER = '" + Model.Globa.GlobalParameter.K3Inf.UserName + "',MODIFICATIONDATE = SYSDATE WHERE RNAME = '" + pRName + "'";
+            _SQL = "UPDATE DM_ROLE SET MIDS = '" + pMids + "',FUNCTIONID = '" + pFunctionIds + "',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFICATIONDATE = SYSDATE WHERE RNAME = '" + pRName + "'";
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -1295,6 +1295,9 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFlag">标识</param>
         public static void DM_Log_Local(string pOName, string pONavi, string pOContent, string pFlag)
         {
+            if (!GlobalParameter.IsJournal)
+                return;
+
             _SQL = @"INSERT INTO DM_LOG_LOCAL(OUSER,IP,MAC,LOGINTIME,LOGOUTTIME,OTIME,ONAME,ONAVI,OCONTENT,FLAG)
             VALUES('" + GlobalParameter.K3Inf.UserName + "','" + GlobalParameter.LocalInf.IP + "','" + GlobalParameter.LocalInf.MAC + "',TO_DATE('" + GlobalParameter.LocalInf.LoginTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),TO_DATE('" + GlobalParameter.LocalInf.LogoutTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),SYSDATE,'" + pOName + "','" + pONavi + "','" + pOContent + "','" + pFlag + "')";
 
@@ -1400,11 +1403,12 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable MStockSetting(string pMTLFNumber)
         {
-            _SQL = @"SELECT MST.FID,MST.FMATERIALNUMBER 物料编码,MTLL.FNAME 物料名称,DEPL.FNAME 部门,MST.FSTOCKNUMBER 仓库编码,STKL.FNAME 仓库名称
+            _SQL = @"SELECT MST.FID 内码,MST.FMATERIALNUMBER 物料编码,MTLL.FNAME 物料名称,DEPL.FNAME 部门名称,MST.FSTOCKNUMBER 调出仓编码,NVL(STKL.FNAME,' ') 调出仓,NVL(STKL2.FNAME,' ') 中间仓
             FROM T_AUTO_MSTOCKSETTING MST
             INNER JOIN T_BD_MATERIAL_L MTLL ON MST.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
             INNER JOIN T_BD_DEPARTMENT_L DEPL ON MST.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
-            INNER JOIN T_BD_STOCK_L STKL ON MST.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052
+            LEFT JOIN T_BD_STOCK_L STKL ON MST.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052
+            LEFT JOIN T_BD_STOCK_L STKL2 ON MST.FTRANSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052
             WHERE MST.FMATERIALNUMBER = '" + pMTLFNumber + "'";
 
             return ORAHelper.ExecuteTable(_SQL);
@@ -1430,18 +1434,55 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 更新MStockSetting
         /// </summary>
-        /// <param name="pStockNumber">仓库编码</param>
         /// <param name="pFID">内码</param>
-        public static void UpdateMStockSetting(string pStockNumber, int pFID)
+        /// <param name="pFName">调出仓名称</param>
+        /// <param name="pFNameTran">中间仓名称</param>
+        public static void UpdateMStockSetting(string pFID, string pFName, string pFNameTran)
         {
-            int iStockId = GetStockIdByNumber(100508, pStockNumber);
-            _SQL = "UPDATE T_AUTO_MSTOCKSETTING SET FSTOCKID = " + iStockId + ", FSTOCKNUMBER = '" + pStockNumber + "',FCREATOR = '" + GlobalParameter.K3Inf.UserName + "',FCREATEDATE = SYSDATE WHERE FID = " + pFID;
+            if (pFName.Equals(string.Empty) && pFNameTran.Equals(string.Empty))
+                return;
+
+            if (pFName.Equals(string.Empty))
+                _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,FTRANSTOCKID =
+                (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
+                WHERE FID = " + pFID;
+            else if (pFNameTran.Equals(string.Empty))
+                _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"')
+                WHERE FID = " + pFID;
+            else
+                _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"'),
+                FTRANSTOCKID = (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
+                WHERE FID = " + pFID;
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
         /// <summary>
-        /// 删除MStockSetting
+        /// 根据FID删除默认仓库设置
+        /// </summary>
+        /// <param name="pFIDs"></param>
+        public static void DeleteMStockSetting(List<string> pFIDs)
+        {
+            if (pFIDs == null || pFIDs.Count == 0)
+                return;
+
+            string FIDs = string.Empty;
+
+            for (int i = 0; i < pFIDs.Count; i++)
+            {
+                if (i > 0)
+                    FIDs += ",";
+                FIDs += pFIDs[i];
+            }
+
+            _SQL = "DELETE FROM T_AUTO_MSTOCKSETTING WHERE FID IN(" + FIDs + ")";
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 清除空值仓库MStockSetting
         /// </summary>
         public static void DelMStockSetting()
         {
