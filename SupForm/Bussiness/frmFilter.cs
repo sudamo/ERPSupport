@@ -488,7 +488,7 @@ namespace ERPSupport.SupForm.Bussiness
 
                 entry.FilterValue = new FilterValue(((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1).ToString(), false)[0]).Text.Trim(), ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1).ToString(), false)[0]).Value, ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1).ToString(), false)[0]).SelectedIndex, ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1).ToString(), false)[0]).Checked);
 
-                if ((entry.Field > 0 && entry.Compare > 0) || (_FormID == FormID.SAL_SaleOrder && entry.Field > 10) || (_FormID == FormID.STK_TransferDirect && entry.Field > 8))//复选框可以没有比较逻辑
+                if ((entry.Field > 0 && entry.Compare > 0) || ((_FormID == FormID.SAL_SaleOrder || _FormID == FormID.SAL_SaleOrderRun) && entry.Field > 10) || (_FormID == FormID.STK_TransferDirect && entry.Field > 8))//复选框可以没有比较逻辑
                 {
                     iLeft += entry.ParenthesesLeft;
                     iRight += entry.ParenthesesRight;
