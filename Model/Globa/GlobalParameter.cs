@@ -64,8 +64,12 @@ namespace ERPSupport.Model.Globa
             _SQLInf = pSQLInf;
         }
 
-        private static bool _IsJournal;
         private static object _Tmp_Params;
+        private static bool _IsJournal;
+        private static int _Dir_DPQtyPZ;
+        private static int _Dir_MinQtyPZ;
+        private static string _Dir_CPDB_Department;
+        private static string _Dir_CPDB_Stock;
         private static K3Setting _K3Inf;
         private static SQLConfig _SQLInf;
         private static LocalInfo _LocalInf;
@@ -165,6 +169,68 @@ namespace ERPSupport.Model.Globa
             set
             {
                 _IsJournal = value;
+            }
+        }
+
+        /// <summary>
+        /// 单片合计数量
+        /// </summary>
+        public static int Dir_DPQtyPZ
+        {
+            get
+            {
+                return _Dir_DPQtyPZ;
+            }
+
+            set
+            {
+                _Dir_DPQtyPZ = value;
+            }
+        }
+
+        /// <summary>
+        /// 大单统计数量
+        /// </summary>
+        public static int Dir_MinQtyPZ
+        {
+            get
+            {
+                return _Dir_MinQtyPZ;
+            }
+
+            set
+            {
+                _Dir_MinQtyPZ = value;
+            }
+        }
+        /// <summary>
+        /// 成品调拨默认部门
+        /// </summary>
+        public static string Dir_CPDB_Department
+        {
+            get
+            {
+                return _Dir_CPDB_Department;
+            }
+
+            set
+            {
+                _Dir_CPDB_Department = value;
+            }
+        }
+        /// <summary>
+        /// 成品调拨默认仓库
+        /// </summary>
+        public static string Dir_CPDB_Stock
+        {
+            get
+            {
+                return _Dir_CPDB_Stock;
+            }
+
+            set
+            {
+                _Dir_CPDB_Stock = value;
             }
         }
     }

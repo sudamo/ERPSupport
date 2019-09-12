@@ -36,7 +36,7 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             _FirstLoad = true;
             _Search = 0;
-            _Stocks = CommFunction.GetStock();
+            _Stocks = CommFunction.GetStock(4);
         }
 
         /// <summary>
@@ -121,9 +121,19 @@ namespace ERPSupport.SupForm.UserCrtl
                     FNameTran = (dgv1.Rows[i].Cells[iColTran]).EditedFormattedValue.ToString();
 
                     if (FValue == string.Empty && FName != string.Empty)
-                        FValue = CommFunction.GetStockNumber(FName);
+                    {
+                        if (FName == " 请选择")
+                            FValue = " 请选择";
+                        else
+                            FValue = CommFunction.GetStockNumber(FName);
+                    }
                     if (FValueTran == string.Empty && FNameTran != string.Empty)
-                        FValueTran = CommFunction.GetStockNumber(FNameTran);
+                    {
+                        if (FNameTran == " 请选择")
+                            FValueTran = " 请选择";
+                        else
+                            FValueTran = CommFunction.GetStockNumber(FNameTran);
+                    }
 
                     if (FValue != string.Empty)
                         dgv1.Rows[i].Cells[iCol].Value = FValue;

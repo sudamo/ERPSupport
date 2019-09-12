@@ -28,6 +28,14 @@ namespace ERPSupport.SupForm
     {
         #region Fields,Properties & Constructor
         /// <summary>
+        /// 仓库ID
+        /// </summary>
+        private int _StockID;
+        /// <summary>
+        /// 部门ID
+        /// </summary>
+        private int _DeptID;
+        /// <summary>
         /// 从数据源的第iStart行开始取数据
         /// </summary>
         private int _Start;
@@ -134,7 +142,7 @@ namespace ERPSupport.SupForm
         /// <summary>
         /// 表头复选框
         /// </summary>
-        CheckBox _chb;
+        private CheckBox _chb;
         /// <summary>
         /// 表体复选框
         /// </summary>
@@ -142,11 +150,11 @@ namespace ERPSupport.SupForm
         /// <summary>
         /// ToolStrip日期从
         /// </summary>
-        private ToolStripDateTimePicker _datefrom;
+        private ToolStripDateTimePicker _dateFrom;
         /// <summary>
         /// ToolStrip日期到
         /// </summary>
-        private ToolStripDateTimePicker _dateto;
+        private ToolStripDateTimePicker _dateTo;
 
         /// <summary>
         /// 构造函数
@@ -175,6 +183,9 @@ namespace ERPSupport.SupForm
         /// </summary>
         private void FromSetting()
         {
+            _DeptID = 0;
+            _StockID = 0;
+            //
             _CurrentRow = 0;
             _ChildCount = 0;
             _FilterName = string.Empty;
@@ -214,21 +225,17 @@ namespace ERPSupport.SupForm
             dgv1.Controls.Add(_chb);
 
             //-----
-            _datefrom = new ToolStripDateTimePicker();
-            _datefrom.Size = new Size(120, 21);
-
-            _dateto = new ToolStripDateTimePicker();
-            _dateto.Size = new Size(120, 21);
-
-            bnTop.Items.Add(_datefrom);
-            bnTop.Items.Add(_dateto);
+            _dateFrom = new ToolStripDateTimePicker();
+            _dateFrom.Size = new Size(120, 21);
+            _dateTo = new ToolStripDateTimePicker();
+            _dateTo.Size = new Size(120, 21);
 
             //重新排列Items
             List<ToolStripItem> list = new List<ToolStripItem>();
             list.Add(bnTop.Items[0]);
-            list.Add(bnTop.Items[9]);
+            list.Add(_dateFrom);
             list.Add(bnTop.Items[1]);
-            list.Add(bnTop.Items[10]);
+            list.Add(_dateTo);
             list.Add(bnTop.Items[2]);
             list.Add(bnTop.Items[3]);
             list.Add(bnTop.Items[4]);
@@ -239,9 +246,7 @@ namespace ERPSupport.SupForm
 
             bnTop.Items.Clear();
             foreach (ToolStripItem item in list)
-            {
                 bnTop.Items.Add(item);
-            }
 
             //-----
             GlobalParameter.LocalInf = new LocalInfo(CommFunction.GetLocalIP(), CommFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);//配置本地信息
@@ -667,10 +672,10 @@ namespace ERPSupport.SupForm
                 bnTop_lblDate.Text = "日期:";
                 bnTop_lblDate.Visible = true;
                 bnTop_lblTo.Visible = true;
-                _datefrom.Visible = true;
-                _datefrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                _dateto.Visible = true;
-                _dateto.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                _dateFrom.Visible = true;
+                _dateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                _dateTo.Visible = true;
+                _dateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
             }
             else if (_FormId == FormID.PRD_PPBOM)
             {
@@ -686,9 +691,9 @@ namespace ERPSupport.SupForm
                 bnTop_lblDate.Text = "计划开工日期:";
                 bnTop_lblDate.Visible = true;
                 bnTop_lblTo.Visible = false;
-                _datefrom.Visible = true;
-                _datefrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                _dateto.Visible = false;
+                _dateFrom.Visible = true;
+                _dateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                _dateTo.Visible = false;
 
                 bnTop.Location = new Point(210, 0);
 
@@ -721,8 +726,8 @@ namespace ERPSupport.SupForm
 
                 bnTop_lblDate.Visible = false;
                 bnTop_lblTo.Visible = false;
-                _datefrom.Visible = false;
-                _dateto.Visible = false;
+                _dateFrom.Visible = false;
+                _dateTo.Visible = false;
 
                 bnTop.Location = new Point(2, 0);
             }
@@ -740,8 +745,8 @@ namespace ERPSupport.SupForm
 
                 bnTop_lblDate.Visible = false;
                 bnTop_lblTo.Visible = false;
-                _datefrom.Visible = false;
-                _dateto.Visible = false;
+                _dateFrom.Visible = false;
+                _dateTo.Visible = false;
             }
         }
         #endregion
@@ -756,11 +761,17 @@ namespace ERPSupport.SupForm
             {
                 string strFilter = string.Empty;
 
-                if (_FormId == FormID.PRD_INSTOCK)
-                    strFilter += "TO_CHAR(A.FDATE,'yyyy-mm-dd') BETWEEN '" + _datefrom.Value.ToString("yyyy-MM-dd") + "' AND '" + _dateto.Value.ToString("yyyy-MM-dd") + "' AND";
-                else if (_FormId == FormID.PRD_PPBOM)
-                    strFilter += "TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + _datefrom.Value.ToString("yyyy-MM-dd") + "' AND";
-                else if (_ListFilter != null && _ListFilter.Count > 0)
+                if (_FormId == FormID.PRD_INSTOCK)//领料
+                    strFilter += "TO_CHAR(A.FDATE,'yyyy-mm-dd') BETWEEN '" + _dateFrom.Value.ToString("yyyy-MM-dd") + "' AND '" + _dateTo.Value.ToString("yyyy-MM-dd") + "' AND";
+                else if (_FormId == FormID.PRD_PPBOM)//调拨
+                {
+                    strFilter += "TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + _dateFrom.Value.ToString("yyyy-MM-dd") + "' AND";
+                    if (_StockID != 0)
+                        strFilter += " MSG.FSTOCKID = " + _StockID + " AND";
+                    if (_DeptID != 0)
+                        strFilter += " DEP.FDEPTID = " + _DeptID + " AND ";
+                }
+                else if (_ListFilter != null && _ListFilter.Count > 0)//锁库&运算
                     strFilter += "(" + GetFilter() + ") AND ";
                 else
                 {
@@ -859,8 +870,10 @@ namespace ERPSupport.SupForm
         {
             dgv1.DataSource = null;
 
-            if (PrdAllocation.SetDefaultStock(_datefrom.Value))
+            if (PrdAllocation.SetDefaultStock(_dateFrom.Value))
             {
+                //更新中间仓
+                PrdAllocation.UpdateMST_Tran();
                 bnTop_btnSearch.Enabled = true;
                 MessageBox.Show("所有物料已经设置默认仓库，可以做调拨单！");
                 return;
@@ -868,7 +881,7 @@ namespace ERPSupport.SupForm
             else
             {
                 bnTop_btnSearch.Enabled = false;
-                frmSetDefaultStock frmSS = new frmSetDefaultStock(_datefrom.Value.ToString("yyyy-MM-dd"));
+                frmSetDefaultStock frmSS = new frmSetDefaultStock(_dateFrom.Value.ToString("yyyy-MM-dd"));
                 frmSS.ShowDialog();
             }
         }
@@ -1497,10 +1510,11 @@ namespace ERPSupport.SupForm
             //事件处理，指定处理函数
             if (_FormId == FormID.PRD_PPBOM)
             {
-                if (GlobalParameter.Tmp_Params != null && GlobalParameter.Tmp_Params.ToString() == "1")
-                    e.Result = TransERP(sender, e);
-                else
-                    TransWMS(sender, e);
+                Trans(sender, e);
+                //if (GlobalParameter.Tmp_Params != null && GlobalParameter.Tmp_Params.ToString() == "1")
+                //    e.Result = TransERP(sender, e);
+                //else
+                //    TransWMS(sender, e);
             }
             else if (_FormId == FormID.SAL_SaleOrder)
                 e.Result = LockStock(sender, e);
@@ -1528,499 +1542,344 @@ namespace ERPSupport.SupForm
         #endregion
 
         #region 直接调拨单
-        /// <summary>
-        /// 直接调拨单ERP
-        /// </summary>
-        private int TransERP(object sender, DoWorkEventArgs e)
+
+        private void Trans(object sender, DoWorkEventArgs e)
         {
             string strBillNos, tmp;
-
-            List<string> list;
-            List<string> lstOutStock, lstOutStock_Fault;
-
-            DataTable dt;
-            DataTable dtDept = CommFunction.GetDepartment(4, -1, "");
-
-            if (dtDept == null || dtDept.Rows.Count == 0)
-                return -1;
-
-            //根据具体部门汇总分组情况指定锯齿数组值
-            string[][] DepNo = new string[dtDept.Rows.Count][];
             strBillNos = string.Empty;
-            tmp = string.Empty;
-            list = new List<string>();
 
-            for (int i = 0; i < dtDept.Rows.Count; i++)
-            {
-                DepNo[i] = new string[] { dtDept.Rows[i]["FNUMBER"].ToString() };
-            }
-
-            for (int i = 0; i < DepNo.Length; i++)
-            {
-                tmp = string.Empty;
-
-                for (int j = 0; j < DepNo[i].Length; j++)
-                {
-                    if (j > 0) tmp += ",";
-                    tmp += "'" + DepNo[i][j] + "'";
-                }
-
-                list.Add(tmp);
-            }
-
-            for (int i = 0; i < list.Count; i++)
-            {
-                dt = new DataTable();
-                lstOutStock = new List<string>();
-
-                //获取调拨单数据
-                dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i]);
-
-                if (dt.Rows.Count == 0)
-                    continue;
-
-                //统计调出仓库
-                for (int j = 0; j < dt.Rows.Count; j++)
-                {
-                    if (j == 0)
-                        lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
-                    else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
-                        lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
-                }
-
-                //根据不同调出仓分批生产单据
-                DataTable dt2;
-                lstOutStock_Fault = new List<string>();//统计生成失败的调出仓
-
-                for (int j = 0; j < lstOutStock.Count; j++)
-                {
-                    dt2 = new DataTable();
-                    dt2 = dt.Clone();
-
-                    for (int m = 0; m < dt.Rows.Count; m++)
-                    {
-                        if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
-                            dt2.ImportRow(dt.Rows[m]);
-                    }
-
-                    if (dt2.Rows.Count > 0)
-                    {
-                        //生成单据
-                        tmp = PrdAllocation.TransferDirERP(dt2, _datefrom.Value);
-
-                        if (tmp != "")
-                            strBillNos += "[" + tmp + "]";
-                        if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
-                            lstOutStock_Fault.Add(tmp);
-                    }
-                }
-
-                //更新【已经生成调拨单】状态
-                PrdAllocation.UpdateDirFields(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
-
-                //控制进度条
-                if (_Worker.CancellationPending)
-                {
-                    e.Cancel = true;
-                    return -1;
-                }
-                else
-                {
-                    // 状态报告  
-                    _Worker.ReportProgress(i * 100 / (list.Count - 1));
-
-                    // 等待，用于UI刷新界面，很重要  
-                    Thread.Sleep(1);
-                }
-            }
-
-            string sFlag = "1";
-            if (strBillNos != "")
-            {
-                MessageBox.Show("生成直接调拨单：" + strBillNos);
-            }
-            else
-            {
-                MessageBox.Show("没有数据可以生成直接调拨单！\n\r 或者源单据未审核！");
-                sFlag = "0";
-            }
-
-            //操作日志
-            CommFunction.DM_Log_Local("调拨单", "辅助功能\\调拨", strBillNos, sFlag);
-
-            return -1;
-
-            ////20190812
-            //string strBillNos, tmp;
-
-            //List<string> list;
-            //List<string> lstOutStock, lstOutStock_Fault;
-
-            //DataTable dt;
-            //DataTable dtDept = CommFunction.GetDepartment(4, -1, "");
-
-            //if (dtDept == null || dtDept.Rows.Count == 0)
-            //    return -1;
-
-            ////根据具体部门汇总分组情况指定锯齿数组值
-            //string[][] DepNo = new string[dtDept.Rows.Count][];
-            //strBillNos = string.Empty;
-            //tmp = string.Empty;
-            //list = new List<string>();
-
-            //for (int i = 0; i < dtDept.Rows.Count; i++)
-            //{
-            //    DepNo[i] = new string[] { dtDept.Rows[i]["FNUMBER"].ToString() };
-            //}
-
-            //for (int i = 0; i < DepNo.Length; i++)
-            //{
-            //    tmp = string.Empty;
-
-            //    for (int j = 0; j < DepNo[i].Length; j++)
-            //    {
-            //        if (j > 0) tmp += ",";
-            //        tmp += "'" + DepNo[i][j] + "'";
-            //    }
-
-            //    list.Add(tmp);
-            //}
-
-            //for (int i = 0; i < list.Count; i++)
-            //{
-            //    #region 处理没有中间仓
-            //    dt = new DataTable();
-            //    lstOutStock = new List<string>();
-            //    lstOutStock_Fault = new List<string>();//统计生成失败的调出仓
-
-            //    //获取调拨单数据
-            //    dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i]);
-
-            //    if (dt == null || dt.Rows.Count == 0)
-            //        goto Transit;
-
-            //    //统计调出仓库
-            //    for (int j = 0; j < dt.Rows.Count; j++)
-            //    {
-            //        if (j == 0)
-            //            lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
-            //        else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
-            //            lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
-            //    }
-
-            //    //根据不同调出仓分批生产单据
-            //    DataTable dt2;
-
-            //    for (int j = 0; j < lstOutStock.Count; j++)
-            //    {
-            //        dt2 = new DataTable();
-            //        dt2 = dt.Clone();
-
-            //        for (int m = 0; m < dt.Rows.Count; m++)
-            //        {
-            //            if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
-            //                dt2.ImportRow(dt.Rows[m]);
-            //        }
-
-            //        if (dt2.Rows.Count > 0)
-            //        {
-            //            //生成单据
-            //            tmp = PrdAllocation.TransferDirERP(dt2, _datefrom.Value);
-
-            //            if (tmp != "")
-            //                strBillNos += "[" + tmp + "]";
-            //            if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
-            //                lstOutStock_Fault.Add(tmp);
-            //        }
-            //    }
-            //    #endregion
-
-            //    Transit:
-            //    #region 处理有中间仓
-            //    dt = new DataTable();
-            //    lstOutStock = new List<string>();
-
-            //    //获取调拨单数据
-            //    dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], true);
-
-            //    if (dt == null || dt.Rows.Count == 0)
-            //        continue;
-
-            //    //统计调出仓库
-            //    for (int j = 0; j < dt.Rows.Count; j++)
-            //    {
-            //        if (j == 0)
-            //            lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
-            //        else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
-            //            lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
-            //    }
-
-            //    //根据不同调出仓分批生产单据
-            //    DataTable dt2_Tr;
-
-            //    for (int j = 0; j < lstOutStock.Count; j++)
-            //    {
-            //        dt2_Tr = new DataTable();
-            //        dt2_Tr = dt.Clone();
-
-            //        for (int m = 0; m < dt.Rows.Count; m++)
-            //        {
-            //            if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
-            //                dt2_Tr.ImportRow(dt.Rows[m]);
-            //        }
-
-            //        if (dt2_Tr.Rows.Count > 0)
-            //        {
-            //            //生成单据
-            //            tmp = PrdAllocation.TransferDirERP(dt2_Tr, _datefrom.Value, true);
-
-            //            if (tmp != "")
-            //                strBillNos += "[" + tmp + "]";
-            //            if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
-            //                lstOutStock_Fault.Add(tmp);
-            //        }
-            //    }
-            //    #endregion
-
-            //    //更新【已经生成调拨单】状态
-            //    PrdAllocation.UpdateDirFields(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
-
-            //    //控制进度条
-            //    if (_Worker.CancellationPending)
-            //    {
-            //        e.Cancel = true;
-            //        return -1;
-            //    }
-            //    else
-            //    {
-            //        // 状态报告  
-            //        _Worker.ReportProgress(i * 100 / (list.Count - 1));
-
-            //        // 等待，用于UI刷新界面，很重要  
-            //        Thread.Sleep(1);
-            //    }
-            //}
-
-            //string sFlag = "1";
-            //if (strBillNos != "")
-            //{
-            //    MessageBox.Show("生成直接调拨单：" + strBillNos);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("没有数据可以生成直接调拨单！\n\r 或者源单据未审核！");
-            //    sFlag = "0";
-            //}
-
-            ////操作日志
-            //CommFunction.DM_Log_Local("调拨单", "辅助功能\\调拨", strBillNos, sFlag);
-
-            //return -1;
-        }
-
-        /// <summary>
-        /// 直接调拨单WMS
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TransWMS(object sender, DoWorkEventArgs e)
-        {
-            //string strBillNos, tmp;
-            //List<string> lstDep;//领料部门List
-            //List<string> lstOutStock;//调出仓编码List
-            //List<string> lstType;//调拨类型
-            //DataTable dt = PrdAllocation.GetTrans2(_datefrom.Value.ToString("yyyy-MM-dd"));
-            //DataTable dtDep = CommFunction.GetPickMtlDepartment();
-
-            //if (dtDep == null || dtDep.Rows.Count == 0 || dt == null || dt.Rows.Count == 0)
-            //    return;
-
-            //int iQty = int.Parse(AppConfig.ReadValue("DIR_Qty", "AppSettings")), iWC = int.Parse(AppConfig.ReadValue("DIR_WC", "AppSettings"));
-            //if (iQty <= 0)
-            //{
-            //    MessageBox.Show("每张单最大数量不能小于等于零。");
-            //    return;
-            //}
-            //bool bIsUse = AppConfig.ReadValue("DIR_IsUse", "AppSettings").ToString() == "1" ? true : false;
-
-            //strBillNos = string.Empty;
-            //lstOutStock = new List<string>();
-            //lstType = new List<string>();
-            //lstDep = new List<string>();
-            //for (int i = 0; i < dtDep.Rows.Count; i++)
-            //{
-            //    lstDep.Add(dtDep.Rows[i]["FNUMBER"].ToString()); ;
-            //}
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    if (!lstOutStock.Contains(dt.Rows[i]["调出仓库编码"].ToString()))
-            //        lstOutStock.Add(dt.Rows[i]["调出仓库编码"].ToString());
-            //    if (!lstType.Contains(dt.Rows[i]["调拨类型"].ToString()))
-            //        lstType.Add(dt.Rows[i]["调拨类型"].ToString());
-            //}
-
-            //DataTable dtPZ, dtOther;
-            //dtPZ = dt.Clone();
-            //dtOther = dt.Clone();
-            //for (int i = 0; i < dt.Rows.Count; i++)
-            //{
-            //    if (dt.Rows[i]["物料编码"].ToString().Substring(0, 3) == "203")
-            //        dtPZ.ImportRow(dt.Rows[i]);
-            //    else
-            //        dtOther.ImportRow(dt.Rows[i]);
-            //}
-
-            ////处理盘子调拨单
-            ////统计总套数
-            //int iSumTemp = int.Parse(dtPZ.Rows[0]["调拨数量"].ToString());
-            //string strSEQ = dtPZ.Rows[0]["生产顺序号"].ToString();
-            //DataTable dtPZ_2 = dt.Clone();
-            //dtPZ_2.ImportRow(dtPZ.Rows[0]);
-
-            //if (dtPZ.Rows.Count == 1)
-            //{
-            //    tmp = PrdAllocation.TransferDir(dtPZ, _datefrom.Value.ToString("yyyy-MM-dd"));
-            //    if (tmp != "")
-            //        strBillNos += "[" + tmp + "]";
-            //}
-            //else
-            //{
-            //    for (int i = 1; i < dtPZ.Rows.Count; i++)
-            //    {
-            //        if (i != dtPZ.Rows.Count - 1)//最后一行数据
-            //        {
-            //            dtPZ_2.ImportRow(dtPZ.Rows[i]);
-            //            tmp = PrdAllocation.TransferDir(dtPZ_2, _datefrom.Value.ToString("yyyy-MM-dd"));
-            //            if (tmp != "")
-            //                strBillNos += "[" + tmp + "]";
-            //        }
-            //        else if (strSEQ == dtPZ.Rows[i]["生产顺序号"].ToString())
-            //        {
-            //            dtPZ_2.ImportRow(dtPZ.Rows[i]);
-            //        }
-            //        else
-            //        {
-            //            if (iSumTemp + int.Parse(dtPZ.Rows[i]["调拨数量"].ToString()) <= iQty || iSumTemp + int.Parse(dtPZ.Rows[i]["调拨数量"].ToString()) - iQty <= iWC)//指定最大数量范围及偏移值之内
-            //            {
-            //                dtPZ_2.ImportRow(dtPZ.Rows[i]);
-            //                iSumTemp += int.Parse(dtPZ.Rows[i]["调拨数量"].ToString());
-            //                strSEQ = dtPZ.Rows[i]["生产顺序号"].ToString();
-            //            }
-            //            else
-            //            {
-            //                tmp = PrdAllocation.TransferDir(dtPZ_2, _datefrom.Value.ToString("yyyy-MM-dd"));
-            //                if (tmp != "")
-            //                    strBillNos += "[" + tmp + "]";
-
-            //                dtPZ_2 = dt.Clone();
-            //                dtPZ_2.ImportRow(dtPZ.Rows[i]);
-            //                iSumTemp = int.Parse(dtPZ.Rows[i]["调拨数量"].ToString());
-            //            }
-            //        }
-            //    }
-            //}
-
-            //for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库--处理非盘子调拨单
-            //{
-            //    DataTable dt_2 = dt.Clone();
-            //    for (int j = 0; j < dtOther.Rows.Count; j++)
-            //    {
-            //        if (lstOutStock[i] == dtOther.Rows[j]["调出仓库编码"].ToString())
-            //            dt_2.ImportRow(dtOther.Rows[j]);
-            //    }
-            //    if (dt_2.Rows.Count > 0)
-            //    {
-            //        for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
-            //        {
-            //            DataTable dt_3 = dt.Clone();
-            //            for (int n = 0; n < dt_2.Rows.Count; n++)
-            //            {
-            //                if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
-            //                    dt_3.ImportRow(dt_2.Rows[n]);
-            //            }
-            //            if (dt_3.Rows.Count > 0)
-            //            {
-            //                for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
-            //                {
-            //                    DataTable dt_4 = dt.Clone();
-            //                    for (int q = 0; q < dt_3.Rows.Count; q++)
-            //                    {
-            //                        if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
-            //                            dt_4.ImportRow(dt_3.Rows[q]);
-            //                    }
-
-            //                    if (dt_4.Rows.Count > 0)
-            //                    {
-            //                        tmp = PrdAllocation.TransferDir(dt_4, _datefrom.Value.ToString("yyyy-MM-dd"));
-            //                        if (tmp != "")
-            //                            strBillNos += "[" + tmp + "]";
-            //                    }
-            //                }
-            //            }
-            //        }
-            //    }
-
-            //    //控制进度条
-            //    if (_Worker.CancellationPending)
-            //    {
-            //        e.Cancel = true;
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        _Worker.ReportProgress(i * 100 / (lstOutStock.Count));//状态报告                      
-            //        Thread.Sleep(1);//等待，用于UI刷新界面，很重要  
-            //    }
-            //}
-
-            //if (strBillNos != "")
-            //{
-            //    PrdAllocation.UpdateDirFields2(_datefrom.Value.ToString("yyyy-MM-dd"), new List<string>());//更新【已经生成调拨单】状态
-            //    MessageBox.Show("直接调拨单：" + strBillNos);
-            //}
-            //else
-            //    MessageBox.Show("没有数据或者源单据未审核！");
-
-            //20190614
-            string strBillNos, tmp;
             List<string> lstDep;//领料部门List
             List<string> lstOutStock;//调出仓编码List
             List<string> lstType;//调拨类型
-            DataTable dt = PrdAllocation.GetTransWMS(_datefrom.Value.ToString("yyyy-MM-dd"));
-            DataTable dtDep = CommFunction.GetPickMtlDepartment();
 
-            if (dtDep == null || dtDep.Rows.Count == 0 || dt == null || dt.Rows.Count == 0)
-                return;
+            List<string> lstDepSet = CommFunction.GetPickMtlDepartment();
 
-            strBillNos = string.Empty;
+            DataTable dtPZ = PrdAllocation.GetTransPZ(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID);
+            DataTable dtCL = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, false);
+            int iPZ = dtPZ == null ? 0 : dtPZ.Rows.Count;
+            int iCL = dtCL == null ? 0 : dtCL.Rows.Count;
+            int iCurrent = 0, iCount = iPZ + iCL;
+
+
+            #region 盆子调拨
+
+            if (dtPZ == null || dtPZ.Rows.Count == 0)
+                goto CailiaoDiaobo;
+
             lstOutStock = new List<string>();
             lstType = new List<string>();
             lstDep = new List<string>();
-            for (int i = 0; i < dtDep.Rows.Count; i++)
+            for (int i = 0; i < dtPZ.Rows.Count; i++)
             {
-                lstDep.Add(dtDep.Rows[i]["FNUMBER"].ToString()); ;
+                if (!lstOutStock.Contains(dtPZ.Rows[i]["调出仓库编码"].ToString()))
+                    lstOutStock.Add(dtPZ.Rows[i]["调出仓库编码"].ToString());
+                if (!lstType.Contains(dtPZ.Rows[i]["调拨类型"].ToString()))
+                    lstType.Add(dtPZ.Rows[i]["调拨类型"].ToString());
+                if (!lstDep.Contains(dtPZ.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtPZ.Rows[i]["领料部门编码"].ToString()))
+                    lstDep.Add(dtPZ.Rows[i]["领料部门编码"].ToString());
             }
-            for (int i = 0; i < dt.Rows.Count; i++)
+
+            int iMaxQtyPZ = int.Parse(AppConfig.ReadValue("DIR_MaxQtyPZ", "AppSettings")), iPianYiPZ = int.Parse(AppConfig.ReadValue("DIR_PianYiPZ", "AppSettings"));
+            if (iMaxQtyPZ <= 0)
             {
-                if (!lstOutStock.Contains(dt.Rows[i]["调出仓库编码"].ToString()))
-                    lstOutStock.Add(dt.Rows[i]["调出仓库编码"].ToString());
-                if (!lstType.Contains(dt.Rows[i]["调拨类型"].ToString()))
-                    lstType.Add(dt.Rows[i]["调拨类型"].ToString());
+                MessageBox.Show("每张单最大数量不能小于等于零。");
+                return;
+            }
+            bool bIsUsePZ = AppConfig.ReadValue("DIR_IsUsePZ", "AppSettings").ToString() == "1" ? true : false;
+
+            #region 启用盆子数量控制
+
+            if (bIsUsePZ)
+            {
+                for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
+                {
+                    DataTable dt_2 = dtPZ.Clone();
+                    for (int j = 0; j < dtPZ.Rows.Count; j++)
+                    {
+                        if (lstOutStock[i] == dtPZ.Rows[j]["调出仓库编码"].ToString())
+                            dt_2.ImportRow(dtPZ.Rows[j]);
+                    }
+                    if (dt_2.Rows.Count > 0)
+                    {
+                        for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
+                        {
+                            DataTable dt_3 = dtPZ.Clone();
+                            for (int n = 0; n < dt_2.Rows.Count; n++)
+                            {
+                                if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
+                                    dt_3.ImportRow(dt_2.Rows[n]);
+                            }
+                            if (dt_3.Rows.Count > 0)
+                            {
+                                for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
+                                {
+                                    DataTable dt_4 = dtPZ.Clone();
+                                    for (int q = 0; q < dt_3.Rows.Count; q++)
+                                    {
+                                        if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
+                                            dt_4.ImportRow(dt_3.Rows[q]);
+                                    }
+
+                                    if (dt_4.Rows.Count > 0)
+                                    {
+                                        int iSumDD = 0;
+                                        DataTable dtPZ_DD, dtPZ_XD;
+                                        dtPZ_DD = dtPZ.Clone();
+                                        dtPZ_XD = dtPZ.Clone();
+
+                                        for (int j = 0; j < dt_4.Rows.Count; j++)
+                                        {
+                                            if (dt_4.Rows[j]["大单"].ToString() == "1")
+                                            {
+                                                dtPZ_DD.ImportRow(dt_4.Rows[j]);
+                                                iSumDD += int.Parse(dt_4.Rows[j]["调拨数量"].ToString());
+                                            }
+                                            else
+                                                dtPZ_XD.ImportRow(dt_4.Rows[j]);
+                                        }
+
+                                        #region 需要区分大单生成调拨单
+                                        if (iSumDD > 0 && iSumDD >= GlobalParameter.Dir_MinQtyPZ)
+                                        {
+                                            //其他盆子正常生成调拨单
+                                            if (dtPZ_XD.Rows.Count > 0)
+                                            {
+                                                int iSumQtyPZ = int.Parse(dtPZ_XD.Rows[0]["合并数量"].ToString());
+                                                string strSEQ = dtPZ_XD.Rows[0]["生产顺序号"].ToString();
+                                                DataTable dtPZ_2 = dt_4.Clone();
+                                                dtPZ_2.ImportRow(dtPZ_XD.Rows[0]);
+
+                                                if (dtPZ_XD.Rows.Count == 1)
+                                                {
+                                                    tmp = PrdAllocation.TransferDir(dtPZ_XD, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                                    iCurrent++;
+                                                    ReportProgreess(e, iCount, iCurrent);
+
+                                                    if (tmp != "")
+                                                        strBillNos += "[" + tmp + "]";
+                                                }
+                                                else
+                                                {
+                                                    for (int j = 1; j < dtPZ_XD.Rows.Count; j++)
+                                                    {
+                                                        if (j == dtPZ_XD.Rows.Count - 1)//最后一行数据,(盘子必然在最后一套之内)
+                                                        {
+                                                            dtPZ_2.ImportRow(dtPZ_XD.Rows[j]);
+                                                            tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                                            iCurrent++;
+                                                            ReportProgreess(e, iCount, iCurrent);
+
+                                                            if (tmp != "")
+                                                                strBillNos += "[" + tmp + "]";
+                                                        }
+                                                        else if (strSEQ == dtPZ_XD.Rows[j]["生产顺序号"].ToString())
+                                                        {
+                                                            dtPZ_2.ImportRow(dtPZ_XD.Rows[j]);
+                                                        }
+                                                        else
+                                                        {
+                                                            //判断累计另一套盘子的数量后是否超出设置数量及允许偏移值
+                                                            if (iSumQtyPZ + int.Parse(dtPZ_XD.Rows[j]["合并数量"].ToString()) <= iMaxQtyPZ || iSumQtyPZ + int.Parse(dtPZ_XD.Rows[j]["合并数量"].ToString()) - iMaxQtyPZ <= iPianYiPZ)//指定最大数量范围及偏移值之内
+                                                            {
+                                                                dtPZ_2.ImportRow(dtPZ_XD.Rows[j]);
+                                                                iSumQtyPZ += int.Parse(dtPZ_XD.Rows[j]["合并数量"].ToString());//累计盘子套数
+                                                                strSEQ = dtPZ_XD.Rows[j]["生产顺序号"].ToString();//设置新的生产顺序号变量
+                                                            }
+                                                            else
+                                                            {
+                                                                tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                                                iCurrent++;
+                                                                ReportProgreess(e, iCount, iCurrent);
+
+                                                                if (tmp != "")
+                                                                    strBillNos += "[" + tmp + "]";
+
+                                                                dtPZ_2 = dtPZ_XD.Clone();
+                                                                dtPZ_2.ImportRow(dtPZ_XD.Rows[j]);
+
+                                                                iSumQtyPZ = int.Parse(dtPZ_XD.Rows[j]["合并数量"].ToString());//重新计算新单据的调拨累计数量
+                                                                strSEQ = dtPZ_XD.Rows[j]["生产顺序号"].ToString();//重新赋值新单据的生产顺序号变量
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+
+                                            //大单单独生成调拨单
+                                            tmp = PrdAllocation.TransferDir(dtPZ_DD, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                            iCurrent++;
+                                            ReportProgreess(e, iCount, iCurrent);
+
+                                            if (tmp != "")
+                                                strBillNos += "[" + tmp + "]";
+                                        }
+                                        #endregion
+
+                                        #region 不需要区分大单
+                                        else
+                                        {
+                                            int iSumQtyPZ = int.Parse(dt_4.Rows[0]["合并数量"].ToString());
+                                            string strSEQ = dt_4.Rows[0]["生产顺序号"].ToString();
+                                            DataTable dtPZ_2 = dtPZ.Clone();
+                                            dtPZ_2.ImportRow(dt_4.Rows[0]);
+
+                                            if (dt_4.Rows.Count == 1)
+                                            {
+                                                tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                                iCurrent++;
+                                                ReportProgreess(e, iCount, iCurrent);
+
+                                                if (tmp != "")
+                                                    strBillNos += "[" + tmp + "]";
+                                            }
+                                            else
+                                            {
+                                                for (int j = 1; j < dt_4.Rows.Count; j++)
+                                                {
+                                                    if (j == dt_4.Rows.Count - 1)//最后一行数据,(盘子必然在最后一套之内)
+                                                    {
+                                                        dtPZ_2.ImportRow(dt_4.Rows[j]);
+                                                        tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                                        iCurrent++;
+                                                        ReportProgreess(e, iCount, iCurrent);
+
+                                                        if (tmp != "")
+                                                            strBillNos += "[" + tmp + "]";
+                                                    }
+                                                    else if (strSEQ == dt_4.Rows[j]["生产顺序号"].ToString())
+                                                    {
+                                                        dtPZ_2.ImportRow(dt_4.Rows[j]);
+                                                    }
+                                                    else
+                                                    {
+                                                        //判断累计另一套盘子的数量后是否超出设置数量及允许偏移值
+                                                        if (iSumQtyPZ + int.Parse(dt_4.Rows[j]["合并数量"].ToString()) <= iMaxQtyPZ || iSumQtyPZ + int.Parse(dt_4.Rows[j]["合并数量"].ToString()) - iMaxQtyPZ <= iPianYiPZ)//指定最大数量范围及偏移值之内
+                                                        {
+                                                            dtPZ_2.ImportRow(dt_4.Rows[j]);
+                                                            iSumQtyPZ += int.Parse(dt_4.Rows[j]["合并数量"].ToString());//累计盘子套数
+                                                            strSEQ = dt_4.Rows[j]["生产顺序号"].ToString();//设置新的生产顺序号变量
+                                                        }
+                                                        else
+                                                        {
+                                                            tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                                            iCurrent++;
+                                                            ReportProgreess(e, iCount, iCurrent);
+
+                                                            if (tmp != "")
+                                                                strBillNos += "[" + tmp + "]";
+
+                                                            dtPZ_2 = dtPZ.Clone();
+                                                            dtPZ_2.ImportRow(dt_4.Rows[j]);
+
+                                                            iSumQtyPZ = int.Parse(dt_4.Rows[j]["合并数量"].ToString());//重新计算新单据的调拨累计数量
+                                                            strSEQ = dt_4.Rows[j]["生产顺序号"].ToString();//重新赋值新单据的生产顺序号变量
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        #endregion
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region 未启用盆子数量控制
+            else
+            {
+                for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
+                {
+                    DataTable dt_2 = dtPZ.Clone();
+                    for (int j = 0; j < dtPZ.Rows.Count; j++)
+                    {
+                        if (lstOutStock[i] == dtPZ.Rows[j]["调出仓库编码"].ToString())
+                            dt_2.ImportRow(dtPZ.Rows[j]);
+                    }
+                    if (dt_2.Rows.Count > 0)
+                    {
+                        for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
+                        {
+                            DataTable dt_3 = dtPZ.Clone();
+                            for (int n = 0; n < dt_2.Rows.Count; n++)
+                            {
+                                if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
+                                    dt_3.ImportRow(dt_2.Rows[n]);
+                            }
+                            if (dt_3.Rows.Count > 0)
+                            {
+                                for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
+                                {
+                                    DataTable dt_4 = dtPZ.Clone();
+                                    for (int q = 0; q < dt_3.Rows.Count; q++)
+                                    {
+                                        if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
+                                            dt_4.ImportRow(dt_3.Rows[q]);
+                                    }
+
+                                    if (dt_4.Rows.Count > 0)
+                                    {
+                                        tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                        iCurrent++;
+                                        ReportProgreess(e, iCount, iCurrent);
+
+                                        if (tmp != "")
+                                            strBillNos += "[" + tmp + "]";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+            #endregion
+
+            CailiaoDiaobo:
+
+            #region 材料调拨
+
+            #region 处理没有中间仓 
+            if (dtCL == null || dtCL.Rows.Count == 0)
+                goto Transit;
+
+            lstOutStock = new List<string>();
+            lstType = new List<string>();
+            lstDep = new List<string>();
+            for (int i = 0; i < dtCL.Rows.Count; i++)
+            {
+                if (!lstOutStock.Contains(dtCL.Rows[i]["调出仓库编码"].ToString()))
+                    lstOutStock.Add(dtCL.Rows[i]["调出仓库编码"].ToString());
+                if (!lstType.Contains(dtCL.Rows[i]["调拨类型"].ToString()))
+                    lstType.Add(dtCL.Rows[i]["调拨类型"].ToString());
+                if (!lstDep.Contains(dtCL.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtCL.Rows[i]["领料部门编码"].ToString()))
+                    lstDep.Add(dtCL.Rows[i]["领料部门编码"].ToString());
             }
 
             for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
             {
-                DataTable dt_2 = dt.Clone();
-                for (int j = 0; j < dt.Rows.Count; j++)
+                DataTable dt_2 = dtCL.Clone();
+                for (int j = 0; j < dtCL.Rows.Count; j++)
                 {
-                    if (lstOutStock[i] == dt.Rows[j]["调出仓库编码"].ToString())
-                        dt_2.ImportRow(dt.Rows[j]);
+                    if (lstOutStock[i] == dtCL.Rows[j]["调出仓库编码"].ToString())
+                        dt_2.ImportRow(dtCL.Rows[j]);
                 }
                 if (dt_2.Rows.Count > 0)
                 {
                     for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
                     {
-                        DataTable dt_3 = dt.Clone();
+                        DataTable dt_3 = dtCL.Clone();
                         for (int n = 0; n < dt_2.Rows.Count; n++)
                         {
                             if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
@@ -2030,7 +1889,7 @@ namespace ERPSupport.SupForm
                         {
                             for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
                             {
-                                DataTable dt_4 = dt.Clone();
+                                DataTable dt_4 = dtCL.Clone();
                                 for (int q = 0; q < dt_3.Rows.Count; q++)
                                 {
                                     if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
@@ -2039,7 +1898,11 @@ namespace ERPSupport.SupForm
 
                                 if (dt_4.Rows.Count > 0)
                                 {
-                                    tmp = PrdAllocation.TransferDirWMS(dt_4, _datefrom.Value.ToString("yyyy-MM-dd"));
+                                    tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                    iCurrent++;
+                                    ReportProgreess(e, iCount, iCurrent);
+
                                     if (tmp != "")
                                         strBillNos += "[" + tmp + "]";
                                 }
@@ -2047,28 +1910,644 @@ namespace ERPSupport.SupForm
                         }
                     }
                 }
+            }
+            #endregion
 
-                //控制进度条
-                if (_Worker.CancellationPending)
-                {
-                    e.Cancel = true;
-                    return;
-                }
-                else
-                {
-                    _Worker.ReportProgress(i * 100 / (lstOutStock.Count));//状态报告                      
-                    Thread.Sleep(1);//等待，用于UI刷新界面，很重要  
-                }
+            Transit:
+            #region 处理有中间仓
+            dtCL = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, true);
+            if (dtCL == null || dtCL.Rows.Count == 0)
+                goto SHOW;
+
+            lstOutStock = new List<string>();
+            lstType = new List<string>();
+            lstDep = new List<string>();
+            for (int i = 0; i < dtCL.Rows.Count; i++)
+            {
+                if (!lstOutStock.Contains(dtCL.Rows[i]["调出仓库编码"].ToString()))
+                    lstOutStock.Add(dtCL.Rows[i]["调出仓库编码"].ToString());
+                if (!lstType.Contains(dtCL.Rows[i]["调拨类型"].ToString()))
+                    lstType.Add(dtCL.Rows[i]["调拨类型"].ToString());
+                if (!lstDep.Contains(dtCL.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtCL.Rows[i]["领料部门编码"].ToString()))
+                    lstDep.Add(dtCL.Rows[i]["领料部门编码"].ToString());
             }
 
+            for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
+            {
+                DataTable dt_2 = dtCL.Clone();
+                for (int j = 0; j < dtCL.Rows.Count; j++)
+                {
+                    if (lstOutStock[i] == dtCL.Rows[j]["调出仓库编码"].ToString())
+                        dt_2.ImportRow(dtCL.Rows[j]);
+                }
+                if (dt_2.Rows.Count > 0)
+                {
+                    for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
+                    {
+                        DataTable dt_3 = dtCL.Clone();
+                        for (int n = 0; n < dt_2.Rows.Count; n++)
+                        {
+                            if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
+                                dt_3.ImportRow(dt_2.Rows[n]);
+                        }
+                        if (dt_3.Rows.Count > 0)
+                        {
+                            for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
+                            {
+                                DataTable dt_4 = dtCL.Clone();
+                                for (int q = 0; q < dt_3.Rows.Count; q++)
+                                {
+                                    if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
+                                        dt_4.ImportRow(dt_3.Rows[q]);
+                                }
+
+                                if (dt_4.Rows.Count > 0)
+                                {
+                                    //生成单据-WMS（调出仓库->中间仓）
+                                    tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"), true);
+
+                                    iCurrent++;
+                                    ReportProgreess(e, iCount, iCurrent);
+
+                                    //生成单据-ERP（中间仓->调入仓库）
+                                    tmp += PrdAllocation.TransferDirERP(dt_4, _dateFrom.Value);
+                                    if (tmp != "")
+                                        strBillNos += "[" + tmp + "]";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            #endregion
+            #endregion
+
+            SHOW:
             if (strBillNos != "")
             {
-                PrdAllocation.UpdateDirFieldsWMS(_datefrom.Value.ToString("yyyy-MM-dd"), new List<string>());//更新【已经生成调拨单】状态
+                PrdAllocation.UpdateDirFieldsWMS(_dateFrom.Value.ToString("yyyy-MM-dd"), null);//更新【已经生成调拨单】状态
+                //PrdAllocation.UpdateDirFields(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
                 MessageBox.Show("直接调拨单：" + strBillNos);
             }
             else
                 MessageBox.Show("没有数据或者源单据未审核！");
         }
+
+        private void ReportProgreess(DoWorkEventArgs e,int pCount,int pCurrent)
+        {
+            //控制进度条
+            if (_Worker.CancellationPending)
+            {
+                e.Cancel = true;
+                return;
+            }
+            else
+            {
+                _Worker.ReportProgress(pCurrent * 100 / pCount);//状态报告                      
+                Thread.Sleep(1);//等待，用于UI刷新界面，很重要  
+            }
+        }
+
+        ///// <summary>
+        ///// 直接调拨单ERP
+        ///// </summary>
+        //private int TransERP(object sender, DoWorkEventArgs e)
+        //{
+        //    string strBillNos, tmp;
+
+        //    List<string> list;
+        //    List<string> lstOutStock, lstOutStock_Fault;
+
+        //    DataTable dt;
+        //    DataTable dtDept = CommFunction.GetDepartment(4, -1, "");
+
+        //    if (dtDept == null || dtDept.Rows.Count == 0)
+        //        return -1;
+
+        //    //根据具体部门汇总分组情况指定锯齿数组值
+        //    string[][] DepNo = new string[dtDept.Rows.Count][];
+        //    strBillNos = string.Empty;
+        //    tmp = string.Empty;
+        //    list = new List<string>();
+
+        //    for (int i = 0; i < dtDept.Rows.Count; i++)
+        //    {
+        //        DepNo[i] = new string[] { dtDept.Rows[i]["FNUMBER"].ToString() };
+        //    }
+
+        //    for (int i = 0; i < DepNo.Length; i++)
+        //    {
+        //        tmp = string.Empty;
+
+        //        for (int j = 0; j < DepNo[i].Length; j++)
+        //        {
+        //            if (j > 0) tmp += ",";
+        //            tmp += "'" + DepNo[i][j] + "'";
+        //        }
+
+        //        list.Add(tmp);
+        //    }
+
+        //    for (int i = 0; i < list.Count; i++)
+        //    {
+        //        dt = new DataTable();
+        //        lstOutStock = new List<string>();
+
+        //        //获取调拨单数据
+        //        dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i]);
+
+        //        if (dt.Rows.Count == 0)
+        //            continue;
+
+        //        //统计调出仓库
+        //        for (int j = 0; j < dt.Rows.Count; j++)
+        //        {
+        //            if (j == 0)
+        //                lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
+        //            else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
+        //                lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
+        //        }
+
+        //        //根据不同调出仓分批生产单据
+        //        DataTable dt2;
+        //        lstOutStock_Fault = new List<string>();//统计生成失败的调出仓
+
+        //        for (int j = 0; j < lstOutStock.Count; j++)
+        //        {
+        //            dt2 = new DataTable();
+        //            dt2 = dt.Clone();
+
+        //            for (int m = 0; m < dt.Rows.Count; m++)
+        //            {
+        //                if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
+        //                    dt2.ImportRow(dt.Rows[m]);
+        //            }
+
+        //            if (dt2.Rows.Count > 0)
+        //            {
+        //                //生成单据
+        //                tmp = PrdAllocation.TransferDirERP(dt2, _datefrom.Value);
+
+        //                if (tmp != "")
+        //                    strBillNos += "[" + tmp + "]";
+        //                if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
+        //                    lstOutStock_Fault.Add(tmp);
+        //            }
+        //        }
+
+        //        //更新【已经生成调拨单】状态
+        //        PrdAllocation.UpdateDirFields(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
+
+        //        //控制进度条
+        //        if (_Worker.CancellationPending)
+        //        {
+        //            e.Cancel = true;
+        //            return -1;
+        //        }
+        //        else
+        //        {
+        //            // 状态报告  
+        //            _Worker.ReportProgress(i * 100 / (list.Count - 1));
+
+        //            // 等待，用于UI刷新界面，很重要  
+        //            Thread.Sleep(1);
+        //        }
+        //    }
+
+        //    string sFlag = "1";
+        //    if (strBillNos != "")
+        //    {
+        //        MessageBox.Show("生成直接调拨单：" + strBillNos);
+        //    }
+        //    else
+        //    {
+        //        MessageBox.Show("没有数据可以生成直接调拨单！\n\r 或者源单据未审核！");
+        //        sFlag = "0";
+        //    }
+
+        //    //操作日志
+        //    CommFunction.DM_Log_Local("调拨单", "辅助功能\\调拨", strBillNos, sFlag);
+
+        //    return -1;
+
+        //    ////20190812
+        //    //string strBillNos, tmp;
+
+        //    //List<string> list;
+        //    //List<string> lstOutStock, lstOutStock_Fault;
+
+        //    //DataTable dt;
+        //    //DataTable dtDept = CommFunction.GetDepartment(4, -1, "");
+
+        //    //if (dtDept == null || dtDept.Rows.Count == 0)
+        //    //    return -1;
+
+        //    ////根据具体部门汇总分组情况指定锯齿数组值
+        //    //string[][] DepNo = new string[dtDept.Rows.Count][];
+        //    //strBillNos = string.Empty;
+        //    //tmp = string.Empty;
+        //    //list = new List<string>();
+
+        //    //for (int i = 0; i < dtDept.Rows.Count; i++)
+        //    //{
+        //    //    DepNo[i] = new string[] { dtDept.Rows[i]["FNUMBER"].ToString() };
+        //    //}
+
+        //    //for (int i = 0; i < DepNo.Length; i++)
+        //    //{
+        //    //    tmp = string.Empty;
+
+        //    //    for (int j = 0; j < DepNo[i].Length; j++)
+        //    //    {
+        //    //        if (j > 0) tmp += ",";
+        //    //        tmp += "'" + DepNo[i][j] + "'";
+        //    //    }
+
+        //    //    list.Add(tmp);
+        //    //}
+
+        //    //for (int i = 0; i < list.Count; i++)
+        //    //{
+        //    //    #region 处理没有中间仓
+        //    //    dt = new DataTable();
+        //    //    lstOutStock = new List<string>();
+        //    //    lstOutStock_Fault = new List<string>();//统计生成失败的调出仓
+
+        //    //    //获取调拨单数据
+        //    //    dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i]);
+
+        //    //    if (dt == null || dt.Rows.Count == 0)
+        //    //        goto Transit;
+
+        //    //    //统计调出仓库
+        //    //    for (int j = 0; j < dt.Rows.Count; j++)
+        //    //    {
+        //    //        if (j == 0)
+        //    //            lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
+        //    //        else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
+        //    //            lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
+        //    //    }
+
+        //    //    //根据不同调出仓分批生产单据
+        //    //    DataTable dt2;
+
+        //    //    for (int j = 0; j < lstOutStock.Count; j++)
+        //    //    {
+        //    //        dt2 = new DataTable();
+        //    //        dt2 = dt.Clone();
+
+        //    //        for (int m = 0; m < dt.Rows.Count; m++)
+        //    //        {
+        //    //            if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
+        //    //                dt2.ImportRow(dt.Rows[m]);
+        //    //        }
+
+        //    //        if (dt2.Rows.Count > 0)
+        //    //        {
+        //    //            //生成单据
+        //    //            tmp = PrdAllocation.TransferDirERP(dt2, _datefrom.Value);
+
+        //    //            if (tmp != "")
+        //    //                strBillNos += "[" + tmp + "]";
+        //    //            if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
+        //    //                lstOutStock_Fault.Add(tmp);
+        //    //        }
+        //    //    }
+        //    //    #endregion
+
+        //    //    Transit:
+        //    //    #region 处理有中间仓
+        //    //    dt = new DataTable();
+        //    //    lstOutStock = new List<string>();
+
+        //    //    //获取调拨单数据
+        //    //    dt = PrdAllocation.GetTransERP(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], true);
+
+        //    //    if (dt == null || dt.Rows.Count == 0)
+        //    //        continue;
+
+        //    //    //统计调出仓库
+        //    //    for (int j = 0; j < dt.Rows.Count; j++)
+        //    //    {
+        //    //        if (j == 0)
+        //    //            lstOutStock.Add(dt.Rows[0]["调出仓库"].ToString());
+        //    //        else if (!lstOutStock.Contains(dt.Rows[j]["调出仓库"].ToString()))
+        //    //            lstOutStock.Add(dt.Rows[j]["调出仓库"].ToString());
+        //    //    }
+
+        //    //    //根据不同调出仓分批生产单据
+        //    //    DataTable dt2_Tr;
+
+        //    //    for (int j = 0; j < lstOutStock.Count; j++)
+        //    //    {
+        //    //        dt2_Tr = new DataTable();
+        //    //        dt2_Tr = dt.Clone();
+
+        //    //        for (int m = 0; m < dt.Rows.Count; m++)
+        //    //        {
+        //    //            if (lstOutStock[j] == dt.Rows[m]["调出仓库"].ToString())
+        //    //                dt2_Tr.ImportRow(dt.Rows[m]);
+        //    //        }
+
+        //    //        if (dt2_Tr.Rows.Count > 0)
+        //    //        {
+        //    //            //生成单据
+        //    //            tmp = PrdAllocation.TransferDirERP(dt2_Tr, _datefrom.Value, true);
+
+        //    //            if (tmp != "")
+        //    //                strBillNos += "[" + tmp + "]";
+        //    //            if (tmp == "" || tmp.IndexOf("ZJDB") < 0)
+        //    //                lstOutStock_Fault.Add(tmp);
+        //    //        }
+        //    //    }
+        //    //    #endregion
+
+        //    //    //更新【已经生成调拨单】状态
+        //    //    PrdAllocation.UpdateDirFields(_datefrom.Value.ToString("yyyy-MM-dd"), list[i], lstOutStock_Fault);
+
+        //    //    //控制进度条
+        //    //    if (_Worker.CancellationPending)
+        //    //    {
+        //    //        e.Cancel = true;
+        //    //        return -1;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        // 状态报告  
+        //    //        _Worker.ReportProgress(i * 100 / (list.Count - 1));
+
+        //    //        // 等待，用于UI刷新界面，很重要  
+        //    //        Thread.Sleep(1);
+        //    //    }
+        //    //}
+
+        //    //string sFlag = "1";
+        //    //if (strBillNos != "")
+        //    //{
+        //    //    MessageBox.Show("生成直接调拨单：" + strBillNos);
+        //    //}
+        //    //else
+        //    //{
+        //    //    MessageBox.Show("没有数据可以生成直接调拨单！\n\r 或者源单据未审核！");
+        //    //    sFlag = "0";
+        //    //}
+
+        //    ////操作日志
+        //    //CommFunction.DM_Log_Local("调拨单", "辅助功能\\调拨", strBillNos, sFlag);
+
+        //    //return -1;
+        //}
+        ///// <summary>
+        ///// 直接调拨单WMS
+        ///// </summary>
+        ///// <param name="sender"></param>
+        ///// <param name="e"></param>
+        //private void TransWMS(object sender, DoWorkEventArgs e)
+        //{
+        //    //string strBillNos, tmp;
+        //    //List<string> lstDep;//领料部门List
+        //    //List<string> lstOutStock;//调出仓编码List
+        //    //List<string> lstType;//调拨类型
+        //    //DataTable dt = PrdAllocation.GetTrans2(_datefrom.Value.ToString("yyyy-MM-dd"));
+        //    //DataTable dtDep = CommFunction.GetPickMtlDepartment();
+
+        //    //if (dtDep == null || dtDep.Rows.Count == 0 || dt == null || dt.Rows.Count == 0)
+        //    //    return;
+
+        //    //int iQty = int.Parse(AppConfig.ReadValue("DIR_Qty", "AppSettings")), iWC = int.Parse(AppConfig.ReadValue("DIR_WC", "AppSettings"));
+        //    //if (iQty <= 0)
+        //    //{
+        //    //    MessageBox.Show("每张单最大数量不能小于等于零。");
+        //    //    return;
+        //    //}
+        //    //bool bIsUse = AppConfig.ReadValue("DIR_IsUse", "AppSettings").ToString() == "1" ? true : false;
+
+        //    //strBillNos = string.Empty;
+        //    //lstOutStock = new List<string>();
+        //    //lstType = new List<string>();
+        //    //lstDep = new List<string>();
+        //    //for (int i = 0; i < dtDep.Rows.Count; i++)
+        //    //{
+        //    //    lstDep.Add(dtDep.Rows[i]["FNUMBER"].ToString()); ;
+        //    //}
+        //    //for (int i = 0; i < dt.Rows.Count; i++)
+        //    //{
+        //    //    if (!lstOutStock.Contains(dt.Rows[i]["调出仓库编码"].ToString()))
+        //    //        lstOutStock.Add(dt.Rows[i]["调出仓库编码"].ToString());
+        //    //    if (!lstType.Contains(dt.Rows[i]["调拨类型"].ToString()))
+        //    //        lstType.Add(dt.Rows[i]["调拨类型"].ToString());
+        //    //}
+
+        //    //DataTable dtPZ, dtOther;
+        //    //dtPZ = dt.Clone();
+        //    //dtOther = dt.Clone();
+        //    //for (int i = 0; i < dt.Rows.Count; i++)
+        //    //{
+        //    //    if (dt.Rows[i]["物料编码"].ToString().Substring(0, 3) == "203")
+        //    //        dtPZ.ImportRow(dt.Rows[i]);
+        //    //    else
+        //    //        dtOther.ImportRow(dt.Rows[i]);
+        //    //}
+
+        //    ////处理盘子调拨单
+        //    ////统计总套数
+        //    //int iSumTemp = int.Parse(dtPZ.Rows[0]["调拨数量"].ToString());
+        //    //string strSEQ = dtPZ.Rows[0]["生产顺序号"].ToString();
+        //    //DataTable dtPZ_2 = dt.Clone();
+        //    //dtPZ_2.ImportRow(dtPZ.Rows[0]);
+
+        //    //if (dtPZ.Rows.Count == 1)
+        //    //{
+        //    //    tmp = PrdAllocation.TransferDir(dtPZ, _datefrom.Value.ToString("yyyy-MM-dd"));
+        //    //    if (tmp != "")
+        //    //        strBillNos += "[" + tmp + "]";
+        //    //}
+        //    //else
+        //    //{
+        //    //    for (int i = 1; i < dtPZ.Rows.Count; i++)
+        //    //    {
+        //    //        if (i != dtPZ.Rows.Count - 1)//最后一行数据
+        //    //        {
+        //    //            dtPZ_2.ImportRow(dtPZ.Rows[i]);
+        //    //            tmp = PrdAllocation.TransferDir(dtPZ_2, _datefrom.Value.ToString("yyyy-MM-dd"));
+        //    //            if (tmp != "")
+        //    //                strBillNos += "[" + tmp + "]";
+        //    //        }
+        //    //        else if (strSEQ == dtPZ.Rows[i]["生产顺序号"].ToString())
+        //    //        {
+        //    //            dtPZ_2.ImportRow(dtPZ.Rows[i]);
+        //    //        }
+        //    //        else
+        //    //        {
+        //    //            if (iSumTemp + int.Parse(dtPZ.Rows[i]["调拨数量"].ToString()) <= iQty || iSumTemp + int.Parse(dtPZ.Rows[i]["调拨数量"].ToString()) - iQty <= iWC)//指定最大数量范围及偏移值之内
+        //    //            {
+        //    //                dtPZ_2.ImportRow(dtPZ.Rows[i]);
+        //    //                iSumTemp += int.Parse(dtPZ.Rows[i]["调拨数量"].ToString());
+        //    //                strSEQ = dtPZ.Rows[i]["生产顺序号"].ToString();
+        //    //            }
+        //    //            else
+        //    //            {
+        //    //                tmp = PrdAllocation.TransferDir(dtPZ_2, _datefrom.Value.ToString("yyyy-MM-dd"));
+        //    //                if (tmp != "")
+        //    //                    strBillNos += "[" + tmp + "]";
+
+        //    //                dtPZ_2 = dt.Clone();
+        //    //                dtPZ_2.ImportRow(dtPZ.Rows[i]);
+        //    //                iSumTemp = int.Parse(dtPZ.Rows[i]["调拨数量"].ToString());
+        //    //            }
+        //    //        }
+        //    //    }
+        //    //}
+
+        //    //for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库--处理非盘子调拨单
+        //    //{
+        //    //    DataTable dt_2 = dt.Clone();
+        //    //    for (int j = 0; j < dtOther.Rows.Count; j++)
+        //    //    {
+        //    //        if (lstOutStock[i] == dtOther.Rows[j]["调出仓库编码"].ToString())
+        //    //            dt_2.ImportRow(dtOther.Rows[j]);
+        //    //    }
+        //    //    if (dt_2.Rows.Count > 0)
+        //    //    {
+        //    //        for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
+        //    //        {
+        //    //            DataTable dt_3 = dt.Clone();
+        //    //            for (int n = 0; n < dt_2.Rows.Count; n++)
+        //    //            {
+        //    //                if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
+        //    //                    dt_3.ImportRow(dt_2.Rows[n]);
+        //    //            }
+        //    //            if (dt_3.Rows.Count > 0)
+        //    //            {
+        //    //                for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
+        //    //                {
+        //    //                    DataTable dt_4 = dt.Clone();
+        //    //                    for (int q = 0; q < dt_3.Rows.Count; q++)
+        //    //                    {
+        //    //                        if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
+        //    //                            dt_4.ImportRow(dt_3.Rows[q]);
+        //    //                    }
+
+        //    //                    if (dt_4.Rows.Count > 0)
+        //    //                    {
+        //    //                        tmp = PrdAllocation.TransferDir(dt_4, _datefrom.Value.ToString("yyyy-MM-dd"));
+        //    //                        if (tmp != "")
+        //    //                            strBillNos += "[" + tmp + "]";
+        //    //                    }
+        //    //                }
+        //    //            }
+        //    //        }
+        //    //    }
+
+        //    //    //控制进度条
+        //    //    if (_Worker.CancellationPending)
+        //    //    {
+        //    //        e.Cancel = true;
+        //    //        return;
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        _Worker.ReportProgress(i * 100 / (lstOutStock.Count));//状态报告                      
+        //    //        Thread.Sleep(1);//等待，用于UI刷新界面，很重要  
+        //    //    }
+        //    //}
+
+        //    //if (strBillNos != "")
+        //    //{
+        //    //    PrdAllocation.UpdateDirFields2(_datefrom.Value.ToString("yyyy-MM-dd"), new List<string>());//更新【已经生成调拨单】状态
+        //    //    MessageBox.Show("直接调拨单：" + strBillNos);
+        //    //}
+        //    //else
+        //    //    MessageBox.Show("没有数据或者源单据未审核！");
+
+        //    //20190614
+        //    string strBillNos, tmp;
+        //    List<string> lstDep;//领料部门List
+        //    List<string> lstOutStock;//调出仓编码List
+        //    List<string> lstType;//调拨类型
+        //    DataTable dt = PrdAllocation.GetTransWMS(_datefrom.Value.ToString("yyyy-MM-dd"));
+        //    DataTable dtDep = CommFunction.GetPickMtlDepartment();
+
+        //    if (dtDep == null || dtDep.Rows.Count == 0 || dt == null || dt.Rows.Count == 0)
+        //        return;
+
+        //    strBillNos = string.Empty;
+        //    lstOutStock = new List<string>();
+        //    lstType = new List<string>();
+        //    lstDep = new List<string>();
+        //    for (int i = 0; i < dtDep.Rows.Count; i++)
+        //    {
+        //        lstDep.Add(dtDep.Rows[i]["FNUMBER"].ToString()); ;
+        //    }
+        //    for (int i = 0; i < dt.Rows.Count; i++)
+        //    {
+        //        if (!lstOutStock.Contains(dt.Rows[i]["调出仓库编码"].ToString()))
+        //            lstOutStock.Add(dt.Rows[i]["调出仓库编码"].ToString());
+        //        if (!lstType.Contains(dt.Rows[i]["调拨类型"].ToString()))
+        //            lstType.Add(dt.Rows[i]["调拨类型"].ToString());
+        //    }
+
+        //    for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
+        //    {
+        //        DataTable dt_2 = dt.Clone();
+        //        for (int j = 0; j < dt.Rows.Count; j++)
+        //        {
+        //            if (lstOutStock[i] == dt.Rows[j]["调出仓库编码"].ToString())
+        //                dt_2.ImportRow(dt.Rows[j]);
+        //        }
+        //        if (dt_2.Rows.Count > 0)
+        //        {
+        //            for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
+        //            {
+        //                DataTable dt_3 = dt.Clone();
+        //                for (int n = 0; n < dt_2.Rows.Count; n++)
+        //                {
+        //                    if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
+        //                        dt_3.ImportRow(dt_2.Rows[n]);
+        //                }
+        //                if (dt_3.Rows.Count > 0)
+        //                {
+        //                    for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
+        //                    {
+        //                        DataTable dt_4 = dt.Clone();
+        //                        for (int q = 0; q < dt_3.Rows.Count; q++)
+        //                        {
+        //                            if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
+        //                                dt_4.ImportRow(dt_3.Rows[q]);
+        //                        }
+
+        //                        if (dt_4.Rows.Count > 0)
+        //                        {
+        //                            tmp = PrdAllocation.TransferDirWMS(dt_4, _datefrom.Value.ToString("yyyy-MM-dd"));
+        //                            if (tmp != "")
+        //                                strBillNos += "[" + tmp + "]";
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+
+        //        //控制进度条
+        //        if (_Worker.CancellationPending)
+        //        {
+        //            e.Cancel = true;
+        //            return;
+        //        }
+        //        else
+        //        {
+        //            _Worker.ReportProgress(i * 100 / (lstOutStock.Count));//状态报告                      
+        //            Thread.Sleep(1);//等待，用于UI刷新界面，很重要  
+        //        }
+        //    }
+
+        //    if (strBillNos != "")
+        //    {
+        //        PrdAllocation.UpdateDirFieldsWMS(_datefrom.Value.ToString("yyyy-MM-dd"), new List<string>());//更新【已经生成调拨单】状态
+        //        MessageBox.Show("直接调拨单：" + strBillNos);
+        //    }
+        //    else
+        //        MessageBox.Show("没有数据或者源单据未审核！");
+        //}
         #endregion
 
         #region 锁库

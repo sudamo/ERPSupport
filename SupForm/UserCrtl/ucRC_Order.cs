@@ -2,6 +2,8 @@
 using System.IO;
 using System.Text;
 using System.Data;
+using System.Drawing;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using ERPSupport.SQL.K3Cloud;
 using Oracle.ManagedDataAccess.Client;
@@ -14,6 +16,15 @@ namespace ERPSupport.SupForm.UserCrtl
     /// </summary>
     public partial class ucRC_Order : UserControl
     {
+        /// <summary>
+        /// ToolStrip日期从
+        /// </summary>
+        private ToolStripDateTimePicker _dateFrom;
+        /// <summary>
+        /// ToolStrip日期到
+        /// </summary>
+        private ToolStripDateTimePicker _dateTo;
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -30,8 +41,41 @@ namespace ERPSupport.SupForm.UserCrtl
         private void ucRC_Order_Load(object sender, EventArgs e)
         {
             FillComboBox();
-            dtpFrom.Value = DateTime.Now.AddDays(-1);
-            dtpTO.Value = DateTime.Now;
+
+            //-----
+            _dateFrom = new ToolStripDateTimePicker();
+            _dateFrom.Size = new Size(120, 21);
+            _dateFrom.Value = DateTime.Now.AddDays(-1);
+
+            _dateTo = new ToolStripDateTimePicker();
+            _dateTo.Size = new Size(120, 21);
+            _dateTo.Value = DateTime.Now;
+
+            bnTop.Items.Add(_dateFrom);
+            bnTop.Items.Add(_dateTo);
+
+            //重新排列Items
+            List<ToolStripItem> list = new List<ToolStripItem>();
+            list.Add(bnTop.Items[0]);
+            list.Add(bnTop.Items[1]);
+            list.Add(bnTop.Items[2]);
+            list.Add(bnTop.Items[3]);
+            list.Add(bnTop.Items[4]);
+            list.Add(bnTop.Items[5]);
+            list.Add(bnTop.Items[6]);
+            list.Add(bnTop.Items[7]);
+            list.Add(bnTop.Items[14]);
+            list.Add(bnTop.Items[8]);
+            list.Add(bnTop.Items[15]);
+            list.Add(bnTop.Items[9]);
+            list.Add(bnTop.Items[10]);
+            list.Add(bnTop.Items[11]);
+            list.Add(bnTop.Items[12]);
+            list.Add(bnTop.Items[13]);
+
+            bnTop.Items.Clear();
+            foreach (ToolStripItem item in list)
+                bnTop.Items.Add(item);
         }
 
         /// <summary>
@@ -65,10 +109,10 @@ namespace ERPSupport.SupForm.UserCrtl
             dr["FValue"] = "ORDERRUNSUM";
             dt.Rows.Add(dr);
 
-            cbxType.DataSource = dt;
-            cbxType.DisplayMember = "FName";
-            cbxType.ValueMember = "FValue";
-            cbxType.SelectedIndex = 1;
+            bnTop_cbxType.ComboBox.DataSource = dt;
+            bnTop_cbxType.ComboBox.DisplayMember = "FName";
+            bnTop_cbxType.ComboBox.ValueMember = "FValue";
+            bnTop_cbxType.SelectedIndex = 1;
 
             //Status
             dt = new DataTable();
@@ -89,54 +133,47 @@ namespace ERPSupport.SupForm.UserCrtl
             dr["FValue"] = "1";
             dt.Rows.Add(dr);
 
-            cbxStatus.DataSource = dt;
-            cbxStatus.DisplayMember = "FName";
-            cbxStatus.ValueMember = "FValue";
+            bnTop_cbxStatus.ComboBox.DataSource = dt;
+            bnTop_cbxStatus.ComboBox.DisplayMember = "FName";
+            bnTop_cbxStatus.ComboBox.ValueMember = "FValue";
         }
 
-        /// <summary>
-        /// 查找
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (cbxType.SelectedIndex == 0)
+            if (e.ClickedItem.Tag == null)
+                return;
+
+            switch (e.ClickedItem.Tag.ToString())
+            {
+                case "1":
+                    Search();
+                    break;
+                case "2":
+                    Export();
+                    break;
+            }
+        }
+
+        private void Search()
+        {
+            if (bnTop_cbxType.SelectedIndex == 0)
             {
                 MessageBox.Show("请选择类型");
                 return;
             }
-            if (cbxType.SelectedIndex == 3 && txtYSD.Text.Trim().Equals(string.Empty))
+            if (bnTop_cbxType.SelectedIndex == 3 && bnTop_txtYSD.Text.Trim().Equals(string.Empty))
             {
                 MessageBox.Show("请输入运算单号");
                 return;
             }
 
             dgv1.DataSource = null;
-            dgv1.DataSource = CommFunction.Log_OrderLock(cbxType.SelectedIndex, txtFBillNO.Text.Trim(), txtYSD.Text.Trim(), dtpFrom.Value, dtpTO.Value, cbxStatus.SelectedValue.ToString(), txtMaterialNo.Text);
+            dgv1.DataSource = CommFunction.Log_OrderLock(bnTop_cbxType.SelectedIndex, bnTop_txtBillNo.Text.Trim(), bnTop_txtYSD.Text.Trim(), _dateFrom.Value, _dateTo.Value, bnTop_cbxStatus.ComboBox.SelectedValue.ToString(), bnTop_txtMaterialNo.Text);
         }
-
-        /// <summary>
-        /// 导出报表
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnExport_Click(object sender, EventArgs e)
+        private void Export()
         {
             MessageBox.Show("开发中...");
         }
-
-        /// <summary>
-        /// 添加行号
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void dgv1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
-        {
-            e.Row.HeaderCell.Value = string.Format("{0}", e.Row.Index + 1);
-        }
-
-
 
         #region 导出CSV
         /// <summary>
@@ -349,27 +386,37 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void cbxType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbxType.SelectedIndex == 0)
+            if (bnTop_cbxType.SelectedIndex == 0)
             {
-                cbxStatus.Visible = true;
+                bnTop_cbxStatus.Visible = true;
 
-                lblYSD.Visible = true;
-                txtYSD.Visible = true;
+                bnTop_lblYSD.Visible = true;
+                bnTop_txtYSD.Visible = true;
             }
-            else if(cbxType.SelectedIndex == 1)
+            else if(bnTop_cbxType.SelectedIndex == 1)
             {
-                cbxStatus.Visible = true;
+                bnTop_cbxStatus.Visible = true;
 
-                lblYSD.Visible = false;
-                txtYSD.Visible = false;
+                bnTop_lblYSD.Visible = false;
+                bnTop_txtYSD.Visible = false;
             }
             else
             {
-                cbxStatus.Visible = false;
+                bnTop_cbxStatus.Visible = false;
 
-                lblYSD.Visible = true;
-                txtYSD.Visible = true;
+                bnTop_lblYSD.Visible = true;
+                bnTop_txtYSD.Visible = true;
             }
+        }
+
+        /// <summary>
+        /// 添加行号
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            e.Row.HeaderCell.Value = string.Format("{0}", e.Row.Index + 1);
         }
     }
 }

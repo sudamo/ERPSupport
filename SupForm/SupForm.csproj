@@ -121,6 +121,12 @@
     <Compile Include="Bussiness\frmBillModify.Designer.cs">
       <DependentUpon>frmBillModify.cs</DependentUpon>
     </Compile>
+    <Compile Include="Bussiness\frmBomCompare.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmBomCompare.Designer.cs">
+      <DependentUpon>frmBomCompare.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bussiness\frmCPDB.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -156,6 +162,12 @@
     </Compile>
     <Compile Include="Bussiness\frmOrderSummary.Designer.cs">
       <DependentUpon>frmOrderSummary.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmPPBom.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmPPBom.Designer.cs">
+      <DependentUpon>frmPPBom.cs</DependentUpon>
     </Compile>
     <Compile Include="Bussiness\frmProgress.cs">
       <SubType>Form</SubType>
@@ -322,6 +334,9 @@
     <EmbeddedResource Include="Bussiness\frmBillModify.resx">
       <DependentUpon>frmBillModify.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmBomCompare.resx">
+      <DependentUpon>frmBomCompare.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmCPDB.resx">
       <DependentUpon>frmCPDB.cs</DependentUpon>
     </EmbeddedResource>
@@ -339,6 +354,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmOrderSummary.resx">
       <DependentUpon>frmOrderSummary.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmPPBom.resx">
+      <DependentUpon>frmPPBom.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>
@@ -449,7 +467,17 @@
     <Content Include="ICON\kk.ico" />
     <Content Include="ICON\PNG\32.32\accept.png" />
     <Content Include="ICON\PNG\32.32\add.png" />
+    <Content Include="ICON\PNG\32.32\arrow_down.png" />
+    <Content Include="ICON\PNG\32.32\arrow_in.png" />
+    <Content Include="ICON\PNG\32.32\arrow_inout.png" />
+    <Content Include="ICON\PNG\32.32\arrow_left.png" />
+    <Content Include="ICON\PNG\32.32\arrow_out.png" />
+    <Content Include="ICON\PNG\32.32\arrow_redo.png" />
     <Content Include="ICON\PNG\32.32\arrow_refresh.png" />
+    <Content Include="ICON\PNG\32.32\arrow_right.png" />
+    <Content Include="ICON\PNG\32.32\arrow_turn_left.png" />
+    <Content Include="ICON\PNG\32.32\arrow_turn_right.png" />
+    <Content Include="ICON\PNG\32.32\arrow_up.png" />
     <Content Include="ICON\PNG\32.32\ask_and_answer.png" />
     <Content Include="ICON\PNG\32.32\change_password.png" />
     <Content Include="ICON\PNG\32.32\comment.png" />
@@ -480,12 +508,30 @@
     <Content Include="ICON\PNG\32.32\delete.png" />
     <Content Include="ICON\PNG\32.32\derivatives.png" />
     <Content Include="ICON\PNG\32.32\direction.png" />
+    <Content Include="ICON\PNG\32.32\information.png" />
+    <Content Include="ICON\PNG\32.32\internet_explorer.png" />
     <Content Include="ICON\PNG\32.32\key.png" />
     <Content Include="ICON\PNG\32.32\key_add.png" />
     <Content Include="ICON\PNG\32.32\key_delete.png" />
+    <Content Include="ICON\PNG\32.32\link.png" />
+    <Content Include="ICON\PNG\32.32\link_add.png" />
+    <Content Include="ICON\PNG\32.32\link_break.png" />
+    <Content Include="ICON\PNG\32.32\link_delete.png" />
+    <Content Include="ICON\PNG\32.32\link_edit.png" />
+    <Content Include="ICON\PNG\32.32\livejournal.png" />
     <Content Include="ICON\PNG\32.32\lock.png" />
     <Content Include="ICON\PNG\32.32\lock_add.png" />
     <Content Include="ICON\PNG\32.32\lock_delete.png" />
+    <Content Include="ICON\PNG\32.32\magnifier.png" />
+    <Content Include="ICON\PNG\32.32\magnifier_zoom_in.png" />
+    <Content Include="ICON\PNG\32.32\magnifier_zoom_out.png" />
+    <Content Include="ICON\PNG\32.32\note.png" />
+    <Content Include="ICON\PNG\32.32\page_excel.png" />
+    <Content Include="ICON\PNG\32.32\page_word.png" />
+    <Content Include="ICON\PNG\32.32\paste_plain.png" />
+    <Content Include="ICON\PNG\32.32\phone.png" />
+    <Content Include="ICON\PNG\32.32\question.png" />
+    <Content Include="ICON\PNG\32.32\recycle.png" />
     <Content Include="ICON\PNG\32.32\report_magnify.png" />
     <Content Include="ICON\PNG\32.32\resultset_first.png" />
     <Content Include="ICON\PNG\32.32\resultset_last.png" />
@@ -494,11 +540,14 @@
     <Content Include="ICON\PNG\32.32\save.png" />
     <Content Include="ICON\PNG\32.32\save_as.png" />
     <Content Include="ICON\PNG\32.32\setting_tools.png" />
+    <Content Include="ICON\PNG\32.32\text.png" />
+    <Content Include="ICON\PNG\32.32\tick.png" />
     <Content Include="ICON\PNG\32.32\time.png" />
     <Content Include="ICON\PNG\32.32\time_add.png" />
     <Content Include="ICON\PNG\32.32\tire.png" />
     <Content Include="ICON\PNG\32.32\update.png" />
     <Content Include="ICON\PNG\32.32\wrench.png" />
+    <Content Include="ICON\PNG\32.32\wrench_orange.png" />
     <Content Include="ICON\PNG\32.32\zoom.png" />
     <Content Include="ICON\PNG\32.32\zootool.png" />
     <Content Include="ICON\Timer.ico" />

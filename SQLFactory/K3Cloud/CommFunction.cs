@@ -209,13 +209,50 @@ namespace ERPSupport.SQL.K3Cloud
             return ORAHelper.ExecuteTable(_SQL);
         }
 
+        ///// <summary>
+        ///// 获取领料部门信息
+        ///// </summary>
+        ///// <returns></returns>
+        //public static DataTable GetPickMtlDepartment()
+        //{
+        //    return ORAHelper.ExecuteTable("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' ORDER BY FNUMBER");
+        //}
         /// <summary>
         /// 获取领料部门信息
         /// </summary>
         /// <returns></returns>
-        public static DataTable GetPickMtlDepartment()
+        public static List<string> GetPickMtlDepartment()
         {
-            return ORAHelper.ExecuteTable("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' ORDER BY FNUMBER");
+            List<string> lstReturn = new List<string>();
+            DataTable dt = ORAHelper.ExecuteTable("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' ORDER BY FNUMBER");
+
+            if (dt == null || dt.Rows.Count == 0)
+                return new List<string>();
+
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                if (!lstReturn.Contains(dt.Rows[i]["FNUMBER"].ToString()))
+                    lstReturn.Add(dt.Rows[i]["FNUMBER"].ToString());
+            }
+
+            return lstReturn;
+        }
+
+        /// <summary>
+        /// 根据客户名称和组织获取客户内码
+        /// </summary>
+        /// <param name="pCustomerName"></param>
+        /// <param name="pUseOrgId"></param>
+        /// <returns></returns>
+        public static int GetCustomerId(string pCustomerName, int pUseOrgId)
+        {
+            _SQL = "SELECT A.FCUSTID FROM T_BD_CUSTOMER A INNER JOIN T_BD_CUSTOMER_L AL ON A.FCUSTID = AL.FCUSTID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = " + pUseOrgId + " AND AL.FNAME = '" + pCustomerName + "'";
+
+            object o = ORAHelper.ExecuteScalar(_SQL);
+            if (o == null)
+                return 0;
+            else
+                return Convert.ToInt32(o);
         }
 
         /// <summary>
@@ -274,6 +311,16 @@ namespace ERPSupport.SQL.K3Cloud
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
                     WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FDEFSTOCKSTATUSID = 10000 --AND SK.FALLOWSUM = '0'
+                    ORDER BY FVALUE";
+                    break;
+                case 4:
+                    _SQL = @"SELECT N' 请选择' FVALUE,N' 请选择' FNAME FROM DUAL
+                    UNION ALL
+                    SELECT SK.FNUMBER FValue,SKL.FNAME FName
+                    FROM T_BD_STOCK SK
+                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
+                    INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
+                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2')
                     ORDER BY FVALUE";
                     break;
                 default:
@@ -765,26 +812,47 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable CalculateStock(string pType, int pIndex, int pUserOrgId)
         {
-            if (pType == "LOCKSTOCK")
+            switch (pType)
             {
-                if (pIndex == 0)
-                    _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'LOCKSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
-                else
-                    _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
+                case "LOCKSTOCK":
+                    if (pIndex == 0)
+                        _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'LOCKSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
+                    else
+                        _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
                     FROM DM_CALCULATESTOCK A
                     INNER JOIN T_BD_STOCK B ON A.FSTOCKID = B.FSTOCKID
                     WHERE A.FTYPE = 'LOCKSTOCK' AND A.ISDELETE = '0'AND B.FUSEORGID = " + pUserOrgId.ToString() + " ORDER BY A.FSEQ";
-            }
-            else
-            {
-                if (pIndex == 0)
-                    _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'RUNSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
-                else
-                    _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
+                    break;
+                case "RUNSTOCK":
+                    if (pIndex == 0)
+                        _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'RUNSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
+                    else
+                        _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
                     FROM DM_CALCULATESTOCK A
                     INNER JOIN T_BD_STOCK B ON A.FSTOCKID = B.FSTOCKID
                     WHERE A.FTYPE = 'RUNSTOCK' AND A.ISDELETE = '0'AND B.FUSEORGID = " + pUserOrgId.ToString() + " ORDER BY A.FSEQ";
+                    break;
             }
+            //if (pType == "LOCKSTOCK")
+            //{
+            //    if (pIndex == 0)
+            //        _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'LOCKSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
+            //    else
+            //        _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
+            //        FROM DM_CALCULATESTOCK A
+            //        INNER JOIN T_BD_STOCK B ON A.FSTOCKID = B.FSTOCKID
+            //        WHERE A.FTYPE = 'LOCKSTOCK' AND A.ISDELETE = '0'AND B.FUSEORGID = " + pUserOrgId.ToString() + " ORDER BY A.FSEQ";
+            //}
+            //else
+            //{
+            //    if (pIndex == 0)
+            //        _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'RUNSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
+            //    else
+            //        _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
+            //        FROM DM_CALCULATESTOCK A
+            //        INNER JOIN T_BD_STOCK B ON A.FSTOCKID = B.FSTOCKID
+            //        WHERE A.FTYPE = 'RUNSTOCK' AND A.ISDELETE = '0'AND B.FUSEORGID = " + pUserOrgId.ToString() + " ORDER BY A.FSEQ";
+            //}
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -826,6 +894,21 @@ namespace ERPSupport.SQL.K3Cloud
         public static void UpdateCalculateStock(int pFID)
         {
             _SQL = "UPDATE DM_CALCULATESTOCK SET ISDELETE = '1',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFYDATE = SYSDATE WHERE FID = " + pFID.ToString();
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        public static void SaveCalculateStock(DataTable pDataTable)
+        {
+            if (pDataTable == null || pDataTable.Rows.Count == 0)
+                return;
+
+            _SQL = "BEGIN";
+            for (int i = 0; i < pDataTable.Rows.Count; i++)
+            {
+                _SQL += " UPDATE DM_CALCULATESTOCK SET FSEQ = " + pDataTable.Rows[i]["序号"].ToString() + " WHERE FID = " + pDataTable.Rows[i]["内码"].ToString() + ";";
+            }
+            _SQL += " END;";
+
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -932,7 +1015,7 @@ namespace ERPSupport.SQL.K3Cloud
             LEFT JOIN DM_ASSISTANTDATA B ON A.FTYPE = B.SUBNO";
 
             if (pType == 6 && pCompany != string.Empty)
-                _SQL += " INNER JOIN DM_NUMBERMATCH C ON INSTR(A.FNUMBER,C.FNUMBER) = 1 AND C.FTYPE = 'COMPANYNAME' ";
+                _SQL += " INNER JOIN DM_NUMBERMATCH C ON INSTR(A.FNUMBER,C.FNUMBER) = 1 AND C.FTYPE = 'COMPANYNAME' AND C.ISDELETE = 0";
             _SQL += " WHERE A.CREATEDATE BETWEEN TO_DATE('" + pFrom.ToString("yyyy-MM-dd") + "','yyyy-mm-dd') AND TO_DATE('" + pTo.AddDays(1).ToString("yyyy-MM-dd") + "','yyyy-mm-dd') ";
 
             if (pType != 0)
@@ -1116,7 +1199,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static bool RoleExists(string pRName)
         {
-            _SQL = "SELECT COUNT(*) FROM DM_ROLE WHERE RNAME = '" + pRName + "'";
+            _SQL = "SELECT COUNT(*) FROM DM_ROLE WHERE ISFORBIDDEN = '0' AND RNAME = '" + pRName + "'";
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
                 return true;
             else
@@ -1443,18 +1526,41 @@ namespace ERPSupport.SQL.K3Cloud
                 return;
 
             if (pFName.Equals(string.Empty))
-                _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,FTRANSTOCKID =
-                (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
-                WHERE FID = " + pFID;
+            {
+                if (pFNameTran == " 请选择")
+                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + "',FCREATEDATE = SYSDATE,FTRANSTOCKID = 0 WHERE FID = " + pFID;
+                else
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,FTRANSTOCKID =
+                    (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
+                    WHERE FID = " + pFID;
+            }
             else if (pFNameTran.Equals(string.Empty))
-                _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
-                (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"')
-                WHERE FID = " + pFID;
+            {
+                if (pFName == " 请选择")
+                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + "',FCREATEDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ' WHERE FID = " + pFID;
+                else
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                    (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"')
+                    WHERE FID = " + pFID;
+            }
             else
-                _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
-                (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"'),
-                FTRANSTOCKID = (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
-                WHERE FID = " + pFID;
+            {
+                if (pFName == " 请选择" && pFNameTran == " 请选择")
+                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + "',FCREATEDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ',FTRANSTOCKID = 0 WHERE FID = " + pFID;
+                else if (pFName == " 请选择")
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ',
+                    FTRANSTOCKID = (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
+                    WHERE FID = " + pFID;
+                else if (pFNameTran == " 请选择")
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                    (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"'),
+                    FTRANSTOCKID = 0 WHERE FID = " + pFID;
+                else
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                    (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"'),
+                    FTRANSTOCKID = (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
+                    WHERE FID = " + pFID;
+            }
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }

@@ -38,9 +38,9 @@
             this.bnTop_btnSearch = new System.Windows.Forms.ToolStripButton();
             this.bnTop_btnBatchFill = new System.Windows.Forms.ToolStripButton();
             this.bnTop_btnSave = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnDel = new System.Windows.Forms.ToolStripButton();
             this.bnTop_btnClear = new System.Windows.Forms.ToolStripButton();
             this.bnTop_tss2 = new System.Windows.Forms.ToolStripSeparator();
-            this.bnTop_btnDel = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
             this.bnTop.SuspendLayout();
@@ -104,7 +104,6 @@
             // 
             this.bnTop_txtNumber.Name = "bnTop_txtNumber";
             this.bnTop_txtNumber.Size = new System.Drawing.Size(130, 25);
-            this.bnTop_txtNumber.Text = "201010803059";
             // 
             // bnTop_tss
             // 
@@ -138,6 +137,15 @@
             this.bnTop_btnSave.Tag = "3";
             this.bnTop_btnSave.Text = "保存";
             // 
+            // bnTop_btnDel
+            // 
+            this.bnTop_btnDel.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
+            this.bnTop_btnDel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnDel.Name = "bnTop_btnDel";
+            this.bnTop_btnDel.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnDel.Tag = "4";
+            this.bnTop_btnDel.Text = "删除";
+            // 
             // bnTop_btnClear
             // 
             this.bnTop_btnClear.Image = global::ERPSupport.SupForm.Properties.Resources.comment_delete;
@@ -151,15 +159,6 @@
             // 
             this.bnTop_tss2.Name = "bnTop_tss2";
             this.bnTop_tss2.Size = new System.Drawing.Size(6, 25);
-            // 
-            // bnTop_btnDel
-            // 
-            this.bnTop_btnDel.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
-            this.bnTop_btnDel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnDel.Name = "bnTop_btnDel";
-            this.bnTop_btnDel.Size = new System.Drawing.Size(52, 22);
-            this.bnTop_btnDel.Tag = "4";
-            this.bnTop_btnDel.Text = "删除";
             // 
             // ucCS_DefaultStock
             // 

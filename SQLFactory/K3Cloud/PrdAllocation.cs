@@ -188,6 +188,296 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
+        /// 获取调拨单数据-CL-WMS
+        /// </summary>
+        /// <param name="pFNeedDate">需求日期</param>
+        /// <param name="pStockID">调出仓库</param>
+        /// <param name="pDeptID">领料部门</param>
+        /// <param name="pIsTran">是否有中间仓</param>
+        /// <returns></returns>
+        public static DataTable GetTransCL(string pFNeedDate, int pStockID, int pDeptID, bool pIsTran)//根据仓库属性-是否汇总 判断汇总信息。
+        {
+            if (pIsTran)
+            {
+                _SQL = @"SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
+                  ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称
+                  ,AC.FSUPPLYORG 调入库存组织,NVL(ORG2.FNUMBER,' ') 调入库存组织编码,NVL(ORGL2.FNAME,' ') 调入库存组织名称,DEP.FINSTOCKID 调入仓库,STK2.FNUMBER 调入仓库编码,STKL2.FNAME 调入仓库名称,STK2.FDEFSTOCKSTATUSID 调入库存状态,STT2.FNUMBER 调入库存状态编码,STTL2.FNAME 调入库存状态名称
+                  ,AC.FSRCTRANSORGID 调出库存组织,NVL(ORG3.FNUMBER,' ') 调出库存组织编码,NVL(ORGL3.FNAME,' ') 调出库存组织名称,MST.FSTOCKID 调出仓库,STK3.FNUMBER 调出仓库编码,STKL3.FNAME 调出仓库名称,STK3.FDEFSTOCKSTATUSID 调出库存状态,STT3.FNUMBER 调出库存状态编码,STTL3.FNAME 调出库存状态名称
+                  ,MST.FTRANSTOCKID 中间仓库,STK4.FNUMBER 中间仓库编码,STKL4.FNAME 中间仓库名称,STK4.FDEFSTOCKSTATUSID 中间库存状态,STT4.FNUMBER 中间库存状态编码,STTL4.FNAME 中间库存状态名称
+                  ,AC.FLOT 批号,SUM(AE.FMUSTQTY) 调拨数量,N' ' 生产顺序号,' ' 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
+                  ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,N' ' 发货类别
+                FROM T_PRD_PPBOM A
+                INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+                INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
+                INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
+                INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
+                INNER JOIN T_PRD_MO MO ON MO.FID = MOE.FID AND MO.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY_A MOA ON MOE.FENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3,4)
+                INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+                INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
+                LEFT JOIN T_BD_MATERIALSTOCK MTLSK ON MTL.FMATERIALID = MTLSK.FMATERIALID
+                INNER JOIN T_BD_UNIT UNT ON AE.FUNITID = UNT.FUNITID
+                INNER JOIN T_BD_UNIT_L UNTL ON UNT.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
+                INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+                INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
+                LEFT JOIN T_ORG_ORGANIZATIONS ORG ON AC.FOWNERID = ORG.FORGID
+                LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+                LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON AC.FSUPPLYORG = ORG2.FORGID
+                LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON ORG2.FORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052
+                LEFT JOIN T_ORG_ORGANIZATIONS ORG3 ON AC.FSRCTRANSORGID = ORG3.FORGID
+                LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL3 ON ORG3.FORGID = ORGL3.FORGID AND ORGL3.FLOCALEID = 2052
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY ASS ON MTL.F_PAEZ_SENDTYPE = ASS.FENTRYID
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL2 ON MTL.F_ISBATCHMANAGER = ASSL2.FENTRYID AND ASSL2.FLOCALEID = 2052
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL3 ON MTL.F_ISSNMANAGER = ASSL3.FENTRYID AND ASSL3.FLOCALEID = 2052
+                LEFT JOIN T_SAL_ORDER O ON MOE.FSALEORDERID = O.FID
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL4 ON O.FHEADDELIVERYWAY = ASSL4.FENTRYID AND ASSL4.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCK STK2 ON DEP.FINSTOCKID = STK2.FSTOCKID
+                INNER JOIN T_BD_STOCK_L STKL2 ON STK2.FSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCKSTATUS STT2 ON STK2.FDEFSTOCKSTATUSID = STT2.FSTOCKSTATUSID
+                INNER JOIN T_BD_STOCKSTATUS_L STTL2 ON STT2.FSTOCKSTATUSID = STTL2.FSTOCKSTATUSID AND STTL2.FLOCALEID = 2052
+                INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID AND MST.FTRANSTOCKID != 0
+                INNER JOIN T_BD_STOCK STK3 ON MST.FSTOCKID = STK3.FSTOCKID
+                INNER JOIN T_BD_STOCK_L STKL3 ON STK3.FSTOCKID = STKL3.FSTOCKID AND STKL3.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCKSTATUS STT3 ON STK3.FDEFSTOCKSTATUSID = STT3.FSTOCKSTATUSID
+                INNER JOIN T_BD_STOCKSTATUS_L STTL3 ON STT3.FSTOCKSTATUSID = STTL3.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCK STK4 ON MST.FTRANSTOCKID = STK4.FSTOCKID
+                INNER JOIN T_BD_STOCK_L STKL4 ON STK4.FSTOCKID = STKL4.FSTOCKID AND STKL4.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCKSTATUS STT4 ON STK4.FDEFSTOCKSTATUSID = STT4.FSTOCKSTATUSID
+                INNER JOIN T_BD_STOCKSTATUS_L STTL4 ON STT4.FSTOCKSTATUSID = STTL4.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
+                WHERE A.FDOCUMENTSTATUS = 'C' AND STK2.FNUMBER <> STK3.FNUMBER AND MST.FSTOCKID != 897784 AND STK3.FALLOWSUM = '1' AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + @"'";
+
+                if (pStockID != 0)
+                    _SQL += " AND MST.FSTOCKID = " + pStockID;
+                if (pDeptID != 0)
+                    _SQL += " AND MOE.FWORKSHOPID = " + pDeptID;
+
+                _SQL += " GROUP BY AC.FOWNERID,ORG.FNUMBER,ORGL.FNAME, AC.FOWNERTYPEID,AE.FMATERIALID,MTL.FNUMBER,MTLL.FNAME,AE.FUNITID,UNT.FNUMBER,UNTL.FNAME,MOE.FWORKSHOPID,DEP.FNUMBER,DEPL.FNAME,AC.FSUPPLYORG,ORG2.FNUMBER,ORGL2.FNAME,DEP.FINSTOCKID,STK2.FNUMBER,STKL2.FNAME,STK2.FDEFSTOCKSTATUSID,STT2.FNUMBER,STTL2.FNAME,AC.FSRCTRANSORGID,ORG3.FNUMBER,ORGL3.FNAME,MST.FSTOCKID,STK3.FNUMBER,STKL3.FNAME,STK3.FDEFSTOCKSTATUSID,STT3.FNUMBER,STTL3.FNAME,MST.FTRANSTOCKID,STK4.FNUMBER,STKL4.FNAME,STK4.FDEFSTOCKSTATUSID,STT4.FNUMBER,STTL4.FNAME,AC.FLOT,MTLSK.F_PAEZ_FMinsendQty,MTL.F_PAEZ_SENDPERCENT,ASS.FNUMBER,ASSL2.FDATAVALUE,ASSL3.FDATAVALUE";
+            }
+            else
+            {
+                _SQL = @"SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
+                  ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称
+                  ,AC.FSUPPLYORG 调入库存组织,NVL(ORG2.FNUMBER,' ') 调入库存组织编码,NVL(ORGL2.FNAME,' ') 调入库存组织名称,DEP.FINSTOCKID 调入仓库,STK2.FNUMBER 调入仓库编码,STKL2.FNAME 调入仓库名称,STK2.FDEFSTOCKSTATUSID 调入库存状态,STT2.FNUMBER 调入库存状态编码,STTL2.FNAME 调入库存状态名称
+                  ,AC.FSRCTRANSORGID 调出库存组织,NVL(ORG3.FNUMBER,' ') 调出库存组织编码,NVL(ORGL3.FNAME,' ') 调出库存组织名称,MST.FSTOCKID 调出仓库,STK3.FNUMBER 调出仓库编码,STKL3.FNAME 调出仓库名称,STK3.FDEFSTOCKSTATUSID 调出库存状态,STT3.FNUMBER 调出库存状态编码,STTL3.FNAME 调出库存状态名称
+                  ,AC.FLOT 批号,SUM(AE.FMUSTQTY) 调拨数量,N' ' 生产顺序号,' ' 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
+                  ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,N' ' 发货类别
+                FROM T_PRD_PPBOM A
+                INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+                INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
+                INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
+                INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
+                INNER JOIN T_PRD_MO MO ON MO.FID = MOE.FID AND MO.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY_A MOA ON MOE.FENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3,4)
+                INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+                INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
+                LEFT JOIN T_BD_MATERIALSTOCK MTLSK ON MTL.FMATERIALID = MTLSK.FMATERIALID
+                INNER JOIN T_BD_UNIT UNT ON AE.FUNITID = UNT.FUNITID
+                INNER JOIN T_BD_UNIT_L UNTL ON UNT.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
+                INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+                INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
+                LEFT JOIN T_ORG_ORGANIZATIONS ORG ON AC.FOWNERID = ORG.FORGID
+                LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+                LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON AC.FSUPPLYORG = ORG2.FORGID
+                LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON ORG2.FORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052
+                LEFT JOIN T_ORG_ORGANIZATIONS ORG3 ON AC.FSRCTRANSORGID = ORG3.FORGID
+                LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL3 ON ORG3.FORGID = ORGL3.FORGID AND ORGL3.FLOCALEID = 2052
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY ASS ON MTL.F_PAEZ_SENDTYPE = ASS.FENTRYID
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL2 ON MTL.F_ISBATCHMANAGER = ASSL2.FENTRYID AND ASSL2.FLOCALEID = 2052
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL3 ON MTL.F_ISSNMANAGER = ASSL3.FENTRYID AND ASSL3.FLOCALEID = 2052
+                LEFT JOIN T_SAL_ORDER O ON MOE.FSALEORDERID = O.FID
+                LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL4 ON O.FHEADDELIVERYWAY = ASSL4.FENTRYID AND ASSL4.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCK STK2 ON DEP.FINSTOCKID = STK2.FSTOCKID
+                INNER JOIN T_BD_STOCK_L STKL2 ON STK2.FSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCKSTATUS STT2 ON STK2.FDEFSTOCKSTATUSID = STT2.FSTOCKSTATUSID
+                INNER JOIN T_BD_STOCKSTATUS_L STTL2 ON STT2.FSTOCKSTATUSID = STTL2.FSTOCKSTATUSID AND STTL2.FLOCALEID = 2052
+                INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID AND MST.FTRANSTOCKID = 0
+                INNER JOIN T_BD_STOCK STK3 ON MST.FSTOCKID = STK3.FSTOCKID
+                INNER JOIN T_BD_STOCK_L STKL3 ON STK3.FSTOCKID = STKL3.FSTOCKID AND STKL3.FLOCALEID = 2052
+                INNER JOIN T_BD_STOCKSTATUS STT3 ON STK3.FDEFSTOCKSTATUSID = STT3.FSTOCKSTATUSID
+                INNER JOIN T_BD_STOCKSTATUS_L STTL3 ON STT3.FSTOCKSTATUSID = STTL3.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
+                WHERE A.FDOCUMENTSTATUS = 'C' AND STK2.FNUMBER <> STK3.FNUMBER AND MST.FSTOCKID != 897784 AND STK3.FALLOWSUM = '1' AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + @"'";
+
+                if (pStockID != 0)
+                    _SQL += " AND MST.FSTOCKID = " + pStockID;
+                if (pDeptID != 0)
+                    _SQL += " AND MOE.FWORKSHOPID = " + pDeptID;
+
+                _SQL += " GROUP BY AC.FOWNERID,ORG.FNUMBER,ORGL.FNAME, AC.FOWNERTYPEID,AE.FMATERIALID,MTL.FNUMBER,MTLL.FNAME,AE.FUNITID,UNT.FNUMBER,UNTL.FNAME,MOE.FWORKSHOPID,DEP.FNUMBER,DEPL.FNAME,AC.FSUPPLYORG,ORG2.FNUMBER,ORGL2.FNAME,DEP.FINSTOCKID,STK2.FNUMBER,STKL2.FNAME,STK2.FDEFSTOCKSTATUSID,STT2.FNUMBER,STTL2.FNAME,AC.FSRCTRANSORGID,ORG3.FNUMBER,ORGL3.FNAME,MST.FSTOCKID,STK3.FNUMBER,STKL3.FNAME,STK3.FDEFSTOCKSTATUSID,STT3.FNUMBER,STTL3.FNAME,AC.FLOT,MTLSK.F_PAEZ_FMinsendQty,MTL.F_PAEZ_SENDPERCENT,ASS.FNUMBER,ASSL2.FDATAVALUE,ASSL3.FDATAVALUE";
+            }
+            return ORAHelper.ExecuteTable(_SQL);
+
+            //if (pIsTran)
+            //{
+            //    _SQL = @"SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
+            //      ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称
+            //      ,AC.FSUPPLYORG 调入库存组织,NVL(ORG2.FNUMBER,' ') 调入库存组织编码,NVL(ORGL2.FNAME,' ') 调入库存组织名称,DEP.FINSTOCKID 调入仓库,STK2.FNUMBER 调入仓库编码,STKL2.FNAME 调入仓库名称,STK2.FDEFSTOCKSTATUSID 调入库存状态,STT2.FNUMBER 调入库存状态编码,STTL2.FNAME 调入库存状态名称
+            //      ,AC.FSRCTRANSORGID 调出库存组织,NVL(ORG3.FNUMBER,' ') 调出库存组织编码,NVL(ORGL3.FNAME,' ') 调出库存组织名称,MST.FSTOCKID 调出仓库,STK3.FNUMBER 调出仓库编码,STKL3.FNAME 调出仓库名称,STK3.FDEFSTOCKSTATUSID 调出库存状态,STT3.FNUMBER 调出库存状态编码,STTL3.FNAME 调出库存状态名称
+            //      ,MST.FTRANSTOCKID 中间仓库,STK4.FNUMBER 中间仓库编码,STKL4.FNAME 中间仓库名称,STK4.FDEFSTOCKSTATUSID 中间库存状态,STT4.FNUMBER 中间库存状态编码,STTL4.FNAME 中间库存状态名称
+            //      ,AC.FLOT 批号,SUM(AE.FMUSTQTY) 调拨数量,N' ' 生产顺序号,' ' 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
+            //      ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,N' ' 发货类别
+            //    FROM T_PRD_PPBOM A
+            //    INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+            //    INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
+            //    INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
+            //    INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
+            //    INNER JOIN T_PRD_MO MO ON MO.FID = MOE.FID AND MO.FDOCUMENTSTATUS = 'C'
+            //    INNER JOIN T_PRD_MOENTRY_A MOA ON MOE.FENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3,4)
+            //    INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+            //    INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
+            //    LEFT JOIN T_BD_MATERIALSTOCK MTLSK ON MTL.FMATERIALID = MTLSK.FMATERIALID
+            //    INNER JOIN T_BD_UNIT UNT ON AE.FUNITID = UNT.FUNITID
+            //    INNER JOIN T_BD_UNIT_L UNTL ON UNT.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
+            //    INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+            //    INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
+            //    LEFT JOIN T_ORG_ORGANIZATIONS ORG ON AC.FOWNERID = ORG.FORGID
+            //    LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+            //    LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON AC.FSUPPLYORG = ORG2.FORGID
+            //    LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON ORG2.FORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052
+            //    LEFT JOIN T_ORG_ORGANIZATIONS ORG3 ON AC.FSRCTRANSORGID = ORG3.FORGID
+            //    LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL3 ON ORG3.FORGID = ORGL3.FORGID AND ORGL3.FLOCALEID = 2052
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY ASS ON MTL.F_PAEZ_SENDTYPE = ASS.FENTRYID
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL2 ON MTL.F_ISBATCHMANAGER = ASSL2.FENTRYID AND ASSL2.FLOCALEID = 2052
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL3 ON MTL.F_ISSNMANAGER = ASSL3.FENTRYID AND ASSL3.FLOCALEID = 2052
+            //    LEFT JOIN T_SAL_ORDER O ON MOE.FSALEORDERID = O.FID
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL4 ON O.FHEADDELIVERYWAY = ASSL4.FENTRYID AND ASSL4.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCK STK2 ON DEP.FINSTOCKID = STK2.FSTOCKID
+            //    INNER JOIN T_BD_STOCK_L STKL2 ON STK2.FSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCKSTATUS STT2 ON STK2.FDEFSTOCKSTATUSID = STT2.FSTOCKSTATUSID
+            //    INNER JOIN T_BD_STOCKSTATUS_L STTL2 ON STT2.FSTOCKSTATUSID = STTL2.FSTOCKSTATUSID AND STTL2.FLOCALEID = 2052
+            //    INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID AND MST.FTRANSTOCKID != 0
+            //    INNER JOIN T_BD_STOCK STK3 ON MST.FSTOCKID = STK3.FSTOCKID
+            //    INNER JOIN T_BD_STOCK_L STKL3 ON STK3.FSTOCKID = STKL3.FSTOCKID AND STKL3.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCKSTATUS STT3 ON STK3.FDEFSTOCKSTATUSID = STT3.FSTOCKSTATUSID
+            //    INNER JOIN T_BD_STOCKSTATUS_L STTL3 ON STT3.FSTOCKSTATUSID = STTL3.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCK STK4 ON MST.FTRANSTOCKID = STK4.FSTOCKID
+            //    INNER JOIN T_BD_STOCK_L STKL4 ON STK4.FSTOCKID = STKL4.FSTOCKID AND STKL4.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCKSTATUS STT4 ON STK4.FDEFSTOCKSTATUSID = STT4.FSTOCKSTATUSID
+            //    INNER JOIN T_BD_STOCKSTATUS_L STTL4 ON STT4.FSTOCKSTATUSID = STTL4.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
+            //    WHERE A.FDOCUMENTSTATUS = 'C' AND STK2.FNUMBER <> STK3.FNUMBER AND MST.FSTOCKID != 897784 AND STK3.FALLOWSUM = '1' AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + @"'";
+
+            //    if (pStockID != 0)
+            //        _SQL += " AND MST.FSTOCKID = " + pStockID;
+            //    if (pDeptID != 0)
+            //        _SQL += " AND MOE.FWORKSHOPID = " + pDeptID;
+
+            //    _SQL += " GROUP BY AC.FOWNERID,ORG.FNUMBER,ORGL.FNAME, AC.FOWNERTYPEID,AE.FMATERIALID,MTL.FNUMBER,MTLL.FNAME,AE.FUNITID,UNT.FNUMBER,UNTL.FNAME,MOE.FWORKSHOPID,DEP.FNUMBER,DEPL.FNAME,AC.FSUPPLYORG,ORG2.FNUMBER,ORGL2.FNAME,DEP.FINSTOCKID,STK2.FNUMBER,STKL2.FNAME,STK2.FDEFSTOCKSTATUSID,STT2.FNUMBER,STTL2.FNAME,AC.FSRCTRANSORGID,ORG3.FNUMBER,ORGL3.FNAME,MST.FSTOCKID,STK3.FNUMBER,STKL3.FNAME,STK3.FDEFSTOCKSTATUSID,STT3.FNUMBER,STTL3.FNAME,MST.FTRANSTOCKID,STK4.FNUMBER,STKL4.FNAME,STK4.FDEFSTOCKSTATUSID,STT4.FNUMBER,STTL4.FNAME,AC.FLOT,MTLSK.F_PAEZ_FMinsendQty,MTL.F_PAEZ_SENDPERCENT,ASS.FNUMBER,ASSL2.FDATAVALUE,ASSL3.FDATAVALUE";
+            //}
+            //else
+            //{
+            //    _SQL = @"SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
+            //      ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称
+            //      ,AC.FSUPPLYORG 调入库存组织,NVL(ORG2.FNUMBER,' ') 调入库存组织编码,NVL(ORGL2.FNAME,' ') 调入库存组织名称,DEP.FINSTOCKID 调入仓库,STK2.FNUMBER 调入仓库编码,STKL2.FNAME 调入仓库名称,STK2.FDEFSTOCKSTATUSID 调入库存状态,STT2.FNUMBER 调入库存状态编码,STTL2.FNAME 调入库存状态名称
+            //      ,AC.FSRCTRANSORGID 调出库存组织,NVL(ORG3.FNUMBER,' ') 调出库存组织编码,NVL(ORGL3.FNAME,' ') 调出库存组织名称,MST.FSTOCKID 调出仓库,STK3.FNUMBER 调出仓库编码,STKL3.FNAME 调出仓库名称,STK3.FDEFSTOCKSTATUSID 调出库存状态,STT3.FNUMBER 调出库存状态编码,STTL3.FNAME 调出库存状态名称
+            //      ,AC.FLOT 批号,SUM(AE.FMUSTQTY) 调拨数量,N' ' 生产顺序号,' ' 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
+            //      ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,N' ' 发货类别
+            //    FROM T_PRD_PPBOM A
+            //    INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+            //    INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
+            //    INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
+            //    INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
+            //    INNER JOIN T_PRD_MO MO ON MO.FID = MOE.FID AND MO.FDOCUMENTSTATUS = 'C'
+            //    INNER JOIN T_PRD_MOENTRY_A MOA ON MOE.FENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3,4)
+            //    INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+            //    INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
+            //    LEFT JOIN T_BD_MATERIALSTOCK MTLSK ON MTL.FMATERIALID = MTLSK.FMATERIALID
+            //    INNER JOIN T_BD_UNIT UNT ON AE.FUNITID = UNT.FUNITID
+            //    INNER JOIN T_BD_UNIT_L UNTL ON UNT.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
+            //    INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+            //    INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
+            //    LEFT JOIN T_ORG_ORGANIZATIONS ORG ON AC.FOWNERID = ORG.FORGID
+            //    LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+            //    LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON AC.FSUPPLYORG = ORG2.FORGID
+            //    LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON ORG2.FORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052
+            //    LEFT JOIN T_ORG_ORGANIZATIONS ORG3 ON AC.FSRCTRANSORGID = ORG3.FORGID
+            //    LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL3 ON ORG3.FORGID = ORGL3.FORGID AND ORGL3.FLOCALEID = 2052
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY ASS ON MTL.F_PAEZ_SENDTYPE = ASS.FENTRYID
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL2 ON MTL.F_ISBATCHMANAGER = ASSL2.FENTRYID AND ASSL2.FLOCALEID = 2052
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL3 ON MTL.F_ISSNMANAGER = ASSL3.FENTRYID AND ASSL3.FLOCALEID = 2052
+            //    LEFT JOIN T_SAL_ORDER O ON MOE.FSALEORDERID = O.FID
+            //    LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL4 ON O.FHEADDELIVERYWAY = ASSL4.FENTRYID AND ASSL4.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCK STK2 ON DEP.FINSTOCKID = STK2.FSTOCKID
+            //    INNER JOIN T_BD_STOCK_L STKL2 ON STK2.FSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCKSTATUS STT2 ON STK2.FDEFSTOCKSTATUSID = STT2.FSTOCKSTATUSID
+            //    INNER JOIN T_BD_STOCKSTATUS_L STTL2 ON STT2.FSTOCKSTATUSID = STTL2.FSTOCKSTATUSID AND STTL2.FLOCALEID = 2052
+            //    INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID AND MST.FTRANSTOCKID = 0
+            //    INNER JOIN T_BD_STOCK STK3 ON MST.FSTOCKID = STK3.FSTOCKID
+            //    INNER JOIN T_BD_STOCK_L STKL3 ON STK3.FSTOCKID = STKL3.FSTOCKID AND STKL3.FLOCALEID = 2052
+            //    INNER JOIN T_BD_STOCKSTATUS STT3 ON STK3.FDEFSTOCKSTATUSID = STT3.FSTOCKSTATUSID
+            //    INNER JOIN T_BD_STOCKSTATUS_L STTL3 ON STT3.FSTOCKSTATUSID = STTL3.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
+            //    WHERE A.FDOCUMENTSTATUS = 'C' AND STK2.FNUMBER <> STK3.FNUMBER AND MST.FSTOCKID != 897784 AND STK3.FALLOWSUM = '1' AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + @"'";
+
+            //    if (pStockID != 0)
+            //        _SQL += " AND MST.FSTOCKID = " + pStockID;
+            //    if (pDeptID != 0)
+            //        _SQL += " AND MOE.FWORKSHOPID = " + pDeptID;
+
+            //    _SQL += " GROUP BY AC.FOWNERID,ORG.FNUMBER,ORGL.FNAME, AC.FOWNERTYPEID,AE.FMATERIALID,MTL.FNUMBER,MTLL.FNAME,AE.FUNITID,UNT.FNUMBER,UNTL.FNAME,MOE.FWORKSHOPID,DEP.FNUMBER,DEPL.FNAME,AC.FSUPPLYORG,ORG2.FNUMBER,ORGL2.FNAME,DEP.FINSTOCKID,STK2.FNUMBER,STKL2.FNAME,STK2.FDEFSTOCKSTATUSID,STT2.FNUMBER,STTL2.FNAME,AC.FSRCTRANSORGID,ORG3.FNUMBER,ORGL3.FNAME,MST.FSTOCKID,STK3.FNUMBER,STKL3.FNAME,STK3.FDEFSTOCKSTATUSID,STT3.FNUMBER,STTL3.FNAME,AC.FLOT,MTLSK.F_PAEZ_FMinsendQty,MTL.F_PAEZ_SENDPERCENT,ASS.FNUMBER,ASSL2.FDATAVALUE,ASSL3.FDATAVALUE";
+            //}
+            //return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 获取调拨单数据-PZ-WMS
+        /// </summary>
+        /// <param name="pFNeedDate"></param>
+        /// <param name="pStockID"></param>
+        /// <param name="pDeptID"></param>
+        /// <returns></returns>
+        public static DataTable GetTransPZ(string pFNeedDate, int pStockID, int pDeptID)//盆子仓
+        {
+            _SQL = @"SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称
+              ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称
+              ,AC.FSUPPLYORG 调入库存组织,NVL(ORG2.FNUMBER,' ') 调入库存组织编码,NVL(ORGL2.FNAME,' ') 调入库存组织名称,DEP.FINSTOCKID 调入仓库,STK2.FNUMBER 调入仓库编码,STKL2.FNAME 调入仓库名称,STK2.FDEFSTOCKSTATUSID 调入库存状态,STT2.FNUMBER 调入库存状态编码,STTL2.FNAME 调入库存状态名称
+              ,AC.FSRCTRANSORGID 调出库存组织,NVL(ORG3.FNUMBER,' ') 调出库存组织编码,NVL(ORGL3.FNAME,' ') 调出库存组织名称,MST.FSTOCKID 调出仓库,STK3.FNUMBER 调出仓库编码,STKL3.FNAME 调出仓库名称,STK3.FDEFSTOCKSTATUSID 调出库存状态,STT3.FNUMBER 调出库存状态编码,STTL3.FNAME 调出库存状态名称
+              ,AC.FLOT 批号,MOE.FQTY 调拨数量,MOE.FPRODUCTIONSEQ 生产顺序号,TO_CHAR(MOE.F_PAEZ_DESCRIPTION) 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
+              ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,NVL(ASSL4.FDATAVALUE,' ') 发货类别,CASE WHEN A.FUNITID = 101045 THEN CEIL(MOE.FQTY/" + GlobalParameter.Dir_DPQtyPZ + @") ELSE A.FQTY END 合并数量,CASE WHEN MOE.FHeadDeliveryWay = '58709fcc96a192' AND MOE.FQTY >= 10 THEN 1 ELSE 0 END 大单
+            FROM T_PRD_PPBOM A
+            INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+            INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
+            INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
+            INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
+            INNER JOIN T_PRD_MO MO ON MO.FID = MOE.FID AND MO.FDOCUMENTSTATUS = 'C'
+            INNER JOIN T_PRD_MOENTRY_A MOA ON MOE.FENTRYID = MOA.FENTRYID AND MOA.FSTATUS IN(3,4)
+            INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
+            INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
+            LEFT JOIN T_BD_MATERIALSTOCK MTLSK ON MTL.FMATERIALID = MTLSK.FMATERIALID
+            INNER JOIN T_BD_UNIT UNT ON AE.FUNITID = UNT.FUNITID
+            INNER JOIN T_BD_UNIT_L UNTL ON UNT.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
+            INNER JOIN T_BD_DEPARTMENT DEP ON MOE.FWORKSHOPID = DEP.FDEPTID
+            INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
+            LEFT JOIN T_ORG_ORGANIZATIONS ORG ON AC.FOWNERID = ORG.FORGID
+            LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+            LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON AC.FSUPPLYORG = ORG2.FORGID
+            LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON ORG2.FORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052
+            LEFT JOIN T_ORG_ORGANIZATIONS ORG3 ON AC.FSRCTRANSORGID = ORG3.FORGID
+            LEFT JOIN T_ORG_ORGANIZATIONS_L ORGL3 ON ORG3.FORGID = ORGL3.FORGID AND ORGL3.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY ASS ON MTL.F_PAEZ_SENDTYPE = ASS.FENTRYID
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL2 ON MTL.F_ISBATCHMANAGER = ASSL2.FENTRYID AND ASSL2.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL3 ON MTL.F_ISSNMANAGER = ASSL3.FENTRYID AND ASSL3.FLOCALEID = 2052
+            LEFT JOIN T_SAL_ORDER O ON MOE.FSALEORDERID = O.FID
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL4 ON O.FHEADDELIVERYWAY = ASSL4.FENTRYID AND ASSL4.FLOCALEID = 2052
+            INNER JOIN T_BD_STOCK STK2 ON DEP.FINSTOCKID = STK2.FSTOCKID
+            INNER JOIN T_BD_STOCK_L STKL2 ON STK2.FSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052
+            INNER JOIN T_BD_STOCKSTATUS STT2 ON STK2.FDEFSTOCKSTATUSID = STT2.FSTOCKSTATUSID
+            INNER JOIN T_BD_STOCKSTATUS_L STTL2 ON STT2.FSTOCKSTATUSID = STTL2.FSTOCKSTATUSID AND STTL2.FLOCALEID = 2052
+            INNER JOIN T_AUTO_MSTOCKSETTING MST ON AE.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID
+            INNER JOIN T_BD_STOCK STK3 ON MST.FSTOCKID = STK3.FSTOCKID
+            INNER JOIN T_BD_STOCK_L STKL3 ON STK3.FSTOCKID = STKL3.FSTOCKID AND STKL3.FLOCALEID = 2052
+            INNER JOIN T_BD_STOCKSTATUS STT3 ON STK3.FDEFSTOCKSTATUSID = STT3.FSTOCKSTATUSID
+            INNER JOIN T_BD_STOCKSTATUS_L STTL3 ON STT3.FSTOCKSTATUSID = STTL3.FSTOCKSTATUSID AND STTL3.FLOCALEID = 2052
+            WHERE A.FDOCUMENTSTATUS = 'C' AND STK2.FNUMBER <> STK3.FNUMBER AND MST.FSTOCKID = 897784 AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + "'";
+
+            if (pStockID != 0)
+                _SQL += " AND MST.FSTOCKID = " + pStockID;
+            if (pDeptID != 0)
+                _SQL += " AND MOE.FWORKSHOPID = " + pDeptID;
+
+            _SQL += " ORDER BY MOE.FPRODUCTIONSEQ";
+
+            return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
         /// 半成品调拨ERP
         /// </summary>
         /// <param name="pDataTable">数据表</param>
@@ -221,19 +511,19 @@ namespace ERPSupport.SQL.K3Cloud
                 model.Add("FTransferBizType", "InnerOrgTransfer");
 
                 basedata = new JObject();
-                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织编码"].ToString());
                 model.Add("FSettleOrgId", basedata);
                 basedata = new JObject();
-                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织编码"].ToString());
                 model.Add("FSaleOrgId", basedata);
                 basedata = new JObject();
-                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织编码"].ToString());
                 model.Add("FStockOutOrgId", basedata);
                 basedata = new JObject();
-                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+                basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织编码"].ToString());
                 model.Add("FStockOrgId", basedata);
                 basedata = new JObject();
-                basedata.Add("FNumber", pDataTable.Rows[0]["领料部门"].ToString());
+                basedata.Add("FNumber", pDataTable.Rows[0]["领料部门编码"].ToString());
                 model.Add("F_PickDepart", basedata);
                 basedata = new JObject();
                 basedata.Add("FNumber", "PRE001");
@@ -260,28 +550,28 @@ namespace ERPSupport.SQL.K3Cloud
                     basedata.Add("FNumber", pDataTable.Rows[i]["物料编码"].ToString());
                     entryRow.Add("FDestMaterialId", basedata);
                     basedata = new JObject();
-                    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                    basedata.Add("FNumber", pDataTable.Rows[i]["单位编码"].ToString());
                     entryRow.Add("FUnitID", basedata);
                     basedata = new JObject();
-                    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                    basedata.Add("FNumber", pDataTable.Rows[i]["单位编码"].ToString());
                     entryRow.Add("FBaseUnitId", basedata);
                     basedata = new JObject();
-                    basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+                    basedata.Add("FNumber", pDataTable.Rows[i]["单位编码"].ToString());
                     entryRow.Add("FPriceUnitID", basedata);
 
                     basedata = new JObject();
-                    basedata.Add("FNumber", pDataTable.Rows[i]["调出仓库"].ToString());
+                    basedata.Add("FNumber", pDataTable.Rows[i]["中间仓库编码"].ToString());
                     entryRow.Add("FSrcStockId", basedata);
                     basedata = new JObject();
-                    basedata.Add("FNumber", pDataTable.Rows[i]["调入仓库"].ToString());
+                    basedata.Add("FNumber", pDataTable.Rows[i]["调入仓库编码"].ToString());
                     entryRow.Add("FDestStockId", basedata);
 
                     basedata = new JObject();
-                    basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+                    basedata.Add("FNumber", pDataTable.Rows[i]["货主编码"].ToString());
                     entryRow.Add("FOwnerId", basedata);
                     entryRow.Add("FOwnerTypeId", "BD_OwnerOrg");
                     basedata = new JObject();
-                    basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+                    basedata.Add("FNumber", pDataTable.Rows[i]["货主编码"].ToString());
                     entryRow.Add("FOwnerOutId", basedata);
                     entryRow.Add("FOwnerTypeOutId", "BD_OwnerOrg");
 
@@ -309,6 +599,121 @@ namespace ERPSupport.SQL.K3Cloud
             }
 
             return strPMBillNO;
+
+            //if (pDataTable.Rows.Count <= 0)
+            //    return "";
+
+            //string strPMBillNO = string.Empty;
+
+            //K3CloudApiClient client = new K3CloudApiClient(GlobalParameter.K3Inf.C_ERPADDRESS);
+            //var bLogin = client.Login(GlobalParameter.K3Inf.C_ZTID, GlobalParameter.K3Inf.UserName, GlobalParameter.K3Inf.UserPWD, 2052);
+
+            //if (bLogin)
+            //{
+            //    JObject jsonRoot = new JObject();
+            //    jsonRoot.Add("Creator", "MANUAL");
+            //    jsonRoot.Add("NeedUpDateFields", new JArray(""));
+
+            //    JObject model = new JObject();
+            //    jsonRoot.Add("Model", model);
+            //    model.Add("FID", 0);
+
+            //    JObject basedata = new JObject();
+            //    basedata.Add("FNumber", "ZJDB01_SYS");
+            //    model.Add("FBillTypeID", basedata);
+
+            //    model.Add("FTransferDirect", "GENERAL");
+            //    model.Add("FTransferBizType", "InnerOrgTransfer");
+
+            //    basedata = new JObject();
+            //    basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+            //    model.Add("FSettleOrgId", basedata);
+            //    basedata = new JObject();
+            //    basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+            //    model.Add("FSaleOrgId", basedata);
+            //    basedata = new JObject();
+            //    basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+            //    model.Add("FStockOutOrgId", basedata);
+            //    basedata = new JObject();
+            //    basedata.Add("FNumber", pDataTable.Rows[0]["调入库存组织"].ToString());
+            //    model.Add("FStockOrgId", basedata);
+            //    basedata = new JObject();
+            //    basedata.Add("FNumber", pDataTable.Rows[0]["领料部门"].ToString());
+            //    model.Add("F_PickDepart", basedata);
+            //    basedata = new JObject();
+            //    basedata.Add("FNumber", "PRE001");
+            //    model.Add("FSETTLECURRID", basedata);
+            //    basedata = new JObject();
+            //    basedata.Add("FNumber", "PRE001");
+            //    model.Add("FBaseCurrId", basedata);
+
+            //    model.Add("FDate", pDate);
+
+            //    JArray entryRows = new JArray();
+            //    string entityKey = "FBillEntry";
+            //    model.Add(entityKey, entryRows);
+            //    for (int i = 0; i < pDataTable.Rows.Count; i++)
+            //    {
+            //        JObject entryRow = new JObject();
+            //        entryRows.Add(entryRow);
+            //        entryRow.Add("FEntryID", 0);
+
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["物料编码"].ToString());
+            //        entryRow.Add("FMaterialId", basedata);
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["物料编码"].ToString());
+            //        entryRow.Add("FDestMaterialId", basedata);
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+            //        entryRow.Add("FUnitID", basedata);
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+            //        entryRow.Add("FBaseUnitId", basedata);
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["单位"].ToString());
+            //        entryRow.Add("FPriceUnitID", basedata);
+
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["调出仓库"].ToString());
+            //        entryRow.Add("FSrcStockId", basedata);
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["调入仓库"].ToString());
+            //        entryRow.Add("FDestStockId", basedata);
+
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+            //        entryRow.Add("FOwnerId", basedata);
+            //        entryRow.Add("FOwnerTypeId", "BD_OwnerOrg");
+            //        basedata = new JObject();
+            //        basedata.Add("FNumber", pDataTable.Rows[i]["货主"].ToString());
+            //        entryRow.Add("FOwnerOutId", basedata);
+            //        entryRow.Add("FOwnerTypeOutId", "BD_OwnerOrg");
+
+            //        entryRow.Add("FQty", pDataTable.Rows[i]["调拨数量"].ToString());
+            //        entryRow.Add("FPAEZAskQty", 0);
+            //        entryRow.Add("FBaseQty", pDataTable.Rows[i]["调拨数量"].ToString());
+            //        entryRow.Add("FActQty", pDataTable.Rows[i]["调拨数量"].ToString());
+            //        entryRow.Add("FPriceQty", pDataTable.Rows[i]["调拨数量"].ToString());
+            //        entryRow.Add("FPriceBaseQty", pDataTable.Rows[i]["调拨数量"].ToString());
+            //    }
+            //    // 调用Web API接口服务，保存领料单
+            //    strPMBillNO = client.Save("STK_TransferDirect", jsonRoot.ToString());
+            //    JObject jo = JObject.Parse(strPMBillNO);
+
+            //    if (!jo["Result"]["ResponseStatus"]["IsSuccess"].Value<bool>())
+            //    {
+            //        strPMBillNO = "生成失败:";
+            //        for (int i = 0; i < ((IList)jo["Result"]["ResponseStatus"]["Errors"]).Count; i++)
+            //            strPMBillNO += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
+            //    }
+            //    else
+            //    {
+            //        strPMBillNO = jo["Result"]["Number"].Value<string>();
+            //    }
+            //}
+
+            //return strPMBillNO;
         }
 
         /// <summary>
@@ -882,11 +1287,12 @@ namespace ERPSupport.SQL.K3Cloud
         /// 更新已经生成调拨单字段状态（半成品）WMS
         /// </summary>
         /// <param name="pFNeedDate"></param>
+        /// <param name="pList"></param>
         public static void UpdateDirFieldsWMS(string pFNeedDate, List<string> pList)
         {
             _SQL = @"UPDATE T_PRD_PPBOMENTRY
-            SET FPAEZHAVEDIRECT = 1
-            WHERE FPAEZHAVEDIRECT = 0 AND FENTRYID IN
+            SET FPAEZHAVEDIRECT = 1,F_PAEZ_PICKTOWMS = 1
+            WHERE FPAEZHAVEDIRECT = 0 AND F_PAEZ_PICKTOWMS = 0 AND FENTRYID IN
             (
             SELECT A.FENTRYID
             FROM T_PRD_PPBOMENTRY A
@@ -985,6 +1391,251 @@ namespace ERPSupport.SQL.K3Cloud
             SELECT 1 FROM T_PRD_MOENTRY BE WHERE AE.FMOENTRYID = BE.FENTRYID AND TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd') <> TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') AND BE.FPLANSTARTDATE BETWEEN TO_DATE('" + pFrom.ToString("yyyy-MM-dd") + "','yyyy-mm-dd') AND TO_DATE('" + pTo.ToString("yyyy-MM-dd") + @"','yyyy-mm-dd')
             )";
             ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static void UpdateMST_Tran()
+        {
+            _SQL = @"BEGIN
+            UPDATE T_AUTO_MSTOCKSETTING SET FSTOCKID = 467795671,FSTOCKNUMBER = 'HWL29',FTRANSTOCKID = 897782,FMODIFYDATE = SYSDATE WHERE FSTOCKID = 897782;
+            UPDATE T_AUTO_MSTOCKSETTING SET FTRANSTOCKID = 897782,FMODIFYDATE = SYSDATE WHERE FSTOCKID = 467795671 AND FTRANSTOCKID = 0 AND FDEPTID IN(100684,100685,100686,100687,100688,100707,465531838,467909049);
+            END;";
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 半成品调拨-WMS（没有中间仓）
+        /// </summary>
+        /// <param name="pDataTable"></param>
+        /// <param name="pDate"></param>
+        /// <returns></returns>
+        public static string TransferDir(DataTable pDataTable, string pDate)
+        {
+            if (pDataTable == null || pDataTable.Rows.Count <= 0)
+                return "";
+
+            string strBillNo = string.Empty;
+
+            //编号
+            SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("DM_P_GetBillNo", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@FBillType", SqlDbType.Int);
+                cmd.Parameters.Add("@BillNo", SqlDbType.VarChar, 50);
+
+                cmd.Parameters["@FBillType"].Value = 1;
+                cmd.Parameters["@BillNo"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                strBillNo = cmd.Parameters["@BillNo"].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            SqlParameter[] parms = new SqlParameter[]
+            {
+                new SqlParameter("@OwnerInId", SqlDbType.Int),
+                new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
+                new SqlParameter("@OwnerInName", SqlDbType.VarChar),
+                new SqlParameter("@InOrgId", SqlDbType.Int),
+                new SqlParameter("@InOrgNumber", SqlDbType.VarChar),
+
+                new SqlParameter("@InOrgName", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgID", SqlDbType.Int),
+                new SqlParameter("@OutOrgNumber", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgName", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartId", SqlDbType.Int),
+
+                new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartName", SqlDbType.VarChar),
+                new SqlParameter("@BillNo", SqlDbType.VarChar),
+                new SqlParameter("@businessType", SqlDbType.Char),
+                new SqlParameter("@billStatus", SqlDbType.Char)
+            };
+            parms[0].Value = int.Parse(pDataTable.Rows[0]["货主"].ToString());
+            parms[1].Value = pDataTable.Rows[0]["货主编码"].ToString();
+            parms[2].Value = pDataTable.Rows[0]["货主名称"].ToString();
+            parms[3].Value = int.Parse(pDataTable.Rows[0]["调入库存组织"].ToString());
+            parms[4].Value = pDataTable.Rows[0]["调入库存组织编码"].ToString();
+
+            parms[5].Value = pDataTable.Rows[0]["调入库存组织名称"].ToString();
+            parms[6].Value = int.Parse(pDataTable.Rows[0]["调出库存组织"].ToString());
+            parms[7].Value = pDataTable.Rows[0]["调出库存组织编码"].ToString();
+            parms[8].Value = pDataTable.Rows[0]["调出库存组织名称"].ToString();
+            parms[9].Value = int.Parse(pDataTable.Rows[0]["领料部门"].ToString());
+
+            parms[10].Value = pDataTable.Rows[0]["领料部门编码"].ToString();
+            parms[11].Value = pDataTable.Rows[0]["领料部门名称"].ToString();
+            parms[12].Value = strBillNo;
+            parms[13].Value = pDataTable.Rows[0]["调拨类型"].ToString();
+            parms[14].Value = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? 2 : 1;//按次调拨类型：审核状态，否则为新建状态
+
+            string strTemp = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? ",0,1" : ",NULL,0";
+
+            _SQL = @"BEGIN TRANSACTION
+            INSERT INTO t_StkTransferOut(billNo,transferDirect,bizType,outOrgID,outOrgNumber,outOrgName,inOrgId,inOrgNumber,inOrgName,billDate,stockManagerId,stockManagerNumber,stockManagerName,transferBizType,pickType,pickDepartId,pickDepartNumber,pickDepartName,ownerTypeOut,ownerTypeIn,ownerInId,ownerInNumber,ownerInName,businessType,billStatus,ownerOutId,ownerOutNumber,ownerOutName,settleOrgId,settleOrgNumber,settleOrgName)
+            VALUES(@BillNo,'General','Standard ',100508,'HN02','河南工厂',@InOrgId,@InOrgNumber,@InOrgName,'" + pDate + @"',0,'','','InnerOrgTransfer',1,@PickDepartId,@PickDepartNumber,@PickDepartName,'BD_OwnerOrg','BD_OwnerOrg',@OwnerInId,@OwnerInNumber,@OwnerInName,@businessType,@billStatus,@InOrgId,@InOrgNumber,@InOrgName,@InOrgId,@InOrgNumber,@InOrgName);
+            DECLARE @stkBillId INT 
+            SELECT @stkBillId = id FROM t_StkTransferOut WHERE billNo = @BillNo;";
+
+            decimal fqty = 0;
+            for (int i = 0; i < pDataTable.Rows.Count; i++)
+            {
+                if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) == 0)
+                    fqty = decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString());
+                else if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) >= decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()))
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString());
+                else
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) * Math.Round(decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) / decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()), MidpointRounding.AwayFromZero);
+
+                _SQL += @"
+                INSERT INTO t_StkTransferOutEntry(stkBillId,mtlId,mtlFnumber,mtlFname,inStockId,inStockNumber,inStockName,inStockStatusId,inStockStatusNumber,inStockStatusName,outStockId,outStockNumber,outStockName,outStockStatusId,outStockStatusNumber,outStockStatusName,unitId,unitFumber,unitFname,fqty,applicationQty,needFqty,pickFqty,batchCode,FPRODUCTIONSEQ,FMONote,deliveryWayName,passQty,entryPassStatus)
+                VALUES(@stkBillId," + int.Parse(pDataTable.Rows[i]["物料"].ToString()) + ",'" + pDataTable.Rows[i]["物料编码"].ToString() + "','" + pDataTable.Rows[i]["物料名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调入仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调入仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调入仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调入库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调入库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调入库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调出仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调出仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调出库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调出库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["单位"].ToString()) + ",'" + pDataTable.Rows[i]["单位编码"].ToString() + "','" + pDataTable.Rows[i]["单位名称"].ToString() + "'," + fqty.ToString() + "," + fqty.ToString() + "," + decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) + ",0,'" + pDataTable.Rows[i]["批号"].ToString() + "','" + pDataTable.Rows[i]["生产顺序号"].ToString() + "','" + pDataTable.Rows[i]["生产订单备注"].ToString() + "','" + pDataTable.Rows[i]["发货类别"].ToString() + "'" + strTemp + ");";
+            }
+
+            _SQL += @"
+            IF @@ERROR = 0
+            BEGIN
+	            COMMIT
+	            SELECT @BillNo
+            END
+            ELSE
+            BEGIN
+	            ROLLBACK
+	            SELECT ''
+            END";
+
+            strBillNo = SQLHelper.ExecuteScalar(_SQL, parms).ToString();
+
+            return strBillNo;
+        }
+
+        /// <summary>
+        /// 半成品调拨-WMS（有中间仓）
+        /// </summary>
+        /// <param name="pDataTable"></param>
+        /// <param name="pDate"></param>
+        /// <param name="pIsTran"></param>
+        /// <returns></returns>
+        public static string TransferDir(DataTable pDataTable, string pDate, bool pIsTran)
+        {
+            if (pDataTable == null || pDataTable.Rows.Count <= 0)
+                return "";
+
+            string strBillNo = string.Empty;
+
+            //编号
+            SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("DM_P_GetBillNo", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@FBillType", SqlDbType.Int);
+                cmd.Parameters.Add("@BillNo", SqlDbType.VarChar, 50);
+
+                cmd.Parameters["@FBillType"].Value = 1;
+                cmd.Parameters["@BillNo"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                strBillNo = cmd.Parameters["@BillNo"].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            SqlParameter[] parms = new SqlParameter[]
+            {
+                new SqlParameter("@OwnerInId", SqlDbType.Int),
+                new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
+                new SqlParameter("@OwnerInName", SqlDbType.VarChar),
+                new SqlParameter("@InOrgId", SqlDbType.Int),
+                new SqlParameter("@InOrgNumber", SqlDbType.VarChar),
+
+                new SqlParameter("@InOrgName", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgID", SqlDbType.Int),
+                new SqlParameter("@OutOrgNumber", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgName", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartId", SqlDbType.Int),
+
+                new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartName", SqlDbType.VarChar),
+                new SqlParameter("@BillNo", SqlDbType.VarChar),
+                new SqlParameter("@businessType", SqlDbType.Char),
+                new SqlParameter("@billStatus", SqlDbType.Char)
+            };
+            parms[0].Value = int.Parse(pDataTable.Rows[0]["货主"].ToString());
+            parms[1].Value = pDataTable.Rows[0]["货主编码"].ToString();
+            parms[2].Value = pDataTable.Rows[0]["货主名称"].ToString();
+            parms[3].Value = int.Parse(pDataTable.Rows[0]["调入库存组织"].ToString());
+            parms[4].Value = pDataTable.Rows[0]["调入库存组织编码"].ToString();
+
+            parms[5].Value = pDataTable.Rows[0]["调入库存组织名称"].ToString();
+            parms[6].Value = int.Parse(pDataTable.Rows[0]["调出库存组织"].ToString());
+            parms[7].Value = pDataTable.Rows[0]["调出库存组织编码"].ToString();
+            parms[8].Value = pDataTable.Rows[0]["调出库存组织名称"].ToString();
+            parms[9].Value = int.Parse(pDataTable.Rows[0]["领料部门"].ToString());
+
+            parms[10].Value = pDataTable.Rows[0]["领料部门编码"].ToString();
+            parms[11].Value = pDataTable.Rows[0]["领料部门名称"].ToString();
+            parms[12].Value = strBillNo;
+            parms[13].Value = pDataTable.Rows[0]["调拨类型"].ToString();
+            parms[14].Value = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? 2 : 1;//按次调拨类型：审核状态，否则为新建状态
+
+            string strTemp = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? ",0,1" : ",NULL,0";
+
+            _SQL = @"BEGIN TRANSACTION
+            INSERT INTO t_StkTransferOut(billNo,transferDirect,bizType,outOrgID,outOrgNumber,outOrgName,inOrgId,inOrgNumber,inOrgName,billDate,stockManagerId,stockManagerNumber,stockManagerName,transferBizType,pickType,pickDepartId,pickDepartNumber,pickDepartName,ownerTypeOut,ownerTypeIn,ownerInId,ownerInNumber,ownerInName,businessType,billStatus,ownerOutId,ownerOutNumber,ownerOutName,settleOrgId,settleOrgNumber,settleOrgName)
+            VALUES(@BillNo,'General','Standard ',100508,'HN02','河南工厂',@InOrgId,@InOrgNumber,@InOrgName,'" + pDate + @"',0,'','','InnerOrgTransfer',1,@PickDepartId,@PickDepartNumber,@PickDepartName,'BD_OwnerOrg','BD_OwnerOrg',@OwnerInId,@OwnerInNumber,@OwnerInName,@businessType,@billStatus,@InOrgId,@InOrgNumber,@InOrgName,@InOrgId,@InOrgNumber,@InOrgName);
+            DECLARE @stkBillId INT 
+            SELECT @stkBillId = id FROM t_StkTransferOut WHERE billNo = @BillNo;";
+
+            decimal fqty = 0;
+            for (int i = 0; i < pDataTable.Rows.Count; i++)
+            {
+                if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) == 0)
+                    fqty = decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString());
+                else if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) >= decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()))
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString());
+                else
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) * Math.Round(decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) / decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()), MidpointRounding.AwayFromZero);
+
+                _SQL += @"
+                INSERT INTO t_StkTransferOutEntry(stkBillId,mtlId,mtlFnumber,mtlFname,inStockId,inStockNumber,inStockName,inStockStatusId,inStockStatusNumber,inStockStatusName,outStockId,outStockNumber,outStockName,outStockStatusId,outStockStatusNumber,outStockStatusName,unitId,unitFumber,unitFname,fqty,applicationQty,needFqty,pickFqty,batchCode,FPRODUCTIONSEQ,FMONote,deliveryWayName,passQty,entryPassStatus)
+                VALUES(@stkBillId," + int.Parse(pDataTable.Rows[i]["物料"].ToString()) + ",'" + pDataTable.Rows[i]["物料编码"].ToString() + "','" + pDataTable.Rows[i]["物料名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["中间仓库"].ToString()) + ",'" + pDataTable.Rows[i]["中间仓库编码"].ToString() + "','" + pDataTable.Rows[i]["中间仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["中间库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["中间库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["中间库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调出仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调出仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调出库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调出库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["单位"].ToString()) + ",'" + pDataTable.Rows[i]["单位编码"].ToString() + "','" + pDataTable.Rows[i]["单位名称"].ToString() + "'," + fqty.ToString() + "," + fqty.ToString() + "," + decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) + ",0,'" + pDataTable.Rows[i]["批号"].ToString() + "','" + pDataTable.Rows[i]["生产顺序号"].ToString() + "','" + pDataTable.Rows[i]["生产订单备注"].ToString() + "','" + pDataTable.Rows[i]["发货类别"].ToString() + "'" + strTemp + ");";
+            }
+
+            _SQL += @"
+            IF @@ERROR = 0
+            BEGIN
+	            COMMIT
+	            SELECT @BillNo
+            END
+            ELSE
+            BEGIN
+	            ROLLBACK
+	            SELECT ''
+            END";
+
+            strBillNo = SQLHelper.ExecuteScalar(_SQL, parms).ToString();
+
+            return strBillNo;
         }
     }
 }

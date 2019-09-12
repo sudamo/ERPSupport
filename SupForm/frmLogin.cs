@@ -162,6 +162,10 @@ namespace ERPSupport.SupForm
             new GlobalParameter(new K3Setting(C_ERPADDRESS, C_DBUSER, C_ZTID, C_USERNAME, C_PASSWORD, C_ORCLADDRESS, userId, userName, PWD, DateTime.Now, RIDS, MIDS, departmentId, departmentNumber, departmentName, phone), new SQLConfig(IP, Port, UserName, Password, Catalog));
             GlobalParameter.Tmp_Params = ConfigurationManager.AppSettings["DIR_DirType"];
             GlobalParameter.IsJournal = ConfigurationManager.AppSettings["GLO_IsJournal"] == "1" ? true : false;//是否记录操作日志
+            GlobalParameter.Dir_DPQtyPZ = int.Parse(ConfigurationManager.AppSettings["DIR_DPQtyPZ"]);
+            GlobalParameter.Dir_MinQtyPZ = int.Parse(ConfigurationManager.AppSettings["DIR_MinQtyPZ"]);
+            GlobalParameter.Dir_CPDB_Department = ConfigurationManager.AppSettings["DIR_CPDB_Department"];
+            GlobalParameter.Dir_CPDB_Stock = ConfigurationManager.AppSettings["DIR_CPDB_Stock"];
             #endregion
 
             //主窗体
@@ -172,7 +176,9 @@ namespace ERPSupport.SupForm
                 fMain.ShowDialog();
             }
             catch (Exception ex)
-            { }
+            {
+                Text = ex.Message;
+            }
             finally
             {
                 fMain.Dispose();

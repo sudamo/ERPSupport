@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using ERPSupport.SQL.K3Cloud;
 using ERPSupport.Model.K3Cloud;
+using System.Configuration;
 
 namespace ERPSupport.SupForm.Bussiness
 {
@@ -112,9 +113,11 @@ namespace ERPSupport.SupForm.Bussiness
                 bnTop_cbxDep.ComboBox.DataSource = dtComboBox;
                 bnTop_cbxDep.ComboBox.DisplayMember = "FNAME";
                 bnTop_cbxDep.ComboBox.ValueMember = "FVALUE";
-                if (bnTop_cbxDep != null && bnTop_cbxDep.ComboBox.Items.Count > 3)
+                if (bnTop_cbxDep != null && bnTop_cbxDep.ComboBox.Items.Count > 0)
                 {
-                    bnTop_cbxDep.ComboBox.SelectedIndex = 3;
+                    //bnTop_cbxDep.ComboBox.SelectedIndex = 3;
+                    string strDepartment = Model.Globa.GlobalParameter.Dir_CPDB_Department;
+                    bnTop_cbxDep.SelectedIndex = bnTop_cbxDep.FindString(strDepartment) == -1 ? 0 : bnTop_cbxDep.FindString(strDepartment);
                 }
             }
             dtComboBox = CommFunction.GetStock(3);
@@ -124,9 +127,11 @@ namespace ERPSupport.SupForm.Bussiness
                 bnTop_cbxInStock.ComboBox.DisplayMember = "FNAME";
                 bnTop_cbxInStock.ComboBox.ValueMember = "FVALUE";
 
-                if (bnTop_cbxInStock != null && bnTop_cbxInStock.Items.Count > 149)
+                if (bnTop_cbxInStock != null && bnTop_cbxInStock.Items.Count > 0)
                 {
-                    bnTop_cbxInStock.SelectedIndex = 149;
+                    //bnTop_cbxInStock.SelectedIndex = 149;
+                    string strStock = Model.Globa.GlobalParameter.Dir_CPDB_Stock;
+                    bnTop_cbxInStock.SelectedIndex = bnTop_cbxInStock.FindString(strStock) == -1 ? 0 : bnTop_cbxInStock.FindString(strStock);
                 }
             }
 

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Data;
-using ERPSupport.SQL.K3Cloud;
+using System.Drawing;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using ERPSupport.SQL.K3Cloud;
 using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
@@ -12,6 +15,30 @@ namespace ERPSupport.SupForm.UserCrtl
     public partial class ucCS_BillEdit : UserControl
     {
         /// <summary>
+        /// ToolStrip日期从
+        /// </summary>
+        private ToolStripDateTimePicker _dateFrom;
+        /// <summary>
+        /// ToolStrip日期到
+        /// </summary>
+        private ToolStripDateTimePicker _dateTo;
+        /// <summary>
+        /// ToolStrip整单发货标识
+        /// </summary>
+        private ToolStripCheckBox _chbSingle;
+        /// <summary>
+        /// ToolStrip销售出库单
+        /// </summary>
+        private ToolStripCheckBox _chbOutStock;
+        /// <summary>
+        /// ToolStrip应收单
+        /// </summary>
+        private ToolStripCheckBox _chbAr;
+        /// <summary>
+        /// 正则表达式
+        /// </summary>
+        private Regex _reg;
+        /// <summary>
         /// 构造函数
         /// </summary>
         public ucCS_BillEdit()
@@ -21,12 +48,74 @@ namespace ERPSupport.SupForm.UserCrtl
 
         private void ucCS_BillEdit_Load(object sender, EventArgs e)
         {
-            FillCombobox();
-            dtpFrom.Value = DateTime.Now.AddDays(-3);
-            dtpTo.Value = DateTime.Now;
-            btnSyn.Visible = false;
+            //-----bnTop
+            _dateFrom = new ToolStripDateTimePicker();
+            _dateFrom.Size = new Size(120, 21);
+            _dateFrom.Value = DateTime.Now.AddDays(-3);
+            _dateFrom.Visible = false;
+            _dateTo = new ToolStripDateTimePicker();
+            _dateTo.Size = new Size(120, 21);
+            _dateTo.Value = DateTime.Now;
+            _dateTo.Visible = false;
+            //重新排列Items
+            List<ToolStripItem> list = new List<ToolStripItem>();
+            list.Add(bnTop.Items[0]);
+            list.Add(bnTop.Items[1]);
+            list.Add(bnTop.Items[2]);
+            list.Add(bnTop.Items[3]);
+            list.Add(bnTop.Items[4]);
+            list.Add(_dateFrom);
+            list.Add(bnTop.Items[5]);
+            list.Add(_dateTo);
+            list.Add(bnTop.Items[6]);
+            list.Add(bnTop.Items[7]);
+            list.Add(bnTop.Items[8]);
+            list.Add(bnTop.Items[9]);
+            list.Add(bnTop.Items[10]);
 
-            cbxType_SelectedIndexChanged(null, null);
+            bnTop.Items.Clear();
+            foreach (ToolStripItem item in list)
+                bnTop.Items.Add(item);
+
+            //-----bnR1
+            _chbSingle = new ToolStripCheckBox();
+            _chbSingle.Text = "整单发货";
+            //重新排列Items
+            list = new List<ToolStripItem>();
+            list.Add(_chbSingle);
+            list.Add(bnR1.Items[0]);
+            list.Add(bnR1.Items[1]);
+            bnR1.Items.Clear();
+            foreach (ToolStripItem item in list)
+                bnR1.Items.Add(item);
+            //-----bnR3
+            _chbOutStock = new ToolStripCheckBox();
+            _chbOutStock.Text = "销售出库单";
+            _chbOutStock.ToolTipText = "同时修改销售出库单";
+            ((CheckBox)_chbOutStock.Control).CheckedChanged += new EventHandler(OutStockCheckedChanged);
+            //_chbOutStock.Checked = true;
+            _chbAr = new ToolStripCheckBox();
+            _chbAr.Text = "应收单";
+            _chbAr.ToolTipText = "同时修改应收单";
+            ((CheckBox)_chbAr.Control).CheckedChanged += new EventHandler(ArCheckedChanged);
+            //_chbAr.Checked = true;
+            //重新排列Items
+            list = new List<ToolStripItem>();
+            list.Add(bnR3.Items[0]);
+            list.Add(bnR3.Items[1]);
+            list.Add(bnR3.Items[2]);
+            list.Add(_chbOutStock);
+            list.Add(_chbAr);
+            list.Add(bnR3.Items[3]);
+            list.Add(bnR3.Items[4]);
+            bnR3.Items.Clear();
+            foreach (ToolStripItem item in list)
+                bnR3.Items.Add(item);
+
+            tpl1.Visible = false;
+            tpl1.Enabled = false;
+
+            FillCombobox();
         }
 
         /// <summary>
@@ -42,6 +131,10 @@ namespace ERPSupport.SupForm.UserCrtl
             dt.Columns.Add("FValue");
 
             dr = dt.NewRow();
+            dr["FName"] = "请选择";
+            dr["FValue"] = "-1";
+            dt.Rows.Add(dr);
+            dr = dt.NewRow();
             dr["FName"] = "销售订单";
             dr["FValue"] = "SAL_SaleOrder";
             dt.Rows.Add(dr);
@@ -50,94 +143,135 @@ namespace ERPSupport.SupForm.UserCrtl
             dr["FValue"] = "PRD_MO";
             dt.Rows.Add(dr);
             dr = dt.NewRow();
-            dr["FName"] = "生产入库单";
-            dr["FValue"] = "PRD_INSTOCK";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
-            dr["FName"] = "销售出库单";
-            dr["FValue"] = "SAL_OUTSTOCK";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
-            dr["FName"] = "应收单";
-            dr["FValue"] = "AR_RECEIVABLE";
+            dr["FName"] = "投料单";
+            dr["FValue"] = "PRD_PPBOM";
             dt.Rows.Add(dr);
 
-            cbxType.DataSource = dt;
-            cbxType.DisplayMember = "FName";
-            cbxType.ValueMember = "FValue";
+            bnTop_cbxType.ComboBox.DataSource = dt;
+            bnTop_cbxType.ComboBox.DisplayMember = "FName";
+            bnTop_cbxType.ComboBox.ValueMember = "FValue";
         }
 
-        /// <summary>
-        /// 查询数据
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            //cbxType.SelectedValue = "SAL_ORDER";
-            //DataBind();
-        }
+            if (e.ClickedItem.Tag == null)
+                return;
 
-        /// <summary>
-        /// 数据绑定
-        /// </summary>
-        private void DataBind()
-        {
-            //string strFormID = cbxType.SelectedValue.ToString(), strFBillNo = txtBillNo.Text.Trim();
-            //DateTime dtFrom = dtpFrom.Value, dtTo = dtpTo.Value;
-
-            //if (strFBillNo == string.Empty)
-            //    dgv1.DataSource = SalOrder.GetBillInfo(Model.Enum.FormID.SAL_SaleOrder, dtFrom, dtTo);
-            //else
-            //    dgv1.DataSource = SalOrder.GetBillInfo(strFormID, strFBillNo, dtFrom, dtTo);
-        }
-
-        /// <summary>
-        /// btnBatchModify_Click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnBatchModify_Click(object sender, EventArgs e)
-        {
-            Bussiness.frmBillModify frmBM = new Bussiness.frmBillModify(cbxType.SelectedValue.ToString(), txtBillNo.Text);
-            frmBM.ShowDialog();
-            //if (frmBM.DialogResult == DialogResult.OK)
-            //    DataBind();
-        }
-
-        /// <summary>
-        /// 同步需求日期
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSyn_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("此时间段：" + dtpFrom.Value.ToString("yyyy-MM-dd") + "至" + dtpTo.Value.ToString("yyyy-MM-dd") + "\n 共有" + PrdAllocation.Asyn_PPBom_FNeedDate(dtpFrom.Value, dtpTo.Value).ToString() + "不同步，确定同步吗？", "同步确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            switch (e.ClickedItem.Tag.ToString())
             {
-                PrdAllocation.Syn_PPBom_FNeedDate(dtpFrom.Value, dtpTo.Value);
-                //操作日志
-                CommFunction.DM_Log_Local("同步需求日期", "配置\\单据信息调整", "时间段：" + dtpFrom.Value.ToString("yyyy-MM-dd") + "至" + dtpTo.Value.ToString("yyyy-MM-dd"), "1");
+                case "1":
+                    SetDataSource();
+                    break;
+                case "2":
+                    Synchro();
+                    break;
+                case "3":
+                    Bussiness.frmPPBom frm = new Bussiness.frmPPBom();
+                    frm.ShowDialog();
+                    break;
+                case "4":
+                    MessageBox.Show("BOM批改功能还未开发，请联系信息部。");
+                    break;
             }
         }
 
-        /// <summary>
-        /// btnModify_Click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnModify_Click(object sender, EventArgs e)
+        private void SetDataSource()
         {
-            string billno = txtBillNo.Text.Trim();
-            bool chk = chkSingle.Checked;
+            if (bnTop_txtBillNo.Text.Trim().Equals(string.Empty))
+            {
+                MessageBox.Show("请输入单据编号。");
+                return;
+            }
 
-            if (billno.Equals(string.Empty))
+            DataTable dtTemp = SalOrder.GetBillInfo(bnTop_cbxType.ComboBox.SelectedValue.ToString(), bnTop_txtBillNo.Text);
+            if (dtTemp == null || dtTemp.Rows.Count == 0)
+            {
+                MessageBox.Show("没有查询到数据。");
+                if (dgv1.DataSource == null)
+                {
+                    tpl1.Enabled = false;
+                }
+                bnTop_txtBillNo.Text = "";
+                return;
+            }
+            else
+            {
+                tpl1.Enabled = true;
+                dgv1.DataSource = dtTemp;
+                dgv1.Columns[12].Visible = false;
+                dgv1.Columns[13].Visible = false;
+                dgv1.Columns[14].Visible = false;
+
+                bnR2_txtMTLNumber.Text = "";
+                bnR2_txtCanOutQty.Text = "";
+            }
+        }
+        private void Synchro()
+        {
+            if (MessageBox.Show("此时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd") + "\n 共有" + PrdAllocation.Asyn_PPBom_FNeedDate(_dateFrom.Value, _dateTo.Value).ToString() + "不同步，确定同步吗？", "同步确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                PrdAllocation.Syn_PPBom_FNeedDate(_dateFrom.Value, _dateTo.Value);
+                //操作日志
+                CommFunction.DM_Log_Local("同步需求日期", "配置\\单据信息调整", "时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd"), "1");
+            }
+        }
+
+        private void bnR1_btnEidt_Click(object sender, EventArgs e)
+        {
+            string strBillNo = dgv1.Rows[0].Cells[0].Value.ToString();
+            bool bSingle = _chbSingle.Checked;
+
+            if (strBillNo.Equals(string.Empty))
             {
                 MessageBox.Show("请输入销售订单编号。");
                 return;
             }
 
-            MessageBox.Show(SalOrder.UpdateSingle(billno, chk));
+            MessageBox.Show(SalOrder.UpdateSingle(strBillNo, bSingle));
+            SetDataSource();
         }
+
+        private void bnR2_btnEdit_Click(object sender, EventArgs e)
+        {
+            if (bnR2_txtMTLNumber.Text.Trim().Equals(string.Empty) || bnR2_txtCanOutQty.Text.Trim().Equals(string.Empty))
+                return;
+
+            if (MessageBox.Show("你确定要修改单据[" + bnTop_txtBillNo.Text + "]第[" + dgv1.CurrentRow.Cells[6].Value.ToString() + "]行分录，物料[" + dgv1.CurrentRow.Cells[8].Value.ToString() + "]的可出数量为[" + bnR2_txtCanOutQty.Text.ToString() + "]吗？", "修改可出数量", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                string strFEntryId = dgv1.CurrentRow.Cells[13].Value.ToString();
+                decimal deCanOutQty = decimal.Parse(bnR2_txtCanOutQty.Text.ToString());
+                SalOrder.UpdateOrderCanOutQty(strFEntryId, deCanOutQty);
+
+                MessageBox.Show("修改成功。");
+                SetDataSource();
+                return;
+            }
+        }
+
+        private void bnR3_btnEdit_Click(object sender, EventArgs e)
+        {
+            if(bnR2_txtCustomer.Text.Trim().Equals(string.Empty))
+            {
+                MessageBox.Show("请输入客户。");
+                return;
+            }
+
+            int iUseOrgId = int.Parse(dgv1.Rows[0].Cells[14].Value.ToString());
+            int iCustomerId = CommFunction.GetCustomerId(bnR2_txtCustomer.Text.Trim(), iUseOrgId);
+
+            if (iCustomerId == 0)
+            {
+                MessageBox.Show("单据的销售组织下不存在此客户。");
+                return;
+            }
+
+            string strBillNo = dgv1.Rows[0].Cells[0].Value.ToString();
+            int iFEntryId = int.Parse(dgv1.Rows[0].Cells[13].Value.ToString());
+            SalOrder.UpdateCustomer(strBillNo, iFEntryId, iCustomerId, _chbOutStock.Checked, _chbAr.Checked);
+            MessageBox.Show("修改成功。");
+            SetDataSource();
+        }
+
 
         /// <summary>
         /// cbxType_SelectedIndexChanged
@@ -146,23 +280,104 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void cbxType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (cbxType == null) return;
-
-            if (cbxType.SelectedValue.ToString() == "PRD_MO")
-                btnSyn.Visible = true;
-            else
-                btnSyn.Visible = false;
-
-            if (cbxType.SelectedValue.ToString() == "SAL_SaleOrder" && (GlobalParameter.K3Inf.DepartmentID == 619615 || GlobalParameter.K3Inf.DepartmentID == 481013))
+            if (bnTop_cbxType.SelectedIndex == 0)
             {
-                pl2.Visible = true;
-                dgv1.Location = new System.Drawing.Point(new System.Drawing.Size(5, 75));
+                tpl1.Visible = false;
+                bnTop_lblBillNo.Visible = false;
+                bnTop_txtBillNo.Visible = false;
+                bnTop_btnSearch.Visible = false;
+
+                bnTop_btnSyn.Visible = false;
+                _dateFrom.Visible = false;
+                bnTop_lblDash.Visible = false;
+                _dateTo.Visible = false;
+
+                bnTop_btnPPBom.Visible = false;
+                bnTop_btnBom.Visible = false;
             }
-            else
+            if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "SAL_SaleOrder" && (GlobalParameter.K3Inf.DepartmentID == 619615 || GlobalParameter.K3Inf.DepartmentID == 481013))
             {
-                pl2.Visible = false;
-                dgv1.Location = new System.Drawing.Point(new System.Drawing.Size(5, 30));
+                if (dgv1 != null)
+                    tpl1.Visible = true;
+                else
+                    tpl1.Visible = false;
+                bnTop_lblBillNo.Visible = true;
+                bnTop_txtBillNo.Visible = true;
+                bnTop_btnSearch.Visible = true;
+
+                bnTop_btnSyn.Visible = false;
+                _dateFrom.Visible = false;
+                bnTop_lblDash.Visible = false;
+                _dateTo.Visible = false;
+
+                bnTop_btnPPBom.Visible = false;
+                bnTop_btnBom.Visible = false;
             }
+            else if(bnTop_cbxType.ComboBox.SelectedValue.ToString() == "PRD_MO")
+            {
+                tpl1.Visible = false;
+                bnTop_lblBillNo.Visible = false;
+                bnTop_txtBillNo.Visible = false;
+                bnTop_btnSearch.Visible = false;
+
+                bnTop_btnSyn.Visible = true;
+                _dateFrom.Visible = true;
+                bnTop_lblDash.Visible = true;
+                _dateTo.Visible = true;
+
+                bnTop_btnPPBom.Visible = false;
+                bnTop_btnBom.Visible = false;
+            }
+            else if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "PRD_PPBOM")
+            {
+                tpl1.Visible = false;
+                bnTop_lblBillNo.Visible = false;
+                bnTop_txtBillNo.Visible = false;
+                bnTop_btnSearch.Visible = false;
+
+                bnTop_btnSyn.Visible = false;
+                _dateFrom.Visible = false;
+                bnTop_lblDash.Visible = false;
+                _dateTo.Visible = false;
+
+                bnTop_btnPPBom.Visible = true;
+                bnTop_btnBom.Visible = true;
+            }
+        }
+
+        private void dgv1_Click(object sender, EventArgs e)
+        {
+            if (dgv1 == null || dgv1.Rows.Count <= 0)
+                return;
+
+            _chbSingle.Checked = dgv1.CurrentRow.Cells[4].Value.ToString() == "是" ? true : false;
+
+            bnR2_txtMTLNumber.Text = dgv1.CurrentRow.Cells[7].Value.ToString();
+            bnR2_txtCanOutQty.Text = dgv1.CurrentRow.Cells[10].Value.ToString();
+        }
+
+        private void bnR2_txtCanOutQty_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            //_reg = new Regex(@"^([0-9]{1,}[.][0-9]*)$");//匹配小数的正则表达式
+            _reg = new Regex(@"^[1-9]\d*|0$");//匹配整数的正则表达式
+            if (e.KeyChar != '\b')
+            {
+                if (!_reg.IsMatch(e.KeyChar.ToString()))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+
+        private void OutStockCheckedChanged(object sender, EventArgs e)
+        {
+            if (!_chbOutStock.Checked)
+                _chbAr.Checked = false;
+        }
+        private void ArCheckedChanged(object sender, EventArgs e)
+        {
+            if (_chbAr.Checked)
+                _chbOutStock.Checked = true;
         }
     }
 }

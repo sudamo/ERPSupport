@@ -28,148 +28,342 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.cbxType = new System.Windows.Forms.ComboBox();
-            this.pl1 = new System.Windows.Forms.Panel();
-            this.btnSyn = new System.Windows.Forms.Button();
-            this.btnBatchModify = new System.Windows.Forms.Button();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.dtpTo = new System.Windows.Forms.DateTimePicker();
-            this.dtpFrom = new System.Windows.Forms.DateTimePicker();
-            this.txtBillNo = new System.Windows.Forms.TextBox();
-            this.lblFbillNo = new System.Windows.Forms.Label();
-            this.lblSP = new System.Windows.Forms.Label();
-            this.lblDate = new System.Windows.Forms.Label();
-            this.lblType = new System.Windows.Forms.Label();
+            this.components = new System.ComponentModel.Container();
+            this.bnR1 = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnR1_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnR1_btnEidt = new System.Windows.Forms.ToolStripButton();
+            this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnTop_lblType = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_cbxType = new System.Windows.Forms.ToolStripComboBox();
+            this.bnTop_lblBillNo = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_txtBillNo = new System.Windows.Forms.ToolStripTextBox();
+            this.bnTop_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop_lblDash = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop_btnSearch = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnSyn = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnPPBom = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnBom = new System.Windows.Forms.ToolStripButton();
+            this.bnR2 = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnR2_lblMTLNumber = new System.Windows.Forms.ToolStripLabel();
+            this.bnR2_txtMTLNumber = new System.Windows.Forms.ToolStripTextBox();
+            this.bnR2_lblCanOutQty = new System.Windows.Forms.ToolStripLabel();
+            this.bnR2_txtCanOutQty = new System.Windows.Forms.ToolStripTextBox();
+            this.bnR2_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnR2_btnEdit = new System.Windows.Forms.ToolStripButton();
+            this.bnR3 = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnR3_lblCustomer = new System.Windows.Forms.ToolStripLabel();
+            this.bnR2_txtCustomer = new System.Windows.Forms.ToolStripTextBox();
+            this.bnR3_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnR3_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnR3_btnEdit = new System.Windows.Forms.ToolStripButton();
+            this.tpl1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgv1 = new System.Windows.Forms.DataGridView();
-            this.lblMTL = new System.Windows.Forms.Label();
-            this.pl2 = new System.Windows.Forms.Panel();
-            this.btnModify = new System.Windows.Forms.Button();
-            this.chkSingle = new System.Windows.Forms.CheckBox();
-            this.txtCanOutQty = new System.Windows.Forms.TextBox();
-            this.txtMTL = new System.Windows.Forms.TextBox();
-            this.lblCanOutQty = new System.Windows.Forms.Label();
-            this.pl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnR1)).BeginInit();
+            this.bnR1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
+            this.bnTop.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnR2)).BeginInit();
+            this.bnR2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnR3)).BeginInit();
+            this.bnR3.SuspendLayout();
+            this.tpl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
-            this.pl2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // cbxType
+            // bnR1
             // 
-            this.cbxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxType.FormattingEnabled = true;
-            this.cbxType.Location = new System.Drawing.Point(50, 3);
-            this.cbxType.Name = "cbxType";
-            this.cbxType.Size = new System.Drawing.Size(100, 20);
-            this.cbxType.TabIndex = 0;
-            this.cbxType.SelectedIndexChanged += new System.EventHandler(this.cbxType_SelectedIndexChanged);
+            this.bnR1.AddNewItem = null;
+            this.bnR1.CountItem = null;
+            this.bnR1.DeleteItem = null;
+            this.bnR1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bnR1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnR1_tss,
+            this.bnR1_btnEidt});
+            this.bnR1.Location = new System.Drawing.Point(0, 0);
+            this.bnR1.MoveFirstItem = null;
+            this.bnR1.MoveLastItem = null;
+            this.bnR1.MoveNextItem = null;
+            this.bnR1.MovePreviousItem = null;
+            this.bnR1.Name = "bnR1";
+            this.bnR1.PositionItem = null;
+            this.bnR1.Size = new System.Drawing.Size(1018, 30);
+            this.bnR1.TabIndex = 27;
+            this.bnR1.Text = "bindingNavigator1";
             // 
-            // pl1
+            // bnR1_tss
             // 
-            this.pl1.Controls.Add(this.btnSyn);
-            this.pl1.Controls.Add(this.btnBatchModify);
-            this.pl1.Controls.Add(this.btnSearch);
-            this.pl1.Controls.Add(this.dtpTo);
-            this.pl1.Controls.Add(this.dtpFrom);
-            this.pl1.Controls.Add(this.txtBillNo);
-            this.pl1.Controls.Add(this.lblFbillNo);
-            this.pl1.Controls.Add(this.lblSP);
-            this.pl1.Controls.Add(this.lblDate);
-            this.pl1.Controls.Add(this.lblType);
-            this.pl1.Controls.Add(this.cbxType);
-            this.pl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pl1.Location = new System.Drawing.Point(0, 0);
-            this.pl1.Name = "pl1";
-            this.pl1.Size = new System.Drawing.Size(1024, 25);
-            this.pl1.TabIndex = 1;
+            this.bnR1_tss.Name = "bnR1_tss";
+            this.bnR1_tss.Size = new System.Drawing.Size(6, 30);
             // 
-            // btnSyn
+            // bnR1_btnEidt
             // 
-            this.btnSyn.Location = new System.Drawing.Point(791, 1);
-            this.btnSyn.Name = "btnSyn";
-            this.btnSyn.Size = new System.Drawing.Size(100, 23);
-            this.btnSyn.TabIndex = 6;
-            this.btnSyn.Text = "同步需求日期";
-            this.btnSyn.UseVisualStyleBackColor = true;
-            this.btnSyn.Click += new System.EventHandler(this.btnSyn_Click);
+            this.bnR1_btnEidt.Image = global::ERPSupport.SupForm.Properties.Resources.livejournal;
+            this.bnR1_btnEidt.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnR1_btnEidt.Name = "bnR1_btnEidt";
+            this.bnR1_btnEidt.Size = new System.Drawing.Size(52, 27);
+            this.bnR1_btnEidt.Tag = "1";
+            this.bnR1_btnEidt.Text = "修改";
+            this.bnR1_btnEidt.ToolTipText = "修改整单发货标识";
+            this.bnR1_btnEidt.Click += new System.EventHandler(this.bnR1_btnEidt_Click);
             // 
-            // btnBatchModify
+            // bnTop
             // 
-            this.btnBatchModify.Location = new System.Drawing.Point(710, 1);
-            this.btnBatchModify.Name = "btnBatchModify";
-            this.btnBatchModify.Size = new System.Drawing.Size(75, 23);
-            this.btnBatchModify.TabIndex = 5;
-            this.btnBatchModify.Text = "批量修改";
-            this.btnBatchModify.UseVisualStyleBackColor = true;
-            this.btnBatchModify.Click += new System.EventHandler(this.btnBatchModify_Click);
+            this.bnTop.AddNewItem = null;
+            this.bnTop.CountItem = null;
+            this.bnTop.DeleteItem = null;
+            this.bnTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnTop_lblType,
+            this.bnTop_cbxType,
+            this.bnTop_lblBillNo,
+            this.bnTop_txtBillNo,
+            this.bnTop_tss,
+            this.bnTop_lblDash,
+            this.bnTop_tss2,
+            this.bnTop_btnSearch,
+            this.bnTop_btnSyn,
+            this.bnTop_btnPPBom,
+            this.bnTop_btnBom});
+            this.bnTop.Location = new System.Drawing.Point(0, 0);
+            this.bnTop.MoveFirstItem = null;
+            this.bnTop.MoveLastItem = null;
+            this.bnTop.MoveNextItem = null;
+            this.bnTop.MovePreviousItem = null;
+            this.bnTop.Name = "bnTop";
+            this.bnTop.PositionItem = null;
+            this.bnTop.Size = new System.Drawing.Size(1024, 25);
+            this.bnTop.TabIndex = 28;
+            this.bnTop.Text = "bindingNavigator1";
+            this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
             // 
-            // btnSearch
+            // bnTop_lblType
             // 
-            this.btnSearch.Location = new System.Drawing.Point(629, 1);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnSearch.TabIndex = 5;
-            this.btnSearch.Text = "查询";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.bnTop_lblType.Name = "bnTop_lblType";
+            this.bnTop_lblType.Size = new System.Drawing.Size(68, 22);
+            this.bnTop_lblType.Text = "单据类型：";
             // 
-            // dtpTo
+            // bnTop_cbxType
             // 
-            this.dtpTo.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpTo.Location = new System.Drawing.Point(523, 3);
-            this.dtpTo.Name = "dtpTo";
-            this.dtpTo.Size = new System.Drawing.Size(100, 21);
-            this.dtpTo.TabIndex = 4;
+            this.bnTop_cbxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.bnTop_cbxType.Name = "bnTop_cbxType";
+            this.bnTop_cbxType.Size = new System.Drawing.Size(90, 25);
+            this.bnTop_cbxType.SelectedIndexChanged += new System.EventHandler(this.cbxType_SelectedIndexChanged);
             // 
-            // dtpFrom
+            // bnTop_lblBillNo
             // 
-            this.dtpFrom.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFrom.Location = new System.Drawing.Point(400, 3);
-            this.dtpFrom.Name = "dtpFrom";
-            this.dtpFrom.Size = new System.Drawing.Size(100, 21);
-            this.dtpFrom.TabIndex = 4;
+            this.bnTop_lblBillNo.Name = "bnTop_lblBillNo";
+            this.bnTop_lblBillNo.Size = new System.Drawing.Size(68, 22);
+            this.bnTop_lblBillNo.Text = "单据编号：";
+            this.bnTop_lblBillNo.Visible = false;
             // 
-            // txtBillNo
+            // bnTop_txtBillNo
             // 
-            this.txtBillNo.Location = new System.Drawing.Point(227, 3);
-            this.txtBillNo.Name = "txtBillNo";
-            this.txtBillNo.Size = new System.Drawing.Size(120, 21);
-            this.txtBillNo.TabIndex = 3;
+            this.bnTop_txtBillNo.Name = "bnTop_txtBillNo";
+            this.bnTop_txtBillNo.Size = new System.Drawing.Size(120, 25);
+            this.bnTop_txtBillNo.Visible = false;
             // 
-            // lblFbillNo
+            // bnTop_tss
             // 
-            this.lblFbillNo.AutoSize = true;
-            this.lblFbillNo.Location = new System.Drawing.Point(156, 6);
-            this.lblFbillNo.Name = "lblFbillNo";
-            this.lblFbillNo.Size = new System.Drawing.Size(65, 12);
-            this.lblFbillNo.TabIndex = 2;
-            this.lblFbillNo.Text = "单据编号：";
+            this.bnTop_tss.Name = "bnTop_tss";
+            this.bnTop_tss.Size = new System.Drawing.Size(6, 25);
             // 
-            // lblSP
+            // bnTop_lblDash
             // 
-            this.lblSP.AutoSize = true;
-            this.lblSP.Location = new System.Drawing.Point(506, 6);
-            this.lblSP.Name = "lblSP";
-            this.lblSP.Size = new System.Drawing.Size(11, 12);
-            this.lblSP.TabIndex = 1;
-            this.lblSP.Text = "-";
+            this.bnTop_lblDash.Name = "bnTop_lblDash";
+            this.bnTop_lblDash.Size = new System.Drawing.Size(13, 22);
+            this.bnTop_lblDash.Text = "-";
+            this.bnTop_lblDash.Visible = false;
             // 
-            // lblDate
+            // bnTop_tss2
             // 
-            this.lblDate.AutoSize = true;
-            this.lblDate.Location = new System.Drawing.Point(353, 6);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(41, 12);
-            this.lblDate.TabIndex = 1;
-            this.lblDate.Text = "日期：";
+            this.bnTop_tss2.Name = "bnTop_tss2";
+            this.bnTop_tss2.Size = new System.Drawing.Size(6, 25);
             // 
-            // lblType
+            // bnTop_btnSearch
             // 
-            this.lblType.AutoSize = true;
-            this.lblType.Location = new System.Drawing.Point(3, 6);
-            this.lblType.Name = "lblType";
-            this.lblType.Size = new System.Drawing.Size(41, 12);
-            this.lblType.TabIndex = 1;
-            this.lblType.Text = "类型：";
+            this.bnTop_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
+            this.bnTop_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnSearch.Name = "bnTop_btnSearch";
+            this.bnTop_btnSearch.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnSearch.Tag = "1";
+            this.bnTop_btnSearch.Text = "查找";
+            this.bnTop_btnSearch.ToolTipText = "查询";
+            this.bnTop_btnSearch.Visible = false;
+            // 
+            // bnTop_btnSyn
+            // 
+            this.bnTop_btnSyn.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
+            this.bnTop_btnSyn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnSyn.Name = "bnTop_btnSyn";
+            this.bnTop_btnSyn.Size = new System.Drawing.Size(100, 22);
+            this.bnTop_btnSyn.Tag = "2";
+            this.bnTop_btnSyn.Text = "同步需求日期";
+            this.bnTop_btnSyn.ToolTipText = "同步用料清单的需求日期为生产订单的计划开工时间";
+            this.bnTop_btnSyn.Visible = false;
+            // 
+            // bnTop_btnPPBom
+            // 
+            this.bnTop_btnPPBom.Image = global::ERPSupport.SupForm.Properties.Resources.text;
+            this.bnTop_btnPPBom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnPPBom.Name = "bnTop_btnPPBom";
+            this.bnTop_btnPPBom.Size = new System.Drawing.Size(88, 22);
+            this.bnTop_btnPPBom.Tag = "3";
+            this.bnTop_btnPPBom.Text = "修改投料单";
+            this.bnTop_btnPPBom.ToolTipText = "修改生产用料清单的信息";
+            this.bnTop_btnPPBom.Visible = false;
+            // 
+            // bnTop_btnBom
+            // 
+            this.bnTop_btnBom.Image = global::ERPSupport.SupForm.Properties.Resources.note;
+            this.bnTop_btnBom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnBom.Name = "bnTop_btnBom";
+            this.bnTop_btnBom.Size = new System.Drawing.Size(82, 22);
+            this.bnTop_btnBom.Tag = "4";
+            this.bnTop_btnBom.Text = "批改BOM";
+            this.bnTop_btnBom.ToolTipText = "批量修改物料清单";
+            this.bnTop_btnBom.Visible = false;
+            // 
+            // bnR2
+            // 
+            this.bnR2.AddNewItem = null;
+            this.bnR2.CountItem = null;
+            this.bnR2.DeleteItem = null;
+            this.bnR2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bnR2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnR2_lblMTLNumber,
+            this.bnR2_txtMTLNumber,
+            this.bnR2_lblCanOutQty,
+            this.bnR2_txtCanOutQty,
+            this.bnR2_tss,
+            this.bnR2_btnEdit});
+            this.bnR2.Location = new System.Drawing.Point(0, 30);
+            this.bnR2.MoveFirstItem = null;
+            this.bnR2.MoveLastItem = null;
+            this.bnR2.MoveNextItem = null;
+            this.bnR2.MovePreviousItem = null;
+            this.bnR2.Name = "bnR2";
+            this.bnR2.PositionItem = null;
+            this.bnR2.Size = new System.Drawing.Size(1018, 30);
+            this.bnR2.TabIndex = 31;
+            this.bnR2.Text = "bindingNavigator1";
+            // 
+            // bnR2_lblMTLNumber
+            // 
+            this.bnR2_lblMTLNumber.Name = "bnR2_lblMTLNumber";
+            this.bnR2_lblMTLNumber.Size = new System.Drawing.Size(68, 27);
+            this.bnR2_lblMTLNumber.Text = "物料编码：";
+            // 
+            // bnR2_txtMTLNumber
+            // 
+            this.bnR2_txtMTLNumber.Name = "bnR2_txtMTLNumber";
+            this.bnR2_txtMTLNumber.ReadOnly = true;
+            this.bnR2_txtMTLNumber.Size = new System.Drawing.Size(160, 30);
+            // 
+            // bnR2_lblCanOutQty
+            // 
+            this.bnR2_lblCanOutQty.Name = "bnR2_lblCanOutQty";
+            this.bnR2_lblCanOutQty.Size = new System.Drawing.Size(68, 27);
+            this.bnR2_lblCanOutQty.Text = "可出数量：";
+            // 
+            // bnR2_txtCanOutQty
+            // 
+            this.bnR2_txtCanOutQty.Name = "bnR2_txtCanOutQty";
+            this.bnR2_txtCanOutQty.Size = new System.Drawing.Size(50, 30);
+            this.bnR2_txtCanOutQty.ToolTipText = "把可出数量修改为当前输入值";
+            this.bnR2_txtCanOutQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.bnR2_txtCanOutQty_KeyPress);
+            // 
+            // bnR2_tss
+            // 
+            this.bnR2_tss.Name = "bnR2_tss";
+            this.bnR2_tss.Size = new System.Drawing.Size(6, 30);
+            // 
+            // bnR2_btnEdit
+            // 
+            this.bnR2_btnEdit.Image = global::ERPSupport.SupForm.Properties.Resources.livejournal;
+            this.bnR2_btnEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnR2_btnEdit.Name = "bnR2_btnEdit";
+            this.bnR2_btnEdit.Size = new System.Drawing.Size(52, 27);
+            this.bnR2_btnEdit.Tag = "1";
+            this.bnR2_btnEdit.Text = "修改";
+            this.bnR2_btnEdit.ToolTipText = "修改销售订单可出数量";
+            this.bnR2_btnEdit.Click += new System.EventHandler(this.bnR2_btnEdit_Click);
+            // 
+            // bnR3
+            // 
+            this.bnR3.AddNewItem = null;
+            this.bnR3.CountItem = null;
+            this.bnR3.DeleteItem = null;
+            this.bnR3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.bnR3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnR3_lblCustomer,
+            this.bnR2_txtCustomer,
+            this.bnR3_tss,
+            this.bnR3_tss2,
+            this.bnR3_btnEdit});
+            this.bnR3.Location = new System.Drawing.Point(0, 60);
+            this.bnR3.MoveFirstItem = null;
+            this.bnR3.MoveLastItem = null;
+            this.bnR3.MoveNextItem = null;
+            this.bnR3.MovePreviousItem = null;
+            this.bnR3.Name = "bnR3";
+            this.bnR3.PositionItem = null;
+            this.bnR3.Size = new System.Drawing.Size(1018, 30);
+            this.bnR3.TabIndex = 32;
+            this.bnR3.Text = "bindingNavigator1";
+            // 
+            // bnR3_lblCustomer
+            // 
+            this.bnR3_lblCustomer.Name = "bnR3_lblCustomer";
+            this.bnR3_lblCustomer.Size = new System.Drawing.Size(44, 27);
+            this.bnR3_lblCustomer.Text = "客户：";
+            // 
+            // bnR2_txtCustomer
+            // 
+            this.bnR2_txtCustomer.Name = "bnR2_txtCustomer";
+            this.bnR2_txtCustomer.Size = new System.Drawing.Size(190, 30);
+            this.bnR2_txtCustomer.ToolTipText = "把客户修改为当前输入值";
+            // 
+            // bnR3_tss
+            // 
+            this.bnR3_tss.Name = "bnR3_tss";
+            this.bnR3_tss.Size = new System.Drawing.Size(6, 30);
+            // 
+            // bnR3_tss2
+            // 
+            this.bnR3_tss2.Name = "bnR3_tss2";
+            this.bnR3_tss2.Size = new System.Drawing.Size(6, 30);
+            // 
+            // bnR3_btnEdit
+            // 
+            this.bnR3_btnEdit.Image = global::ERPSupport.SupForm.Properties.Resources.livejournal;
+            this.bnR3_btnEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnR3_btnEdit.Name = "bnR3_btnEdit";
+            this.bnR3_btnEdit.Size = new System.Drawing.Size(52, 27);
+            this.bnR3_btnEdit.Tag = "1";
+            this.bnR3_btnEdit.Text = "修改";
+            this.bnR3_btnEdit.ToolTipText = "修改客户";
+            this.bnR3_btnEdit.Click += new System.EventHandler(this.bnR3_btnEdit_Click);
+            // 
+            // tpl1
+            // 
+            this.tpl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tpl1.ColumnCount = 1;
+            this.tpl1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tpl1.Controls.Add(this.bnR1, 0, 0);
+            this.tpl1.Controls.Add(this.bnR2, 0, 1);
+            this.tpl1.Controls.Add(this.bnR3, 0, 2);
+            this.tpl1.Controls.Add(this.dgv1, 0, 3);
+            this.tpl1.Location = new System.Drawing.Point(3, 28);
+            this.tpl1.Name = "tpl1";
+            this.tpl1.RowCount = 4;
+            this.tpl1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tpl1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tpl1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            this.tpl1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tpl1.Size = new System.Drawing.Size(1018, 737);
+            this.tpl1.TabIndex = 33;
             // 
             // dgv1
             // 
@@ -179,121 +373,78 @@
             this.dgv1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.dgv1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv1.Location = new System.Drawing.Point(5, 75);
+            this.dgv1.Location = new System.Drawing.Point(3, 93);
+            this.dgv1.MultiSelect = false;
             this.dgv1.Name = "dgv1";
+            this.dgv1.ReadOnly = true;
+            this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dgv1.RowTemplate.Height = 23;
-            this.dgv1.Size = new System.Drawing.Size(1016, 690);
-            this.dgv1.TabIndex = 2;
-            this.dgv1.Visible = false;
-            // 
-            // lblMTL
-            // 
-            this.lblMTL.AutoSize = true;
-            this.lblMTL.Location = new System.Drawing.Point(3, 11);
-            this.lblMTL.Name = "lblMTL";
-            this.lblMTL.Size = new System.Drawing.Size(65, 12);
-            this.lblMTL.TabIndex = 3;
-            this.lblMTL.Text = "物料编码：";
-            // 
-            // pl2
-            // 
-            this.pl2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pl2.Controls.Add(this.btnModify);
-            this.pl2.Controls.Add(this.chkSingle);
-            this.pl2.Controls.Add(this.txtCanOutQty);
-            this.pl2.Controls.Add(this.txtMTL);
-            this.pl2.Controls.Add(this.lblCanOutQty);
-            this.pl2.Controls.Add(this.lblMTL);
-            this.pl2.Location = new System.Drawing.Point(5, 30);
-            this.pl2.Name = "pl2";
-            this.pl2.Size = new System.Drawing.Size(1016, 39);
-            this.pl2.TabIndex = 4;
-            // 
-            // btnModify
-            // 
-            this.btnModify.Location = new System.Drawing.Point(624, 6);
-            this.btnModify.Name = "btnModify";
-            this.btnModify.Size = new System.Drawing.Size(75, 23);
-            this.btnModify.TabIndex = 6;
-            this.btnModify.Text = "修改";
-            this.btnModify.UseVisualStyleBackColor = true;
-            this.btnModify.Click += new System.EventHandler(this.btnModify_Click);
-            // 
-            // chkSingle
-            // 
-            this.chkSingle.AutoSize = true;
-            this.chkSingle.Location = new System.Drawing.Point(518, 12);
-            this.chkSingle.Name = "chkSingle";
-            this.chkSingle.Size = new System.Drawing.Size(72, 16);
-            this.chkSingle.TabIndex = 5;
-            this.chkSingle.Text = "整单发货";
-            this.chkSingle.UseVisualStyleBackColor = true;
-            // 
-            // txtCanOutQty
-            // 
-            this.txtCanOutQty.Location = new System.Drawing.Point(353, 8);
-            this.txtCanOutQty.Name = "txtCanOutQty";
-            this.txtCanOutQty.Size = new System.Drawing.Size(142, 21);
-            this.txtCanOutQty.TabIndex = 4;
-            // 
-            // txtMTL
-            // 
-            this.txtMTL.Location = new System.Drawing.Point(74, 8);
-            this.txtMTL.Name = "txtMTL";
-            this.txtMTL.Size = new System.Drawing.Size(142, 21);
-            this.txtMTL.TabIndex = 4;
-            // 
-            // lblCanOutQty
-            // 
-            this.lblCanOutQty.AutoSize = true;
-            this.lblCanOutQty.Location = new System.Drawing.Point(277, 11);
-            this.lblCanOutQty.Name = "lblCanOutQty";
-            this.lblCanOutQty.Size = new System.Drawing.Size(65, 12);
-            this.lblCanOutQty.TabIndex = 3;
-            this.lblCanOutQty.Text = "可出数量：";
+            this.dgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgv1.Size = new System.Drawing.Size(1012, 644);
+            this.dgv1.TabIndex = 33;
+            this.dgv1.Click += new System.EventHandler(this.dgv1_Click);
             // 
             // ucCS_BillEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.pl2);
-            this.Controls.Add(this.dgv1);
-            this.Controls.Add(this.pl1);
+            this.Controls.Add(this.tpl1);
+            this.Controls.Add(this.bnTop);
             this.Name = "ucCS_BillEdit";
             this.Size = new System.Drawing.Size(1024, 768);
             this.Load += new System.EventHandler(this.ucCS_BillEdit_Load);
-            this.pl1.ResumeLayout(false);
-            this.pl1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnR1)).EndInit();
+            this.bnR1.ResumeLayout(false);
+            this.bnR1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).EndInit();
+            this.bnTop.ResumeLayout(false);
+            this.bnTop.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnR2)).EndInit();
+            this.bnR2.ResumeLayout(false);
+            this.bnR2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnR3)).EndInit();
+            this.bnR3.ResumeLayout(false);
+            this.bnR3.PerformLayout();
+            this.tpl1.ResumeLayout(false);
+            this.tpl1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).EndInit();
-            this.pl2.ResumeLayout(false);
-            this.pl2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ComboBox cbxType;
-        private System.Windows.Forms.Panel pl1;
-        private System.Windows.Forms.TextBox txtBillNo;
-        private System.Windows.Forms.Label lblFbillNo;
-        private System.Windows.Forms.Label lblType;
-        private System.Windows.Forms.Button btnBatchModify;
-        private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.DateTimePicker dtpTo;
-        private System.Windows.Forms.DateTimePicker dtpFrom;
-        private System.Windows.Forms.Label lblSP;
-        private System.Windows.Forms.Label lblDate;
+        private System.Windows.Forms.BindingNavigator bnR1;
+        private System.Windows.Forms.ToolStripSeparator bnR1_tss;
+        private System.Windows.Forms.ToolStripButton bnR1_btnEidt;
+        private System.Windows.Forms.BindingNavigator bnTop;
+        private System.Windows.Forms.ToolStripComboBox bnTop_cbxType;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblBillNo;
+        private System.Windows.Forms.ToolStripTextBox bnTop_txtBillNo;
+        private System.Windows.Forms.ToolStripSeparator bnTop_tss;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblDash;
+        private System.Windows.Forms.ToolStripSeparator bnTop_tss2;
+        private System.Windows.Forms.ToolStripButton bnTop_btnSearch;
+        private System.Windows.Forms.ToolStripButton bnTop_btnSyn;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblType;
+        private System.Windows.Forms.BindingNavigator bnR2;
+        private System.Windows.Forms.ToolStripSeparator bnR2_tss;
+        private System.Windows.Forms.ToolStripButton bnR2_btnEdit;
+        private System.Windows.Forms.ToolStripLabel bnR2_lblMTLNumber;
+        private System.Windows.Forms.ToolStripTextBox bnR2_txtMTLNumber;
+        private System.Windows.Forms.ToolStripLabel bnR2_lblCanOutQty;
+        private System.Windows.Forms.ToolStripTextBox bnR2_txtCanOutQty;
+        private System.Windows.Forms.BindingNavigator bnR3;
+        private System.Windows.Forms.ToolStripSeparator bnR3_tss;
+        private System.Windows.Forms.ToolStripLabel bnR3_lblCustomer;
+        private System.Windows.Forms.ToolStripTextBox bnR2_txtCustomer;
+        private System.Windows.Forms.ToolStripButton bnR3_btnEdit;
+        private System.Windows.Forms.TableLayoutPanel tpl1;
+        private System.Windows.Forms.ToolStripSeparator bnR3_tss2;
         private System.Windows.Forms.DataGridView dgv1;
-        private System.Windows.Forms.Button btnSyn;
-        private System.Windows.Forms.Label lblMTL;
-        private System.Windows.Forms.Panel pl2;
-        private System.Windows.Forms.Button btnModify;
-        private System.Windows.Forms.CheckBox chkSingle;
-        private System.Windows.Forms.TextBox txtCanOutQty;
-        private System.Windows.Forms.TextBox txtMTL;
-        private System.Windows.Forms.Label lblCanOutQty;
+        private System.Windows.Forms.ToolStripButton bnTop_btnPPBom;
+        private System.Windows.Forms.ToolStripButton bnTop_btnBom;
     }
 }

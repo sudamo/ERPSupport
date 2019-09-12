@@ -28,15 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.dgv1 = new System.Windows.Forms.DataGridView();
-            this.pl1 = new System.Windows.Forms.Panel();
-            this.dtpFrom = new System.Windows.Forms.DateTimePicker();
-            this.lblDate = new System.Windows.Forms.Label();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.txtUser = new System.Windows.Forms.TextBox();
-            this.lblUser = new System.Windows.Forms.Label();
+            this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnTop_lblDate = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_txtUser = new System.Windows.Forms.ToolStripTextBox();
+            this.bnTop_lblUser = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop_btnSearch = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_tss2 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
-            this.pl1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
+            this.bnTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // dgv1
@@ -48,96 +51,105 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgv1.Location = new System.Drawing.Point(5, 29);
+            this.dgv1.Location = new System.Drawing.Point(5, 27);
             this.dgv1.Margin = new System.Windows.Forms.Padding(2);
             this.dgv1.Name = "dgv1";
             this.dgv1.RowHeadersVisible = false;
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader;
             this.dgv1.RowTemplate.Height = 27;
             this.dgv1.ShowEditingIcon = false;
-            this.dgv1.Size = new System.Drawing.Size(1017, 737);
+            this.dgv1.Size = new System.Drawing.Size(1017, 739);
             this.dgv1.TabIndex = 21;
             // 
-            // pl1
+            // bnTop
             // 
-            this.pl1.Controls.Add(this.dtpFrom);
-            this.pl1.Controls.Add(this.lblDate);
-            this.pl1.Controls.Add(this.btnSearch);
-            this.pl1.Controls.Add(this.txtUser);
-            this.pl1.Controls.Add(this.lblUser);
-            this.pl1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pl1.Location = new System.Drawing.Point(0, 0);
-            this.pl1.Name = "pl1";
-            this.pl1.Size = new System.Drawing.Size(1024, 25);
-            this.pl1.TabIndex = 20;
+            this.bnTop.AddNewItem = null;
+            this.bnTop.CountItem = null;
+            this.bnTop.DeleteItem = null;
+            this.bnTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnTop_lblDate,
+            this.bnTop_tss,
+            this.bnTop_lblUser,
+            this.bnTop_txtUser,
+            this.bnTop_tss2,
+            this.bnTop_btnSearch});
+            this.bnTop.Location = new System.Drawing.Point(0, 0);
+            this.bnTop.MoveFirstItem = null;
+            this.bnTop.MoveLastItem = null;
+            this.bnTop.MoveNextItem = null;
+            this.bnTop.MovePreviousItem = null;
+            this.bnTop.Name = "bnTop";
+            this.bnTop.PositionItem = null;
+            this.bnTop.Size = new System.Drawing.Size(1024, 25);
+            this.bnTop.TabIndex = 26;
+            this.bnTop.Text = "bindingNavigator1";
+            this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
             // 
-            // dtpFrom
+            // bnTop_lblDate
             // 
-            this.dtpFrom.Location = new System.Drawing.Point(50, 0);
-            this.dtpFrom.Name = "dtpFrom";
-            this.dtpFrom.Size = new System.Drawing.Size(110, 21);
-            this.dtpFrom.TabIndex = 1;
+            this.bnTop_lblDate.Name = "bnTop_lblDate";
+            this.bnTop_lblDate.Size = new System.Drawing.Size(44, 22);
+            this.bnTop_lblDate.Text = "日期：";
             // 
-            // lblDate
+            // bnTop_txtUser
             // 
-            this.lblDate.AutoSize = true;
-            this.lblDate.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lblDate.Location = new System.Drawing.Point(3, 6);
-            this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(41, 12);
-            this.lblDate.TabIndex = 0;
-            this.lblDate.Text = "日期：";
+            this.bnTop_txtUser.Name = "bnTop_txtUser";
+            this.bnTop_txtUser.Size = new System.Drawing.Size(100, 25);
+            this.bnTop_txtUser.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUser_KeyPress);
             // 
-            // btnSearch
+            // bnTop_lblUser
             // 
-            this.btnSearch.Location = new System.Drawing.Point(349, 1);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnSearch.TabIndex = 9;
-            this.btnSearch.Text = "查找";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
+            this.bnTop_lblUser.Name = "bnTop_lblUser";
+            this.bnTop_lblUser.Size = new System.Drawing.Size(44, 22);
+            this.bnTop_lblUser.Text = "用户：";
             // 
-            // txtUser
+            // bnTop_tss
             // 
-            this.txtUser.Location = new System.Drawing.Point(213, 3);
-            this.txtUser.Name = "txtUser";
-            this.txtUser.Size = new System.Drawing.Size(130, 21);
-            this.txtUser.TabIndex = 6;
-            this.txtUser.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUser_KeyPress);
+            this.bnTop_tss.Name = "bnTop_tss";
+            this.bnTop_tss.Size = new System.Drawing.Size(6, 25);
             // 
-            // lblUser
+            // bnTop_btnSearch
             // 
-            this.lblUser.AutoSize = true;
-            this.lblUser.Location = new System.Drawing.Point(166, 6);
-            this.lblUser.Name = "lblUser";
-            this.lblUser.Size = new System.Drawing.Size(41, 12);
-            this.lblUser.TabIndex = 0;
-            this.lblUser.Text = "用户：";
+            this.bnTop_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.magnifier;
+            this.bnTop_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnSearch.Name = "bnTop_btnSearch";
+            this.bnTop_btnSearch.Size = new System.Drawing.Size(52, 22);
+            this.bnTop_btnSearch.Tag = "1";
+            this.bnTop_btnSearch.Text = "查找";
+            this.bnTop_btnSearch.ToolTipText = "刷新仓库信息";
+            // 
+            // bnTop_tss2
+            // 
+            this.bnTop_tss2.Name = "bnTop_tss2";
+            this.bnTop_tss2.Size = new System.Drawing.Size(6, 25);
             // 
             // ucRC_System
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.bnTop);
             this.Controls.Add(this.dgv1);
-            this.Controls.Add(this.pl1);
             this.Name = "ucRC_System";
             this.Size = new System.Drawing.Size(1024, 768);
+            this.Load += new System.EventHandler(this.ucRC_System_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).EndInit();
-            this.pl1.ResumeLayout(false);
-            this.pl1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnTop)).EndInit();
+            this.bnTop.ResumeLayout(false);
+            this.bnTop.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         private System.Windows.Forms.DataGridView dgv1;
-        private System.Windows.Forms.Panel pl1;
-        private System.Windows.Forms.DateTimePicker dtpFrom;
-        private System.Windows.Forms.Label lblDate;
-        private System.Windows.Forms.Button btnSearch;
-        private System.Windows.Forms.TextBox txtUser;
-        private System.Windows.Forms.Label lblUser;
+        private System.Windows.Forms.BindingNavigator bnTop;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblDate;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblUser;
+        private System.Windows.Forms.ToolStripTextBox bnTop_txtUser;
+        private System.Windows.Forms.ToolStripSeparator bnTop_tss;
+        private System.Windows.Forms.ToolStripButton bnTop_btnSearch;
+        private System.Windows.Forms.ToolStripSeparator bnTop_tss2;
     }
 }

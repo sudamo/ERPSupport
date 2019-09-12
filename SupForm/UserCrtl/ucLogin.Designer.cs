@@ -67,6 +67,7 @@
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(100, 26);
             this.txtUser.TabIndex = 5;
+            this.txtUser.Text = "damo";
             this.tt.SetToolTip(this.txtUser, "请输入K3Cloud用户名。");
             this.txtUser.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtUser_KeyPress);
             // 
@@ -89,6 +90,7 @@
             this.txtPWD.PasswordChar = '*';
             this.txtPWD.Size = new System.Drawing.Size(100, 26);
             this.txtPWD.TabIndex = 6;
+            this.txtPWD.Text = "a111111";
             this.txtPWD.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPWD_KeyPress);
             // 
             // lblUser
