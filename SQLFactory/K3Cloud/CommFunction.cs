@@ -1464,6 +1464,23 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
+        /// 根据物料编码获取物料
+        /// </summary>
+        /// <param name="pFNumber"></param>
+        /// <param name="pUseOrgId"></param>
+        /// <returns></returns>
+        public static string GetMTLByMTLNumber(string pFNumber, int pUseOrgId = 100508)
+        {
+            //_SQL = "SELECT A.FMATERIALID||'|'||AL.FNAME FROM T_BD_MATERIAL A INNER JOIN T_BD_MATERIAL_L AL ON A.FMATERIALID = AL.FMATERIALID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = " + pUseOrgId + " AND A.FNUMBER = '" + pFNumber + "'";
+            _SQL = "SELECT AL.FNAME FROM T_BD_MATERIAL A INNER JOIN T_BD_MATERIAL_L AL ON A.FMATERIALID = AL.FMATERIALID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = " + pUseOrgId + " AND A.FNUMBER = '" + pFNumber + "'";
+            _obj = ORAHelper.ExecuteScalar(_SQL);
+            if (_obj == null)
+                return string.Empty;
+            else
+                return _obj.ToString();
+        }
+
+        /// <summary>
         /// 更新物料参数
         /// </summary>
         /// <param name="pMTLPara">物料参数</param>

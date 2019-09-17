@@ -1,12 +1,9 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using ERPSupport.SupForm.UserCrtl;
 
 namespace ERPSupport.SupForm.Bussiness
@@ -25,9 +22,17 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         private DataTable _dtNew;
         /// <summary>
+        /// 产品编码
+        /// </summary>
+        private string _Number;
+        /// <summary>
         /// 需求日期
         /// </summary>
         private DateTime _tNeedDate;
+        /// <summary>
+        /// 修改行号
+        /// </summary>
+        private int _Row;
         /// <summary>
         /// ToolStrip日期
         /// </summary>
@@ -42,13 +47,18 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         /// <param name="pdtOld">原数据</param>
         /// <param name="pdtNew">修改后数据</param>
-        /// /// <param name="pdtNew">需求日期</param>
-        public frmBomCompare(DataTable pdtOld, DataTable pdtNew, DateTime pNeedDate)
+        /// <param name="pNumber">产品编码</param>
+        /// <param name="pNeedDate">需求日期</param>
+        /// <param name="pRow">修改行序号</param>
+        /// <param name="pType">是否之修改数量</param>
+        public frmBomCompare(DataTable pdtOld, DataTable pdtNew, string pNumber, DateTime pNeedDate, int pRow, bool pType)
         {
             InitializeComponent();
             _dtOld = pdtOld;
             _dtNew = pdtNew;
+            _Number = pNumber;
             _tNeedDate = pNeedDate;
+            _Row = pRow;
         }
 
         private void frmBomCompare_Load(object sender, EventArgs e)
@@ -78,18 +88,29 @@ namespace ERPSupport.SupForm.Bussiness
             bnBottom.Items.Clear();
             foreach (ToolStripItem item in list)
                 bnBottom.Items.Add(item);
+
+            dgv1.DataSource = _dtOld;
+            dgv2.DataSource = _dtNew;
+
+            dgv1.Rows[_Row].DefaultCellStyle.BackColor = Color.Plum;
+            dgv1.Rows[_Row].Selected = true;
+            dgv2.Rows[_Row].DefaultCellStyle.BackColor = Color.Plum;
+            dgv2.Rows[_Row].Selected = true;
+
+            Text = "物料清单修改对照-产品编码：" + _Number + "[高亮显示的是被修改的子项物料]";
         }
 
         private void bnBottom_btnOK_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.OK;
-            MessageBox.Show("修改成功。");
+            MessageBox.Show("急啥急，开发中呢....");
             Close();
         }
 
         private void bnBottom_btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
+            MessageBox.Show("你真的要走了吗？");
             Close();
         }
     }

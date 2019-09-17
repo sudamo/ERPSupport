@@ -40,11 +40,15 @@
             this.tpl1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgv1 = new System.Windows.Forms.DataGridView();
             this.dgv2 = new System.Windows.Forms.DataGridView();
+            this.gbx1 = new System.Windows.Forms.GroupBox();
+            this.gbx2 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).BeginInit();
             this.bnBottom.SuspendLayout();
             this.tpl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv2)).BeginInit();
+            this.gbx1.SuspendLayout();
+            this.gbx2.SuspendLayout();
             this.SuspendLayout();
             // 
             // bnBottom
@@ -60,14 +64,14 @@
             this.bnBottom_btnOK,
             this.bnBottom_tss3,
             this.bnBottom_btnCancel});
-            this.bnBottom.Location = new System.Drawing.Point(0, 537);
+            this.bnBottom.Location = new System.Drawing.Point(0, 617);
             this.bnBottom.MoveFirstItem = null;
             this.bnBottom.MoveLastItem = null;
             this.bnBottom.MoveNextItem = null;
             this.bnBottom.MovePreviousItem = null;
             this.bnBottom.Name = "bnBottom";
             this.bnBottom.PositionItem = null;
-            this.bnBottom.Size = new System.Drawing.Size(784, 25);
+            this.bnBottom.Size = new System.Drawing.Size(884, 25);
             this.bnBottom.TabIndex = 30;
             this.bnBottom.Text = "bindingNavigator1";
             // 
@@ -120,14 +124,14 @@
             this.tpl1.ColumnCount = 2;
             this.tpl1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tpl1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tpl1.Controls.Add(this.dgv1, 0, 0);
-            this.tpl1.Controls.Add(this.dgv2, 1, 0);
+            this.tpl1.Controls.Add(this.gbx1, 0, 0);
+            this.tpl1.Controls.Add(this.gbx2, 1, 0);
             this.tpl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tpl1.Location = new System.Drawing.Point(0, 0);
             this.tpl1.Name = "tpl1";
             this.tpl1.RowCount = 1;
             this.tpl1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tpl1.Size = new System.Drawing.Size(784, 537);
+            this.tpl1.Size = new System.Drawing.Size(884, 617);
             this.tpl1.TabIndex = 31;
             // 
             // dgv1
@@ -135,17 +139,17 @@
             this.dgv1.AllowUserToAddRows = false;
             this.dgv1.AllowUserToDeleteRows = false;
             this.dgv1.AllowUserToResizeRows = false;
-            this.dgv1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgv1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgv1.Location = new System.Drawing.Point(3, 3);
+            this.dgv1.Location = new System.Drawing.Point(3, 17);
             this.dgv1.MultiSelect = false;
             this.dgv1.Name = "dgv1";
             this.dgv1.ReadOnly = true;
-            this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
+            this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv1.RowTemplate.Height = 23;
-            this.dgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv1.Size = new System.Drawing.Size(386, 531);
+            this.dgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgv1.Size = new System.Drawing.Size(430, 591);
             this.dgv1.TabIndex = 34;
             // 
             // dgv2
@@ -153,30 +157,52 @@
             this.dgv2.AllowUserToAddRows = false;
             this.dgv2.AllowUserToDeleteRows = false;
             this.dgv2.AllowUserToResizeRows = false;
-            this.dgv2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
-            this.dgv2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgv2.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.ColumnHeader;
+            this.dgv2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
             this.dgv2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgv2.Location = new System.Drawing.Point(395, 3);
+            this.dgv2.Location = new System.Drawing.Point(3, 17);
             this.dgv2.MultiSelect = false;
             this.dgv2.Name = "dgv2";
             this.dgv2.ReadOnly = true;
-            this.dgv2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
+            this.dgv2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv2.RowTemplate.Height = 23;
-            this.dgv2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgv2.Size = new System.Drawing.Size(386, 531);
+            this.dgv2.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgv2.Size = new System.Drawing.Size(430, 591);
             this.dgv2.TabIndex = 34;
+            // 
+            // gbx1
+            // 
+            this.gbx1.Controls.Add(this.dgv1);
+            this.gbx1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbx1.Location = new System.Drawing.Point(3, 3);
+            this.gbx1.Name = "gbx1";
+            this.gbx1.Size = new System.Drawing.Size(436, 611);
+            this.gbx1.TabIndex = 35;
+            this.gbx1.TabStop = false;
+            this.gbx1.Text = "修改前";
+            // 
+            // gbx2
+            // 
+            this.gbx2.Controls.Add(this.dgv2);
+            this.gbx2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gbx2.Location = new System.Drawing.Point(445, 3);
+            this.gbx2.Name = "gbx2";
+            this.gbx2.Size = new System.Drawing.Size(436, 611);
+            this.gbx2.TabIndex = 35;
+            this.gbx2.TabStop = false;
+            this.gbx2.Text = "修改后";
             // 
             // frmBomCompare
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 562);
+            this.ClientSize = new System.Drawing.Size(884, 642);
             this.ControlBox = false;
             this.Controls.Add(this.tpl1);
             this.Controls.Add(this.bnBottom);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(800, 600);
-            this.MinimumSize = new System.Drawing.Size(800, 600);
+            this.MaximumSize = new System.Drawing.Size(900, 680);
+            this.MinimumSize = new System.Drawing.Size(900, 680);
             this.Name = "frmBomCompare";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "物料清单修改对照";
@@ -187,6 +213,8 @@
             this.tpl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgv2)).EndInit();
+            this.gbx1.ResumeLayout(false);
+            this.gbx2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -204,5 +232,7 @@
         private System.Windows.Forms.DataGridView dgv1;
         private System.Windows.Forms.DataGridView dgv2;
         private System.Windows.Forms.ToolStripLabel bnBottom_lblNeedDate;
+        private System.Windows.Forms.GroupBox gbx1;
+        private System.Windows.Forms.GroupBox gbx2;
     }
 }
