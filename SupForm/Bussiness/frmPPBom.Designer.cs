@@ -68,23 +68,23 @@
             this.bnC_tss = new System.Windows.Forms.ToolStripSeparator();
             this.bnC_btnSearch = new System.Windows.Forms.ToolStripButton();
             this.bnC_btnChange = new System.Windows.Forms.ToolStripButton();
+            this.lblFM = new System.Windows.Forms.Label();
+            this.lblFZ = new System.Windows.Forms.Label();
+            this.txtFM = new System.Windows.Forms.TextBox();
+            this.txtFZ = new System.Windows.Forms.TextBox();
             this.lblMustQty = new System.Windows.Forms.Label();
             this.txtMustQty = new System.Windows.Forms.TextBox();
             this.gbx2 = new System.Windows.Forms.GroupBox();
             this.lblSeq = new System.Windows.Forms.Label();
             this.txtCName2 = new System.Windows.Forms.TextBox();
             this.lblCName2 = new System.Windows.Forms.Label();
+            this.lblFM2 = new System.Windows.Forms.Label();
+            this.lblFZ2 = new System.Windows.Forms.Label();
             this.lblMustQty2 = new System.Windows.Forms.Label();
             this.lblCNumber2 = new System.Windows.Forms.Label();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.txtFZ = new System.Windows.Forms.TextBox();
-            this.lblFZ = new System.Windows.Forms.Label();
-            this.txtFM = new System.Windows.Forms.TextBox();
-            this.lblFM = new System.Windows.Forms.Label();
-            this.lblFZ2 = new System.Windows.Forms.Label();
-            this.lblFM2 = new System.Windows.Forms.Label();
             this.pl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
             this.bnTop.SuspendLayout();
@@ -376,7 +376,7 @@
             this.dgv1.RowTemplate.Height = 23;
             this.dgv1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgv1.Size = new System.Drawing.Size(598, 582);
-            this.dgv1.TabIndex = 2;
+            this.dgv1.TabIndex = 60;
             this.dgv1.Click += new System.EventHandler(this.dgv1_Click);
             // 
             // plRight
@@ -424,7 +424,7 @@
             this.txtCName.Name = "txtCName";
             this.txtCName.ReadOnly = true;
             this.txtCName.Size = new System.Drawing.Size(380, 50);
-            this.txtCName.TabIndex = 61;
+            this.txtCName.TabIndex = 70;
             // 
             // bnC
             // 
@@ -445,7 +445,7 @@
             this.bnC.Name = "bnC";
             this.bnC.PositionItem = null;
             this.bnC.Size = new System.Drawing.Size(392, 25);
-            this.bnC.TabIndex = 29;
+            this.bnC.TabIndex = 61;
             this.bnC.Text = "bindingNavigator1";
             // 
             // bnC_lblMTLNumber
@@ -487,6 +487,40 @@
             this.bnC_btnChange.ToolTipText = "替换或检查替换";
             this.bnC_btnChange.Click += new System.EventHandler(this.bnC_bntChange_Click);
             // 
+            // lblFM
+            // 
+            this.lblFM.AutoSize = true;
+            this.lblFM.Location = new System.Drawing.Point(52, 189);
+            this.lblFM.Name = "lblFM";
+            this.lblFM.Size = new System.Drawing.Size(41, 12);
+            this.lblFM.TabIndex = 36;
+            this.lblFM.Text = "分母：";
+            // 
+            // lblFZ
+            // 
+            this.lblFZ.AutoSize = true;
+            this.lblFZ.Location = new System.Drawing.Point(52, 162);
+            this.lblFZ.Name = "lblFZ";
+            this.lblFZ.Size = new System.Drawing.Size(41, 12);
+            this.lblFZ.TabIndex = 36;
+            this.lblFZ.Text = "分子：";
+            // 
+            // txtFM
+            // 
+            this.txtFM.Location = new System.Drawing.Point(99, 186);
+            this.txtFM.Name = "txtFM";
+            this.txtFM.ReadOnly = true;
+            this.txtFM.Size = new System.Drawing.Size(100, 21);
+            this.txtFM.TabIndex = 73;
+            // 
+            // txtFZ
+            // 
+            this.txtFZ.Location = new System.Drawing.Point(99, 159);
+            this.txtFZ.Name = "txtFZ";
+            this.txtFZ.Size = new System.Drawing.Size(100, 21);
+            this.txtFZ.TabIndex = 72;
+            this.txtFZ.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxCheck_Decimal);
+            // 
             // lblMustQty
             // 
             this.lblMustQty.AutoSize = true;
@@ -501,8 +535,8 @@
             this.txtMustQty.Location = new System.Drawing.Point(99, 132);
             this.txtMustQty.Name = "txtMustQty";
             this.txtMustQty.Size = new System.Drawing.Size(100, 21);
-            this.txtMustQty.TabIndex = 60;
-            this.txtMustQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMustQty_KeyPress);
+            this.txtMustQty.TabIndex = 71;
+            this.txtMustQty.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBoxCheck_Decimal);
             // 
             // gbx2
             // 
@@ -519,7 +553,7 @@
             this.gbx2.Location = new System.Drawing.Point(3, 225);
             this.gbx2.Name = "gbx2";
             this.gbx2.Size = new System.Drawing.Size(392, 210);
-            this.gbx2.TabIndex = 62;
+            this.gbx2.TabIndex = 80;
             this.gbx2.TabStop = false;
             this.gbx2.Text = "被替换子项物料信息";
             // 
@@ -529,7 +563,7 @@
             this.lblSeq.Location = new System.Drawing.Point(54, 31);
             this.lblSeq.Name = "lblSeq";
             this.lblSeq.Size = new System.Drawing.Size(41, 12);
-            this.lblSeq.TabIndex = 36;
+            this.lblSeq.TabIndex = 80;
             this.lblSeq.Text = "序号：";
             // 
             // txtCName2
@@ -539,7 +573,7 @@
             this.txtCName2.Name = "txtCName2";
             this.txtCName2.ReadOnly = true;
             this.txtCName2.Size = new System.Drawing.Size(380, 50);
-            this.txtCName2.TabIndex = 61;
+            this.txtCName2.TabIndex = 74;
             // 
             // lblCName2
             // 
@@ -547,8 +581,26 @@
             this.lblCName2.Location = new System.Drawing.Point(6, 75);
             this.lblCName2.Name = "lblCName2";
             this.lblCName2.Size = new System.Drawing.Size(89, 12);
-            this.lblCName2.TabIndex = 36;
+            this.lblCName2.TabIndex = 80;
             this.lblCName2.Text = "子项物料名称：";
+            // 
+            // lblFM2
+            // 
+            this.lblFM2.AutoSize = true;
+            this.lblFM2.Location = new System.Drawing.Point(54, 186);
+            this.lblFM2.Name = "lblFM2";
+            this.lblFM2.Size = new System.Drawing.Size(41, 12);
+            this.lblFM2.TabIndex = 80;
+            this.lblFM2.Text = "分母：";
+            // 
+            // lblFZ2
+            // 
+            this.lblFZ2.AutoSize = true;
+            this.lblFZ2.Location = new System.Drawing.Point(54, 165);
+            this.lblFZ2.Name = "lblFZ2";
+            this.lblFZ2.Size = new System.Drawing.Size(41, 12);
+            this.lblFZ2.TabIndex = 80;
+            this.lblFZ2.Text = "分子：";
             // 
             // lblMustQty2
             // 
@@ -556,7 +608,7 @@
             this.lblMustQty2.Location = new System.Drawing.Point(30, 143);
             this.lblMustQty2.Name = "lblMustQty2";
             this.lblMustQty2.Size = new System.Drawing.Size(65, 12);
-            this.lblMustQty2.TabIndex = 36;
+            this.lblMustQty2.TabIndex = 80;
             this.lblMustQty2.Text = "应发数量：";
             // 
             // lblCNumber2
@@ -565,7 +617,7 @@
             this.lblCNumber2.Location = new System.Drawing.Point(6, 52);
             this.lblCNumber2.Name = "lblCNumber2";
             this.lblCNumber2.Size = new System.Drawing.Size(89, 12);
-            this.lblCNumber2.TabIndex = 36;
+            this.lblCNumber2.TabIndex = 80;
             this.lblCNumber2.Text = "子项物料编码：";
             // 
             // dataGridViewTextBoxColumn1
@@ -589,58 +641,6 @@
             this.dataGridViewTextBoxColumn3.HeaderText = "应发数量";
             this.dataGridViewTextBoxColumn3.Name = "dataGridViewTextBoxColumn3";
             // 
-            // txtFZ
-            // 
-            this.txtFZ.Location = new System.Drawing.Point(99, 159);
-            this.txtFZ.Name = "txtFZ";
-            this.txtFZ.Size = new System.Drawing.Size(100, 21);
-            this.txtFZ.TabIndex = 60;
-            this.txtFZ.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtMustQty_KeyPress);
-            // 
-            // lblFZ
-            // 
-            this.lblFZ.AutoSize = true;
-            this.lblFZ.Location = new System.Drawing.Point(52, 162);
-            this.lblFZ.Name = "lblFZ";
-            this.lblFZ.Size = new System.Drawing.Size(41, 12);
-            this.lblFZ.TabIndex = 36;
-            this.lblFZ.Text = "分子：";
-            // 
-            // txtFM
-            // 
-            this.txtFM.Location = new System.Drawing.Point(99, 186);
-            this.txtFM.Name = "txtFM";
-            this.txtFM.ReadOnly = true;
-            this.txtFM.Size = new System.Drawing.Size(100, 21);
-            this.txtFM.TabIndex = 60;
-            // 
-            // lblFM
-            // 
-            this.lblFM.AutoSize = true;
-            this.lblFM.Location = new System.Drawing.Point(52, 189);
-            this.lblFM.Name = "lblFM";
-            this.lblFM.Size = new System.Drawing.Size(41, 12);
-            this.lblFM.TabIndex = 36;
-            this.lblFM.Text = "分母：";
-            // 
-            // lblFZ2
-            // 
-            this.lblFZ2.AutoSize = true;
-            this.lblFZ2.Location = new System.Drawing.Point(54, 165);
-            this.lblFZ2.Name = "lblFZ2";
-            this.lblFZ2.Size = new System.Drawing.Size(41, 12);
-            this.lblFZ2.TabIndex = 36;
-            this.lblFZ2.Text = "分子：";
-            // 
-            // lblFM2
-            // 
-            this.lblFM2.AutoSize = true;
-            this.lblFM2.Location = new System.Drawing.Point(54, 186);
-            this.lblFM2.Name = "lblFM2";
-            this.lblFM2.Size = new System.Drawing.Size(41, 12);
-            this.lblFM2.TabIndex = 36;
-            this.lblFM2.Text = "分母：";
-            // 
             // frmPPBom
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -649,7 +649,7 @@
             this.Controls.Add(this.tpl1);
             this.Controls.Add(this.pl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(800, 600);
+            this.MinimumSize = new System.Drawing.Size(1024, 768);
             this.Name = "frmPPBom";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "修改生产用料清单信息";

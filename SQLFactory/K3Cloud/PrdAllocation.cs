@@ -29,7 +29,7 @@ namespace ERPSupport.SQL.K3Cloud
         #endregion
 
         /// <summary>
-        /// 获取调拨单数据ERP
+        /// 获取调拨单数据ERP--已弃用
         /// </summary>
         /// <param name="pFNeedDate">需求日期</param>
         /// <param name="pDeptNos">部门</param>
@@ -59,7 +59,7 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 获取调拨单数据ERP-物料设置中间仓调拨
+        /// 获取调拨单数据ERP-物料设置中间仓调拨--已弃用
         /// </summary>
         /// <param name="pFNeedDate"></param>
         /// <param name="pDeptNos"></param>
@@ -91,7 +91,7 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 获取调拨单数据WMS
+        /// 获取调拨单数据WMS--已弃用
         /// </summary>
         /// <param name="pFNeedDate"></param>
         /// <returns></returns>
@@ -207,7 +207,7 @@ namespace ERPSupport.SQL.K3Cloud
                   ,AC.FLOT 批号,SUM(AE.FMUSTQTY) 调拨数量,N' ' 生产顺序号,' ' 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
                   ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,N' ' 发货类别
                 FROM T_PRD_PPBOM A
-                INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+                INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0 AND AE.FPAEZHAVEDIRECT = 0
                 INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
                 INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
                 INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
@@ -262,7 +262,7 @@ namespace ERPSupport.SQL.K3Cloud
                   ,AC.FLOT 批号,SUM(AE.FMUSTQTY) 调拨数量,N' ' 生产顺序号,' ' 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
                   ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,N' ' 发货类别
                 FROM T_PRD_PPBOM A
-                INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+                INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0 AND AE.FPAEZHAVEDIRECT = 0
                 INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
                 INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
                 INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
@@ -432,7 +432,7 @@ namespace ERPSupport.SQL.K3Cloud
               ,AC.FLOT 批号,MOE.FQTY 调拨数量,MOE.FPRODUCTIONSEQ 生产顺序号,TO_CHAR(MOE.F_PAEZ_DESCRIPTION) 生产订单备注,NVL(MTLSK.F_PAEZ_FMinsendQty,0) 最小批量,MTL.F_PAEZ_SENDPERCENT 发料百分比
               ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,NVL(ASSL4.FDATAVALUE,' ') 发货类别,CASE WHEN A.FUNITID = 101045 THEN CEIL(MOE.FQTY/" + GlobalParameter.Dir_DPQtyPZ + @") ELSE A.FQTY END 合并数量,CASE WHEN MOE.FHeadDeliveryWay = '58709fcc96a192' AND MOE.FQTY >= 10 THEN 1 ELSE 0 END 大单
             FROM T_PRD_PPBOM A
-            INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0
+            INNER JOIN T_PRD_PPBOMENTRY AE ON A.FID = AE.FID AND AE.F_PAEZ_PICKTOWMS = 0 AND AE.FPAEZHAVEDIRECT = 0
             INNER JOIN T_PRD_PPBOMENTRY_C AC ON AE.FENTRYID = AC.FENTRYID
             INNER JOIN T_PRD_PPBOMENTRY_Q AQ ON AE.FENTRYID = AQ.FENTRYID
             INNER JOIN T_PRD_MOENTRY MOE ON AE.FMOENTRYID = MOE.FENTRYID AND TO_CHAR(MOE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(AE.FNEEDDATE,'yyyy-mm-dd')
@@ -717,7 +717,7 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 半成品调拨ERP-物料设置中间仓调拨
+        /// 半成品调拨ERP-物料设置中间仓调拨--已弃用
         /// </summary>
         /// <param name="pDataTable">数据表</param>
         /// <param name="pDate">日期</param>
@@ -948,7 +948,7 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 半成品调拨WMS
+        /// 半成品调拨WMS--已弃用
         /// </summary>
         /// <param name="pDataTable"></param>
         /// <param name="pDate"></param>
@@ -1224,7 +1224,36 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 更新已经生成调拨单字段状态（半成品）ERP
+        /// 更新已经生成调拨单字段状态（半成品）WMS
+        /// </summary>
+        /// <param name="pFNeedDate">需求日期</param>
+        /// <param name="pList">已弃用</param>
+        public static void UpdateDirFieldsWMS(string pFNeedDate, List<string> pList)
+        {
+            _SQL = @"UPDATE T_PRD_PPBOMENTRY
+            SET FPAEZHAVEDIRECT = 1,F_PAEZ_PICKTOWMS = 1
+            WHERE FPAEZHAVEDIRECT = 0 AND F_PAEZ_PICKTOWMS = 0 AND FENTRYID IN
+            (
+            SELECT A.FENTRYID
+            FROM T_PRD_PPBOMENTRY A
+            INNER JOIN T_PRD_PPBOM E ON A.FID = E.FID AND E.FDOCUMENTSTATUS = 'C'
+            INNER JOIN T_PRD_MOENTRY G ON A.FMOENTRYID = G.FENTRYID AND TO_CHAR(G.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd')
+            INNER JOIN T_PRD_MO H ON G.FID = H.FID AND H.FDOCUMENTSTATUS = 'C'
+            INNER JOIN T_PRD_MOENTRY_A I ON A.FMOENTRYID = I.FENTRYID AND I.FSTATUS IN(3,4)
+            INNER JOIN T_BD_MATERIAL J ON A.FMATERIALID = J.FMATERIALID AND J.FUSEORGID = 100508
+            INNER JOIN T_BD_DEPARTMENT L ON G.FWORKSHOPID = L.FDEPTID
+            INNER JOIN T_BD_STOCK M ON L.FINSTOCKID = M.FSTOCKID
+            INNER JOIN T_AUTO_MSTOCKSETTING N ON A.FMATERIALID = N.FMATERIALID AND L.FDEPTID = N.FDEPTID
+            INNER JOIN T_BD_STOCK O ON N.FSTOCKID = O.FSTOCKID
+            WHERE A.FPAEZHAVEDIRECT = 0 AND M.FNUMBER <> O.FNUMBER AND TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + @"'
+            GROUP BY J.FNUMBER,M.FNUMBER,O.FNUMBER,L.FNUMBER,A.FENTRYID
+            )";
+
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 更新已经生成调拨单字段状态（半成品）ERP--已弃用
         /// </summary>
         /// <param name="pFNeedDate">需求日期</param>
         /// <param name="pDeptNos">部门</param>
@@ -1284,34 +1313,9 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 更新已经生成调拨单字段状态（半成品）WMS
+        /// 更新已经生成调拨单字段状态-已弃用
         /// </summary>
-        /// <param name="pFNeedDate"></param>
-        /// <param name="pList"></param>
-        public static void UpdateDirFieldsWMS(string pFNeedDate, List<string> pList)
-        {
-            _SQL = @"UPDATE T_PRD_PPBOMENTRY
-            SET FPAEZHAVEDIRECT = 1,F_PAEZ_PICKTOWMS = 1
-            WHERE FPAEZHAVEDIRECT = 0 AND F_PAEZ_PICKTOWMS = 0 AND FENTRYID IN
-            (
-            SELECT A.FENTRYID
-            FROM T_PRD_PPBOMENTRY A
-            INNER JOIN T_PRD_PPBOM E ON A.FID = E.FID AND E.FDOCUMENTSTATUS = 'C'
-            INNER JOIN T_PRD_MOENTRY G ON A.FMOENTRYID = G.FENTRYID AND TO_CHAR(G.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd')
-            INNER JOIN T_PRD_MO H ON G.FID = H.FID AND H.FDOCUMENTSTATUS = 'C'
-            INNER JOIN T_PRD_MOENTRY_A I ON A.FMOENTRYID = I.FENTRYID AND I.FSTATUS IN(3,4)
-            INNER JOIN T_BD_MATERIAL J ON A.FMATERIALID = J.FMATERIALID AND J.FUSEORGID = 100508
-            INNER JOIN T_BD_DEPARTMENT L ON G.FWORKSHOPID = L.FDEPTID
-            INNER JOIN T_BD_STOCK M ON L.FINSTOCKID = M.FSTOCKID
-            INNER JOIN T_AUTO_MSTOCKSETTING N ON A.FMATERIALID = N.FMATERIALID AND L.FDEPTID = N.FDEPTID
-            INNER JOIN T_BD_STOCK O ON N.FSTOCKID = O.FSTOCKID
-            WHERE A.FPAEZHAVEDIRECT = 0 AND M.FNUMBER <> O.FNUMBER AND TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd') = '" + pFNeedDate + @"'
-            GROUP BY J.FNUMBER, M.FNUMBER, O.FNUMBER, L.FNUMBER, A.FENTRYID
-            )";
-
-            ORAHelper.ExecuteNonQuery(_SQL);
-        }
-
+        /// <param name="pDataTable"></param>
         public static void UpdateDirFieldsWMS(DataTable pDataTable)
         {
             _SQL = "BEGIN";
@@ -1394,7 +1398,7 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 
+        /// 物料默认设置-中间仓调整
         /// </summary>
         public static void UpdateMST_Tran()
         {
@@ -1408,8 +1412,8 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 半成品调拨-WMS（没有中间仓）
         /// </summary>
-        /// <param name="pDataTable"></param>
-        /// <param name="pDate"></param>
+        /// <param name="pDataTable">数据源</param>
+        /// <param name="pDate">单据日期</param>
         /// <returns></returns>
         public static string TransferDir(DataTable pDataTable, string pDate)
         {
@@ -1524,9 +1528,9 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 半成品调拨-WMS（有中间仓）
         /// </summary>
-        /// <param name="pDataTable"></param>
-        /// <param name="pDate"></param>
-        /// <param name="pIsTran"></param>
+        /// <param name="pDataTable">数据源</param>
+        /// <param name="pDate">单据日期</param>
+        /// <param name="pIsTran">用于区别没有中间仓方法</param>
         /// <returns></returns>
         public static string TransferDir(DataTable pDataTable, string pDate, bool pIsTran)
         {
@@ -1638,7 +1642,11 @@ namespace ERPSupport.SQL.K3Cloud
             return strBillNo;
         }
 
-
+        /// <summary>
+        /// 根据单号获取生产用料清单信息
+        /// </summary>
+        /// <param name="pBillNo">产用料清单单号</param>
+        /// <returns></returns>
         public static DataTable GetPPBomByBillNo(string pBillNo)
         {
             _SQL = @"SELECT AE.FENTRYID,MTL.FNUMBER 产品编码,BOM.FNUMBER BOM版本,MTLL.FNAME 产品名称,ORGL.FNAME 生产组织,DEPL.FNAME 生产车间,UNTL.FNAME 单位,A.FQTY 数量
@@ -1660,6 +1668,37 @@ namespace ERPSupport.SQL.K3Cloud
             WHERE A.FBILLNO = '" + pBillNo + "' ORDER BY A.FID,AE.FSEQ";
 
             return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 更新生产用料清单
+        /// </summary>
+        /// <param name="pSyn">同步更新</param>
+        /// <param name="pType">是否只修改数量</param>
+        /// <param name="pFEntryId">生产用量清单内码</param>
+        /// <param name="pMTLNumber">用于替换的子项物料编码</param>
+        /// <param name="pFZ">分子</param>
+        /// <param name="pMustQty">应发数量</param>
+        /// <param name="pNeedDate">需求日期</param>
+        /// <returns></returns>
+        public static void UpdatePPBom(bool pSyn, bool pType, int pFEntryId, string pMTLNumber, string pNewMTLNumber, decimal pFZ, decimal pMustQty, DateTime pNeedDate)
+        {
+            if (pSyn)
+            {
+                if (pType)
+                    _SQL = "UPDATE T_PRD_PPBOMENTRY SET FNUMERATOR = " + pFZ + ",FMUSTQTY = " + pMustQty + " WHERE FMATERIALID = (SELECT FMATERIALID FROM T_BD_MATERIAL WHERE FUSEORGID = 100508 AND FNUMBER = '" + pMTLNumber + "') AND TO_CHAR(FNEEDDATE,'yyyy-mm-dd') = '" + pNeedDate.ToString("yyyy-MM-dd") + "'";
+                else
+                    _SQL = "UPDATE T_PRD_PPBOMENTRY SET FMATERIALID = (SELECT FMATERIALID FROM T_BD_MATERIAL WHERE FUSEORGID = 100508 AND FNUMBER = '" + pNewMTLNumber + "'),FNUMERATOR = " + pFZ + ",FMUSTQTY = " + pMustQty + " WHERE FMATERIALID = (SELECT FMATERIALID FROM T_BD_MATERIAL WHERE FUSEORGID = 100508 AND FNUMBER = '" + pMTLNumber + "') AND TO_CHAR(FNEEDDATE,'yyyy-mm-dd') = '" + pNeedDate.ToString("yyyy-MM-dd") + "'";
+            }
+            else
+            {
+                if (pType)
+                    _SQL = "UPDATE T_PRD_PPBOMENTRY SET FNUMERATOR = " + pFZ + ",FMUSTQTY = " + pMustQty + " WHERE FENTRYID = " + pFEntryId;
+                else
+                    _SQL = @"UPDATE T_PRD_PPBOMENTRY SET FMATERIALID = (SELECT FMATERIALID FROM T_BD_MATERIAL WHERE FUSEORGID = 100508 AND FNUMBER = '" + pNewMTLNumber + "'),FNUMERATOR = " + pFZ + ",FMUSTQTY = " + pMustQty + " WHERE FENTRYID = " + pFEntryId;
+            }
+
+            ORAHelper.ExecuteNonQuery(_SQL);
         }
     }
 }

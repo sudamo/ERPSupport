@@ -22,17 +22,25 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         private DataTable _dtNew;
         /// <summary>
-        /// 产品编码
-        /// </summary>
-        private string _Number;
-        /// <summary>
         /// 需求日期
         /// </summary>
         private DateTime _tNeedDate;
         /// <summary>
+        /// 产品编码
+        /// </summary>
+        private string _Number;
+        /// <summary>
         /// 修改行号
         /// </summary>
         private int _Row;
+        /// <summary>
+        /// 是否只修改数量
+        /// </summary>
+        private bool _Type;
+        /// <summary>
+        /// 生产用量清单内码
+        /// </summary>
+        private int _FentryId;
         /// <summary>
         /// ToolStrip日期
         /// </summary>
@@ -47,27 +55,34 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         /// <param name="pdtOld">原数据</param>
         /// <param name="pdtNew">修改后数据</param>
-        /// <param name="pNumber">产品编码</param>
         /// <param name="pNeedDate">需求日期</param>
+        /// <param name="pNumber">产品编码</param>
         /// <param name="pRow">修改行序号</param>
-        /// <param name="pType">是否之修改数量</param>
-        public frmBomCompare(DataTable pdtOld, DataTable pdtNew, string pNumber, DateTime pNeedDate, int pRow, bool pType)
+        /// <param name="pType">是否只修改数量</param>
+        /// <param name="pFEntryId">生产用量清单内码</param>
+        public frmBomCompare(DataTable pdtOld, DataTable pdtNew, DateTime pNeedDate, string pNumber, int pRow, bool pType, int pFEntryId)
         {
             InitializeComponent();
             _dtOld = pdtOld;
             _dtNew = pdtNew;
-            _Number = pNumber;
             _tNeedDate = pNeedDate;
+            _Number = pNumber;
             _Row = pRow;
+            _Type = pType;
+            _FentryId = pFEntryId;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void frmBomCompare_Load(object sender, EventArgs e)
         {
             _tsNeedDate = new ToolStripDateTimePicker();
             _tsNeedDate.Size = new Size(120, 21);
             _tsNeedDate.Value = _tNeedDate;
             _tsNeedDate.Enabled = false;
-            //((DateTimePicker)_tsNeedDate.Control).ValueChanged += new EventHandler(NeedDate_ValueChanged);
 
             _chbSyn = new ToolStripCheckBox();
             _chbSyn.Text = "同步修改";
@@ -93,24 +108,55 @@ namespace ERPSupport.SupForm.Bussiness
             dgv2.DataSource = _dtNew;
 
             dgv1.Rows[_Row].DefaultCellStyle.BackColor = Color.Plum;
-            dgv1.Rows[_Row].Selected = true;
+            //dgv1.Rows[_Row].Selected = true;
             dgv2.Rows[_Row].DefaultCellStyle.BackColor = Color.Plum;
-            dgv2.Rows[_Row].Selected = true;
+            //dgv2.Rows[_Row].Selected = true;
 
-            Text = "物料清单修改对照-产品编码：" + _Number + "[高亮显示的是被修改的子项物料]";
+            if (_Type)
+                Text = "物料清单修改对照-产品编码：" + _Number + "[修改子项物料用量]";
+            else
+                Text = "物料清单修改对照-产品编码：" + _Number + "[替换子项物料]";
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bnBottom_btnOK_Click(object sender, EventArgs e)
         {
+            string strMTLNumber = dgv1.Rows[_Row].Cells[1].Value.ToString();
+            decimal dFZ = decimal.Parse(dgv1.Rows[_Row].Cells[3].Value.ToString());
+            decimal dMustQty = decimal.Parse(dgv1.Rows[_Row].Cells[5].Value.ToString());
+
+            string strNewMTLNumber = dgv2.Rows[_Row].Cells[1].Value.ToString();
+            decimal dNewFZ = decimal.Parse(dgv2.Rows[_Row].Cells[3].Value.ToString());
+            decimal dNewMustQty = decimal.Parse(dgv2.Rows[_Row].Cells[5].Value.ToString());
+
+            DateTime tNeedDate = _tsNeedDate.Value;
+            bool bSyn = _chbSyn.Checked;
+
+            SQL.K3Cloud.PrdAllocation.UpdatePPBom(bSyn, _Type, _FentryId, strMTLNumber, strNewMTLNumber, dNewFZ, dNewMustQty, tNeedDate);
+
+            //日志
+            string strConTent = _Type ? "修改生产用料清单子项物料用量,子项物料:[" + strMTLNumber + "],应发数量:[" + dMustQty + "->" + dNewMustQty + "],分子:[" + dFZ + "->" + dNewFZ + "]." : "替换生产用料清单子项物料,子项物料:[" + strMTLNumber + "->" + strNewMTLNumber + "],应发数量:[" + dMustQty + "->" + dNewMustQty + "],分子:[" + dFZ + "->" + dNewFZ + "].";
+            if (bSyn)
+                strConTent += " 并同步需求日期：" + tNeedDate.ToString("yyyy-MM-dd") + "的数据.";
+            SQL.K3Cloud.CommFunction.DM_Log_Local("生产用料清单修改", "配置//单据信息调整", strConTent, "1");
+
             DialogResult = DialogResult.OK;
-            MessageBox.Show("急啥急，开发中呢....");
+            MessageBox.Show("数据已经更新。");
             Close();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bnBottom_btnCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
-            MessageBox.Show("你真的要走了吗？");
             Close();
         }
     }
