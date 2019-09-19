@@ -4,12 +4,15 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.K3Cloud;
-using System.Configuration;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using SQL.K3Cloud;
+    using Model.K3Cloud;
+
+    /// <summary>
+    /// 成品调拨
+    /// </summary>
     public partial class frmCPDB : Form
     {
         /// <summary>

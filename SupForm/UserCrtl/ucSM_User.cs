@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 用户
     /// </summary>
@@ -211,3 +211,4 @@ namespace ERPSupport.SupForm.UserCrtl
         }
     }
 }
+

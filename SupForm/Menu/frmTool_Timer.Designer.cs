@@ -53,9 +53,10 @@
             // 
             // btnStar
             // 
-            this.btnStar.Location = new System.Drawing.Point(10, 203);
+            this.btnStar.Location = new System.Drawing.Point(15, 242);
+            this.btnStar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnStar.Name = "btnStar";
-            this.btnStar.Size = new System.Drawing.Size(75, 23);
+            this.btnStar.Size = new System.Drawing.Size(100, 29);
             this.btnStar.TabIndex = 3;
             this.btnStar.Text = "启动";
             this.tt.SetToolTip(this.btnStar, "启动自动执行。");
@@ -64,9 +65,10 @@
             // 
             // btnPause
             // 
-            this.btnPause.Location = new System.Drawing.Point(91, 203);
+            this.btnPause.Location = new System.Drawing.Point(123, 242);
+            this.btnPause.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnPause.Name = "btnPause";
-            this.btnPause.Size = new System.Drawing.Size(75, 23);
+            this.btnPause.Size = new System.Drawing.Size(100, 29);
             this.btnPause.TabIndex = 4;
             this.btnPause.Text = "暂停";
             this.tt.SetToolTip(this.btnPause, "暂停自动执行。");
@@ -75,9 +77,10 @@
             // 
             // txtPickMinute
             // 
-            this.txtPickMinute.Location = new System.Drawing.Point(91, 142);
+            this.txtPickMinute.Location = new System.Drawing.Point(123, 178);
+            this.txtPickMinute.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtPickMinute.Name = "txtPickMinute";
-            this.txtPickMinute.Size = new System.Drawing.Size(75, 21);
+            this.txtPickMinute.Size = new System.Drawing.Size(99, 25);
             this.txtPickMinute.TabIndex = 1;
             this.txtPickMinute.Text = "20";
             this.tt.SetToolTip(this.txtPickMinute, "每次自动执行功能的时间间隔。");
@@ -87,9 +90,10 @@
             // 
             this.lblTime.AutoSize = true;
             this.lblTime.Font = new System.Drawing.Font("新宋体", 16F, System.Drawing.FontStyle.Bold);
-            this.lblTime.Location = new System.Drawing.Point(75, 79);
+            this.lblTime.Location = new System.Drawing.Point(100, 99);
+            this.lblTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTime.Name = "lblTime";
-            this.lblTime.Size = new System.Drawing.Size(106, 22);
+            this.lblTime.Size = new System.Drawing.Size(132, 27);
             this.lblTime.TabIndex = 2;
             this.lblTime.Text = "00:00:00";
             this.tt.SetToolTip(this.lblTime, "自动功能已经启动的时间。");
@@ -101,9 +105,10 @@
             // 
             // btnRestar
             // 
-            this.btnRestar.Location = new System.Drawing.Point(172, 203);
+            this.btnRestar.Location = new System.Drawing.Point(231, 242);
+            this.btnRestar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnRestar.Name = "btnRestar";
-            this.btnRestar.Size = new System.Drawing.Size(75, 23);
+            this.btnRestar.Size = new System.Drawing.Size(100, 29);
             this.btnRestar.TabIndex = 5;
             this.btnRestar.Text = "重置";
             this.tt.SetToolTip(this.btnRestar, "清除所有持续状态，并重新开始。");
@@ -114,9 +119,10 @@
             // 
             this.lblT.AutoSize = true;
             this.lblT.Font = new System.Drawing.Font("宋体", 12F);
-            this.lblT.Location = new System.Drawing.Point(66, 114);
+            this.lblT.Location = new System.Drawing.Point(88, 142);
+            this.lblT.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblT.Name = "lblT";
-            this.lblT.Size = new System.Drawing.Size(80, 16);
+            this.lblT.Size = new System.Drawing.Size(99, 20);
             this.lblT.TabIndex = 2;
             this.lblT.Text = "执行次数:";
             this.tt.SetToolTip(this.lblT, "功能已经自动执行的次数。");
@@ -124,18 +130,20 @@
             // lblTick
             // 
             this.lblTick.AutoSize = true;
-            this.lblTick.Location = new System.Drawing.Point(26, 145);
+            this.lblTick.Location = new System.Drawing.Point(35, 181);
+            this.lblTick.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTick.Name = "lblTick";
-            this.lblTick.Size = new System.Drawing.Size(59, 12);
+            this.lblTick.Size = new System.Drawing.Size(75, 15);
             this.lblTick.TabIndex = 2;
             this.lblTick.Text = "时间间隔:";
             // 
             // lblMinute
             // 
             this.lblMinute.AutoSize = true;
-            this.lblMinute.Location = new System.Drawing.Point(172, 145);
+            this.lblMinute.Location = new System.Drawing.Point(231, 181);
+            this.lblMinute.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMinute.Name = "lblMinute";
-            this.lblMinute.Size = new System.Drawing.Size(29, 12);
+            this.lblMinute.Size = new System.Drawing.Size(37, 15);
             this.lblMinute.TabIndex = 2;
             this.lblMinute.Text = "分钟";
             // 
@@ -143,9 +151,10 @@
             // 
             this.lblTitle.AutoSize = true;
             this.lblTitle.Font = new System.Drawing.Font("新宋体", 20F, System.Drawing.FontStyle.Bold);
-            this.lblTitle.Location = new System.Drawing.Point(64, 9);
+            this.lblTitle.Location = new System.Drawing.Point(85, 11);
+            this.lblTitle.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTitle.Name = "lblTitle";
-            this.lblTitle.Size = new System.Drawing.Size(128, 27);
+            this.lblTitle.Size = new System.Drawing.Size(155, 34);
             this.lblTitle.TabIndex = 2;
             this.lblTitle.Text = "运行时间";
             // 
@@ -153,18 +162,20 @@
             // 
             this.lblDay.AutoSize = true;
             this.lblDay.Font = new System.Drawing.Font("新宋体", 16F, System.Drawing.FontStyle.Bold);
-            this.lblDay.Location = new System.Drawing.Point(113, 49);
+            this.lblDay.Location = new System.Drawing.Point(151, 61);
+            this.lblDay.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDay.Name = "lblDay";
-            this.lblDay.Size = new System.Drawing.Size(33, 22);
+            this.lblDay.Size = new System.Drawing.Size(41, 27);
             this.lblDay.TabIndex = 2;
             this.lblDay.Text = "天";
             this.tt.SetToolTip(this.lblDay, "自动功能已经启动的天数。");
             // 
             // btnOK
             // 
-            this.btnOK.Location = new System.Drawing.Point(91, 232);
+            this.btnOK.Location = new System.Drawing.Point(123, 278);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(100, 29);
             this.btnOK.TabIndex = 6;
             this.btnOK.Text = "确定";
             this.tt.SetToolTip(this.btnOK, "确定并返回设置参数。");
@@ -173,9 +184,10 @@
             // 
             // btnCancle
             // 
-            this.btnCancle.Location = new System.Drawing.Point(172, 232);
+            this.btnCancle.Location = new System.Drawing.Point(231, 278);
+            this.btnCancle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancle.Name = "btnCancle";
-            this.btnCancle.Size = new System.Drawing.Size(75, 23);
+            this.btnCancle.Size = new System.Drawing.Size(100, 29);
             this.btnCancle.TabIndex = 7;
             this.btnCancle.Text = "取消";
             this.tt.SetToolTip(this.btnCancle, "取消当前设置的参数并返回。");
@@ -186,9 +198,10 @@
             // 
             this.lblDays.AutoSize = true;
             this.lblDays.Font = new System.Drawing.Font("宋体", 16F);
-            this.lblDays.Location = new System.Drawing.Point(75, 49);
+            this.lblDays.Location = new System.Drawing.Point(100, 61);
+            this.lblDays.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDays.Name = "lblDays";
-            this.lblDays.Size = new System.Drawing.Size(21, 22);
+            this.lblDays.Size = new System.Drawing.Size(26, 27);
             this.lblDays.TabIndex = 4;
             this.lblDays.Text = " ";
             // 
@@ -196,18 +209,20 @@
             // 
             this.lblTimes.AutoSize = true;
             this.lblTimes.Font = new System.Drawing.Font("宋体", 12F);
-            this.lblTimes.Location = new System.Drawing.Point(152, 114);
+            this.lblTimes.Location = new System.Drawing.Point(203, 142);
+            this.lblTimes.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblTimes.Name = "lblTimes";
-            this.lblTimes.Size = new System.Drawing.Size(16, 16);
+            this.lblTimes.Size = new System.Drawing.Size(19, 20);
             this.lblTimes.TabIndex = 4;
             this.lblTimes.Text = " ";
             // 
             // lblFunction
             // 
             this.lblFunction.AutoSize = true;
-            this.lblFunction.Location = new System.Drawing.Point(26, 172);
+            this.lblFunction.Location = new System.Drawing.Point(35, 215);
+            this.lblFunction.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFunction.Name = "lblFunction";
-            this.lblFunction.Size = new System.Drawing.Size(59, 12);
+            this.lblFunction.Size = new System.Drawing.Size(75, 15);
             this.lblFunction.TabIndex = 2;
             this.lblFunction.Text = "执行功能:";
             // 
@@ -215,18 +230,20 @@
             // 
             this.cbxFnuction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFnuction.FormattingEnabled = true;
-            this.cbxFnuction.Location = new System.Drawing.Point(92, 169);
+            this.cbxFnuction.Location = new System.Drawing.Point(123, 211);
+            this.cbxFnuction.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.cbxFnuction.Name = "cbxFnuction";
-            this.cbxFnuction.Size = new System.Drawing.Size(109, 20);
+            this.cbxFnuction.Size = new System.Drawing.Size(144, 23);
             this.cbxFnuction.TabIndex = 2;
             this.tt.SetToolTip(this.cbxFnuction, "选择自动执行功能。");
             // 
             // chbExit
             // 
             this.chbExit.AutoSize = true;
-            this.chbExit.Location = new System.Drawing.Point(10, 236);
+            this.chbExit.Location = new System.Drawing.Point(15, 283);
+            this.chbExit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chbExit.Name = "chbExit";
-            this.chbExit.Size = new System.Drawing.Size(72, 16);
+            this.chbExit.Size = new System.Drawing.Size(89, 19);
             this.chbExit.TabIndex = 8;
             this.chbExit.Text = "定时关闭";
             this.tt.SetToolTip(this.chbExit, "无操作定时关闭程序");
@@ -234,9 +251,9 @@
             // 
             // frmTool_Timer
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(259, 262);
+            this.ClientSize = new System.Drawing.Size(342, 313);
             this.ControlBox = false;
             this.Controls.Add(this.chbExit);
             this.Controls.Add(this.cbxFnuction);
@@ -256,9 +273,10 @@
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(275, 300);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MaximumSize = new System.Drawing.Size(360, 360);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(275, 300);
+            this.MinimumSize = new System.Drawing.Size(360, 360);
             this.Name = "frmTool_Timer";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "计时器设置";

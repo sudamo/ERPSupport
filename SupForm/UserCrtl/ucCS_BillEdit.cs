@@ -72,6 +72,7 @@ namespace ERPSupport.SupForm.UserCrtl
             list.Add(bnTop.Items[8]);
             list.Add(bnTop.Items[9]);
             list.Add(bnTop.Items[10]);
+            list.Add(bnTop.Items[11]);
 
             bnTop.Items.Clear();
             foreach (ToolStripItem item in list)
@@ -166,10 +167,14 @@ namespace ERPSupport.SupForm.UserCrtl
                     Synchro();
                     break;
                 case "3":
+                    Bussiness.frmPPBomDir frmDir = new Bussiness.frmPPBomDir();
+                    frmDir.Show(this);
+                    break;
+                case "4":
                     Bussiness.frmPPBom frm = new Bussiness.frmPPBom();
                     frm.ShowDialog();
                     break;
-                case "4":
+                case "5":
                     MessageBox.Show("BOM批改功能还未开发，请联系信息部。");
                     break;
             }
@@ -288,6 +293,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_btnSearch.Visible = false;
 
                 bnTop_btnSyn.Visible = false;
+                bnTop_btnChangeDB.Visible = false;
                 _dateFrom.Visible = false;
                 bnTop_lblDash.Visible = false;
                 _dateTo.Visible = false;
@@ -306,6 +312,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_btnSearch.Visible = true;
 
                 bnTop_btnSyn.Visible = false;
+                bnTop_btnChangeDB.Visible = false;
                 _dateFrom.Visible = false;
                 bnTop_lblDash.Visible = false;
                 _dateTo.Visible = false;
@@ -321,6 +328,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_btnSearch.Visible = false;
 
                 bnTop_btnSyn.Visible = true;
+                bnTop_btnChangeDB.Visible = true;
                 _dateFrom.Visible = true;
                 bnTop_lblDash.Visible = true;
                 _dateTo.Visible = true;
@@ -336,6 +344,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_btnSearch.Visible = false;
 
                 bnTop_btnSyn.Visible = false;
+                bnTop_btnChangeDB.Visible = false;
                 _dateFrom.Visible = false;
                 bnTop_lblDash.Visible = false;
                 _dateTo.Visible = false;
@@ -345,6 +354,11 @@ namespace ERPSupport.SupForm.UserCrtl
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dgv1_Click(object sender, EventArgs e)
         {
             if (dgv1 == null || dgv1.Rows.Count <= 0)
@@ -356,17 +370,29 @@ namespace ERPSupport.SupForm.UserCrtl
             bnR2_txtCanOutQty.Text = dgv1.CurrentRow.Cells[10].Value.ToString();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bnR2_txtCanOutQty_KeyPress(object sender, KeyPressEventArgs e)
         {
             //_reg = new Regex(@"^([0-9]{1,}[.][0-9]*)$");//匹配小数的正则表达式
+            //_reg = new Regex(@"^[1-9]\d{0,13}(\.\d{0,4})?$");//匹配小数的正则表达式,这个适应于decimal（18，4）
             _reg = new Regex(@"^[1-9]\d*|0$");//匹配整数的正则表达式
-            if (e.KeyChar != '\b')
+
+            if (e.KeyChar == '\b')//忽略退格键
+                return;
+
+            if (e.KeyChar != '.')//非小数点输入
             {
-                if (!_reg.IsMatch(e.KeyChar.ToString()))
-                {
+                if (!_reg.IsMatch(e.KeyChar.ToString()))//忽略非数字输入
                     e.Handled = true;
-                }
+                else if (e.KeyChar == '0' && ((TextBox)sender).Text.IndexOf(".") < 0 && ((TextBox)sender).Text.IndexOf("0") == 0)//最左边不能连续输入零
+                    e.Handled = true;
             }
+            else if (((TextBox)sender).Text.IndexOf(".") >= 0 || ((TextBox)sender).Text.Length == 0)//已经有小数点或第一位数不能输入小数点
+                e.Handled = true;
         }
 
         private void OutStockCheckedChanged(object sender, EventArgs e)

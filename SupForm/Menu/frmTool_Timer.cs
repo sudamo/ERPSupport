@@ -2,12 +2,13 @@
 using System.Data;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Basic;
-using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.Menu
 {
+    using SQL.K3Cloud;
+    using Model.Basic;
+    using Model.Globa;
+
     /// <summary>
     /// 定时器设置
     /// </summary>

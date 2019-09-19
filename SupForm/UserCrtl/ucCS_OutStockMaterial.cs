@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
-using System.Text.RegularExpressions;
-using ERPSupport.SQL.K3Cloud;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 销售出库携带辅料出库规则
     /// </summary>
@@ -49,17 +50,14 @@ namespace ERPSupport.SupForm.UserCrtl
             _rbtNotMatch.Checked = false;
             _rbtNotMatch.Text = "排除";
             _rbtNotMatch.Tag = 6;
-
-            bnTop.Items.Add(_rbtMatch);
-            bnTop.Items.Add(_rbtNotMatch);
-
+            
             //重新排列Items
             List<ToolStripItem> list = new List<ToolStripItem>();
             list.Add(bnTop.Items[0]);
             list.Add(bnTop.Items[1]);
             list.Add(bnTop.Items[2]);
-            list.Add(bnTop.Items[8]);
-            list.Add(bnTop.Items[9]);
+            list.Add(_rbtMatch);
+            list.Add(_rbtNotMatch);
             list.Add(bnTop.Items[3]);
             list.Add(bnTop.Items[4]);
             list.Add(bnTop.Items[5]);
@@ -68,9 +66,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
             bnTop.Items.Clear();
             foreach (ToolStripItem item in list)
-            {
                 bnTop.Items.Add(item);
-            }
 
             SetDataSource();
         }
@@ -142,14 +138,14 @@ namespace ERPSupport.SupForm.UserCrtl
                 case "4":
                     RefreshDate();
                     break;
-                //case "5":
-                //    _rbtMatch.Checked = true;
-                //    _rbtNotMatch.Checked = false;
-                //    break;
-                //case "6":
-                //    _rbtMatch.Checked = false;
-                //    _rbtNotMatch.Checked = true;
-                //    break;
+                    //case "5":
+                    //    _rbtMatch.Checked = true;
+                    //    _rbtNotMatch.Checked = false;
+                    //    break;
+                    //case "6":
+                    //    _rbtMatch.Checked = false;
+                    //    _rbtNotMatch.Checked = true;
+                    //    break;
             }
         }
 

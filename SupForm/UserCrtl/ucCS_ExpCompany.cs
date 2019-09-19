@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 快递公司
     /// </summary>

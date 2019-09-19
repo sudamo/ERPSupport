@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 设置领料部门
     /// </summary>
@@ -192,3 +193,5 @@ namespace ERPSupport.SupForm.UserCrtl
         }
     }
 }
+
+

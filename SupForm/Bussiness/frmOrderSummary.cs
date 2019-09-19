@@ -2,11 +2,11 @@
 using System.Data;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
-using System.Drawing;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 运算汇总
     /// </summary>
@@ -174,7 +174,7 @@ namespace ERPSupport.SupForm.Bussiness
                         dr["库存数量"] = _dtDtl.Rows[i]["库存数量"].ToString();
                         dr["库存可用数量"] = _dtDtl.Rows[i]["库存可用数量"].ToString();
 
-                        dr["库存可用天数"] = string.Format("{0:N2}", decimal.Parse(_dtDtl.Rows[i]["库存可用天数"].ToString())); 
+                        dr["库存可用天数"] = string.Format("{0:N2}", decimal.Parse(_dtDtl.Rows[i]["库存可用天数"].ToString()));
                         dr["最低订货量"] = _dtDtl.Rows[i]["最低订货量"].ToString();
                         dr["最小批量"] = _dtDtl.Rows[i]["最小批量"].ToString();
                         dr["安全库存"] = _dtDtl.Rows[i]["安全库存"].ToString();
@@ -214,7 +214,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         private void FillDepartment()
         {
-            cbxWorkShop.DataSource = CommFunction.GetDepartment(2,100508, "基本生产部门");
+            cbxWorkShop.DataSource = CommFunction.GetDepartment(2, 100508, "基本生产部门");
             cbxWorkShop.DisplayMember = "FName";
             cbxWorkShop.ValueMember = "FValue";
         }
@@ -621,3 +621,4 @@ namespace ERPSupport.SupForm.Bussiness
     }
     */
 }
+

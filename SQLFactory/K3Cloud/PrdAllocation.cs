@@ -5,10 +5,11 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using Newtonsoft.Json.Linq;
 using Kingdee.BOS.WebApi.Client;
-using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SQL.K3Cloud
 {
+    using Model.Globa;
+
     /// <summary>
     /// 调拨
     /// </summary>
@@ -1259,7 +1260,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDeptNos">部门</param>
         /// <param name="pList">根据调出仓排除更新</param>
         public static void UpdateDirFields(string pFNeedDate, string pDeptNos, List<string> pList)
-       {
+        {
             if (pList.Count > 0)
             {
                 string strOutStock = string.Empty;
@@ -1697,6 +1698,47 @@ namespace ERPSupport.SQL.K3Cloud
                 else
                     _SQL = @"UPDATE T_PRD_PPBOMENTRY SET FMATERIALID = (SELECT FMATERIALID FROM T_BD_MATERIAL WHERE FUSEORGID = 100508 AND FNUMBER = '" + pNewMTLNumber + "'),FNUMERATOR = " + pFZ + ",FMUSTQTY = " + pMustQty + " WHERE FENTRYID = " + pFEntryId;
             }
+
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pMoBillNos">生产订单编号</param>
+        /// <param name="pDir">是否生成调拨单</param>
+        public static void UpdatePPBom(string pMoBillNos, bool pDir)
+        {
+            if (pDir)
+                _SQL = @"UPDATE T_PRD_PPBOMENTRY
+                SET FPAEZHAVEDIRECT = 1,F_PAEZ_PICKTOWMS = 1
+                WHERE (FPAEZHAVEDIRECT = 0 OR F_PAEZ_PICKTOWMS = 0) AND FENTRYID IN(SELECT A.FENTRYID
+                FROM T_PRD_PPBOMENTRY A
+                INNER JOIN T_PRD_PPBOM E ON A.FID = E.FID AND E.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY G ON A.FMOENTRYID = G.FENTRYID AND TO_CHAR(G.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd')
+                INNER JOIN T_PRD_MO H ON G.FID = H.FID AND H.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY_A I ON A.FMOENTRYID = I.FENTRYID AND I.FSTATUS IN(3,4)
+                INNER JOIN T_BD_MATERIAL J ON A.FMATERIALID = J.FMATERIALID AND J.FUSEORGID = 100508
+                INNER JOIN T_BD_DEPARTMENT L ON G.FWORKSHOPID = L.FDEPTID
+                INNER JOIN T_BD_STOCK M ON L.FINSTOCKID = M.FSTOCKID
+                INNER JOIN T_AUTO_MSTOCKSETTING N ON A.FMATERIALID = N.FMATERIALID AND L.FDEPTID = N.FDEPTID
+                INNER JOIN T_BD_STOCK O ON N.FSTOCKID = O.FSTOCKID
+                WHERE (A.FPAEZHAVEDIRECT = 0 OR A.F_PAEZ_PICKTOWMS = 0) AND M.FNUMBER <> O.FNUMBER AND H.FBILLNO IN(" + pMoBillNos + ") GROUP BY J.FNUMBER,M.FNUMBER,O.FNUMBER,L.FNUMBER,A.FENTRYID)";
+            else
+                _SQL = @"UPDATE T_PRD_PPBOMENTRY
+                SET FPAEZHAVEDIRECT = 0,F_PAEZ_PICKTOWMS = 0
+                WHERE (FPAEZHAVEDIRECT = 1 OR F_PAEZ_PICKTOWMS = 1) AND FENTRYID IN(SELECT A.FENTRYID
+                FROM T_PRD_PPBOMENTRY A
+                INNER JOIN T_PRD_PPBOM E ON A.FID = E.FID AND E.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY G ON A.FMOENTRYID = G.FENTRYID AND TO_CHAR(G.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd')
+                INNER JOIN T_PRD_MO H ON G.FID = H.FID AND H.FDOCUMENTSTATUS = 'C'
+                INNER JOIN T_PRD_MOENTRY_A I ON A.FMOENTRYID = I.FENTRYID AND I.FSTATUS IN(3,4)
+                INNER JOIN T_BD_MATERIAL J ON A.FMATERIALID = J.FMATERIALID AND J.FUSEORGID = 100508
+                INNER JOIN T_BD_DEPARTMENT L ON G.FWORKSHOPID = L.FDEPTID
+                INNER JOIN T_BD_STOCK M ON L.FINSTOCKID = M.FSTOCKID
+                INNER JOIN T_AUTO_MSTOCKSETTING N ON A.FMATERIALID = N.FMATERIALID AND L.FDEPTID = N.FDEPTID
+                INNER JOIN T_BD_STOCK O ON N.FSTOCKID = O.FSTOCKID
+                WHERE (A.FPAEZHAVEDIRECT = 1 OR A.F_PAEZ_PICKTOWMS = 1) AND M.FNUMBER <> O.FNUMBER AND H.FBILLNO IN(" + pMoBillNos + ") GROUP BY J.FNUMBER,M.FNUMBER,O.FNUMBER,L.FNUMBER,A.FENTRYID)";
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }

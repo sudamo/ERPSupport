@@ -2,14 +2,15 @@
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
-using ERPSupport.Model.Enum;
-using ERPSupport.Model.Globa;
-using ERPSupport.Model.K3Cloud;
 using Newtonsoft.Json.Linq;
 using Kingdee.BOS.WebApi.Client;
 
 namespace ERPSupport.SQL.K3Cloud
 {
+    using Model.Enum;
+    using Model.Globa;
+    using Model.K3Cloud;
+
     /// <summary>
     /// 销售订单
     /// </summary>

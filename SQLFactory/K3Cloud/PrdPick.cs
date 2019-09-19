@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Data;
 using System.Collections;
-using ERPSupport.Model.Globa;
 using Newtonsoft.Json.Linq;
 using Kingdee.BOS.WebApi.Client;
 using Oracle.ManagedDataAccess.Client;
 
 namespace ERPSupport.SQL.K3Cloud
 {
+    using Model.Globa;
+
     /// <summary>
     /// 生产领料
     /// </summary>

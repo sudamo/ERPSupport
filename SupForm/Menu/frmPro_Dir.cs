@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Data;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using ERPSupport.SQL.K3Cloud;
 
 namespace ERPSupport.SupForm.Menu
 {
+    using SQL.K3Cloud;
+
     /// <summary>
-    /// 
+    /// 调拨单选项
     /// </summary>
     public partial class frmPro_Dir : Form
     {
@@ -209,6 +209,21 @@ namespace ERPSupport.SupForm.Menu
                 txtMaxQtyCL.ReadOnly = true;
                 txtPianYiCL.ReadOnly = true;
             }
+        }
+
+        /// <summary>
+        /// 测试连接
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCheckConnect_Click(object sender, EventArgs e)
+        {
+            if (txtIP.Text.Trim() == "" || txtCatalog.Text.Trim() == "" || txtUser.Text.Trim() == "" || txtPWD.Text.Trim() == "")
+            {
+                MessageBox.Show("请输入完整信息。");
+                return;
+            }
+            MessageBox.Show(CommFunction.ConnectionCheck_SQL("Data Source=" + txtIP.Text + ";Initial Catalog=" + txtCatalog.Text + ";User ID=" + txtUser.Text + ";Password=" + txtPWD.Text + ";Max Pool Size=1024;"));
         }
     }
 }

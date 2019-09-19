@@ -2,12 +2,13 @@
 using System.Data;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Enum;
-using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using SQL.K3Cloud;
+    using Model.Enum;
+    using Model.K3Cloud;
+
     /// <summary>
     /// 筛选条件方案
     /// </summary>

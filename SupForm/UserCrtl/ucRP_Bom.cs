@@ -2,11 +2,12 @@
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 物料清单报表
     /// </summary>
@@ -245,7 +246,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void rbtBom_CheckedChanged(object sender, EventArgs e)
         {
-            if(rbtBom.Checked)
+            if (rbtBom.Checked)
             {
                 cbxUseOrg.Enabled = false;
                 cbxLogic.Enabled = false;
@@ -257,7 +258,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 cbxLogic.Enabled = false;
                 cbxTimes.Enabled = false;
             }
-            else if(rbtReplaceGroup.Checked)
+            else if (rbtReplaceGroup.Checked)
             {
                 cbxUseOrg.Enabled = true;
                 cbxLogic.Enabled = true;

@@ -9,12 +9,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using Kingdee.BOS.WebApi.Client;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Globa;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using SQL.K3Cloud;
+    using Model.Globa;
+
     /// <summary>
     /// 订单运算
     /// </summary>
@@ -359,7 +360,7 @@ namespace ERPSupport.SupForm.Bussiness
             _dtDtlResult.Columns.Add("欠料数量");
             _dtDtlResult.Columns.Add("欠料等级");
             _dtDtlResult.Columns.Add("物料属性");
-            
+
             _dtDtlResult.Columns.Add("客户");
             _dtDtlResult.Columns.Add("提交人");
             _dtDtlResult.Columns.Add("采购在途");

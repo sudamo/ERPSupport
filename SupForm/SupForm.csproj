@@ -169,6 +169,12 @@
     <Compile Include="Bussiness\frmPPBom.Designer.cs">
       <DependentUpon>frmPPBom.cs</DependentUpon>
     </Compile>
+    <Compile Include="Bussiness\frmPPBomDir.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmPPBomDir.Designer.cs">
+      <DependentUpon>frmPPBomDir.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bussiness\frmProgress.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -357,6 +363,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmPPBom.resx">
       <DependentUpon>frmPPBom.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmPPBomDir.resx">
+      <DependentUpon>frmPPBomDir.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmProgress.resx">
       <DependentUpon>frmProgress.cs</DependentUpon>

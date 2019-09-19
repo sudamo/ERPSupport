@@ -272,10 +272,10 @@ namespace ERPSupport.SupForm.Bussiness
 
             DateTime tNeedDate = DateTime.Parse(dgv1.CurrentRow.Cells[17].Value.ToString());
             frmBomCompare frm = new frmBomCompare(dtOld, dtNew, tNeedDate, dgv1.CurrentRow.Cells[1].Value.ToString(), iRow, bType, iFEntryId);
-            if(frm.ShowDialog()== DialogResult.OK)
+            if (frm.ShowDialog() == DialogResult.OK)
             {
                 bnTop_btnSearch_Click(null, null);
-            }            
+            }
         }
 
         /// <summary>

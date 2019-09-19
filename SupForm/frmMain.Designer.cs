@@ -110,8 +110,8 @@
             this.sc1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.sc1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.sc1.IsSplitterFixed = true;
-            this.sc1.Location = new System.Drawing.Point(0, 28);
-            this.sc1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.sc1.Location = new System.Drawing.Point(0, 26);
+            this.sc1.Margin = new System.Windows.Forms.Padding(4);
             this.sc1.Name = "sc1";
             // 
             // sc1.Panel1
@@ -123,7 +123,7 @@
             // sc1.Panel2
             // 
             this.sc1.Panel2.Controls.Add(this.panel1);
-            this.sc1.Size = new System.Drawing.Size(1396, 891);
+            this.sc1.Size = new System.Drawing.Size(1396, 893);
             this.sc1.SplitterDistance = 160;
             this.sc1.SplitterWidth = 5;
             this.sc1.TabIndex = 0;
@@ -135,9 +135,9 @@
             this.panel1.Controls.Add(this.dgv1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1231, 891);
+            this.panel1.Size = new System.Drawing.Size(1231, 893);
             this.panel1.TabIndex = 0;
             this.panel1.Visible = false;
             // 
@@ -166,7 +166,7 @@
             this.bnB_btnNext,
             this.bnB_btnLast,
             this.bnB_tss4});
-            this.bnBottom.Location = new System.Drawing.Point(0, 863);
+            this.bnBottom.Location = new System.Drawing.Point(0, 865);
             this.bnBottom.MoveFirstItem = null;
             this.bnBottom.MoveLastItem = null;
             this.bnBottom.MoveNextItem = null;
@@ -410,7 +410,7 @@
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dgv1.RowTemplate.Height = 27;
             this.dgv1.ShowEditingIcon = false;
-            this.dgv1.Size = new System.Drawing.Size(1227, 822);
+            this.dgv1.Size = new System.Drawing.Size(1227, 824);
             this.dgv1.TabIndex = 18;
             this.dgv1.RowHeadersWidthChanged += new System.EventHandler(this.dgv1_RowHeadersWidthChanged);
             this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
@@ -428,7 +428,7 @@
             this.msMain.Location = new System.Drawing.Point(0, 0);
             this.msMain.Name = "msMain";
             this.msMain.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
-            this.msMain.Size = new System.Drawing.Size(1396, 28);
+            this.msMain.Size = new System.Drawing.Size(1396, 26);
             this.msMain.TabIndex = 1;
             this.msMain.Text = "主菜单";
             // 
@@ -441,7 +441,7 @@
             this.tsmiFile_L,
             this.tsmiFile_Exit});
             this.tsmiFile.Name = "tsmiFile";
-            this.tsmiFile.Size = new System.Drawing.Size(83, 24);
+            this.tsmiFile.Size = new System.Drawing.Size(83, 22);
             this.tsmiFile.Text = "文件(&F)";
             // 
             // tsmiFile_New
@@ -487,7 +487,7 @@
             this.tsmiTool_tss2,
             this.tsmiTool_Timer});
             this.tsmiTool.Name = "tsmiTool";
-            this.tsmiTool.Size = new System.Drawing.Size(83, 24);
+            this.tsmiTool.Size = new System.Drawing.Size(83, 22);
             this.tsmiTool.Text = "工具(&T)";
             // 
             // tsmiTool_Config
@@ -579,7 +579,7 @@
             this.tsmiPro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiPro_Dir});
             this.tsmiPro.Name = "tsmiPro";
-            this.tsmiPro.Size = new System.Drawing.Size(83, 24);
+            this.tsmiPro.Size = new System.Drawing.Size(83, 22);
             this.tsmiPro.Text = "项目(&P)";
             // 
             // tsmiPro_Dir
@@ -598,7 +598,7 @@
             this.tsmiHelp_Version,
             this.tsmiHelp_About});
             this.tsmiHelp.Name = "tsmiHelp";
-            this.tsmiHelp.Size = new System.Drawing.Size(83, 24);
+            this.tsmiHelp.Size = new System.Drawing.Size(83, 22);
             this.tsmiHelp.Text = "帮助(&H)";
             // 
             // tsmiHelp_Regedit
@@ -647,7 +647,7 @@
             this.Controls.Add(this.msMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.msMain;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(1357, 943);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

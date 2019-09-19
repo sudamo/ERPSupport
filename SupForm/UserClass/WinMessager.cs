@@ -4,7 +4,7 @@ using System.Windows.Forms;
 namespace ERPSupport.SupForm.UserClass
 {
     /// <summary>
-    /// 
+    /// window消息
     /// </summary>
     internal class WinMessager : IMessageFilter
     {

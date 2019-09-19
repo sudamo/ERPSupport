@@ -360,7 +360,7 @@ namespace ERPSupport.SupForm
             }
 
             //菜单权限-工具
-            if (GlobalParameter.K3Inf.UserName != "Administrator")
+            if (GlobalParameter.K3Inf.UserName != "Administrator" && GlobalParameter.K3Inf.UserName != "damo")
             {
                 foreach (ToolStripItem ct in ((ToolStripMenuItem)((MenuStrip)Controls[1]).Items[1]).DropDownItems)
                 {
@@ -1543,6 +1543,11 @@ namespace ERPSupport.SupForm
 
         #region 直接调拨单
 
+        /// <summary>
+        /// 直接调拨单
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Trans(object sender, DoWorkEventArgs e)
         {
             string strBillNos, tmp;
@@ -1993,7 +1998,13 @@ namespace ERPSupport.SupForm
                 MessageBox.Show("没有数据或者源单据未审核！");
         }
 
-        private void ReportProgreess(DoWorkEventArgs e,int pCount,int pCurrent)
+        /// <summary>
+        /// 进度条
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="pCount"></param>
+        /// <param name="pCurrent"></param>
+        private void ReportProgreess(DoWorkEventArgs e, int pCount, int pCurrent)
         {
             //控制进度条
             if (_Worker.CancellationPending)

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Enum;
-using ERPSupport.Model.Globa;
-using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using SQL.K3Cloud;
+    using Model.Enum;
+    using Model.Globa;
+    using Model.K3Cloud;
+
     /// <summary>
     /// 添加筛选条件
     /// </summary>
@@ -69,7 +70,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            if(txtName.Text.Trim().Equals(string.Empty))
+            if (txtName.Text.Trim().Equals(string.Empty))
             {
                 lblTips.Text = "请输入方案名";
                 return;

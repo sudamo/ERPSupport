@@ -42,6 +42,26 @@ namespace ERPSupport.SQL
         /// </summary>
         static SQLHelper() { }
 
+        //
+        public static string ConnectionChecked(string pConnectionString)
+        {
+            SqlConnection conn = new SqlConnection(pConnectionString);
+            try
+            {
+                conn.Open();
+                return "连接成功";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
+            }
+        }
+
         //NonQuery
         public static void ExecuteNonQuery(string pCommandText)
         {
@@ -56,7 +76,8 @@ namespace ERPSupport.SQL
             catch { return; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
         }
         public static void ExecuteNonQuery(string pCommandText, SqlParameter[] pParameters)
@@ -77,7 +98,8 @@ namespace ERPSupport.SQL
             catch { return; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
         }
         public static void ExecuteNonQuery(CommandType pCommandType, string pCommandText, SqlParameter[] pParameters)
@@ -100,7 +122,8 @@ namespace ERPSupport.SQL
             catch { return; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
         }
         public static int ExecuteNonQuery(SqlConnection pConnection, CommandType pCommandType, string pCommandText, SqlParameter[] pParameters)
@@ -161,7 +184,8 @@ namespace ERPSupport.SQL
             catch { return null; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
             return o;
         }
@@ -179,7 +203,8 @@ namespace ERPSupport.SQL
             catch { return null; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
             return o;
         }
@@ -199,10 +224,11 @@ namespace ERPSupport.SQL
                 o = cmd.ExecuteScalar();
                 cmd.Parameters.Clear();
             }
-            catch (Exception ex){ return null; }
+            catch (Exception ex) { return null; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
             return o;
         }
@@ -221,7 +247,8 @@ namespace ERPSupport.SQL
             catch { return null; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
             return dt;
         }
@@ -243,7 +270,8 @@ namespace ERPSupport.SQL
             catch { return null; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
             return dt;
         }
@@ -263,7 +291,8 @@ namespace ERPSupport.SQL
             catch { return null; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
         }
 
@@ -282,7 +311,8 @@ namespace ERPSupport.SQL
             catch { return null; }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
 
             return ds;
@@ -320,7 +350,8 @@ namespace ERPSupport.SQL
             }
             finally
             {
-                conn.Close();
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
             }
 
             return ds;
@@ -357,7 +388,8 @@ namespace ERPSupport.SQL
             }
             finally
             {
-                pConnection.Close();
+                if (pConnection.State == ConnectionState.Open)
+                    pConnection.Close();
             }
 
             return ds;

@@ -99,15 +99,10 @@ namespace ERPSupport.SupForm
             }
 
             //数据库连接检验
-            int iDBStatus = CommFunction.DB_Connection(C_ORCLADDRESS);
-            if (iDBStatus == -1)
+            string strDBStatus = CommFunction.ConnectionCheck_ORA(C_ORCLADDRESS);
+            if (strDBStatus != "连接成功")
             {
-                MessageBox.Show("数据库连接失败，请联系管理员。");
-                return;
-            }
-            else if (iDBStatus == 0)
-            {
-                MessageBox.Show("数据库查询失败，请联系管理员。");
+                MessageBox.Show(strDBStatus);
                 return;
             }
             #endregion

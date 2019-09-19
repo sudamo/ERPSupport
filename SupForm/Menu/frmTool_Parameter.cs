@@ -2,12 +2,12 @@
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using Excel = Microsoft.Office.Interop.Excel;
-using ERPSupport.Model.Globa;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SupForm.Menu
 {
+    using SQL.K3Cloud;
+    using Model.K3Cloud;
+
     /// <summary>
     /// 物料参数设置
     /// </summary>

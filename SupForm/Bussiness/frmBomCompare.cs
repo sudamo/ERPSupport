@@ -1,13 +1,13 @@
-﻿
-using System;
+﻿using System;
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ERPSupport.SupForm.UserCrtl;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using UserCrtl;
+
     /// <summary>
     /// 物料清单修改对照
     /// </summary>

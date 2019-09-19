@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
 using Oracle.ManagedDataAccess.Client;
-using ERPSupport.Model.Enum;
-using ERPSupport.Model.Globa;
-using ERPSupport.Model.K3Cloud;
 
 namespace ERPSupport.SQL.K3Cloud
 {
+    using Model.Enum;
+    using Model.Globa;
+    using Model.K3Cloud;
+
     /// <summary>
     /// 公共方法
     /// </summary>
@@ -35,31 +36,38 @@ namespace ERPSupport.SQL.K3Cloud
         /// 数据库连接检验
         /// </summary>
         /// <returns></returns>
-        public static int DB_Connection(string pConnectionString)
+        public static string ConnectionCheck_ORA(string pConnectionString)
         {
-            OracleConnection conn = new OracleConnection(pConnectionString);
-            object oTest = null;
-            try
-            {
-                conn.Open();
-                OracleCommand cmd = conn.CreateCommand();
-                cmd.CommandText = "SELECT 1 FROM DUAL";
-                oTest = cmd.ExecuteScalar();
-            }
-            catch
-            {
-                return -1;//数据库连接失败
-            }
-            finally
-            {
-                if (conn.State == ConnectionState.Open)
-                    conn.Close();
-            }
+            //OracleConnection conn = new OracleConnection(pConnectionString);
+            //object oTest = null;
+            //try
+            //{
+            //    conn.Open();
+            //    OracleCommand cmd = conn.CreateCommand();
+            //    cmd.CommandText = "SELECT 1 FROM DUAL";
+            //    oTest = cmd.ExecuteScalar();
+            //}
+            //catch
+            //{
+            //    return -1;//数据库连接失败
+            //}
+            //finally
+            //{
+            //    if (conn.State == ConnectionState.Open)
+            //        conn.Close();
+            //}
 
-            if (oTest == null)
-                return 0;//数据库查询失败
+            //if (oTest == null)
+            //    return 0;//数据库查询失败
 
-            return 1;//数据库测试正常
+            //return 1;//数据库测试正常
+
+            return ORAHelper.ConnectionChecked(pConnectionString);
+        }
+
+        public static string ConnectionCheck_SQL(string pConnectionString)
+        {
+            return SQLHelper.ConnectionChecked(pConnectionString);
         }
         #endregion
 

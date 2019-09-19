@@ -3,10 +3,11 @@ using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using ERPSupport.SQL.K3Cloud;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// ERP日志
     /// </summary>
@@ -36,12 +37,10 @@ namespace ERPSupport.SupForm.UserCrtl
             _date = new ToolStripDateTimePicker();
             _date.Size = new Size(120, 21);
 
-            bnTop.Items.Add(_date);
-
             //重新排列Items
             List<ToolStripItem> list = new List<ToolStripItem>();
             list.Add(bnTop.Items[0]);
-            list.Add(bnTop.Items[6]);
+            list.Add(_date);
             list.Add(bnTop.Items[1]);
             list.Add(bnTop.Items[2]);
             list.Add(bnTop.Items[3]);
@@ -50,11 +49,12 @@ namespace ERPSupport.SupForm.UserCrtl
 
             bnTop.Items.Clear();
             foreach (ToolStripItem item in list)
-            {
                 bnTop.Items.Add(item);
-            }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void SetDataSource()
         {
             DataTable dt = new DataTable();
@@ -92,8 +92,12 @@ namespace ERPSupport.SupForm.UserCrtl
             if (e.KeyChar == 13)
                 SetDataSource();
         }
-        
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem.Tag == null)

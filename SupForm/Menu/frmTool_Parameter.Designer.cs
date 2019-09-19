@@ -85,9 +85,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxOrderRun.Controls.Add(this.plOther);
             this.gbxOrderRun.Controls.Add(this.plMaterial);
-            this.gbxOrderRun.Location = new System.Drawing.Point(9, 176);
+            this.gbxOrderRun.Location = new System.Drawing.Point(12, 220);
+            this.gbxOrderRun.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gbxOrderRun.Name = "gbxOrderRun";
-            this.gbxOrderRun.Size = new System.Drawing.Size(480, 194);
+            this.gbxOrderRun.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxOrderRun.Size = new System.Drawing.Size(633, 242);
             this.gbxOrderRun.TabIndex = 10;
             this.gbxOrderRun.TabStop = false;
             this.gbxOrderRun.Text = "订单运算参数";
@@ -105,17 +107,19 @@
             this.plOther.Controls.Add(this.lblOther);
             this.plOther.Controls.Add(this.txtSumDays);
             this.plOther.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plOther.Location = new System.Drawing.Point(243, 17);
+            this.plOther.Location = new System.Drawing.Point(323, 22);
+            this.plOther.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plOther.Name = "plOther";
-            this.plOther.Size = new System.Drawing.Size(234, 174);
+            this.plOther.Size = new System.Drawing.Size(306, 216);
             this.plOther.TabIndex = 17;
             // 
             // chbJoin
             // 
             this.chbJoin.AutoSize = true;
-            this.chbJoin.Location = new System.Drawing.Point(42, 116);
+            this.chbJoin.Location = new System.Drawing.Point(56, 145);
+            this.chbJoin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chbJoin.Name = "chbJoin";
-            this.chbJoin.Size = new System.Drawing.Size(150, 16);
+            this.chbJoin.Size = new System.Drawing.Size(187, 19);
             this.chbJoin.TabIndex = 22;
             this.chbJoin.Text = "采购/生产数量参与运算";
             this.tt.SetToolTip(this.chbJoin, "勾选表示采购生产数量参与销售订单运算，否则不参与。");
@@ -123,9 +127,10 @@
             // 
             // btnInport
             // 
-            this.btnInport.Location = new System.Drawing.Point(42, 141);
+            this.btnInport.Location = new System.Drawing.Point(56, 176);
+            this.btnInport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnInport.Name = "btnInport";
-            this.btnInport.Size = new System.Drawing.Size(157, 23);
+            this.btnInport.Size = new System.Drawing.Size(209, 29);
             this.btnInport.TabIndex = 21;
             this.btnInport.Text = "导入物料选项参数";
             this.tt.SetToolTip(this.btnInport, "批量导入物料选项参数。");
@@ -135,63 +140,70 @@
             // dtpEnd
             // 
             this.dtpEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpEnd.Location = new System.Drawing.Point(99, 59);
+            this.dtpEnd.Location = new System.Drawing.Point(132, 74);
+            this.dtpEnd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dtpEnd.Name = "dtpEnd";
-            this.dtpEnd.Size = new System.Drawing.Size(100, 21);
+            this.dtpEnd.Size = new System.Drawing.Size(132, 25);
             this.dtpEnd.TabIndex = 19;
             this.dtpEnd.ValueChanged += new System.EventHandler(this.dtpEnd_ValueChanged);
             // 
             // dtpStar
             // 
             this.dtpStar.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpStar.Location = new System.Drawing.Point(99, 32);
+            this.dtpStar.Location = new System.Drawing.Point(132, 40);
+            this.dtpStar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.dtpStar.Name = "dtpStar";
-            this.dtpStar.Size = new System.Drawing.Size(100, 21);
+            this.dtpStar.Size = new System.Drawing.Size(132, 25);
             this.dtpStar.TabIndex = 18;
             this.dtpStar.ValueChanged += new System.EventHandler(this.dtpStar_ValueChanged);
             // 
             // lblSumDays
             // 
             this.lblSumDays.AutoSize = true;
-            this.lblSumDays.Location = new System.Drawing.Point(40, 92);
+            this.lblSumDays.Location = new System.Drawing.Point(53, 115);
+            this.lblSumDays.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSumDays.Name = "lblSumDays";
-            this.lblSumDays.Size = new System.Drawing.Size(53, 12);
+            this.lblSumDays.Size = new System.Drawing.Size(67, 15);
             this.lblSumDays.TabIndex = 1;
             this.lblSumDays.Text = "累计天数";
             // 
             // lblEndTime
             // 
             this.lblEndTime.AutoSize = true;
-            this.lblEndTime.Location = new System.Drawing.Point(40, 65);
+            this.lblEndTime.Location = new System.Drawing.Point(53, 81);
+            this.lblEndTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblEndTime.Name = "lblEndTime";
-            this.lblEndTime.Size = new System.Drawing.Size(53, 12);
+            this.lblEndTime.Size = new System.Drawing.Size(67, 15);
             this.lblEndTime.TabIndex = 1;
             this.lblEndTime.Text = "结束时间";
             // 
             // lblStarTime
             // 
             this.lblStarTime.AutoSize = true;
-            this.lblStarTime.Location = new System.Drawing.Point(40, 38);
+            this.lblStarTime.Location = new System.Drawing.Point(53, 48);
+            this.lblStarTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStarTime.Name = "lblStarTime";
-            this.lblStarTime.Size = new System.Drawing.Size(53, 12);
+            this.lblStarTime.Size = new System.Drawing.Size(67, 15);
             this.lblStarTime.TabIndex = 1;
             this.lblStarTime.Text = "开始时间";
             // 
             // lblOther
             // 
             this.lblOther.AutoSize = true;
-            this.lblOther.Location = new System.Drawing.Point(95, 9);
+            this.lblOther.Location = new System.Drawing.Point(127, 11);
+            this.lblOther.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblOther.Name = "lblOther";
-            this.lblOther.Size = new System.Drawing.Size(53, 12);
+            this.lblOther.Size = new System.Drawing.Size(67, 15);
             this.lblOther.TabIndex = 1;
             this.lblOther.Text = "其他选项";
             // 
             // txtSumDays
             // 
             this.txtSumDays.Enabled = false;
-            this.txtSumDays.Location = new System.Drawing.Point(99, 89);
+            this.txtSumDays.Location = new System.Drawing.Point(132, 111);
+            this.txtSumDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSumDays.Name = "txtSumDays";
-            this.txtSumDays.Size = new System.Drawing.Size(60, 21);
+            this.txtSumDays.Size = new System.Drawing.Size(79, 25);
             this.txtSumDays.TabIndex = 20;
             this.txtSumDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
@@ -211,103 +223,115 @@
             this.plMaterial.Controls.Add(this.txtSafeStockDays);
             this.plMaterial.Dock = System.Windows.Forms.DockStyle.Left;
             this.plMaterial.Enabled = false;
-            this.plMaterial.Location = new System.Drawing.Point(3, 17);
+            this.plMaterial.Location = new System.Drawing.Point(4, 22);
+            this.plMaterial.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plMaterial.Name = "plMaterial";
-            this.plMaterial.Size = new System.Drawing.Size(240, 174);
+            this.plMaterial.Size = new System.Drawing.Size(319, 216);
             this.plMaterial.TabIndex = 11;
             // 
             // lblMinBats
             // 
             this.lblMinBats.AutoSize = true;
-            this.lblMinBats.Location = new System.Drawing.Point(48, 146);
+            this.lblMinBats.Location = new System.Drawing.Point(64, 182);
+            this.lblMinBats.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMinBats.Name = "lblMinBats";
-            this.lblMinBats.Size = new System.Drawing.Size(53, 12);
+            this.lblMinBats.Size = new System.Drawing.Size(67, 15);
             this.lblMinBats.TabIndex = 1;
             this.lblMinBats.Text = "最小批量";
             // 
             // lblLowBook
             // 
             this.lblLowBook.AutoSize = true;
-            this.lblLowBook.Location = new System.Drawing.Point(36, 119);
+            this.lblLowBook.Location = new System.Drawing.Point(48, 149);
+            this.lblLowBook.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLowBook.Name = "lblLowBook";
-            this.lblLowBook.Size = new System.Drawing.Size(65, 12);
+            this.lblLowBook.Size = new System.Drawing.Size(82, 15);
             this.lblLowBook.TabIndex = 1;
             this.lblLowBook.Text = "最低订货量";
             // 
             // txtMinBats
             // 
-            this.txtMinBats.Location = new System.Drawing.Point(107, 143);
+            this.txtMinBats.Location = new System.Drawing.Point(143, 179);
+            this.txtMinBats.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtMinBats.Name = "txtMinBats";
-            this.txtMinBats.Size = new System.Drawing.Size(60, 21);
+            this.txtMinBats.Size = new System.Drawing.Size(79, 25);
             this.txtMinBats.TabIndex = 16;
             this.txtMinBats.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Float);
             // 
             // lblAddGoodsDays
             // 
             this.lblAddGoodsDays.AutoSize = true;
-            this.lblAddGoodsDays.Location = new System.Drawing.Point(60, 92);
+            this.lblAddGoodsDays.Location = new System.Drawing.Point(80, 115);
+            this.lblAddGoodsDays.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblAddGoodsDays.Name = "lblAddGoodsDays";
-            this.lblAddGoodsDays.Size = new System.Drawing.Size(41, 12);
+            this.lblAddGoodsDays.Size = new System.Drawing.Size(52, 15);
             this.lblAddGoodsDays.TabIndex = 1;
             this.lblAddGoodsDays.Text = "补货量";
             // 
             // txtLowBook
             // 
-            this.txtLowBook.Location = new System.Drawing.Point(107, 116);
+            this.txtLowBook.Location = new System.Drawing.Point(143, 145);
+            this.txtLowBook.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtLowBook.Name = "txtLowBook";
-            this.txtLowBook.Size = new System.Drawing.Size(60, 21);
+            this.txtLowBook.Size = new System.Drawing.Size(79, 25);
             this.txtLowBook.TabIndex = 15;
             this.txtLowBook.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Float);
             // 
             // lblLogisticsDays
             // 
             this.lblLogisticsDays.AutoSize = true;
-            this.lblLogisticsDays.Location = new System.Drawing.Point(48, 65);
+            this.lblLogisticsDays.Location = new System.Drawing.Point(64, 81);
+            this.lblLogisticsDays.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblLogisticsDays.Name = "lblLogisticsDays";
-            this.lblLogisticsDays.Size = new System.Drawing.Size(53, 12);
+            this.lblLogisticsDays.Size = new System.Drawing.Size(67, 15);
             this.lblLogisticsDays.TabIndex = 1;
             this.lblLogisticsDays.Text = "物流时间";
             // 
             // txtAddGoodsDays
             // 
-            this.txtAddGoodsDays.Location = new System.Drawing.Point(107, 89);
+            this.txtAddGoodsDays.Location = new System.Drawing.Point(143, 111);
+            this.txtAddGoodsDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtAddGoodsDays.Name = "txtAddGoodsDays";
-            this.txtAddGoodsDays.Size = new System.Drawing.Size(60, 21);
+            this.txtAddGoodsDays.Size = new System.Drawing.Size(79, 25);
             this.txtAddGoodsDays.TabIndex = 14;
             this.txtAddGoodsDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
             // lblSafeStockDays
             // 
             this.lblSafeStockDays.AutoSize = true;
-            this.lblSafeStockDays.Location = new System.Drawing.Point(24, 38);
+            this.lblSafeStockDays.Location = new System.Drawing.Point(32, 48);
+            this.lblSafeStockDays.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblSafeStockDays.Name = "lblSafeStockDays";
-            this.lblSafeStockDays.Size = new System.Drawing.Size(77, 12);
+            this.lblSafeStockDays.Size = new System.Drawing.Size(97, 15);
             this.lblSafeStockDays.TabIndex = 1;
             this.lblSafeStockDays.Text = "安全库存天数";
             // 
             // txtLogisticsDays
             // 
-            this.txtLogisticsDays.Location = new System.Drawing.Point(107, 62);
+            this.txtLogisticsDays.Location = new System.Drawing.Point(143, 78);
+            this.txtLogisticsDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtLogisticsDays.Name = "txtLogisticsDays";
-            this.txtLogisticsDays.Size = new System.Drawing.Size(60, 21);
+            this.txtLogisticsDays.Size = new System.Drawing.Size(79, 25);
             this.txtLogisticsDays.TabIndex = 13;
             this.txtLogisticsDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
             // lblMaterial
             // 
             this.lblMaterial.AutoSize = true;
-            this.lblMaterial.Location = new System.Drawing.Point(90, 9);
+            this.lblMaterial.Location = new System.Drawing.Point(120, 11);
+            this.lblMaterial.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblMaterial.Name = "lblMaterial";
-            this.lblMaterial.Size = new System.Drawing.Size(53, 12);
+            this.lblMaterial.Size = new System.Drawing.Size(67, 15);
             this.lblMaterial.TabIndex = 1;
             this.lblMaterial.Text = "物料选项";
             this.lblMaterial.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // txtSafeStockDays
             // 
-            this.txtSafeStockDays.Location = new System.Drawing.Point(107, 35);
+            this.txtSafeStockDays.Location = new System.Drawing.Point(143, 44);
+            this.txtSafeStockDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtSafeStockDays.Name = "txtSafeStockDays";
-            this.txtSafeStockDays.Size = new System.Drawing.Size(60, 21);
+            this.txtSafeStockDays.Size = new System.Drawing.Size(79, 25);
             this.txtSafeStockDays.TabIndex = 12;
             this.txtSafeStockDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
@@ -317,9 +341,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.gbxLockStock.Controls.Add(this.plMiddle);
             this.gbxLockStock.Controls.Add(this.plOption);
-            this.gbxLockStock.Location = new System.Drawing.Point(12, 12);
+            this.gbxLockStock.Location = new System.Drawing.Point(16, 15);
+            this.gbxLockStock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gbxLockStock.Name = "gbxLockStock";
-            this.gbxLockStock.Size = new System.Drawing.Size(480, 158);
+            this.gbxLockStock.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxLockStock.Size = new System.Drawing.Size(633, 198);
             this.gbxLockStock.TabIndex = 0;
             this.gbxLockStock.TabStop = false;
             this.gbxLockStock.Text = "锁库规则(未使用)";
@@ -330,18 +356,20 @@
             this.plMiddle.Controls.Add(this.plNumber);
             this.plMiddle.Controls.Add(this.plPercent);
             this.plMiddle.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plMiddle.Location = new System.Drawing.Point(3, 56);
+            this.plMiddle.Location = new System.Drawing.Point(4, 71);
+            this.plMiddle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plMiddle.Name = "plMiddle";
-            this.plMiddle.Size = new System.Drawing.Size(474, 99);
+            this.plMiddle.Size = new System.Drawing.Size(625, 123);
             this.plMiddle.TabIndex = 0;
             // 
             // chbIsUse
             // 
             this.chbIsUse.AutoSize = true;
             this.chbIsUse.Enabled = false;
-            this.chbIsUse.Location = new System.Drawing.Point(365, 10);
+            this.chbIsUse.Location = new System.Drawing.Point(487, 12);
+            this.chbIsUse.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chbIsUse.Name = "chbIsUse";
-            this.chbIsUse.Size = new System.Drawing.Size(72, 16);
+            this.chbIsUse.Size = new System.Drawing.Size(89, 19);
             this.chbIsUse.TabIndex = 5;
             this.chbIsUse.Text = "启用规则";
             this.chbIsUse.UseVisualStyleBackColor = true;
@@ -350,24 +378,27 @@
             // 
             this.plNumber.Controls.Add(this.lblNumber);
             this.plNumber.Controls.Add(this.txtNumber);
-            this.plNumber.Location = new System.Drawing.Point(121, 6);
+            this.plNumber.Location = new System.Drawing.Point(161, 8);
+            this.plNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plNumber.Name = "plNumber";
-            this.plNumber.Size = new System.Drawing.Size(105, 82);
+            this.plNumber.Size = new System.Drawing.Size(140, 102);
             this.plNumber.TabIndex = 0;
             // 
             // lblNumber
             // 
-            this.lblNumber.Location = new System.Drawing.Point(5, 5);
+            this.lblNumber.Location = new System.Drawing.Point(7, 6);
+            this.lblNumber.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblNumber.Name = "lblNumber";
-            this.lblNumber.Size = new System.Drawing.Size(95, 45);
+            this.lblNumber.Size = new System.Drawing.Size(127, 56);
             this.lblNumber.TabIndex = 0;
             this.lblNumber.Text = "订单每条分录最大锁库数量";
             // 
             // txtNumber
             // 
-            this.txtNumber.Location = new System.Drawing.Point(8, 55);
+            this.txtNumber.Location = new System.Drawing.Point(11, 69);
+            this.txtNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtNumber.Name = "txtNumber";
-            this.txtNumber.Size = new System.Drawing.Size(75, 21);
+            this.txtNumber.Size = new System.Drawing.Size(99, 25);
             this.txtNumber.TabIndex = 3;
             this.txtNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Float);
             // 
@@ -376,33 +407,37 @@
             this.plPercent.Controls.Add(this.lblPC);
             this.plPercent.Controls.Add(this.lblPercent);
             this.plPercent.Controls.Add(this.txtPercent);
-            this.plPercent.Location = new System.Drawing.Point(247, 6);
+            this.plPercent.Location = new System.Drawing.Point(329, 8);
+            this.plPercent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plPercent.Name = "plPercent";
-            this.plPercent.Size = new System.Drawing.Size(105, 82);
+            this.plPercent.Size = new System.Drawing.Size(140, 102);
             this.plPercent.TabIndex = 0;
             // 
             // lblPC
             // 
             this.lblPC.AutoSize = true;
-            this.lblPC.Location = new System.Drawing.Point(89, 58);
+            this.lblPC.Location = new System.Drawing.Point(119, 72);
+            this.lblPC.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPC.Name = "lblPC";
-            this.lblPC.Size = new System.Drawing.Size(11, 12);
+            this.lblPC.Size = new System.Drawing.Size(15, 15);
             this.lblPC.TabIndex = 0;
             this.lblPC.Text = "%";
             // 
             // lblPercent
             // 
-            this.lblPercent.Location = new System.Drawing.Point(5, 5);
+            this.lblPercent.Location = new System.Drawing.Point(7, 6);
+            this.lblPercent.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblPercent.Name = "lblPercent";
-            this.lblPercent.Size = new System.Drawing.Size(95, 45);
+            this.lblPercent.Size = new System.Drawing.Size(127, 56);
             this.lblPercent.TabIndex = 0;
             this.lblPercent.Text = "订单每条分录最大锁库数量按库存量百分比分配";
             // 
             // txtPercent
             // 
-            this.txtPercent.Location = new System.Drawing.Point(14, 55);
+            this.txtPercent.Location = new System.Drawing.Point(19, 69);
+            this.txtPercent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.txtPercent.Name = "txtPercent";
-            this.txtPercent.Size = new System.Drawing.Size(75, 21);
+            this.txtPercent.Size = new System.Drawing.Size(99, 25);
             this.txtPercent.TabIndex = 4;
             this.txtPercent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Percent);
             // 
@@ -411,18 +446,20 @@
             this.plOption.Controls.Add(this.rbtPercent);
             this.plOption.Controls.Add(this.rbtNumber);
             this.plOption.Dock = System.Windows.Forms.DockStyle.Top;
-            this.plOption.Location = new System.Drawing.Point(3, 17);
+            this.plOption.Location = new System.Drawing.Point(4, 22);
+            this.plOption.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plOption.Name = "plOption";
-            this.plOption.Size = new System.Drawing.Size(474, 39);
+            this.plOption.Size = new System.Drawing.Size(625, 49);
             this.plOption.TabIndex = 0;
             // 
             // rbtPercent
             // 
             this.rbtPercent.AutoSize = true;
             this.rbtPercent.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.rbtPercent.Location = new System.Drawing.Point(247, 12);
+            this.rbtPercent.Location = new System.Drawing.Point(329, 15);
+            this.rbtPercent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.rbtPercent.Name = "rbtPercent";
-            this.rbtPercent.Size = new System.Drawing.Size(77, 20);
+            this.rbtPercent.Size = new System.Drawing.Size(93, 24);
             this.rbtPercent.TabIndex = 2;
             this.rbtPercent.TabStop = true;
             this.rbtPercent.Text = "百分比";
@@ -432,9 +469,10 @@
             // 
             this.rbtNumber.AutoSize = true;
             this.rbtNumber.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.rbtNumber.Location = new System.Drawing.Point(151, 16);
+            this.rbtNumber.Location = new System.Drawing.Point(201, 20);
+            this.rbtNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.rbtNumber.Name = "rbtNumber";
-            this.rbtNumber.Size = new System.Drawing.Size(60, 20);
+            this.rbtNumber.Size = new System.Drawing.Size(72, 24);
             this.rbtNumber.TabIndex = 1;
             this.rbtNumber.TabStop = true;
             this.rbtNumber.Text = "数量";
@@ -443,9 +481,10 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(166, 376);
+            this.btnSave.Location = new System.Drawing.Point(221, 470);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(75, 23);
+            this.btnSave.Size = new System.Drawing.Size(100, 29);
             this.btnSave.TabIndex = 21;
             this.btnSave.Text = "保存(&S)";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -453,9 +492,10 @@
             // 
             // btnCancle
             // 
-            this.btnCancle.Location = new System.Drawing.Point(262, 376);
+            this.btnCancle.Location = new System.Drawing.Point(349, 470);
+            this.btnCancle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnCancle.Name = "btnCancle";
-            this.btnCancle.Size = new System.Drawing.Size(75, 23);
+            this.btnCancle.Size = new System.Drawing.Size(100, 29);
             this.btnCancle.TabIndex = 22;
             this.btnCancle.Text = "取消(&C)";
             this.btnCancle.UseVisualStyleBackColor = true;
@@ -463,16 +503,17 @@
             // 
             // frmTool_Parameter
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(504, 412);
+            this.ClientSize = new System.Drawing.Size(662, 503);
             this.Controls.Add(this.btnCancle);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.gbxLockStock);
             this.Controls.Add(this.gbxOrderRun);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(520, 450);
-            this.MinimumSize = new System.Drawing.Size(520, 450);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MaximumSize = new System.Drawing.Size(680, 550);
+            this.MinimumSize = new System.Drawing.Size(680, 550);
             this.Name = "frmTool_Parameter";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "参数设置";

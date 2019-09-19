@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+    using Model.Globa;
+
     /// <summary>
     /// 权限设置
     /// </summary>

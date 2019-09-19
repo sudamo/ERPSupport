@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Threading;
-using System.Windows.Forms;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
 using System.Reflection;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
 
 namespace ERPSupport.SupForm
 {
+    /// <summary>
+    /// Program启动
+    /// </summary>
     static class Program
     {
         /// <summary>

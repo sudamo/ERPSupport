@@ -5,12 +5,13 @@ using System.Data;
 using System.Drawing;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
 using Oracle.ManagedDataAccess.Client;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 销售订单日志
     /// </summary>
@@ -393,7 +394,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_lblYSD.Visible = true;
                 bnTop_txtYSD.Visible = true;
             }
-            else if(bnTop_cbxType.SelectedIndex == 1)
+            else if (bnTop_cbxType.SelectedIndex == 1)
             {
                 bnTop_cbxStatus.Visible = true;
 
@@ -420,3 +421,4 @@ namespace ERPSupport.SupForm.UserCrtl
         }
     }
 }
+

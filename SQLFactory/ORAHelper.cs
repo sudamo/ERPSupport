@@ -23,6 +23,7 @@
 
 namespace ERPSupport.SQL
 {
+    using System;
     using System.Data;
     using Model.Globa;
     using Oracle.ManagedDataAccess.Client;
@@ -33,6 +34,26 @@ namespace ERPSupport.SQL
     public static class ORAHelper
     {
         static ORAHelper() { }
+
+        //
+        public static string ConnectionChecked(string pConnectionString)
+        {
+            OracleConnection conn = new OracleConnection(pConnectionString);
+            try
+            {
+                conn.Open();
+                return "连接成功";
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
+            }
+        }
 
         //NonQuery
         public static int ExecuteNonQuery(string pCommandText)
@@ -175,3 +196,4 @@ namespace ERPSupport.SQL
         }
     }
 }
+

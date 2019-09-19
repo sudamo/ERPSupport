@@ -2,10 +2,11 @@
 using System.Data;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using ERPSupport.SQL.K3Cloud;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+
     /// <summary>
     /// 锁库仓库
     /// </summary>
@@ -370,3 +371,4 @@ namespace ERPSupport.SupForm.UserCrtl
         }
     }
 }
+
