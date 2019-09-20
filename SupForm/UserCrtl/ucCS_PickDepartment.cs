@@ -170,7 +170,7 @@ namespace ERPSupport.SupForm.UserCrtl
             //新增记录
             CommFunction.AddPickMTLDept(iDeptId.ToString(), strNumber, strName, strUseOrgId);
             //操作日志
-            CommFunction.DM_Log_Local("新增领料部门", "配置\\设置领料部门", bnTop_cbxOrg.Text + ":" + bnTop_cbxDepartment.Text, "1");
+            CommFunction.DM_Log_Local("新增领料部门", "配置\\设置领料部门", bnTop_cbxOrg.Text + ":" + bnTop_cbxDepartment.Text);
             MessageBox.Show("添加成功");
             //重新获取数据
             dgv1.DataSource = CommFunction.PickMTLDepartment();
@@ -182,7 +182,7 @@ namespace ERPSupport.SupForm.UserCrtl
             //根据序号删除数据
             CommFunction.DelPickMTLDept(dgv1.CurrentRow.Cells[0].Value.ToString());
             //操作日志
-            CommFunction.DM_Log_Local("删除领料部门", "配置\\设置领料部门", dgv1.CurrentRow.Cells[0].Value.ToString(), "1");
+            CommFunction.DM_Log_Local("删除领料部门", "配置\\设置领料部门", dgv1.CurrentRow.Cells[0].Value.ToString());
             MessageBox.Show("删除成功");
             //重新获取数据
             dgv1.DataSource = CommFunction.PickMTLDepartment();

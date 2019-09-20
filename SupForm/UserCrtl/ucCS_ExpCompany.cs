@@ -248,7 +248,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 return;
             }
             //操作日志
-            CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "新增：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text, "1");
+            CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "新增：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text);
             MessageBox.Show("新增成功");
             dgv1.DataSource = CommFunction.NumberMatch("COMPANYNAME");
         }
@@ -290,7 +290,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 return;
             }
             //操作日志
-            CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "删除：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text, "1");
+            CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "删除：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text);
             MessageBox.Show("删除成功");
             dgv1.DataSource = CommFunction.NumberMatch("COMPANYNAME");
         }

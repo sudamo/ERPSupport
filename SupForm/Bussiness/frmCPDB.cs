@@ -174,21 +174,63 @@ namespace ERPSupport.SupForm.Bussiness
         }
 
         /// <summary>
-        /// 筛选
+        /// 获取数据
         /// </summary>
-        private void Filter()
+        /// <param name="pType">Search,ChangePageSize OR Navi</param>
+        private void DataSourceBinding(int pType)
         {
-            frmFilter frm = new frmFilter(_ListFilter, _FilterName, Model.Enum.FormID.STK_TransferDirect);
-            frm.ShowDialog();
-
-            if (frm.DialogResult == DialogResult.OK)
+            if (_ListFilter.Count == 0)
             {
-                _ListFilter = frm.ListFilter;
-                _FilterName = frm.FilterName;
-
-                if (_ListFilter.Count > 0)
-                    Search();
+                MessageBox.Show("请过滤单据");
+                return;
             }
+            string strFilter = GetFilter();
+            if (strFilter.Equals(string.Empty))
+                return;
+
+            if (pType == 1)//重新加载数据源
+            {
+                _DataSource = PrdAllocation.GetTransForP(strFilter);
+
+                if (_DataSource == null || _DataSource.Rows.Count == 0)
+                {
+                    dgv1.DataSource = null;
+                    return;
+                }
+
+                _CurrentPage = 1;//当前页数从1开始
+            }
+            else if (pType == 2)//改变_PageSize，重新计算 _CurrentPage
+            {
+                if (dgv1.DataSource == null || dgv1.Rows.Count == 0)
+                    return;
+
+                _CurrentPage = _Start / _PageSize + 1;
+            }
+
+            _RecordCount = _DataSource.Rows.Count;
+            _PageCount = (_RecordCount / _PageSize);
+            if ((_RecordCount % _PageSize) > 0)
+                _PageCount++;
+
+            _Start = _PageSize * (_CurrentPage - 1);
+            if (_CurrentPage == _PageCount)
+                _End = _RecordCount;
+            else
+                _End = _PageSize * _CurrentPage;
+
+            _DataTemp = _DataSource.Clone();
+            for (int i = _Start; i < _End; i++)
+                _DataTemp.ImportRow(_DataSource.Rows[i]);
+
+            bn_txtCurrentPage.Text = _CurrentPage.ToString();
+            bn_lblPageCount.Text = string.Format("{0}页", _PageCount.ToString());
+            bn_lblRecordCount.Text = string.Format("{0}行", _RecordCount.ToString());
+            bn_lblLockQty.Text = string.Format("锁库数汇总：{0}", SumQty("锁库数量"));
+
+            bs1.DataSource = _DataTemp;
+            bn1.BindingSource = bs1;
+            dgv1.DataSource = bs1;
         }
 
         /// <summary>
@@ -263,67 +305,44 @@ namespace ERPSupport.SupForm.Bussiness
 
             MessageBox.Show("直接调拨单：" + strBillNos);
 
+            //日志
+            CommFunction.DM_Log_Local("成品调拨", "辅助功能//调拨//成品调拨", strBillNos);
+
             Search();
         }
 
         /// <summary>
-        /// 获取数据
+        /// 
         /// </summary>
-        /// <param name="pType">Search,ChangePageSize OR Navi</param>
-        private void DataSourceBinding(int pType)
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
-            if (_ListFilter.Count == 0)
-            {
-                MessageBox.Show("请过滤单据");
-                return;
-            }
-            string strFilter = GetFilter();
-            if (strFilter.Equals(string.Empty))
+            if (e.ClickedItem.Tag == null)
                 return;
 
-            if (pType == 1)//重新加载数据源
+            switch (e.ClickedItem.Tag.ToString())
             {
-                _DataSource = PrdAllocation.GetTransForP(strFilter);
+                case "1"://筛选
+                    frmFilter frm = new frmFilter(_ListFilter, _FilterName, Model.Enum.FormID.STK_TransferDirect);
+                    frm.ShowDialog();
 
-                if (_DataSource == null || _DataSource.Rows.Count == 0)
-                {
-                    dgv1.DataSource = null;
-                    return;
-                }
+                    if (frm.DialogResult == DialogResult.OK)
+                    {
+                        _ListFilter = frm.ListFilter;
+                        _FilterName = frm.FilterName;
 
-                _CurrentPage = 1;//当前页数从1开始
+                        if (_ListFilter.Count > 0)
+                            Search();
+                    }
+                    break;
+                case "2"://成品调拨
+                    Commit();
+                    break;
+                case "3"://发货通知单下推成品调拨单
+
+                    break;
             }
-            else if (pType == 2)//改变_PageSize，重新计算 _CurrentPage
-            {
-                if (dgv1.DataSource == null || dgv1.Rows.Count == 0)
-                    return;
-
-                _CurrentPage = _Start / _PageSize + 1;
-            }
-
-            _RecordCount = _DataSource.Rows.Count;
-            _PageCount = (_RecordCount / _PageSize);
-            if ((_RecordCount % _PageSize) > 0)
-                _PageCount++;
-
-            _Start = _PageSize * (_CurrentPage - 1);
-            if (_CurrentPage == _PageCount)
-                _End = _RecordCount;
-            else
-                _End = _PageSize * _CurrentPage;
-
-            _DataTemp = _DataSource.Clone();
-            for (int i = _Start; i < _End; i++)
-                _DataTemp.ImportRow(_DataSource.Rows[i]);
-
-            bn_txtCurrentPage.Text = _CurrentPage.ToString();
-            bn_lblPageCount.Text = string.Format("{0}页", _PageCount.ToString());
-            bn_lblRecordCount.Text = string.Format("{0}行", _RecordCount.ToString());
-            bn_lblLockQty.Text = string.Format("锁库数汇总：{0}", SumQty("锁库数量"));
-
-            bs1.DataSource = _DataTemp;
-            bn1.BindingSource = bs1;
-            dgv1.DataSource = bs1;
         }
 
         /// <summary>
@@ -598,27 +617,6 @@ namespace ERPSupport.SupForm.Bussiness
             dgv1.EndEdit();
         }
         #endregion
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void bnTop_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (e.ClickedItem.Tag == null)
-                return;
-
-            switch (e.ClickedItem.Tag.ToString())
-            {
-                case "1":
-                    Filter();
-                    break;
-                case "2":
-                    Commit();
-                    break;
-            }
-        }
 
         /// <summary>
         /// 

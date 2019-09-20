@@ -292,7 +292,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
             CommFunction.AddRole(txtRoleName.Text.Trim(), strMids, sFunctionIds);
             //操作日志
-            CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "创建角色:" + txtRoleName.Text.Trim(), "1");
+            CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "创建角色:" + txtRoleName.Text.Trim());
             MessageBox.Show("创建角色成功");
             SetDataSource();
         }
@@ -315,7 +315,7 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 CommFunction.DelRole(strName);
                 //操作日志
-                CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "删除角色:" + strName, "1");
+                CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "删除角色:" + strName);
                 SetDataSource();
             }
         }
@@ -430,7 +430,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
             CommFunction.UpdateRole(strName, strMids, sFunctionIds);
             //操作日志
-            CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "修改角色:[" + strName + "]" + strMids + "|" + sFunctionIds, "1");
+            CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "修改角色:[" + strName + "]" + strMids + "|" + sFunctionIds);
             MessageBox.Show("保存成功");
             SetDataSource();
         }

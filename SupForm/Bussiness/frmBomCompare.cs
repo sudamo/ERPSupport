@@ -142,7 +142,7 @@ namespace ERPSupport.SupForm.Bussiness
             string strConTent = _Type ? "修改生产用料清单子项物料用量,子项物料:[" + strMTLNumber + "],应发数量:[" + dMustQty + "->" + dNewMustQty + "],分子:[" + dFZ + "->" + dNewFZ + "]." : "替换生产用料清单子项物料,子项物料:[" + strMTLNumber + "->" + strNewMTLNumber + "],应发数量:[" + dMustQty + "->" + dNewMustQty + "],分子:[" + dFZ + "->" + dNewFZ + "].";
             if (bSyn)
                 strConTent += " 并同步需求日期：" + tNeedDate.ToString("yyyy-MM-dd") + "的数据.";
-            SQL.K3Cloud.CommFunction.DM_Log_Local("生产用料清单修改", "配置//单据信息调整", strConTent, "1");
+            SQL.K3Cloud.CommFunction.DM_Log_Local("生产用料清单修改", "配置//单据信息调整", strConTent);
 
             DialogResult = DialogResult.OK;
             MessageBox.Show("数据已经更新。");

@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>21</ApplicationRevision>
+    <ApplicationRevision>22</ApplicationRevision>
     <ApplicationVersion>1.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -550,7 +550,66 @@
     <Content Include="ICON\PNG\32.32\save_as.png" />
     <Content Include="ICON\PNG\32.32\setting_tools.png" />
     <Content Include="ICON\PNG\32.32\text.png" />
+    <Content Include="ICON\PNG\32.32\textfield.png" />
+    <Content Include="ICON\PNG\32.32\textfield_add.png" />
+    <Content Include="ICON\PNG\32.32\textfield_delete.png" />
+    <Content Include="ICON\PNG\32.32\textfield_key.png" />
+    <Content Include="ICON\PNG\32.32\textfield_rename.png" />
+    <Content Include="ICON\PNG\32.32\text_align_center.png" />
+    <Content Include="ICON\PNG\32.32\text_align_justity.png" />
+    <Content Include="ICON\PNG\32.32\text_align_left.png" />
+    <Content Include="ICON\PNG\32.32\text_align_right.png" />
+    <Content Include="ICON\PNG\32.32\text_allcaps.png" />
+    <Content Include="ICON\PNG\32.32\text_area.png" />
+    <Content Include="ICON\PNG\32.32\text_bold.png" />
+    <Content Include="ICON\PNG\32.32\text_columns.png" />
+    <Content Include="ICON\PNG\32.32\text_document.png" />
+    <Content Include="ICON\PNG\32.32\text_document_wrap.png" />
+    <Content Include="ICON\PNG\32.32\text_drama.png" />
+    <Content Include="ICON\PNG\32.32\text_dropcaps.png" />
+    <Content Include="ICON\PNG\32.32\text_heading_1.png" />
+    <Content Include="ICON\PNG\32.32\text_heading_2.png" />
+    <Content Include="ICON\PNG\32.32\text_heading_3.png" />
+    <Content Include="ICON\PNG\32.32\text_heading_4.png" />
+    <Content Include="ICON\PNG\32.32\text_heading_5.png" />
+    <Content Include="ICON\PNG\32.32\text_heading_6.png" />
+    <Content Include="ICON\PNG\32.32\text_horizontalrule.png" />
+    <Content Include="ICON\PNG\32.32\text_indent.png" />
+    <Content Include="ICON\PNG\32.32\text_indent_remove.png" />
+    <Content Include="ICON\PNG\32.32\text_italic.png" />
+    <Content Include="ICON\PNG\32.32\text_kerning.png" />
+    <Content Include="ICON\PNG\32.32\text_large_cap.png" />
+    <Content Include="ICON\PNG\32.32\text_letterspacing.png" />
+    <Content Include="ICON\PNG\32.32\text_letter_omega.png" />
+    <Content Include="ICON\PNG\32.32\text_linespacing.png" />
+    <Content Include="ICON\PNG\32.32\text_list_bullets.png" />
+    <Content Include="ICON\PNG\32.32\text_list_numbers.png" />
+    <Content Include="ICON\PNG\32.32\text_lowercase.png" />
+    <Content Include="ICON\PNG\32.32\text_padding_bottom.png" />
+    <Content Include="ICON\PNG\32.32\text_padding_left.png" />
+    <Content Include="ICON\PNG\32.32\text_padding_right.png" />
+    <Content Include="ICON\PNG\32.32\text_padding_top.png" />
+    <Content Include="ICON\PNG\32.32\text_pagination.png" />
+    <Content Include="ICON\PNG\32.32\text_pagination_100.png" />
+    <Content Include="ICON\PNG\32.32\text_prose.png" />
+    <Content Include="ICON\PNG\32.32\text_replace.png" />
+    <Content Include="ICON\PNG\32.32\text_resize.png" />
+    <Content Include="ICON\PNG\32.32\text_signature.png" />
+    <Content Include="ICON\PNG\32.32\text_smallcaps.png" />
+    <Content Include="ICON\PNG\32.32\text_strikethroungh.png" />
+    <Content Include="ICON\PNG\32.32\text_subscript.png" />
+    <Content Include="ICON\PNG\32.32\text_superscript.png" />
+    <Content Include="ICON\PNG\32.32\text_underline.png" />
+    <Content Include="ICON\PNG\32.32\text_uppercase.png" />
+    <Content Include="ICON\PNG\32.32\text_width.png" />
+    <Content Include="ICON\PNG\32.32\theater.png" />
+    <Content Include="ICON\PNG\32.32\things_beauty.png" />
+    <Content Include="ICON\PNG\32.32\things_digital.png" />
+    <Content Include="ICON\PNG\32.32\three_tags.png" />
+    <Content Include="ICON\PNG\32.32\thumb_down.png" />
+    <Content Include="ICON\PNG\32.32\thumb_up.png" />
     <Content Include="ICON\PNG\32.32\tick.png" />
+    <Content Include="ICON\PNG\32.32\tilelist.png" />
     <Content Include="ICON\PNG\32.32\time.png" />
     <Content Include="ICON\PNG\32.32\time_add.png" />
     <Content Include="ICON\PNG\32.32\tire.png" />

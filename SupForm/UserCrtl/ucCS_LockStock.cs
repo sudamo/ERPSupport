@@ -224,7 +224,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 OName = "锁库仓库";
             else
                 OName = "运算仓库";
-            CommFunction.DM_Log_Local("新增" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text, "1");
+            CommFunction.DM_Log_Local("新增" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text);
 
             //重新获取数据
             SetDataSource();
@@ -332,7 +332,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 OName = "锁库仓库";
             else
                 OName = "运算仓库";
-            CommFunction.DM_Log_Local("删除" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text, "1");
+            CommFunction.DM_Log_Local("删除" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text);
             //重新获取数据
             SetDataSource();
         }

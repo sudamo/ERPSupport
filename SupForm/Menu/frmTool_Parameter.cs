@@ -90,7 +90,7 @@ namespace ERPSupport.SupForm.Menu
 
             //操作日志
             string OContent = string.Format("LockType:{0}|IsUse:{1}|LockNumber:{2}|LockPercent:{3}|SafeStockDays:{4}|LogisticsDays:{5}|AddGoodsDays:{6}|LowGoods:{7}|MinBats:{8}|StarTime:{9}|EndTime:{10}|SumMoonths:{11}|AddJoinQty:{12}", LockType, IsUse, txtNumber.Text, txtPercent.Text, txtSafeStockDays.Text, txtLogisticsDays.Text, txtAddGoodsDays.Text, txtLowBook.Text, txtMinBats.Text, dtpStar.Value.ToString(), dtpEnd.Value.ToString(), txtSumDays.Text, AddJoinQty);
-            CommFunction.DM_Log_Local("参数设定", "菜单->工具->参数", OContent, "1");
+            CommFunction.DM_Log_Local("参数设定", "菜单->工具->参数", OContent);
 
             MessageBox.Show("保存成功");
             DialogResult = DialogResult.OK;

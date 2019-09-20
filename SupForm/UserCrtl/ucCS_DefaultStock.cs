@@ -173,7 +173,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 CommFunction.UpdateMStockSetting(FID, FName, FNameTran);
 
                 //操作日志
-                CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", bnTop_txtNumber.Text + ":[" + FName + "|" + FNameTran + "]", "1");
+                CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", bnTop_txtNumber.Text + ":[" + FName + "|" + FNameTran + "]");
             }
             MessageBox.Show("更新完成。");
             Search();
@@ -211,7 +211,7 @@ namespace ERPSupport.SupForm.UserCrtl
             CommFunction.DeleteMStockSetting(list);
 
             //操作日志
-            CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "删除[" + bnTop_txtNumber.Text + "]", "1");
+            CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "删除[" + bnTop_txtNumber.Text + "]");
 
             MessageBox.Show("删除完成。");
             Search();
@@ -221,7 +221,7 @@ namespace ERPSupport.SupForm.UserCrtl
             CommFunction.DelMStockSetting();
 
             //操作日志
-            CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "清除空值仓库", "1");
+            CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "清除空值仓库");
 
             MessageBox.Show("清除完成");
         }

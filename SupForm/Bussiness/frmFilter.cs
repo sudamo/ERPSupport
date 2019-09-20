@@ -63,6 +63,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         /// <param name="pListFilter">筛选条件</param>
         /// <param name="pFilterName">方案名称</param>
+        /// <param name="pFormID">单据标识</param>
         public frmFilter(List<Filter> pListFilter, string pFilterName, FormID pFormID)
         {
             InitializeComponent();
@@ -83,15 +84,7 @@ namespace ERPSupport.SupForm.Bussiness
             FillComboBox();
             SetComboBoxStatus();
             SetDataSource();
-            SeletRow();
-        }
-
-        /// <summary>
-        /// 设置方案数据源
-        /// </summary>
-        private void SetDataSource()
-        {
-            dgv1.DataSource = CommFunction.GetSolution(_FormID);
+            SelectedRow();
         }
 
         /// <summary>
@@ -432,9 +425,17 @@ namespace ERPSupport.SupForm.Bussiness
         }
 
         /// <summary>
+        /// 设置方案数据源
+        /// </summary>
+        private void SetDataSource()
+        {
+            dgv1.DataSource = CommFunction.GetSolution(_FormID);
+        }
+
+        /// <summary>
         /// 定位方案名
         /// </summary>
-        private void SeletRow()
+        private void SelectedRow()
         {
             if (_FilterName.Equals(string.Empty)) return;
             if (dgv1 == null || dgv1.Rows.Count == 0) return;
@@ -589,7 +590,7 @@ namespace ERPSupport.SupForm.Bussiness
                 _FilterName = frm.FilterName;
                 MessageBox.Show("保存成功");
                 SetDataSource();
-                SeletRow();
+                SelectedRow();
             }
         }
 

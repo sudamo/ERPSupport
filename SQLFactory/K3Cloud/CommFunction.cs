@@ -1383,8 +1383,8 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pOName">操作名称</param>
         /// <param name="pONavi">业务模块</param>
         /// <param name="pOContent">操作信息</param>
-        /// <param name="pFlag">标识</param>
-        public static void DM_Log_Local(string pOName, string pONavi, string pOContent, string pFlag)
+        /// <param name="pFlag">是否操作成功</param>
+        public static void DM_Log_Local(string pOName, string pONavi, string pOContent, string pFlag = "1")
         {
             if (!GlobalParameter.IsJournal)
                 return;

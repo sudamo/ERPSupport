@@ -217,7 +217,7 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 PrdAllocation.Syn_PPBom_FNeedDate(_dateFrom.Value, _dateTo.Value);
                 //操作日志
-                CommFunction.DM_Log_Local("同步需求日期", "配置\\单据信息调整", "时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd"), "1");
+                CommFunction.DM_Log_Local("同步需求日期", "配置\\单据信息调整", "时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd"));
             }
         }
 

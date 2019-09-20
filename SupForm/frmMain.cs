@@ -250,7 +250,7 @@ namespace ERPSupport.SupForm
 
             //-----
             GlobalParameter.LocalInf = new LocalInfo(CommFunction.GetLocalIP(), CommFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);//配置本地信息
-            CommFunction.DM_Log_Local("登录系统", "主窗口", "登录系统", "1");//登录日志
+            CommFunction.DM_Log_Local("登录系统", "主窗口", "登录系统");//登录日志
             //-----
             Text = "ERP辅助系统" + " - " + GlobalParameter.K3Inf.UserName;
         }
@@ -999,7 +999,7 @@ namespace ERPSupport.SupForm
                     BillNos += "[" + dtResult.Rows[i]["单号"].ToString() + "]";
                 }
 
-                CommFunction.DM_Log_Local("倒冲领料", "辅助功能\\倒冲领料", BillNos, "1");
+                CommFunction.DM_Log_Local("倒冲领料", "辅助功能\\倒冲领料", BillNos);
             }
             #endregion
 
@@ -1087,7 +1087,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //操作日志
-                CommFunction.DM_Log_Local("锁库", "辅助功能\\锁库", "请查看锁库日志", "1");
+                CommFunction.DM_Log_Local("锁库", "辅助功能\\锁库", "请查看锁库日志");
             }
             #endregion
 
@@ -1169,7 +1169,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //操作日志
-                CommFunction.DM_Log_Local("运算", "辅助功能\\运算", "请查看运算日志", "1");
+                CommFunction.DM_Log_Local("运算", "辅助功能\\运算", "请查看运算日志");
             }
             #endregion
         }
@@ -1181,7 +1181,7 @@ namespace ERPSupport.SupForm
             if (_FormId == FormID.PRD_PPBOM)//成品调拨
             {
                 frmCPDB frm = new frmCPDB();
-                frm.ShowDialog();
+                frm.Show(this);
             }
             else if (_FormId == FormID.SAL_SaleOrder)//销售订单解锁
             {
@@ -2966,7 +2966,7 @@ namespace ERPSupport.SupForm
         {
             if (MessageBox.Show("您确定要注销用户[" + GlobalParameter.K3Inf.UserName + "]吗？", "用户注销", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                CommFunction.DM_Log_Local("注销系统", "主窗口", "关闭主窗体并注销用户", "1");//日志
+                CommFunction.DM_Log_Local("注销系统", "主窗口", "关闭主窗体并注销用户");//日志
 
                 Dispose();
                 DialogResult = DialogResult.None;
@@ -3033,7 +3033,7 @@ namespace ERPSupport.SupForm
                 {
                     CommFunction.UpdateLockStatus(0, "PICKMTL");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除倒冲领料", "1");
+                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除倒冲领料");
                 }
             }
         }
@@ -3057,7 +3057,7 @@ namespace ERPSupport.SupForm
                 {
                     CommFunction.UpdateLockStatus(0, "TRANS");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除调拨", "1");
+                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除调拨");
                 }
             }
         }
@@ -3081,7 +3081,7 @@ namespace ERPSupport.SupForm
                 {
                     CommFunction.UpdateLockStatus(0, "LOCKSTOCK");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除锁库占用", "1");
+                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除锁库占用");
                 }
             }
         }
@@ -3105,7 +3105,7 @@ namespace ERPSupport.SupForm
                 {
                     CommFunction.UpdateLockStatus(0, "ORDERRUN");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除订单运算占用", "1");
+                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除订单运算占用");
                 }
             }
         }
@@ -3129,7 +3129,7 @@ namespace ERPSupport.SupForm
                 {
                     CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除自动领料", "1");
+                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除自动领料");
                 }
             }
         }
@@ -3171,7 +3171,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //操作日志
-                CommFunction.DM_Log_Local("定时器", "菜单->工具", "操作定时器", "1");
+                CommFunction.DM_Log_Local("定时器", "菜单->工具", "操作定时器");
             }
             //frmTime.Dispose();
         }
@@ -3319,7 +3319,7 @@ namespace ERPSupport.SupForm
             }
 
             //日志
-            CommFunction.DM_Log_Local("退出系统", "主窗口", "关闭主窗体并退出系统", "1");//日志
+            CommFunction.DM_Log_Local("退出系统", "主窗口", "关闭主窗体并退出系统");//日志
         }
 
         #region 定时器事件

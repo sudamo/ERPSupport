@@ -174,7 +174,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 }
                 strContent += "]";
             }
-            CommFunction.DM_Log_Local("用户管理", "系统管理\\用户管理", strContent, "1");
+            CommFunction.DM_Log_Local("用户管理", "系统管理\\用户管理", strContent);
             MessageBox.Show("保存成功！");
         }
 

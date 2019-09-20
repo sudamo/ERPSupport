@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace ERPSupport.Model.Enum
 {
     /// <summary>
-    /// 窗体标识
+    /// 单据标识
     /// </summary>
     public enum FormID : int
     {
