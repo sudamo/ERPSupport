@@ -133,6 +133,12 @@
     <Compile Include="Bussiness\frmCPDB.Designer.cs">
       <DependentUpon>frmCPDB.cs</DependentUpon>
     </Compile>
+    <Compile Include="Bussiness\frmCPDB_Push.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmCPDB_Push.Designer.cs">
+      <DependentUpon>frmCPDB_Push.cs</DependentUpon>
+    </Compile>
     <Compile Include="Bussiness\frmFilter.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -240,6 +246,7 @@
     <Compile Include="UserClass\AppConfig.cs" />
     <Compile Include="UserClass\DataGridViewAutoFilterColumnHeaderCell.cs" />
     <Compile Include="UserClass\DataGridViewAutoFilterTextBoxColumn.cs" />
+    <Compile Include="UserClass\DataGridViewControls.cs" />
     <Compile Include="UserClass\WinMessager.cs" />
     <Compile Include="UserCrtl\ToolStripDateTimePicker.cs">
       <SubType>Component</SubType>
@@ -345,6 +352,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmCPDB.resx">
       <DependentUpon>frmCPDB.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmCPDB_Push.resx">
+      <DependentUpon>frmCPDB_Push.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmFilter.resx">
       <DependentUpon>frmFilter.cs</DependentUpon>
@@ -514,9 +524,11 @@
     <Content Include="ICON\PNG\32.32\control_start_blue.png" />
     <Content Include="ICON\PNG\32.32\control_stop.png" />
     <Content Include="ICON\PNG\32.32\control_stop_blue.png" />
+    <Content Include="ICON\PNG\32.32\cross.png" />
     <Content Include="ICON\PNG\32.32\delete.png" />
     <Content Include="ICON\PNG\32.32\derivatives.png" />
     <Content Include="ICON\PNG\32.32\direction.png" />
+    <Content Include="ICON\PNG\32.32\exclamation.png" />
     <Content Include="ICON\PNG\32.32\information.png" />
     <Content Include="ICON\PNG\32.32\internet_explorer.png" />
     <Content Include="ICON\PNG\32.32\key.png" />

@@ -1063,13 +1063,13 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 成品调拨数据WMS
+        /// 成品调拨数据WMS-销售订单
         /// </summary>
         /// <param name="pFilter"></param>
         /// <returns></returns>
         public static DataTable GetTransForP(string pFilter)
         {
-            _SQL = @"SELECT O.* FROM
+            _SQL = @"SELECT 0 chb,O.* FROM
             (
             SELECT * FROM OPENQUERY(ERP_ORACLE,
             '";
@@ -1118,6 +1118,61 @@ namespace ERPSupport.SQL.K3Cloud
             HAVING O.锁库数量 + O.锁库调拨数量 - SUM(ISNULL(AE.FQTY,0)) > 0";
 
             return SQLHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 成品调拨数据WMS-发货通知单
+        /// </summary>
+        /// <param name="pList"></param>
+        /// <returns></returns>
+        public static DataTable GetTransForP(List<string> pList)
+        {
+            if (pList == null || pList.Count == 0)
+                return new DataTable();
+
+            string strBillNos = string.Empty;
+            for(int i=0;i<pList.Count;i++)
+            {
+                if (i > 0)
+                    strBillNos += ",";
+                strBillNos += "'" + pList[i] + "'";
+            }
+
+            _SQL = @"SELECT DISTINCT A.FBILLNO 订单编号,O.FDATE 订单日期,A.FOWNERID 货主ID,ORG.FNUMBER 货主代码,ORGL.FNAME 货主名称,A.FOWNERTYPEID 货主类型
+                ,AE.FMATERIALID 物料ID,MTL.FNUMBER 物料代码,MTLL.FNAME 物料名称,MTLB.FBASEUNITID 单位ID,UNT.FNUMBER 单位代码,UNTL.FNAME 单位名称,AE.FLOCKQTY 锁库数量,OE.F_PAEZ_LOCKALLOTQTY 锁库调拨数量,AE.FQTY 发货通知数量
+                ,MTL.F_PAEZ_SENDPERCENT 发料百分比,MTLS.F_PAEZ_FMINSENDQTY 最小发出数量,AE.FSHIPMENTSTOCKID 调出仓库ID,STK.FNUMBER 调出仓库代码,STKL.FNAME 调出仓库名称,CUST.FNUMBER 客户代码,CUSTL.FNAME 客户名称
+                ,NVL(ASS.FNUMBER,' ') 调拨类型,NVL(ASSL2.FDATAVALUE,' ') 启用批次,NVL(ASSL3.FDATAVALUE,' ') 启用序列号,NVL(ASSL4.FDATAVALUE,' ') 发货类别,NVL(ASSL5.FDATAVALUE,' ') 品牌,NVL(ASSL6.FDATAVALUE,' ') 系列,NVL(ASSL7.FDATAVALUE,' ') 商品名,NVL(ASSL8.FDATAVALUE,' ') 颜色,NVL(ASSL9.FDATAVALUE,' ') 车系,NVL(ASSL10.FDATAVALUE,' ') 车型
+                ,O.FID,OE.FENTRYID
+            FROM T_SAL_DELIVERYNOTICE A
+            INNER JOIN T_SAL_DELIVERYNOTICEENTRY AE ON A.FID = AE.FID
+            INNER JOIN T_SAL_DELIVERYNOTICEENTRY_E AEE ON AE.FENTRYID = AEE.FENTRYID
+            INNER JOIN T_SAL_ORDERENTRY OE ON AEE.FSOENTRYID = OE.FENTRYID
+            INNER JOIN T_SAL_ORDER O ON OE.FID = O.FID
+            INNER JOIN T_ORG_ORGANIZATIONS ORG ON A.FOWNERID = ORG.FORGID
+            INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+            INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID
+            INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
+            INNER JOIN T_BD_MATERIALSTOCK MTLS ON MTL.FMATERIALID = MTLS.FMATERIALID
+            INNER JOIN T_BD_MATERIALbase MTLB ON MTL.FMATERIALID = MTLB.FMATERIALID
+            INNER JOIN T_BD_UNIT UNT ON MTLB.FBASEUNITID = UNT.FUNITID
+            INNER JOIN T_BD_UNIT_L UNTL ON UNT.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
+            INNER JOIN T_BD_STOCK STK ON AE.FSHIPMENTSTOCKID = STK.FSTOCKID
+            INNER JOIN T_BD_STOCK_L STKL ON STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052
+            INNER JOIN T_BD_CUSTOMER CUST ON A.FCUSTOMERID = CUST.FCUSTID
+            INNER JOIN T_BD_CUSTOMER_L CUSTL ON CUST.FCUSTID = CUSTL.FCUSTID AND CUSTL.FLOCALEID = 2052 
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY ASS ON MTL.F_PAEZ_SENDTYPE = ASS.FENTRYID
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL2 ON MTL.F_ISBATCHMANAGER = ASSL2.FENTRYID AND ASSL2.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL3 ON MTL.F_ISSNMANAGER = ASSL3.FENTRYID AND ASSL3.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL4 ON O.FHEADDELIVERYWAY = ASSL4.FENTRYID AND ASSL4.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL5 ON MTL.F_PAEZ_BRAND = ASSL5.FENTRYID AND ASSL5.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL6 ON MTL.F_PAEZ_SERIES = ASSL6.FENTRYID AND ASSL6.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL7 ON MTL.F_PAEZ_TRADE = ASSL7.FENTRYID AND ASSL7.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL8 ON MTL.F_PAEZ_COLOR = ASSL8.FENTRYID AND ASSL8.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL9 ON MTL.F_PAEZ_CARSERIES = ASSL9.FENTRYID AND ASSL9.FLOCALEID = 2052
+            LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL10 ON MTL.F_PAEZ_CARTYPE = ASSL10.FENTRYID AND ASSL10.FLOCALEID = 2052
+            WHERE A.FBILLNO IN(" + strBillNos + ")";
+
+            return ORAHelper.ExecuteTable(_SQL);
         }
 
         /// <summary>
@@ -1703,7 +1758,7 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
-        /// 
+        /// 更新生产用料清单生成调拨单状态
         /// </summary>
         /// <param name="pMoBillNos">生产订单编号</param>
         /// <param name="pDir">是否生成调拨单</param>
@@ -1739,6 +1794,49 @@ namespace ERPSupport.SQL.K3Cloud
                 INNER JOIN T_AUTO_MSTOCKSETTING N ON A.FMATERIALID = N.FMATERIALID AND L.FDEPTID = N.FDEPTID
                 INNER JOIN T_BD_STOCK O ON N.FSTOCKID = O.FSTOCKID
                 WHERE (A.FPAEZHAVEDIRECT = 1 OR A.F_PAEZ_PICKTOWMS = 1) AND M.FNUMBER <> O.FNUMBER AND H.FBILLNO IN(" + pMoBillNos + ") GROUP BY J.FNUMBER,M.FNUMBER,O.FNUMBER,L.FNUMBER,A.FENTRYID)";
+
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 获取发货通知单信息
+        /// </summary>
+        /// <param name="pFDate"></param>
+        /// <param name="pFBillNo"></param>
+        /// <returns></returns>
+        public static DataTable GetNotice(DateTime pFDate, string pFBillNo)
+        {
+            _SQL = @"SELECT '删除' BTN,A.FDATE 日期,A.FBILLNO 单据编号,CASE A.FDOCUMENTSTATUS WHEN 'A' THEN '创建' WHEN 'B' THEN '审核中' WHEN 'C' THEN '已审核' WHEN 'D' THEN '重新审核' WHEN 'Z' THEN '暂存' END 数据状态,CUSTL.FNAME 客户,A.F_CONTACTS 联系人
+            FROM T_SAL_DELIVERYNOTICE A
+            INNER JOIN T_SAL_DELIVERYNOTICEENTRY AE ON A.FID = AE.FID
+            INNER JOIN T_BD_CUSTOMER_L CUSTL ON A.FCUSTOMERID = CUSTL.FCUSTID AND CUSTL.FLOCALEID = 2052";
+            if (pFBillNo.Trim().Equals(string.Empty))
+                _SQL += " WHERE TO_CHAR(A.FDATE,'YYYY-MM-DD') = '" + pFDate.ToString("yyyy-MM-dd") + "'";
+            else
+                _SQL += " WHERE A.FBILLNO = '" + pFBillNo + "'";
+            _SQL += " GROUP BY A.FDATE,A.FBILLNO,A.FDOCUMENTSTATUS,CUSTL.FNAME,A.F_CONTACTS HAVING SUM(CASE WHEN AE.FBASETRANSFERQTY > 0 THEN 1 ELSE 0 END) = 0 ORDER BY A.FBILLNO";
+
+            return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 反写发货通知单关联调拨数量
+        /// </summary>
+        /// <param name="pList"></param>
+        public static void UpdateNotice(List<string> pList)
+        {
+            string strBillNos = string.Empty;
+            for (int i = 0; i < pList.Count; i++)
+            {
+                if (i > 0)
+                    strBillNos += ",";
+                strBillNos += "'" + pList[i] + "'";
+            }
+
+            _SQL = @"BEGIN
+            UPDATE T_SAL_DELIVERYNOTICEENTRY SET FTRANSFERQTY = FQTY,FBASETRANSFERQTY = FQTY WHERE FID IN(SELECT FID FROM T_SAL_DELIVERYNOTICE WHERE FBILLNO IN(" + strBillNos + @"));
+            UPDATE T_SAL_DELIVERYNOTICEENTRY_E AEE SET FSTOCKBASETRANSQTY = (SELECT FQTY FROM T_SAL_DELIVERYNOTICEENTRY AE WHERE AEE.FENTRYID = AE.FENTRYID) WHERE FID IN(SELECT FID FROM T_SAL_DELIVERYNOTICE WHERE FBILLNO IN(" + strBillNos + @")) AND EXISTS (SELECT 1 FROM T_SAL_DELIVERYNOTICEENTRY AE WHERE AEE.FENTRYID = AE.FENTRYID);
+            END;";
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }

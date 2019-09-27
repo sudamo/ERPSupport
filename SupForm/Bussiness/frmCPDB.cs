@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data;
-using System.Drawing;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -9,6 +8,7 @@ namespace ERPSupport.SupForm.Bussiness
 {
     using SQL.K3Cloud;
     using Model.K3Cloud;
+    using UserClass;
 
     /// <summary>
     /// 成品调拨
@@ -59,6 +59,18 @@ namespace ERPSupport.SupForm.Bussiness
         /// 筛选条件
         /// </summary>
         private List<Filter> _ListFilter;
+        /// <summary>
+        /// 初次加载
+        /// </summary>
+        private bool _Load;
+        /// <summary>
+        /// DGV复选框列
+        /// </summary>
+        private DataGridViewCheckBoxColumn _Chb;
+        /// <summary>
+        /// DGV复选框列头
+        /// </summary>
+        private datagridviewCheckboxHeaderCell _Ch;
 
         /// <summary>
         /// 
@@ -77,29 +89,11 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void frmCPDB_Load(object sender, EventArgs e)
         {
-            FromSetting();
+            _Load = true;
+            _Chb = new DataGridViewCheckBoxColumn();
+
             FillComboBox();
             _PageSize = int.Parse(bn_cbxPageSize.ComboBox.SelectedValue.ToString());
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        private void FromSetting()
-        {
-            //-----
-            DataGridViewCheckBoxColumn newColumn = new DataGridViewCheckBoxColumn();
-            newColumn.HeaderText = "";
-            newColumn.Width = 20;
-            dgv1.Columns.Add(newColumn);
-
-            CheckBox ckBox = new CheckBox();
-            ckBox.Name = "chb1";
-            ckBox.Size = new Size(16, 16);
-            ckBox.Location = new Point(42, 2);
-            ckBox.Checked = false;
-            ckBox.CheckedChanged += new EventHandler(ckBox_CheckedChanged);
-            dgv1.Controls.Add(ckBox);
         }
 
         /// <summary>
@@ -179,11 +173,20 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="pType">Search,ChangePageSize OR Navi</param>
         private void DataSourceBinding(int pType)
         {
+            if (_Load)
+            {
+                _Chb.DataPropertyName = "chb";
+                dgv1.Columns.Add(_Chb);
+
+                _Load = false;
+            }
+
             if (_ListFilter.Count == 0)
             {
                 MessageBox.Show("请过滤单据");
                 return;
             }
+
             string strFilter = GetFilter();
             if (strFilter.Equals(string.Empty))
                 return;
@@ -231,6 +234,30 @@ namespace ERPSupport.SupForm.Bussiness
             bs1.DataSource = _DataTemp;
             bn1.BindingSource = bs1;
             dgv1.DataSource = bs1;
+
+            _Ch = new datagridviewCheckboxHeaderCell();
+            _Chb = dgv1.Columns[0] as DataGridViewCheckBoxColumn;
+            _Chb.Width = 35;
+            _Chb.DataPropertyName = "chb";
+            _Chb.HeaderCell = _Ch;
+            _Chb.HeaderCell.Value = "";
+            _Ch.OnCheckBoxClicked += ch_OnCheckBoxClicked;
+        }
+
+        /// <summary>
+        /// 勾选行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ch_OnCheckBoxClicked(object sender, datagridviewCheckboxHeaderEventArgs e)
+        {
+            if (dgv1 == null || dgv1.Rows.Count == 0)
+                return;
+
+            foreach (DataGridViewRow dr in dgv1.Rows)
+                dr.Cells[0].Value = e.CheckedState;
+
+            dgv1.EndEdit();
         }
 
         /// <summary>
@@ -249,22 +276,14 @@ namespace ERPSupport.SupForm.Bussiness
 
                 dgv1.Columns[10].Visible = false;
                 dgv1.Columns[13].Visible = false;
-                dgv1.Columns[14].Visible = false;
-                dgv1.Columns[19].Visible = false;
-                dgv1.Columns[20].Visible = false;
-
                 dgv1.Columns[21].Visible = false;
                 dgv1.Columns[22].Visible = false;
                 dgv1.Columns[24].Visible = false;
-                dgv1.Columns[26].Visible = false;
-                dgv1.Columns[27].Visible = false;
-
-                dgv1.Columns[28].Visible = false;
 
                 dgv1.Columns[36].Visible = false;
                 dgv1.Columns[37].Visible = false;
 
-                Controls.Find("chb1", true)[0].Location = new Point(dgv1.Columns[1].Width - 35, 2);
+                //Controls.Find("chb", true)[0].Location = new Point(dgv1.Columns[1].Width - 35, 2);
             }
         }
 
@@ -340,7 +359,22 @@ namespace ERPSupport.SupForm.Bussiness
                     Commit();
                     break;
                 case "3"://发货通知单下推成品调拨单
+                    if (bnTop_cbxDep.SelectedIndex == 0 || bnTop_cbxInStock.SelectedIndex == 0)
+                    {
+                        MessageBox.Show("请选择部门和调入仓库");
+                        return;
+                    }
 
+                    List<string> listParas = new List<string>();
+                    listParas.Add(bnTop_cbxDep.ComboBox.SelectedValue.ToString().Substring(bnTop_cbxDep.ComboBox.SelectedValue.ToString().IndexOf("|") + 1));
+                    listParas.Add(bnTop_cbxDep.ComboBox.SelectedValue.ToString().Substring(0, bnTop_cbxDep.ComboBox.SelectedValue.ToString().IndexOf("|")));
+                    listParas.Add(bnTop_cbxDep.ComboBox.Text);
+                    listParas.Add(bnTop_cbxInStock.ComboBox.SelectedValue.ToString().Substring(bnTop_cbxInStock.ComboBox.SelectedValue.ToString().IndexOf("|") + 1));
+                    listParas.Add(bnTop_cbxInStock.ComboBox.SelectedValue.ToString().Substring(0, bnTop_cbxInStock.ComboBox.SelectedValue.ToString().IndexOf("|")));
+                    listParas.Add(bnTop_cbxInStock.Text);
+
+                    frmCPDB_Push frmPush = new frmCPDB_Push(listParas);
+                    frmPush.Show(this);
                     break;
             }
         }
@@ -693,74 +727,6 @@ namespace ERPSupport.SupForm.Bussiness
                 default:
                     return;
             }
-
-            //if (e.ClickedItem.Text == "FIRST")
-            //{
-            //    if (_CurrentPage <= 1)
-            //    {
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        _CurrentPage = 1;
-            //    }
-            //}
-            //else if (e.ClickedItem.Text == "PREVIOUS")
-            //{
-            //    if (_CurrentPage <= 1)
-            //    {
-            //        //MessageBox.Show("已经是第一页，请点击“下一页”查看！");
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        _CurrentPage--;
-            //    }
-            //}
-            //else if (e.ClickedItem.Text == "GOTO")
-            //{
-            //    _reg = new Regex(@"^[0-9]*[1-9][0-9]*$");
-
-            //    if (!_reg.IsMatch(bn_txtCurrentPage.Text))
-            //    {
-            //        MessageBox.Show("输入的页码格式不正确！");
-            //        bn_txtCurrentPage.Focus();
-            //        bn_txtCurrentPage.Text = _PageCount.ToString();
-            //        bn_txtCurrentPage.Select(0, bn_txtCurrentPage.Text.Length);
-            //        return;
-            //    }
-            //    if (int.Parse(bn_txtCurrentPage.Text) > _PageCount)
-            //    {
-            //        MessageBox.Show("跳转页超过了总页数！");
-            //        return;
-            //    }
-            //    _CurrentPage = int.Parse(bn_txtCurrentPage.Text);
-            //}
-            //else if (e.ClickedItem.Text == "NEXT")
-            //{
-            //    if (_CurrentPage >= _PageCount)
-            //    {
-            //        //MessageBox.Show("已经是最后一页，请点击“上一页”查看！");
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        _CurrentPage++;
-            //    }
-            //}
-            //else if (e.ClickedItem.Text == "LAST")
-            //{
-            //    if (_CurrentPage >= _PageCount)
-            //    {
-            //        return;
-            //    }
-            //    else
-            //    {
-            //        _CurrentPage = _PageCount;
-            //    }
-            //}
-            //else
-            //    return;
 
             //控制按钮颜色
             if (_PageCount == 1)
