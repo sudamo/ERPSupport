@@ -314,7 +314,7 @@
             this.bnTop.Name = "bnTop";
             this.bnTop.PositionItem = null;
             this.bnTop.Size = new System.Drawing.Size(1231, 27);
-            this.bnTop.TabIndex = 20;
+            this.bnTop.TabIndex = 0;
             this.bnTop.Text = "bnTop";
             this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
             // 
@@ -411,7 +411,7 @@
             this.dgv1.RowTemplate.Height = 27;
             this.dgv1.ShowEditingIcon = false;
             this.dgv1.Size = new System.Drawing.Size(1227, 824);
-            this.dgv1.TabIndex = 18;
+            this.dgv1.TabIndex = 1;
             this.dgv1.RowHeadersWidthChanged += new System.EventHandler(this.dgv1_RowHeadersWidthChanged);
             this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
             // 

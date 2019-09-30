@@ -123,7 +123,7 @@
             this.bn1.Name = "bn1";
             this.bn1.PositionItem = null;
             this.bn1.Size = new System.Drawing.Size(1179, 28);
-            this.bn1.TabIndex = 22;
+            this.bn1.TabIndex = 2;
             this.bn1.Text = "bindingNavigator1";
             this.bn1.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bn1_ItemClicked);
             // 
@@ -280,7 +280,7 @@
             this.bnTop.Name = "bnTop";
             this.bnTop.PositionItem = null;
             this.bnTop.Size = new System.Drawing.Size(1179, 28);
-            this.bnTop.TabIndex = 23;
+            this.bnTop.TabIndex = 0;
             this.bnTop.Text = "bindingNavigator1";
             this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
             // 

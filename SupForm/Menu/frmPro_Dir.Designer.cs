@@ -35,7 +35,10 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.gbxDB_WMS = new System.Windows.Forms.GroupBox();
+            this.btnCheckConnect = new System.Windows.Forms.Button();
+            this.rbtOracle = new System.Windows.Forms.RadioButton();
             this.txtPWD = new System.Windows.Forms.TextBox();
+            this.rbtSQL = new System.Windows.Forms.RadioButton();
             this.txtUser = new System.Windows.Forms.TextBox();
             this.txtCatalog = new System.Windows.Forms.TextBox();
             this.txtIP = new System.Windows.Forms.TextBox();
@@ -70,9 +73,6 @@
             this.cbxDepartment = new System.Windows.Forms.ComboBox();
             this.lblStock = new System.Windows.Forms.Label();
             this.lblDepartment = new System.Windows.Forms.Label();
-            this.rbtSQL = new System.Windows.Forms.RadioButton();
-            this.rbtOracle = new System.Windows.Forms.RadioButton();
-            this.btnCheckConnect = new System.Windows.Forms.Button();
             this.gbxDirType.SuspendLayout();
             this.gbxDB_WMS.SuspendLayout();
             this.gbxPenZi.SuspendLayout();
@@ -86,11 +86,11 @@
             this.gbxDirType.Controls.Add(this.rbtERP);
             this.gbxDirType.Enabled = false;
             this.gbxDirType.Location = new System.Drawing.Point(371, 15);
-            this.gbxDirType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxDirType.Margin = new System.Windows.Forms.Padding(4);
             this.gbxDirType.Name = "gbxDirType";
-            this.gbxDirType.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxDirType.Padding = new System.Windows.Forms.Padding(4);
             this.gbxDirType.Size = new System.Drawing.Size(300, 62);
-            this.gbxDirType.TabIndex = 0;
+            this.gbxDirType.TabIndex = 1;
             this.gbxDirType.TabStop = false;
             this.gbxDirType.Text = "调拨方向";
             // 
@@ -99,10 +99,10 @@
             this.rbtWMS.AutoSize = true;
             this.rbtWMS.Checked = true;
             this.rbtWMS.Location = new System.Drawing.Point(160, 25);
-            this.rbtWMS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbtWMS.Margin = new System.Windows.Forms.Padding(4);
             this.rbtWMS.Name = "rbtWMS";
             this.rbtWMS.Size = new System.Drawing.Size(52, 19);
-            this.rbtWMS.TabIndex = 0;
+            this.rbtWMS.TabIndex = 1;
             this.rbtWMS.TabStop = true;
             this.rbtWMS.Text = "WMS";
             this.rbtWMS.UseVisualStyleBackColor = true;
@@ -111,7 +111,7 @@
             // 
             this.rbtERP.AutoSize = true;
             this.rbtERP.Location = new System.Drawing.Point(53, 25);
-            this.rbtERP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbtERP.Margin = new System.Windows.Forms.Padding(4);
             this.rbtERP.Name = "rbtERP";
             this.rbtERP.Size = new System.Drawing.Size(52, 19);
             this.rbtERP.TabIndex = 0;
@@ -121,10 +121,10 @@
             // btnSave
             // 
             this.btnSave.Location = new System.Drawing.Point(243, 411);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 29);
-            this.btnSave.TabIndex = 1;
+            this.btnSave.TabIndex = 5;
             this.btnSave.Text = "确定(&OK)";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -132,10 +132,10 @@
             // btnCancel
             // 
             this.btnCancel.Location = new System.Drawing.Point(371, 411);
-            this.btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(100, 29);
-            this.btnCancel.TabIndex = 1;
+            this.btnCancel.TabIndex = 6;
             this.btnCancel.Text = "取消(&C)";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -154,46 +154,82 @@
             this.gbxDB_WMS.Controls.Add(this.lblCatalog);
             this.gbxDB_WMS.Controls.Add(this.lblIP);
             this.gbxDB_WMS.Location = new System.Drawing.Point(16, 15);
-            this.gbxDB_WMS.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxDB_WMS.Margin = new System.Windows.Forms.Padding(4);
             this.gbxDB_WMS.Name = "gbxDB_WMS";
-            this.gbxDB_WMS.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxDB_WMS.Padding = new System.Windows.Forms.Padding(4);
             this.gbxDB_WMS.Size = new System.Drawing.Size(327, 238);
-            this.gbxDB_WMS.TabIndex = 2;
+            this.gbxDB_WMS.TabIndex = 0;
             this.gbxDB_WMS.TabStop = false;
             this.gbxDB_WMS.Text = "WMS数据库配置";
+            // 
+            // btnCheckConnect
+            // 
+            this.btnCheckConnect.Location = new System.Drawing.Point(72, 201);
+            this.btnCheckConnect.Name = "btnCheckConnect";
+            this.btnCheckConnect.Size = new System.Drawing.Size(100, 30);
+            this.btnCheckConnect.TabIndex = 6;
+            this.btnCheckConnect.Text = "测试连接";
+            this.btnCheckConnect.UseVisualStyleBackColor = true;
+            this.btnCheckConnect.Click += new System.EventHandler(this.btnCheckConnect_Click);
+            // 
+            // rbtOracle
+            // 
+            this.rbtOracle.AutoSize = true;
+            this.rbtOracle.Enabled = false;
+            this.rbtOracle.Location = new System.Drawing.Point(179, 25);
+            this.rbtOracle.Margin = new System.Windows.Forms.Padding(4);
+            this.rbtOracle.Name = "rbtOracle";
+            this.rbtOracle.Size = new System.Drawing.Size(76, 19);
+            this.rbtOracle.TabIndex = 1;
+            this.rbtOracle.Text = "Oracle";
+            this.rbtOracle.UseVisualStyleBackColor = true;
             // 
             // txtPWD
             // 
             this.txtPWD.Location = new System.Drawing.Point(72, 166);
-            this.txtPWD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtPWD.Margin = new System.Windows.Forms.Padding(4);
             this.txtPWD.Name = "txtPWD";
             this.txtPWD.PasswordChar = '*';
             this.txtPWD.Size = new System.Drawing.Size(235, 25);
-            this.txtPWD.TabIndex = 1;
+            this.txtPWD.TabIndex = 5;
+            // 
+            // rbtSQL
+            // 
+            this.rbtSQL.AutoSize = true;
+            this.rbtSQL.Checked = true;
+            this.rbtSQL.Enabled = false;
+            this.rbtSQL.Location = new System.Drawing.Point(72, 25);
+            this.rbtSQL.Margin = new System.Windows.Forms.Padding(4);
+            this.rbtSQL.Name = "rbtSQL";
+            this.rbtSQL.Size = new System.Drawing.Size(100, 19);
+            this.rbtSQL.TabIndex = 0;
+            this.rbtSQL.TabStop = true;
+            this.rbtSQL.Text = "SQLServer";
+            this.rbtSQL.UseVisualStyleBackColor = true;
             // 
             // txtUser
             // 
             this.txtUser.Location = new System.Drawing.Point(72, 132);
-            this.txtUser.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtUser.Margin = new System.Windows.Forms.Padding(4);
             this.txtUser.Name = "txtUser";
             this.txtUser.Size = new System.Drawing.Size(235, 25);
-            this.txtUser.TabIndex = 1;
+            this.txtUser.TabIndex = 4;
             // 
             // txtCatalog
             // 
             this.txtCatalog.Location = new System.Drawing.Point(72, 99);
-            this.txtCatalog.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtCatalog.Margin = new System.Windows.Forms.Padding(4);
             this.txtCatalog.Name = "txtCatalog";
             this.txtCatalog.Size = new System.Drawing.Size(235, 25);
-            this.txtCatalog.TabIndex = 1;
+            this.txtCatalog.TabIndex = 3;
             // 
             // txtIP
             // 
             this.txtIP.Location = new System.Drawing.Point(72, 65);
-            this.txtIP.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtIP.Margin = new System.Windows.Forms.Padding(4);
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(235, 25);
-            this.txtIP.TabIndex = 1;
+            this.txtIP.TabIndex = 2;
             // 
             // lblPWD
             // 
@@ -255,7 +291,7 @@
             this.gbxPenZi.Name = "gbxPenZi";
             this.gbxPenZi.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbxPenZi.Size = new System.Drawing.Size(300, 169);
-            this.gbxPenZi.TabIndex = 3;
+            this.gbxPenZi.TabIndex = 2;
             this.gbxPenZi.TabStop = false;
             this.gbxPenZi.Text = "盆子调拨设置";
             // 
@@ -283,7 +319,7 @@
             this.txtMinQtyPZ.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtMinQtyPZ.Name = "txtMinQtyPZ";
             this.txtMinQtyPZ.Size = new System.Drawing.Size(80, 25);
-            this.txtMinQtyPZ.TabIndex = 11;
+            this.txtMinQtyPZ.TabIndex = 4;
             // 
             // txtDPQtyPZ
             // 
@@ -291,7 +327,7 @@
             this.txtDPQtyPZ.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtDPQtyPZ.Name = "txtDPQtyPZ";
             this.txtDPQtyPZ.Size = new System.Drawing.Size(80, 25);
-            this.txtDPQtyPZ.TabIndex = 12;
+            this.txtDPQtyPZ.TabIndex = 3;
             // 
             // lblMin
             // 
@@ -336,7 +372,7 @@
             this.chbIsUsePZ.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chbIsUsePZ.Name = "chbIsUsePZ";
             this.chbIsUsePZ.Size = new System.Drawing.Size(59, 19);
-            this.chbIsUsePZ.TabIndex = 2;
+            this.chbIsUsePZ.TabIndex = 0;
             this.chbIsUsePZ.Text = "启用";
             this.chbIsUsePZ.UseVisualStyleBackColor = true;
             this.chbIsUsePZ.CheckedChanged += new System.EventHandler(this.chbIsUse_CheckedChanged);
@@ -347,7 +383,7 @@
             this.txtPianYiPZ.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPianYiPZ.Name = "txtPianYiPZ";
             this.txtPianYiPZ.Size = new System.Drawing.Size(80, 25);
-            this.txtPianYiPZ.TabIndex = 1;
+            this.txtPianYiPZ.TabIndex = 2;
             this.txtPianYiPZ.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // txtMaxQtyPZ
@@ -392,7 +428,7 @@
             this.gbxCaiLiao.Name = "gbxCaiLiao";
             this.gbxCaiLiao.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbxCaiLiao.Size = new System.Drawing.Size(300, 112);
-            this.gbxCaiLiao.TabIndex = 6;
+            this.gbxCaiLiao.TabIndex = 3;
             this.gbxCaiLiao.TabStop = false;
             this.gbxCaiLiao.Text = "材料调拨设置";
             // 
@@ -421,7 +457,7 @@
             this.chbIsUseCL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.chbIsUseCL.Name = "chbIsUseCL";
             this.chbIsUseCL.Size = new System.Drawing.Size(59, 19);
-            this.chbIsUseCL.TabIndex = 7;
+            this.chbIsUseCL.TabIndex = 0;
             this.chbIsUseCL.Text = "启用";
             this.chbIsUseCL.UseVisualStyleBackColor = true;
             this.chbIsUseCL.CheckedChanged += new System.EventHandler(this.chbIsUseCL_CheckedChanged);
@@ -432,7 +468,7 @@
             this.txtPianYiCL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtPianYiCL.Name = "txtPianYiCL";
             this.txtPianYiCL.Size = new System.Drawing.Size(81, 25);
-            this.txtPianYiCL.TabIndex = 5;
+            this.txtPianYiCL.TabIndex = 2;
             this.txtPianYiCL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // txtMaxQtyCL
@@ -441,7 +477,7 @@
             this.txtMaxQtyCL.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.txtMaxQtyCL.Name = "txtMaxQtyCL";
             this.txtMaxQtyCL.Size = new System.Drawing.Size(81, 25);
-            this.txtMaxQtyCL.TabIndex = 6;
+            this.txtMaxQtyCL.TabIndex = 1;
             this.txtMaxQtyCL.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress);
             // 
             // lblPianYiCL
@@ -469,11 +505,11 @@
             this.gbxCPDB_Default.Controls.Add(this.lblStock);
             this.gbxCPDB_Default.Controls.Add(this.lblDepartment);
             this.gbxCPDB_Default.Location = new System.Drawing.Point(16, 261);
-            this.gbxCPDB_Default.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxCPDB_Default.Margin = new System.Windows.Forms.Padding(4);
             this.gbxCPDB_Default.Name = "gbxCPDB_Default";
-            this.gbxCPDB_Default.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxCPDB_Default.Padding = new System.Windows.Forms.Padding(4);
             this.gbxCPDB_Default.Size = new System.Drawing.Size(327, 112);
-            this.gbxCPDB_Default.TabIndex = 0;
+            this.gbxCPDB_Default.TabIndex = 4;
             this.gbxCPDB_Default.TabStop = false;
             this.gbxCPDB_Default.Text = "成品调拨默认参数";
             // 
@@ -482,7 +518,7 @@
             this.cbxStock.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxStock.FormattingEnabled = true;
             this.cbxStock.Location = new System.Drawing.Point(103, 73);
-            this.cbxStock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbxStock.Margin = new System.Windows.Forms.Padding(4);
             this.cbxStock.Name = "cbxStock";
             this.cbxStock.Size = new System.Drawing.Size(203, 23);
             this.cbxStock.TabIndex = 1;
@@ -492,10 +528,10 @@
             this.cbxDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDepartment.FormattingEnabled = true;
             this.cbxDepartment.Location = new System.Drawing.Point(103, 41);
-            this.cbxDepartment.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbxDepartment.Margin = new System.Windows.Forms.Padding(4);
             this.cbxDepartment.Name = "cbxDepartment";
             this.cbxDepartment.Size = new System.Drawing.Size(203, 23);
-            this.cbxDepartment.TabIndex = 1;
+            this.cbxDepartment.TabIndex = 0;
             // 
             // lblStock
             // 
@@ -517,42 +553,6 @@
             this.lblDepartment.TabIndex = 0;
             this.lblDepartment.Text = "调入部门：";
             // 
-            // rbtSQL
-            // 
-            this.rbtSQL.AutoSize = true;
-            this.rbtSQL.Checked = true;
-            this.rbtSQL.Enabled = false;
-            this.rbtSQL.Location = new System.Drawing.Point(72, 25);
-            this.rbtSQL.Margin = new System.Windows.Forms.Padding(4);
-            this.rbtSQL.Name = "rbtSQL";
-            this.rbtSQL.Size = new System.Drawing.Size(100, 19);
-            this.rbtSQL.TabIndex = 0;
-            this.rbtSQL.TabStop = true;
-            this.rbtSQL.Text = "SQLServer";
-            this.rbtSQL.UseVisualStyleBackColor = true;
-            // 
-            // rbtOracle
-            // 
-            this.rbtOracle.AutoSize = true;
-            this.rbtOracle.Enabled = false;
-            this.rbtOracle.Location = new System.Drawing.Point(179, 25);
-            this.rbtOracle.Margin = new System.Windows.Forms.Padding(4);
-            this.rbtOracle.Name = "rbtOracle";
-            this.rbtOracle.Size = new System.Drawing.Size(76, 19);
-            this.rbtOracle.TabIndex = 0;
-            this.rbtOracle.Text = "Oracle";
-            this.rbtOracle.UseVisualStyleBackColor = true;
-            // 
-            // btnCheckConnect
-            // 
-            this.btnCheckConnect.Location = new System.Drawing.Point(72, 201);
-            this.btnCheckConnect.Name = "btnCheckConnect";
-            this.btnCheckConnect.Size = new System.Drawing.Size(100, 30);
-            this.btnCheckConnect.TabIndex = 2;
-            this.btnCheckConnect.Text = "测试连接";
-            this.btnCheckConnect.UseVisualStyleBackColor = true;
-            this.btnCheckConnect.Click += new System.EventHandler(this.btnCheckConnect_Click);
-            // 
             // frmPro_Dir
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
@@ -567,7 +567,7 @@
             this.Controls.Add(this.gbxCPDB_Default);
             this.Controls.Add(this.gbxDirType);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximumSize = new System.Drawing.Size(700, 500);
             this.MinimumSize = new System.Drawing.Size(700, 500);
             this.Name = "frmPro_Dir";

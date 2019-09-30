@@ -32,12 +32,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCPDB_Push));
             this.dgv1 = new System.Windows.Forms.DataGridView();
             this.bnBottom = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnBottom_lblDate = new System.Windows.Forms.ToolStripLabel();
+            this.bnBottom_lblBillNo = new System.Windows.Forms.ToolStripLabel();
+            this.bnBottom_txtBillNo = new System.Windows.Forms.ToolStripTextBox();
             this.bnBottom_btnSearch = new System.Windows.Forms.ToolStripButton();
             this.bnBottom_btnClose = new System.Windows.Forms.ToolStripButton();
             this.bnBottom_btnPush = new System.Windows.Forms.ToolStripButton();
-            this.bnBottom_lblBillNo = new System.Windows.Forms.ToolStripLabel();
-            this.bnBottom_txtBillNo = new System.Windows.Forms.ToolStripTextBox();
-            this.bnBottom_lblDate = new System.Windows.Forms.ToolStripLabel();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).BeginInit();
             this.bnBottom.SuspendLayout();
@@ -57,8 +57,8 @@
             this.dgv1.Name = "dgv1";
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv1.RowTemplate.Height = 23;
-            this.dgv1.Size = new System.Drawing.Size(756, 509);
-            this.dgv1.TabIndex = 61;
+            this.dgv1.Size = new System.Drawing.Size(956, 480);
+            this.dgv1.TabIndex = 0;
             this.dgv1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv1_CellContentClick);
             // 
             // bnBottom
@@ -83,9 +83,27 @@
             this.bnBottom.MovePreviousItem = null;
             this.bnBottom.Name = "bnBottom";
             this.bnBottom.PositionItem = null;
-            this.bnBottom.Size = new System.Drawing.Size(782, 27);
-            this.bnBottom.TabIndex = 62;
+            this.bnBottom.Size = new System.Drawing.Size(982, 27);
+            this.bnBottom.TabIndex = 1;
             this.bnBottom.Text = "bnTop";
+            // 
+            // bnBottom_lblDate
+            // 
+            this.bnBottom_lblDate.Name = "bnBottom_lblDate";
+            this.bnBottom_lblDate.Size = new System.Drawing.Size(54, 24);
+            this.bnBottom_lblDate.Text = "日期：";
+            // 
+            // bnBottom_lblBillNo
+            // 
+            this.bnBottom_lblBillNo.Name = "bnBottom_lblBillNo";
+            this.bnBottom_lblBillNo.Size = new System.Drawing.Size(114, 24);
+            this.bnBottom_lblBillNo.Text = "发后通知单号：";
+            // 
+            // bnBottom_txtBillNo
+            // 
+            this.bnBottom_txtBillNo.Name = "bnBottom_txtBillNo";
+            this.bnBottom_txtBillNo.Size = new System.Drawing.Size(120, 27);
+            this.bnBottom_txtBillNo.ToolTipText = "如果输入通知单号，只根据单号查询。";
             // 
             // bnBottom_btnSearch
             // 
@@ -110,7 +128,6 @@
             // 
             // bnBottom_btnPush
             // 
-            this.bnBottom_btnPush.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.bnBottom_btnPush.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_right;
             this.bnBottom_btnPush.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnPush.Name = "bnBottom_btnPush";
@@ -119,33 +136,16 @@
             this.bnBottom_btnPush.ToolTipText = "根据所选发货通知单下推调拨单";
             this.bnBottom_btnPush.Click += new System.EventHandler(this.bnBottom_btnPush_Click);
             // 
-            // bnBottom_lblBillNo
-            // 
-            this.bnBottom_lblBillNo.Name = "bnBottom_lblBillNo";
-            this.bnBottom_lblBillNo.Size = new System.Drawing.Size(114, 24);
-            this.bnBottom_lblBillNo.Text = "发后通知单号：";
-            // 
-            // bnBottom_txtBillNo
-            // 
-            this.bnBottom_txtBillNo.Name = "bnBottom_txtBillNo";
-            this.bnBottom_txtBillNo.Size = new System.Drawing.Size(120, 27);
-            // 
-            // bnBottom_lblDate
-            // 
-            this.bnBottom_lblDate.Name = "bnBottom_lblDate";
-            this.bnBottom_lblDate.Size = new System.Drawing.Size(54, 24);
-            this.bnBottom_lblDate.Text = "日期：";
-            // 
             // frmCPDB_Push
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(782, 553);
+            this.ClientSize = new System.Drawing.Size(982, 553);
             this.ControlBox = false;
             this.Controls.Add(this.bnBottom);
             this.Controls.Add(this.dgv1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(800, 600);
+            this.MaximumSize = new System.Drawing.Size(1000, 600);
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "frmCPDB_Push";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

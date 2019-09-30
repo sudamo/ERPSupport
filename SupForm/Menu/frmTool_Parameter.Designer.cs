@@ -86,11 +86,11 @@
             this.gbxOrderRun.Controls.Add(this.plOther);
             this.gbxOrderRun.Controls.Add(this.plMaterial);
             this.gbxOrderRun.Location = new System.Drawing.Point(12, 220);
-            this.gbxOrderRun.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxOrderRun.Margin = new System.Windows.Forms.Padding(4);
             this.gbxOrderRun.Name = "gbxOrderRun";
-            this.gbxOrderRun.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxOrderRun.Padding = new System.Windows.Forms.Padding(4);
             this.gbxOrderRun.Size = new System.Drawing.Size(633, 242);
-            this.gbxOrderRun.TabIndex = 10;
+            this.gbxOrderRun.TabIndex = 1;
             this.gbxOrderRun.TabStop = false;
             this.gbxOrderRun.Text = "订单运算参数";
             // 
@@ -108,19 +108,19 @@
             this.plOther.Controls.Add(this.txtSumDays);
             this.plOther.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plOther.Location = new System.Drawing.Point(323, 22);
-            this.plOther.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plOther.Margin = new System.Windows.Forms.Padding(4);
             this.plOther.Name = "plOther";
             this.plOther.Size = new System.Drawing.Size(306, 216);
-            this.plOther.TabIndex = 17;
+            this.plOther.TabIndex = 1;
             // 
             // chbJoin
             // 
             this.chbJoin.AutoSize = true;
             this.chbJoin.Location = new System.Drawing.Point(56, 145);
-            this.chbJoin.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chbJoin.Margin = new System.Windows.Forms.Padding(4);
             this.chbJoin.Name = "chbJoin";
             this.chbJoin.Size = new System.Drawing.Size(187, 19);
-            this.chbJoin.TabIndex = 22;
+            this.chbJoin.TabIndex = 3;
             this.chbJoin.Text = "采购/生产数量参与运算";
             this.tt.SetToolTip(this.chbJoin, "勾选表示采购生产数量参与销售订单运算，否则不参与。");
             this.chbJoin.UseVisualStyleBackColor = true;
@@ -128,10 +128,10 @@
             // btnInport
             // 
             this.btnInport.Location = new System.Drawing.Point(56, 176);
-            this.btnInport.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnInport.Margin = new System.Windows.Forms.Padding(4);
             this.btnInport.Name = "btnInport";
             this.btnInport.Size = new System.Drawing.Size(209, 29);
-            this.btnInport.TabIndex = 21;
+            this.btnInport.TabIndex = 4;
             this.btnInport.Text = "导入物料选项参数";
             this.tt.SetToolTip(this.btnInport, "批量导入物料选项参数。");
             this.btnInport.UseVisualStyleBackColor = true;
@@ -141,20 +141,20 @@
             // 
             this.dtpEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpEnd.Location = new System.Drawing.Point(132, 74);
-            this.dtpEnd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpEnd.Margin = new System.Windows.Forms.Padding(4);
             this.dtpEnd.Name = "dtpEnd";
             this.dtpEnd.Size = new System.Drawing.Size(132, 25);
-            this.dtpEnd.TabIndex = 19;
+            this.dtpEnd.TabIndex = 1;
             this.dtpEnd.ValueChanged += new System.EventHandler(this.dtpEnd_ValueChanged);
             // 
             // dtpStar
             // 
             this.dtpStar.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dtpStar.Location = new System.Drawing.Point(132, 40);
-            this.dtpStar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dtpStar.Margin = new System.Windows.Forms.Padding(4);
             this.dtpStar.Name = "dtpStar";
             this.dtpStar.Size = new System.Drawing.Size(132, 25);
-            this.dtpStar.TabIndex = 18;
+            this.dtpStar.TabIndex = 0;
             this.dtpStar.ValueChanged += new System.EventHandler(this.dtpStar_ValueChanged);
             // 
             // lblSumDays
@@ -201,10 +201,10 @@
             // 
             this.txtSumDays.Enabled = false;
             this.txtSumDays.Location = new System.Drawing.Point(132, 111);
-            this.txtSumDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSumDays.Margin = new System.Windows.Forms.Padding(4);
             this.txtSumDays.Name = "txtSumDays";
             this.txtSumDays.Size = new System.Drawing.Size(79, 25);
-            this.txtSumDays.TabIndex = 20;
+            this.txtSumDays.TabIndex = 2;
             this.txtSumDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
             // plMaterial
@@ -224,10 +224,10 @@
             this.plMaterial.Dock = System.Windows.Forms.DockStyle.Left;
             this.plMaterial.Enabled = false;
             this.plMaterial.Location = new System.Drawing.Point(4, 22);
-            this.plMaterial.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plMaterial.Margin = new System.Windows.Forms.Padding(4);
             this.plMaterial.Name = "plMaterial";
             this.plMaterial.Size = new System.Drawing.Size(319, 216);
-            this.plMaterial.TabIndex = 11;
+            this.plMaterial.TabIndex = 0;
             // 
             // lblMinBats
             // 
@@ -252,10 +252,10 @@
             // txtMinBats
             // 
             this.txtMinBats.Location = new System.Drawing.Point(143, 179);
-            this.txtMinBats.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtMinBats.Margin = new System.Windows.Forms.Padding(4);
             this.txtMinBats.Name = "txtMinBats";
             this.txtMinBats.Size = new System.Drawing.Size(79, 25);
-            this.txtMinBats.TabIndex = 16;
+            this.txtMinBats.TabIndex = 4;
             this.txtMinBats.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Float);
             // 
             // lblAddGoodsDays
@@ -271,10 +271,10 @@
             // txtLowBook
             // 
             this.txtLowBook.Location = new System.Drawing.Point(143, 145);
-            this.txtLowBook.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtLowBook.Margin = new System.Windows.Forms.Padding(4);
             this.txtLowBook.Name = "txtLowBook";
             this.txtLowBook.Size = new System.Drawing.Size(79, 25);
-            this.txtLowBook.TabIndex = 15;
+            this.txtLowBook.TabIndex = 3;
             this.txtLowBook.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Float);
             // 
             // lblLogisticsDays
@@ -290,10 +290,10 @@
             // txtAddGoodsDays
             // 
             this.txtAddGoodsDays.Location = new System.Drawing.Point(143, 111);
-            this.txtAddGoodsDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtAddGoodsDays.Margin = new System.Windows.Forms.Padding(4);
             this.txtAddGoodsDays.Name = "txtAddGoodsDays";
             this.txtAddGoodsDays.Size = new System.Drawing.Size(79, 25);
-            this.txtAddGoodsDays.TabIndex = 14;
+            this.txtAddGoodsDays.TabIndex = 2;
             this.txtAddGoodsDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
             // lblSafeStockDays
@@ -309,10 +309,10 @@
             // txtLogisticsDays
             // 
             this.txtLogisticsDays.Location = new System.Drawing.Point(143, 78);
-            this.txtLogisticsDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtLogisticsDays.Margin = new System.Windows.Forms.Padding(4);
             this.txtLogisticsDays.Name = "txtLogisticsDays";
             this.txtLogisticsDays.Size = new System.Drawing.Size(79, 25);
-            this.txtLogisticsDays.TabIndex = 13;
+            this.txtLogisticsDays.TabIndex = 1;
             this.txtLogisticsDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
             // lblMaterial
@@ -329,10 +329,10 @@
             // txtSafeStockDays
             // 
             this.txtSafeStockDays.Location = new System.Drawing.Point(143, 44);
-            this.txtSafeStockDays.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSafeStockDays.Margin = new System.Windows.Forms.Padding(4);
             this.txtSafeStockDays.Name = "txtSafeStockDays";
             this.txtSafeStockDays.Size = new System.Drawing.Size(79, 25);
-            this.txtSafeStockDays.TabIndex = 12;
+            this.txtSafeStockDays.TabIndex = 0;
             this.txtSafeStockDays.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Int);
             // 
             // gbxLockStock
@@ -342,9 +342,9 @@
             this.gbxLockStock.Controls.Add(this.plMiddle);
             this.gbxLockStock.Controls.Add(this.plOption);
             this.gbxLockStock.Location = new System.Drawing.Point(16, 15);
-            this.gbxLockStock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxLockStock.Margin = new System.Windows.Forms.Padding(4);
             this.gbxLockStock.Name = "gbxLockStock";
-            this.gbxLockStock.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gbxLockStock.Padding = new System.Windows.Forms.Padding(4);
             this.gbxLockStock.Size = new System.Drawing.Size(633, 198);
             this.gbxLockStock.TabIndex = 0;
             this.gbxLockStock.TabStop = false;
@@ -357,20 +357,20 @@
             this.plMiddle.Controls.Add(this.plPercent);
             this.plMiddle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.plMiddle.Location = new System.Drawing.Point(4, 71);
-            this.plMiddle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plMiddle.Margin = new System.Windows.Forms.Padding(4);
             this.plMiddle.Name = "plMiddle";
             this.plMiddle.Size = new System.Drawing.Size(625, 123);
-            this.plMiddle.TabIndex = 0;
+            this.plMiddle.TabIndex = 1;
             // 
             // chbIsUse
             // 
             this.chbIsUse.AutoSize = true;
             this.chbIsUse.Enabled = false;
             this.chbIsUse.Location = new System.Drawing.Point(487, 12);
-            this.chbIsUse.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chbIsUse.Margin = new System.Windows.Forms.Padding(4);
             this.chbIsUse.Name = "chbIsUse";
             this.chbIsUse.Size = new System.Drawing.Size(89, 19);
-            this.chbIsUse.TabIndex = 5;
+            this.chbIsUse.TabIndex = 0;
             this.chbIsUse.Text = "启用规则";
             this.chbIsUse.UseVisualStyleBackColor = true;
             // 
@@ -379,7 +379,7 @@
             this.plNumber.Controls.Add(this.lblNumber);
             this.plNumber.Controls.Add(this.txtNumber);
             this.plNumber.Location = new System.Drawing.Point(161, 8);
-            this.plNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plNumber.Margin = new System.Windows.Forms.Padding(4);
             this.plNumber.Name = "plNumber";
             this.plNumber.Size = new System.Drawing.Size(140, 102);
             this.plNumber.TabIndex = 0;
@@ -396,10 +396,10 @@
             // txtNumber
             // 
             this.txtNumber.Location = new System.Drawing.Point(11, 69);
-            this.txtNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtNumber.Margin = new System.Windows.Forms.Padding(4);
             this.txtNumber.Name = "txtNumber";
             this.txtNumber.Size = new System.Drawing.Size(99, 25);
-            this.txtNumber.TabIndex = 3;
+            this.txtNumber.TabIndex = 0;
             this.txtNumber.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Float);
             // 
             // plPercent
@@ -408,7 +408,7 @@
             this.plPercent.Controls.Add(this.lblPercent);
             this.plPercent.Controls.Add(this.txtPercent);
             this.plPercent.Location = new System.Drawing.Point(329, 8);
-            this.plPercent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plPercent.Margin = new System.Windows.Forms.Padding(4);
             this.plPercent.Name = "plPercent";
             this.plPercent.Size = new System.Drawing.Size(140, 102);
             this.plPercent.TabIndex = 0;
@@ -435,10 +435,10 @@
             // txtPercent
             // 
             this.txtPercent.Location = new System.Drawing.Point(19, 69);
-            this.txtPercent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtPercent.Margin = new System.Windows.Forms.Padding(4);
             this.txtPercent.Name = "txtPercent";
             this.txtPercent.Size = new System.Drawing.Size(99, 25);
-            this.txtPercent.TabIndex = 4;
+            this.txtPercent.TabIndex = 0;
             this.txtPercent.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.TextBox_KeyPress_Percent);
             // 
             // plOption
@@ -447,7 +447,7 @@
             this.plOption.Controls.Add(this.rbtNumber);
             this.plOption.Dock = System.Windows.Forms.DockStyle.Top;
             this.plOption.Location = new System.Drawing.Point(4, 22);
-            this.plOption.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.plOption.Margin = new System.Windows.Forms.Padding(4);
             this.plOption.Name = "plOption";
             this.plOption.Size = new System.Drawing.Size(625, 49);
             this.plOption.TabIndex = 0;
@@ -457,10 +457,10 @@
             this.rbtPercent.AutoSize = true;
             this.rbtPercent.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbtPercent.Location = new System.Drawing.Point(329, 15);
-            this.rbtPercent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbtPercent.Margin = new System.Windows.Forms.Padding(4);
             this.rbtPercent.Name = "rbtPercent";
             this.rbtPercent.Size = new System.Drawing.Size(93, 24);
-            this.rbtPercent.TabIndex = 2;
+            this.rbtPercent.TabIndex = 1;
             this.rbtPercent.TabStop = true;
             this.rbtPercent.Text = "百分比";
             this.rbtPercent.UseVisualStyleBackColor = true;
@@ -470,10 +470,10 @@
             this.rbtNumber.AutoSize = true;
             this.rbtNumber.Font = new System.Drawing.Font("宋体", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.rbtNumber.Location = new System.Drawing.Point(201, 20);
-            this.rbtNumber.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.rbtNumber.Margin = new System.Windows.Forms.Padding(4);
             this.rbtNumber.Name = "rbtNumber";
             this.rbtNumber.Size = new System.Drawing.Size(72, 24);
-            this.rbtNumber.TabIndex = 1;
+            this.rbtNumber.TabIndex = 0;
             this.rbtNumber.TabStop = true;
             this.rbtNumber.Text = "数量";
             this.rbtNumber.UseVisualStyleBackColor = true;
@@ -482,10 +482,10 @@
             // btnSave
             // 
             this.btnSave.Location = new System.Drawing.Point(221, 470);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(100, 29);
-            this.btnSave.TabIndex = 21;
+            this.btnSave.TabIndex = 2;
             this.btnSave.Text = "保存(&S)";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -493,10 +493,10 @@
             // btnCancle
             // 
             this.btnCancle.Location = new System.Drawing.Point(349, 470);
-            this.btnCancle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancle.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancle.Name = "btnCancle";
             this.btnCancle.Size = new System.Drawing.Size(100, 29);
-            this.btnCancle.TabIndex = 22;
+            this.btnCancle.TabIndex = 3;
             this.btnCancle.Text = "取消(&C)";
             this.btnCancle.UseVisualStyleBackColor = true;
             this.btnCancle.Click += new System.EventHandler(this.btnCancle_Click);
@@ -511,7 +511,7 @@
             this.Controls.Add(this.gbxLockStock);
             this.Controls.Add(this.gbxOrderRun);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximumSize = new System.Drawing.Size(680, 550);
             this.MinimumSize = new System.Drawing.Size(680, 550);
             this.Name = "frmTool_Parameter";

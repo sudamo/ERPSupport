@@ -314,6 +314,15 @@ namespace ERPSupport.SupForm.UserCrtl
             if (MessageBox.Show("你确定要保存修改吗？", "保存信息", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 CommFunction.SaveCalculateStock(_dtSource);
+
+                //日志
+                string OName;
+                if (_Type == "LOCKSTOCK")
+                    OName = "锁库仓库";
+                else
+                    OName = "运算仓库";
+                CommFunction.DM_Log_Local("调整" + OName + "序号", "配置\\设置" + OName, "");
+
                 MessageBox.Show("信息已经保存。");
             }
         }

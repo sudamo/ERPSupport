@@ -6,8 +6,9 @@ using System.Collections.Generic;
 
 namespace ERPSupport.SupForm.Bussiness
 {
-    using SQL.K3Cloud;
     using UserCrtl;
+    using UserClass;
+    using SQL.K3Cloud;
 
     /// <summary>
     /// 发货通知单推调拨单
@@ -18,10 +19,18 @@ namespace ERPSupport.SupForm.Bussiness
         /// 初次加载
         /// </summary>
         private bool _Load;
+        ///// <summary>
+        ///// DGV按键列
+        ///// </summary>
+        //private DataGridViewButtonColumn _Btn;
         /// <summary>
-        /// DGV按键列
+        /// DGV复选框列
         /// </summary>
-        private DataGridViewButtonColumn _Btn;
+        private DataGridViewCheckBoxColumn _Chb;
+        /// <summary>
+        /// DGV复选框列头
+        /// </summary>
+        private datagridviewCheckboxHeaderCell _Ch;
         /// <summary>
         /// ToolStrip日期从
         /// </summary>
@@ -52,9 +61,10 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void frmCPDB_Push_Load(object sender, EventArgs e)
         {
-            _dtDataSource = new DataTable();
+            //_dtDataSource = new DataTable();
             _Load = true;
-            _Btn = new DataGridViewButtonColumn();
+            //_Btn = new DataGridViewButtonColumn();
+            _Chb = new DataGridViewCheckBoxColumn();
 
             _Date = new ToolStripDateTimePicker();
             _Date.Size = new Size(120, 21);
@@ -85,8 +95,11 @@ namespace ERPSupport.SupForm.Bussiness
         {
             if (_Load)
             {
-                _Btn.DataPropertyName = "BTN";
-                dgv1.Columns.Add(_Btn);
+                //_Btn.DataPropertyName = "BTN";
+                //dgv1.Columns.Add(_Btn);
+                _Chb.DataPropertyName = "CHB";
+                //_Chb.Name = "CHB";
+                dgv1.Columns.Add(_Chb);
 
                 _Load = false;
             }
@@ -94,10 +107,20 @@ namespace ERPSupport.SupForm.Bussiness
             _dtDataSource = PrdAllocation.GetNotice(_Date.Value, bnBottom_txtBillNo.Text);
             dgv1.DataSource = _dtDataSource;
 
-            _Btn = dgv1.Columns[0] as DataGridViewButtonColumn;
-            _Btn.HeaderText = "";
-            _Btn.Name = "BTN";
-            _Btn.Width = 60;
+            //_Btn = dgv1.Columns[0] as DataGridViewButtonColumn;
+            //_Btn.HeaderText = "";
+            //_Btn.Name = "BTN";
+            //_Btn.Width = 60;
+
+            _Ch = new datagridviewCheckboxHeaderCell();
+            _Chb = dgv1.Columns[0] as DataGridViewCheckBoxColumn;
+            _Chb.Width = 35;
+            _Chb.DataPropertyName = "CHB";
+            //_Chb.FalseValue = false;
+            //_Chb.TrueValue = true;
+            _Chb.HeaderCell = _Ch;
+            _Chb.HeaderCell.Value = "";
+            _Ch.OnCheckBoxClicked += ch_OnCheckBoxClicked;
         }
 
         /// <summary>
@@ -110,13 +133,19 @@ namespace ERPSupport.SupForm.Bussiness
             if (_dtDataSource == null || _dtDataSource.Rows.Count == 0)
                 return;
 
-            string strBillNos = string.Empty;
-            DataTable dtDate = new DataTable();
-            List<string> listCust = new List<string>(), listFBillNos = new List<string>(), listFBillNoAll = new List<string>();
+            string strBillNos;
+            DataTable dtDate;
+            List<string> listCust = new List<string>(), listFBillNos, listFBillNoAll;
 
             for (int i = 0; i < _dtDataSource.Rows.Count; i++)
-                if (!listCust.Contains(_dtDataSource.Rows[i]["客户名称"].ToString()))
+                if (!listCust.Contains(_dtDataSource.Rows[i]["客户名称"].ToString()) && dgv1.Rows[i].Cells[0].Value.ToString() == "1")
                     listCust.Add(_dtDataSource.Rows[i]["客户名称"].ToString());
+
+            if (listCust.Count == 0)
+                return;
+
+            strBillNos = string.Empty;
+            listFBillNoAll = new List<string>();
 
             //根据不用的客户生成单据
             for (int i = 0; i < listCust.Count; i++)
@@ -124,11 +153,11 @@ namespace ERPSupport.SupForm.Bussiness
                 listFBillNos = new List<string>();
                 for (int j = 0; j < _dtDataSource.Rows.Count; j++)
                 {
-                    if (listCust[i] == _dtDataSource.Rows[j]["客户"].ToString())
+                    if (listCust[i] == _dtDataSource.Rows[j]["客户"].ToString() && !listFBillNos.Contains(_dtDataSource.Rows[j]["单据编号"].ToString()))
+                    {
                         listFBillNos.Add(_dtDataSource.Rows[j]["单据编号"].ToString());
-
-                    if (i == 0)
                         listFBillNoAll.Add(_dtDataSource.Rows[j]["单据编号"].ToString());
+                    }
                 }
 
                 dtDate = PrdAllocation.GetTransForP(listFBillNos);
@@ -160,26 +189,50 @@ namespace ERPSupport.SupForm.Bussiness
         }
 
         /// <summary>
-        /// 删除行
+        /// 选取相同客户的行
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void dgv1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (sender == null || ((DataGridView)sender).Rows.Count == 0 || e.RowIndex < 0)
+            //if (sender == null || ((DataGridView)sender).Rows.Count == 0 || e.RowIndex < 0)
+            //    return;
+
+            //if (e.ColumnIndex == ((DataGridView)sender).Columns["BTN"].Index)
+            //{
+            //    int rows = ((DataGridView)sender).CurrentRow.Index;
+
+            //    //if (MessageBox.Show("您确定要删除吗？", "重要提示！", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
+            //    //{
+            //        _dtDataSource.Rows.RemoveAt(rows);
+            //        ((DataGridView)sender).DataSource = _dtDataSource;
+            //    //}
+            //}
+
+            if (dgv1 == null || dgv1.Rows.Count == 0 || e.RowIndex < 0)
                 return;
 
-            if (e.ColumnIndex == ((DataGridView)sender).Columns["BTN"].Index)
-            {
-                int rows = ((DataGridView)sender).CurrentRow.Index;
+            if (e.ColumnIndex == 0)//点击列为CHB列
+                for (int i = 0; i < dgv1.Rows.Count; i++)
+                    if (dgv1.Rows[i].Cells[4].Value.ToString() == dgv1.CurrentRow.Cells[4].Value.ToString())
+                        dgv1.Rows[i].Cells[0].Value = dgv1.CurrentRow.Cells[0].EditedFormattedValue;
+        }
 
-                //if (MessageBox.Show("您确定要删除吗？", "重要提示！", MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation) == DialogResult.OK)
-                //{
-                    _dtDataSource.Rows.RemoveAt(rows);
-                    ((DataGridView)sender).DataSource = _dtDataSource;
-                //}
-            }
-        }        
+        /// <summary>
+        /// 勾选行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ch_OnCheckBoxClicked(object sender, datagridviewCheckboxHeaderEventArgs e)
+        {
+            if (dgv1 == null || dgv1.Rows.Count == 0)
+                return;
+
+            foreach (DataGridViewRow dr in dgv1.Rows)
+                dr.Cells[0].Value = e.CheckedState;
+
+            //dgv1.EndEdit();
+        }
     }
 }
 

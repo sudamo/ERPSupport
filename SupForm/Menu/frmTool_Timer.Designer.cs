@@ -54,10 +54,10 @@
             // btnStar
             // 
             this.btnStar.Location = new System.Drawing.Point(15, 242);
-            this.btnStar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnStar.Margin = new System.Windows.Forms.Padding(4);
             this.btnStar.Name = "btnStar";
             this.btnStar.Size = new System.Drawing.Size(100, 29);
-            this.btnStar.TabIndex = 3;
+            this.btnStar.TabIndex = 2;
             this.btnStar.Text = "启动";
             this.tt.SetToolTip(this.btnStar, "启动自动执行。");
             this.btnStar.UseVisualStyleBackColor = true;
@@ -66,10 +66,10 @@
             // btnPause
             // 
             this.btnPause.Location = new System.Drawing.Point(123, 242);
-            this.btnPause.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnPause.Margin = new System.Windows.Forms.Padding(4);
             this.btnPause.Name = "btnPause";
             this.btnPause.Size = new System.Drawing.Size(100, 29);
-            this.btnPause.TabIndex = 4;
+            this.btnPause.TabIndex = 3;
             this.btnPause.Text = "暂停";
             this.tt.SetToolTip(this.btnPause, "暂停自动执行。");
             this.btnPause.UseVisualStyleBackColor = true;
@@ -78,10 +78,10 @@
             // txtPickMinute
             // 
             this.txtPickMinute.Location = new System.Drawing.Point(123, 178);
-            this.txtPickMinute.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtPickMinute.Margin = new System.Windows.Forms.Padding(4);
             this.txtPickMinute.Name = "txtPickMinute";
             this.txtPickMinute.Size = new System.Drawing.Size(99, 25);
-            this.txtPickMinute.TabIndex = 1;
+            this.txtPickMinute.TabIndex = 0;
             this.txtPickMinute.Text = "20";
             this.tt.SetToolTip(this.txtPickMinute, "每次自动执行功能的时间间隔。");
             this.txtPickMinute.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtPickMinute_KeyPress);
@@ -106,10 +106,10 @@
             // btnRestar
             // 
             this.btnRestar.Location = new System.Drawing.Point(231, 242);
-            this.btnRestar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnRestar.Margin = new System.Windows.Forms.Padding(4);
             this.btnRestar.Name = "btnRestar";
             this.btnRestar.Size = new System.Drawing.Size(100, 29);
-            this.btnRestar.TabIndex = 5;
+            this.btnRestar.TabIndex = 4;
             this.btnRestar.Text = "重置";
             this.tt.SetToolTip(this.btnRestar, "清除所有持续状态，并重新开始。");
             this.btnRestar.UseVisualStyleBackColor = true;
@@ -173,7 +173,7 @@
             // btnOK
             // 
             this.btnOK.Location = new System.Drawing.Point(123, 278);
-            this.btnOK.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnOK.Margin = new System.Windows.Forms.Padding(4);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(100, 29);
             this.btnOK.TabIndex = 6;
@@ -185,7 +185,7 @@
             // btnCancle
             // 
             this.btnCancle.Location = new System.Drawing.Point(231, 278);
-            this.btnCancle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCancle.Margin = new System.Windows.Forms.Padding(4);
             this.btnCancle.Name = "btnCancle";
             this.btnCancle.Size = new System.Drawing.Size(100, 29);
             this.btnCancle.TabIndex = 7;
@@ -231,20 +231,20 @@
             this.cbxFnuction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxFnuction.FormattingEnabled = true;
             this.cbxFnuction.Location = new System.Drawing.Point(123, 211);
-            this.cbxFnuction.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbxFnuction.Margin = new System.Windows.Forms.Padding(4);
             this.cbxFnuction.Name = "cbxFnuction";
             this.cbxFnuction.Size = new System.Drawing.Size(144, 23);
-            this.cbxFnuction.TabIndex = 2;
+            this.cbxFnuction.TabIndex = 1;
             this.tt.SetToolTip(this.cbxFnuction, "选择自动执行功能。");
             // 
             // chbExit
             // 
             this.chbExit.AutoSize = true;
             this.chbExit.Location = new System.Drawing.Point(15, 283);
-            this.chbExit.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chbExit.Margin = new System.Windows.Forms.Padding(4);
             this.chbExit.Name = "chbExit";
             this.chbExit.Size = new System.Drawing.Size(89, 19);
-            this.chbExit.TabIndex = 8;
+            this.chbExit.TabIndex = 5;
             this.chbExit.Text = "定时关闭";
             this.tt.SetToolTip(this.chbExit, "无操作定时关闭程序");
             this.chbExit.UseVisualStyleBackColor = true;
@@ -273,7 +273,7 @@
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.btnStar);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximumSize = new System.Drawing.Size(360, 360);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(360, 360);

@@ -290,14 +290,6 @@ namespace ERPSupport.SQL.K3Cloud
         {
             switch (pType)
             {
-                case 0:
-                    _SQL = @"SELECT SK.FNUMBER FVALUE,SKL.FNAME
-                    FROM T_BD_STOCK SK
-                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
-                    INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A'
-                    ORDER BY SKL.FNAME";
-                    break;
                 case 1:
                     _SQL = @"SELECT SK.FNUMBER||'|'||SK.FSTOCKID FVALUE,SKL.FNAME
                     FROM T_BD_STOCK SK
@@ -318,7 +310,7 @@ namespace ERPSupport.SQL.K3Cloud
                     SELECT SK.FNUMBER||'|'||SK.FSTOCKID FVALUE,SKL.FNAME
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FDEFSTOCKSTATUSID = 10000 --AND SK.FALLOWSUM = '0'
+                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FDEFSTOCKSTATUSID = 10000 AND SK.FUSEORGID = 100508
                     ORDER BY FVALUE";
                     break;
                 case 4:
@@ -332,11 +324,11 @@ namespace ERPSupport.SQL.K3Cloud
                     ORDER BY FVALUE";
                     break;
                 default:
-                    _SQL = @"SELECT SK.FNUMBER FValue,SKL.FNAME FName
+                    _SQL = @"SELECT SK.FNUMBER FValue,SKL.FNAME
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2')
+                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2')  AND SK.FUSEORGID = 100508
                     ORDER BY SK.FNUMBER";
                     break;
             }
@@ -905,6 +897,10 @@ namespace ERPSupport.SQL.K3Cloud
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
+        /// <summary>
+        /// 调整锁库/运算仓库序号
+        /// </summary>
+        /// <param name="pDataTable">修改数据</param>
         public static void SaveCalculateStock(DataTable pDataTable)
         {
             if (pDataTable == null || pDataTable.Rows.Count == 0)
