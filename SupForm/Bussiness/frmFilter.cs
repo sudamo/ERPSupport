@@ -346,6 +346,11 @@ namespace ERPSupport.SupForm.Bussiness
                     dr["FValue"] = "NOT LIKE";
                     dtCompare.Rows.Add(dr);//10
 
+                    dr = dtCompare.NewRow();
+                    dr["FName"] = "涵括";
+                    dr["FValue"] = "IN";
+                    dtCompare.Rows.Add(dr);
+
                     ((ComboBox)ctl).DataSource = dtCompare;
                     ((ComboBox)ctl).DisplayMember = "FName";
                     ((ComboBox)ctl).ValueMember = "FValue";

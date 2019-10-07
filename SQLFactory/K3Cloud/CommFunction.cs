@@ -35,36 +35,18 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 数据库连接检验
         /// </summary>
+        /// <param name="pConnectionString">数据库连接字符串</param>
         /// <returns></returns>
         public static string ConnectionCheck_ORA(string pConnectionString)
         {
-            //OracleConnection conn = new OracleConnection(pConnectionString);
-            //object oTest = null;
-            //try
-            //{
-            //    conn.Open();
-            //    OracleCommand cmd = conn.CreateCommand();
-            //    cmd.CommandText = "SELECT 1 FROM DUAL";
-            //    oTest = cmd.ExecuteScalar();
-            //}
-            //catch
-            //{
-            //    return -1;//数据库连接失败
-            //}
-            //finally
-            //{
-            //    if (conn.State == ConnectionState.Open)
-            //        conn.Close();
-            //}
-
-            //if (oTest == null)
-            //    return 0;//数据库查询失败
-
-            //return 1;//数据库测试正常
-
             return ORAHelper.ConnectionChecked(pConnectionString);
         }
 
+        /// <summary>
+        /// 数据库连接检验-SQLServer
+        /// </summary>
+        /// <param name="pConnectionString">数据库连接字符串</param>
+        /// <returns></returns>
         public static string ConnectionCheck_SQL(string pConnectionString)
         {
             return SQLHelper.ConnectionChecked(pConnectionString);
@@ -92,8 +74,8 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 根据用户名获取用户信息
         /// </summary>
-        /// <param name="pConnectionString"></param>
-        /// <param name="pUserName"></param>
+        /// <param name="pConnectionString">数据库连接字符串</param>
+        /// <param name="pUserName">用户名</param>
         /// <returns></returns>
         public static DataTable GetUserInfoByName(string pConnectionString, string pUserName)
         {
@@ -217,14 +199,6 @@ namespace ERPSupport.SQL.K3Cloud
             return ORAHelper.ExecuteTable(_SQL);
         }
 
-        ///// <summary>
-        ///// 获取领料部门信息
-        ///// </summary>
-        ///// <returns></returns>
-        //public static DataTable GetPickMtlDepartment()
-        //{
-        //    return ORAHelper.ExecuteTable("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' ORDER BY FNUMBER");
-        //}
         /// <summary>
         /// 获取领料部门信息
         /// </summary>
@@ -249,8 +223,8 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 根据客户名称和组织获取客户内码
         /// </summary>
-        /// <param name="pCustomerName"></param>
-        /// <param name="pUseOrgId"></param>
+        /// <param name="pCustomerName">客户名称</param>
+        /// <param name="pUseOrgId">使用组织</param>
         /// <returns></returns>
         public static int GetCustomerId(string pCustomerName, int pUseOrgId)
         {
@@ -339,7 +313,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 根据仓库名称获取编码
         /// </summary>
-        /// <param name="pFName"></param>
+        /// <param name="pFName">仓库名</param>
         /// <returns></returns>
         public static string GetStockNumber(string pFName)
         {
@@ -393,7 +367,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 根据类别FID获取辅助资料信息
         /// </summary>
-        /// <param name="pFID"></param>
+        /// <param name="pFID">内码</param>
         /// <returns></returns>
         public static DataTable GetAssistantDataEntryByFID(string pFID)
         {
@@ -591,7 +565,10 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 根据Category新增LockObject
         /// </summary>
-        /// <param name="pCategory"></param>
+        /// <param name="pObName">对象名称</param>
+        /// <param name="pFType">对象类型</param>
+        /// <param name="pDescription">描述</param>
+        /// <param name="pCategory">分类</param>
         public static void DM_LockObject_Add(string pObName, string pFType, string pDescription, string pCategory)
         {
             _SQL = "INSERT INTO DM_LOCKOBJECT(OBNAME,FUSER,FSTATUS,FTYPE,DESCRIPTION,CATEGORY) VALUES('" + pObName + "','None',0,'" + pFType + "','" + pDescription + "','" + pCategory + "')";
@@ -612,6 +589,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 获取方案信息
         /// </summary>
+        /// <param name="pFormID">业务标识</param>
         /// <returns></returns>
         public static DataTable GetSolution(FormID pFormID)
         {

@@ -1388,6 +1388,7 @@ namespace ERPSupport.SupForm
         /// 获取比较
         /// </summary>
         /// <param name="pFilter"></param>
+        /// <param name="pIsComboBox"></param>
         /// <returns></returns>
         private string GetCompare(Filter pFilter, bool pIsComboBox)
         {
@@ -1430,6 +1431,9 @@ namespace ERPSupport.SupForm
                     case 10:
                         retrunValue = " NOT LIKE ";
                         break;
+                    case 11:
+                        retrunValue = " IN ";
+                        break;
                     default:
                         retrunValue = " = ";
                         break;
@@ -1469,6 +1473,10 @@ namespace ERPSupport.SupForm
                             break;
                         case 9:
                             retrunValue = "'%" + pFilter.FilterValue.FilterText + "'";
+                            break;
+                        case 11:
+                            string str = pFilter.FilterValue.FilterText.Replace("，", ",").Replace(",", "','");
+                            retrunValue = "('" + str + "')";
                             break;
                         default:
                             retrunValue = "'" + pFilter.FilterValue.FilterText + "'";
