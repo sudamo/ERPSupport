@@ -138,8 +138,8 @@ namespace ERPSupport.SupForm.Bussiness
             List<string> listCust = new List<string>(), listFBillNos, listFBillNoAll;
 
             for (int i = 0; i < _dtDataSource.Rows.Count; i++)
-                if (!listCust.Contains(_dtDataSource.Rows[i]["客户名称"].ToString()) && dgv1.Rows[i].Cells[0].Value.ToString() == "1")
-                    listCust.Add(_dtDataSource.Rows[i]["客户名称"].ToString());
+                if (!listCust.Contains(_dtDataSource.Rows[i]["客户"].ToString()) && dgv1.Rows[i].Cells[0].Value.ToString() == "1")
+                    listCust.Add(_dtDataSource.Rows[i]["客户"].ToString());
 
             if (listCust.Count == 0)
                 return;
@@ -164,7 +164,7 @@ namespace ERPSupport.SupForm.Bussiness
                 if (dtDate == null || dtDate.Rows.Count == 0)
                     continue;
 
-                strBillNos += PrdAllocation.TransferDir(dtDate, _List);
+                strBillNos += PrdAllocation.TransferDir(dtDate, _List, true);
             }
 
             //反写发货通知单关联调拨数量

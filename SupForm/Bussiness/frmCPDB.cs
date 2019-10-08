@@ -318,7 +318,7 @@ namespace ERPSupport.SupForm.Bussiness
             }
 
             //成品调拨
-            string strBillNos = PrdAllocation.TransferDir(dtTemp, listParas);
+            string strBillNos = PrdAllocation.TransferDir(dtTemp, listParas, false);
             ////更新反写销售订单锁库调拨数量
             //PrdAllocation.UpdateDirFields2(dtTemp);
 

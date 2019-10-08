@@ -166,16 +166,6 @@ namespace ERPSupport.SupForm.Menu
         /// <param name="e"></param>
         private void chbIsUse_CheckedChanged(object sender, EventArgs e)
         {
-            //if (chbIsUsePZ.Checked)
-            //{
-            //    txtMaxQtyPZ.ReadOnly = false;
-            //    txtPianYiPZ.ReadOnly = false;
-            //}
-            //else
-            //{
-            //    txtMaxQtyPZ.ReadOnly = true;
-            //    txtPianYiPZ.ReadOnly = true;
-            //}
             if (chbIsUsePZ.Checked)
             {
                 txtMaxQtyPZ.ReadOnly = false;
@@ -223,7 +213,19 @@ namespace ERPSupport.SupForm.Menu
                 MessageBox.Show("请输入完整信息。");
                 return;
             }
+
             MessageBox.Show(CommFunction.ConnectionCheck_SQL("Data Source=" + txtIP.Text + ";Initial Catalog=" + txtCatalog.Text + ";User ID=" + txtUser.Text + ";Password=" + txtPWD.Text + ";Max Pool Size=1024;"));
+        }
+
+        /// <summary>
+        /// 设置对应仓库
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnStock_Click(object sender, EventArgs e)
+        {
+            frmPro_Dir_Stock frm = new frmPro_Dir_Stock();
+            frm.ShowDialog();
         }
     }
 }

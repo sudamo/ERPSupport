@@ -69,6 +69,7 @@
             this.lblPianYiCL = new System.Windows.Forms.Label();
             this.lblMaxQtyCL = new System.Windows.Forms.Label();
             this.gbxCPDB_Default = new System.Windows.Forms.GroupBox();
+            this.btnStock = new System.Windows.Forms.Button();
             this.cbxStock = new System.Windows.Forms.ComboBox();
             this.cbxDepartment = new System.Windows.Forms.ComboBox();
             this.lblStock = new System.Windows.Forms.Label();
@@ -427,7 +428,7 @@
             this.gbxCaiLiao.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.gbxCaiLiao.Name = "gbxCaiLiao";
             this.gbxCaiLiao.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.gbxCaiLiao.Size = new System.Drawing.Size(300, 112);
+            this.gbxCaiLiao.Size = new System.Drawing.Size(300, 106);
             this.gbxCaiLiao.TabIndex = 3;
             this.gbxCaiLiao.TabStop = false;
             this.gbxCaiLiao.Text = "材料调拨设置";
@@ -508,16 +509,26 @@
             this.gbxCPDB_Default.Margin = new System.Windows.Forms.Padding(4);
             this.gbxCPDB_Default.Name = "gbxCPDB_Default";
             this.gbxCPDB_Default.Padding = new System.Windows.Forms.Padding(4);
-            this.gbxCPDB_Default.Size = new System.Drawing.Size(327, 112);
+            this.gbxCPDB_Default.Size = new System.Drawing.Size(327, 106);
             this.gbxCPDB_Default.TabIndex = 4;
             this.gbxCPDB_Default.TabStop = false;
             this.gbxCPDB_Default.Text = "成品调拨默认参数";
+            // 
+            // btnStock
+            // 
+            this.btnStock.Location = new System.Drawing.Point(510, 372);
+            this.btnStock.Name = "btnStock";
+            this.btnStock.Size = new System.Drawing.Size(161, 26);
+            this.btnStock.TabIndex = 2;
+            this.btnStock.Text = "设置仓库间调拨";
+            this.btnStock.UseVisualStyleBackColor = true;
+            this.btnStock.Click += new System.EventHandler(this.btnStock_Click);
             // 
             // cbxStock
             // 
             this.cbxStock.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxStock.FormattingEnabled = true;
-            this.cbxStock.Location = new System.Drawing.Point(103, 73);
+            this.cbxStock.Location = new System.Drawing.Point(104, 72);
             this.cbxStock.Margin = new System.Windows.Forms.Padding(4);
             this.cbxStock.Name = "cbxStock";
             this.cbxStock.Size = new System.Drawing.Size(203, 23);
@@ -527,7 +538,7 @@
             // 
             this.cbxDepartment.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDepartment.FormattingEnabled = true;
-            this.cbxDepartment.Location = new System.Drawing.Point(103, 41);
+            this.cbxDepartment.Location = new System.Drawing.Point(104, 40);
             this.cbxDepartment.Margin = new System.Windows.Forms.Padding(4);
             this.cbxDepartment.Name = "cbxDepartment";
             this.cbxDepartment.Size = new System.Drawing.Size(203, 23);
@@ -536,7 +547,7 @@
             // lblStock
             // 
             this.lblStock.AutoSize = true;
-            this.lblStock.Location = new System.Drawing.Point(8, 76);
+            this.lblStock.Location = new System.Drawing.Point(9, 75);
             this.lblStock.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblStock.Name = "lblStock";
             this.lblStock.Size = new System.Drawing.Size(82, 15);
@@ -546,7 +557,7 @@
             // lblDepartment
             // 
             this.lblDepartment.AutoSize = true;
-            this.lblDepartment.Location = new System.Drawing.Point(8, 45);
+            this.lblDepartment.Location = new System.Drawing.Point(9, 44);
             this.lblDepartment.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblDepartment.Name = "lblDepartment";
             this.lblDepartment.Size = new System.Drawing.Size(82, 15);
@@ -559,6 +570,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(682, 453);
             this.ControlBox = false;
+            this.Controls.Add(this.btnStock);
             this.Controls.Add(this.gbxCaiLiao);
             this.Controls.Add(this.gbxPenZi);
             this.Controls.Add(this.gbxDB_WMS);
@@ -634,5 +646,6 @@
         private System.Windows.Forms.Button btnCheckConnect;
         private System.Windows.Forms.RadioButton rbtOracle;
         private System.Windows.Forms.RadioButton rbtSQL;
+        private System.Windows.Forms.Button btnStock;
     }
 }

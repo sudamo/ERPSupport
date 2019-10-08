@@ -205,6 +205,12 @@
     <Compile Include="Menu\frmPro_Dir.Designer.cs">
       <DependentUpon>frmPro_Dir.cs</DependentUpon>
     </Compile>
+    <Compile Include="Menu\frmPro_Dir_Stock.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\frmPro_Dir_Stock.Designer.cs">
+      <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu\frmTool_Timer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -388,6 +394,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir.resx">
       <DependentUpon>frmPro_Dir.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\frmPro_Dir_Stock.resx">
+      <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmTool_Timer.resx">
       <DependentUpon>frmTool_Timer.cs</DependentUpon>

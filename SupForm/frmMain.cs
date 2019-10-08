@@ -1103,7 +1103,7 @@ namespace ERPSupport.SupForm
                         //排除完全锁库订单或已锁库分录(在运算时排除)
 
                         //dtTran.ImportRow(dtSearch.Rows[i]);
-                        dtTran.ImportRow((_DataSource.Select("订单内码=" + dgv1.Rows[i].Cells[19].Value.ToString()))[0]);
+                        dtTran.ImportRow((_DataSource.Select("订单内码=" + dgv1.Rows[i].Cells[20].Value.ToString()))[0]);
                     }
                 }
 
@@ -1121,7 +1121,7 @@ namespace ERPSupport.SupForm
                 //判断是否有未批量锁库的订单
                 for (int i = 0; i < dtTran.Rows.Count; i++)
                 {
-                    if (dtTran.Rows[i]["批量锁库"].ToString() == "否" && dtTran.Rows[i]["单据类型"].ToString() != "备货销售订单")
+                    if (dtTran.Rows[i]["批量锁库"].ToString() == "否" && dtTran.Rows[i]["单据类型"].ToString() != "备货销售订单" && dtTran.Rows[i]["特殊"].ToString() != "1")//备货类型和非普通类型不用批量锁库也可以参与运算
                     {
                         dr = dtResult.NewRow();
                         dr["状态"] = "失败";
