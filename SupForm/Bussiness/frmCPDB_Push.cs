@@ -233,6 +233,16 @@ namespace ERPSupport.SupForm.Bussiness
 
             //dgv1.EndEdit();
         }
+
+        /// <summary>
+        /// 显示行号
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            e.Row.HeaderCell.Value = string.Format("{0}", e.Row.Index + 1);
+        }
     }
 }
 

@@ -298,7 +298,7 @@ namespace ERPSupport.SQL.K3Cloud
                     ORDER BY FVALUE";
                     break;
                 default:
-                    _SQL = @"SELECT SK.FNUMBER FValue,SKL.FNAME
+                    _SQL = @"SELECT SK.FNUMBER FVALUE,SKL.FNAME
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
@@ -1365,6 +1365,68 @@ namespace ERPSupport.SQL.K3Cloud
 
             _SQL = @"INSERT INTO DM_LOG_LOCAL(OUSER,IP,MAC,LOGINTIME,LOGOUTTIME,OTIME,ONAME,ONAVI,OCONTENT,FLAG)
             VALUES('" + GlobalParameter.K3Inf.UserName + "','" + GlobalParameter.LocalInf.IP + "','" + GlobalParameter.LocalInf.MAC + "',TO_DATE('" + GlobalParameter.LocalInf.LoginTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),TO_DATE('" + GlobalParameter.LocalInf.LogoutTime.ToString("yyyy-MM-dd HH:mm:ss") + "','yyyy-mm-dd hh24:mi:ss'),SYSDATE,'" + pOName + "','" + pONavi + "','" + pOContent + "','" + pFlag + "')";
+
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 获取对应仓库调拨
+        /// </summary>
+        /// <returns></returns>
+        public static DataTable GetDM_Dir_Stock()
+        {
+            _SQL = @"SELECT A.PID,B.FNAME OUTSTOCK,C.FNAME INSTOCK,A.CREATOR,A.CREATIONDATE
+            FROM DM_DIR_STOCK A
+            INNER JOIN T_BD_STOCK_L B ON A.OUTSTOCKID = B.FSTOCKID AND B.FLOCALEID = 2052
+            INNER JOIN T_BD_STOCK_L C ON A.INSTOCKID = C.FSTOCKID AND C.FLOCALEID = 2052
+            WHERE A.ISDELETE = 0";
+
+            return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        /// <summary>
+        /// 添加对应仓库调拨
+        /// </summary>
+        /// <param name="pOutStockId"></param>
+        /// <param name="pInStockId"></param>
+        public static string AddDM_Dir_Stock(int pOutStockId, int pInStockId)
+        {
+            _SQL = "SELECT COUNT(*) FROM DM_DIR_STOCK WHERE ISDELETE = 0 AND OUTSTOCKID = " + pOutStockId + " AND INSTOCKID = " + pInStockId;
+            _obj = ORAHelper.ExecuteScalar(_SQL);
+            if (_obj.ToString() != "0")
+                return "已经存在此对应仓库。";
+
+            _SQL = "INSERT INTO DM_DIR_STOCK(OUTSTOCKID,INSTOCKID,CREATOR) VALUES(" + pOutStockId + "," + pInStockId + ",'" + GlobalParameter.K3Inf.UserName + "')";
+            ORAHelper.ExecuteNonQuery(_SQL);
+
+            return "添加成功。";
+        }
+
+        /// <summary>
+        /// 修改对应仓库调拨
+        /// </summary>
+        /// <param name="pOutStockId"></param>
+        /// <param name="pInStockId"></param>
+        public static string EditDM_Dir_Stock(int pOutStockId, int pInStockId, int pPID)
+        {
+            _SQL = "SELECT COUNT(*) FROM DM_DIR_STOCK WHERE ISDELETE = 0 AND OUTSTOCKID = " + pOutStockId + " AND INSTOCKID = " + pInStockId;
+            _obj = ORAHelper.ExecuteScalar(_SQL);
+            if (_obj.ToString() != "0")
+                return "已经存在此对应仓库。";
+
+            _SQL = "UPDATE DM_DIR_STOCK SET OUTSTOCKID = " + pOutStockId + ",INSTOCKID = " + pInStockId + " WHERE PID = " + pPID;
+            ORAHelper.ExecuteNonQuery(_SQL);
+            return "修改成功。";
+        }
+
+        /// <summary>
+        /// 删除对应仓库调拨
+        /// </summary>
+        /// <param name="pOutStockId"></param>
+        /// <param name="pInStockId"></param>
+        public static void DelDM_Dir_Stock(int pPID)
+        {
+            _SQL = "UPDATE DM_DIR_STOCK SET ISDELETE = 1 WHERE ISDELETE = 0 AND PID = " + pPID;
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }

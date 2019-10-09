@@ -795,7 +795,7 @@ namespace ERPSupport.SupForm.Bussiness
         }
 
         /// <summary>
-        /// 
+        /// 显示行号
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

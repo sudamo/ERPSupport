@@ -48,15 +48,18 @@
             // 
             // libStock
             // 
-            this.libStock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.libStock.Font = new System.Drawing.Font("宋体", 12F);
+            this.libStock.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.libStock.BackColor = System.Drawing.Color.AliceBlue;
+            this.libStock.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.libStock.FormattingEnabled = true;
-            this.libStock.ItemHeight = 20;
-            this.libStock.Location = new System.Drawing.Point(0, 0);
-            this.libStock.Margin = new System.Windows.Forms.Padding(4);
+            this.libStock.ItemHeight = 14;
+            this.libStock.Location = new System.Drawing.Point(0, 32);
             this.libStock.Name = "libStock";
-            this.libStock.Size = new System.Drawing.Size(382, 453);
+            this.libStock.Size = new System.Drawing.Size(344, 298);
             this.libStock.TabIndex = 2;
+            this.libStock.SelectedIndexChanged += new System.EventHandler(this.libStock_SelectedIndexChanged);
             // 
             // bnBottom
             // 
@@ -70,14 +73,14 @@
             this.bnBottom_btnEdit,
             this.bnBottom_btnDelete,
             this.bnBottom_btnCancel});
-            this.bnBottom.Location = new System.Drawing.Point(0, 426);
+            this.bnBottom.Location = new System.Drawing.Point(0, 335);
             this.bnBottom.MoveFirstItem = null;
             this.bnBottom.MoveLastItem = null;
             this.bnBottom.MoveNextItem = null;
             this.bnBottom.MovePreviousItem = null;
             this.bnBottom.Name = "bnBottom";
             this.bnBottom.PositionItem = null;
-            this.bnBottom.Size = new System.Drawing.Size(382, 27);
+            this.bnBottom.Size = new System.Drawing.Size(344, 27);
             this.bnBottom.TabIndex = 3;
             this.bnBottom.Text = "bindingNavigator1";
             // 
@@ -86,7 +89,7 @@
             this.bnBottom_btnAdd.Image = global::ERPSupport.SupForm.Properties.Resources.add;
             this.bnBottom_btnAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnAdd.Name = "bnBottom_btnAdd";
-            this.bnBottom_btnAdd.Size = new System.Drawing.Size(63, 24);
+            this.bnBottom_btnAdd.Size = new System.Drawing.Size(56, 24);
             this.bnBottom_btnAdd.Text = "新增";
             this.bnBottom_btnAdd.ToolTipText = "新增仓库对应";
             this.bnBottom_btnAdd.Click += new System.EventHandler(this.bnBottom_btnAdd_Click);
@@ -96,7 +99,7 @@
             this.bnBottom_btnEdit.Image = global::ERPSupport.SupForm.Properties.Resources.livejournal;
             this.bnBottom_btnEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnEdit.Name = "bnBottom_btnEdit";
-            this.bnBottom_btnEdit.Size = new System.Drawing.Size(63, 24);
+            this.bnBottom_btnEdit.Size = new System.Drawing.Size(56, 24);
             this.bnBottom_btnEdit.Text = "修改";
             this.bnBottom_btnEdit.Click += new System.EventHandler(this.bnBottom_btnEdit_Click);
             // 
@@ -105,7 +108,7 @@
             this.bnBottom_btnDelete.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
             this.bnBottom_btnDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnDelete.Name = "bnBottom_btnDelete";
-            this.bnBottom_btnDelete.Size = new System.Drawing.Size(63, 24);
+            this.bnBottom_btnDelete.Size = new System.Drawing.Size(56, 24);
             this.bnBottom_btnDelete.Text = "删除";
             this.bnBottom_btnDelete.Click += new System.EventHandler(this.bnBottom_btnDelete_Click);
             // 
@@ -115,7 +118,7 @@
             this.bnBottom_btnCancel.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_redo;
             this.bnBottom_btnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnCancel.Name = "bnBottom_btnCancel";
-            this.bnBottom_btnCancel.Size = new System.Drawing.Size(63, 24);
+            this.bnBottom_btnCancel.Size = new System.Drawing.Size(56, 24);
             this.bnBottom_btnCancel.Text = "取消";
             this.bnBottom_btnCancel.ToolTipText = "取消并退出";
             this.bnBottom_btnCancel.Click += new System.EventHandler(this.bnBottom_btnCancel_Click);
@@ -137,7 +140,7 @@
             this.bnTop.MovePreviousItem = null;
             this.bnTop.Name = "bnTop";
             this.bnTop.PositionItem = null;
-            this.bnTop.Size = new System.Drawing.Size(382, 28);
+            this.bnTop.Size = new System.Drawing.Size(344, 25);
             this.bnTop.TabIndex = 4;
             this.bnTop.Text = "bindingNavigator1";
             // 
@@ -145,33 +148,34 @@
             // 
             this.bnTop_cbxOutStock.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bnTop_cbxOutStock.Name = "bnTop_cbxOutStock";
-            this.bnTop_cbxOutStock.Size = new System.Drawing.Size(140, 28);
+            this.bnTop_cbxOutStock.Size = new System.Drawing.Size(125, 25);
             // 
             // bnTop_lblTo
             // 
             this.bnTop_lblTo.Name = "bnTop_lblTo";
-            this.bnTop_lblTo.Size = new System.Drawing.Size(26, 25);
-            this.bnTop_lblTo.Text = "->";
+            this.bnTop_lblTo.Size = new System.Drawing.Size(27, 22);
+            this.bnTop_lblTo.Text = "-->";
             this.bnTop_lblTo.ToolTipText = "由调出仓库到调入仓库";
             // 
             // bnTop_cbxInStock
             // 
             this.bnTop_cbxInStock.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bnTop_cbxInStock.Name = "bnTop_cbxInStock";
-            this.bnTop_cbxInStock.Size = new System.Drawing.Size(140, 28);
+            this.bnTop_cbxInStock.Size = new System.Drawing.Size(125, 25);
             // 
             // frmPro_Dir_Stock
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 453);
+            this.ClientSize = new System.Drawing.Size(344, 362);
             this.ControlBox = false;
             this.Controls.Add(this.bnTop);
             this.Controls.Add(this.bnBottom);
             this.Controls.Add(this.libStock);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(400, 500);
-            this.MinimumSize = new System.Drawing.Size(400, 500);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaximumSize = new System.Drawing.Size(360, 400);
+            this.MinimumSize = new System.Drawing.Size(320, 400);
             this.Name = "frmPro_Dir_Stock";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "仓库间调拨";

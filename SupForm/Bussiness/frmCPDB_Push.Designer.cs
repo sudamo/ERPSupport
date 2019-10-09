@@ -52,14 +52,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgv1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.DisableResizing;
-            this.dgv1.Location = new System.Drawing.Point(13, 13);
-            this.dgv1.Margin = new System.Windows.Forms.Padding(4);
+            this.dgv1.Location = new System.Drawing.Point(10, 10);
             this.dgv1.Name = "dgv1";
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgv1.RowTemplate.Height = 23;
-            this.dgv1.Size = new System.Drawing.Size(956, 480);
+            this.dgv1.Size = new System.Drawing.Size(717, 384);
             this.dgv1.TabIndex = 0;
             this.dgv1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgv1_CellContentClick);
+            this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
             // 
             // bnBottom
             // 
@@ -76,33 +76,33 @@
             this.bnBottom_btnSearch,
             this.bnBottom_btnClose,
             this.bnBottom_btnPush});
-            this.bnBottom.Location = new System.Drawing.Point(0, 526);
+            this.bnBottom.Location = new System.Drawing.Point(0, 423);
             this.bnBottom.MoveFirstItem = null;
             this.bnBottom.MoveLastItem = null;
             this.bnBottom.MoveNextItem = null;
             this.bnBottom.MovePreviousItem = null;
             this.bnBottom.Name = "bnBottom";
             this.bnBottom.PositionItem = null;
-            this.bnBottom.Size = new System.Drawing.Size(982, 27);
+            this.bnBottom.Size = new System.Drawing.Size(736, 27);
             this.bnBottom.TabIndex = 1;
             this.bnBottom.Text = "bnTop";
             // 
             // bnBottom_lblDate
             // 
             this.bnBottom_lblDate.Name = "bnBottom_lblDate";
-            this.bnBottom_lblDate.Size = new System.Drawing.Size(54, 24);
+            this.bnBottom_lblDate.Size = new System.Drawing.Size(44, 24);
             this.bnBottom_lblDate.Text = "日期：";
             // 
             // bnBottom_lblBillNo
             // 
             this.bnBottom_lblBillNo.Name = "bnBottom_lblBillNo";
-            this.bnBottom_lblBillNo.Size = new System.Drawing.Size(114, 24);
+            this.bnBottom_lblBillNo.Size = new System.Drawing.Size(92, 24);
             this.bnBottom_lblBillNo.Text = "发后通知单号：";
             // 
             // bnBottom_txtBillNo
             // 
             this.bnBottom_txtBillNo.Name = "bnBottom_txtBillNo";
-            this.bnBottom_txtBillNo.Size = new System.Drawing.Size(120, 27);
+            this.bnBottom_txtBillNo.Size = new System.Drawing.Size(91, 27);
             this.bnBottom_txtBillNo.ToolTipText = "如果输入通知单号，只根据单号查询。";
             // 
             // bnBottom_btnSearch
@@ -110,7 +110,7 @@
             this.bnBottom_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
             this.bnBottom_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnSearch.Name = "bnBottom_btnSearch";
-            this.bnBottom_btnSearch.Size = new System.Drawing.Size(63, 24);
+            this.bnBottom_btnSearch.Size = new System.Drawing.Size(56, 24);
             this.bnBottom_btnSearch.Tag = "1";
             this.bnBottom_btnSearch.Text = "查找";
             this.bnBottom_btnSearch.Click += new System.EventHandler(this.bnTop_btnSearch_Click);
@@ -121,7 +121,7 @@
             this.bnBottom_btnClose.Image = global::ERPSupport.SupForm.Properties.Resources.cross;
             this.bnBottom_btnClose.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnClose.Name = "bnBottom_btnClose";
-            this.bnBottom_btnClose.Size = new System.Drawing.Size(63, 24);
+            this.bnBottom_btnClose.Size = new System.Drawing.Size(56, 24);
             this.bnBottom_btnClose.Text = "关闭";
             this.bnBottom_btnClose.ToolTipText = "关闭窗口";
             this.bnBottom_btnClose.Click += new System.EventHandler(this.bnBottom_btnClose_Click);
@@ -131,22 +131,23 @@
             this.bnBottom_btnPush.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_right;
             this.bnBottom_btnPush.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnPush.Name = "bnBottom_btnPush";
-            this.bnBottom_btnPush.Size = new System.Drawing.Size(63, 24);
+            this.bnBottom_btnPush.Size = new System.Drawing.Size(56, 24);
             this.bnBottom_btnPush.Text = "下推";
             this.bnBottom_btnPush.ToolTipText = "根据所选发货通知单下推调拨单";
             this.bnBottom_btnPush.Click += new System.EventHandler(this.bnBottom_btnPush_Click);
             // 
             // frmCPDB_Push
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(982, 553);
+            this.ClientSize = new System.Drawing.Size(736, 450);
             this.ControlBox = false;
             this.Controls.Add(this.bnBottom);
             this.Controls.Add(this.dgv1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(1000, 600);
-            this.MinimumSize = new System.Drawing.Size(800, 600);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.MaximumSize = new System.Drawing.Size(754, 488);
+            this.MinimumSize = new System.Drawing.Size(604, 488);
             this.Name = "frmCPDB_Push";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "调拨";

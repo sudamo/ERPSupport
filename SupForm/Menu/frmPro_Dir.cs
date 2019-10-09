@@ -86,65 +86,6 @@ namespace ERPSupport.SupForm.Menu
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            string DirType = rbtERP.Checked ? "1" : "0";
-            UserClass.AppConfig.WriteValue("DIR_DirType", DirType);
-
-            //
-            string IsUsePZ = chbIsUsePZ.Checked ? "1" : "0";
-            UserClass.AppConfig.WriteValue("DIR_IsUsePZ", IsUsePZ);
-            UserClass.AppConfig.WriteValue("DIR_MaxQtyPZ", txtMaxQtyPZ.Text);
-            UserClass.AppConfig.WriteValue("DIR_PianYiPZ", txtPianYiPZ.Text);
-            UserClass.AppConfig.WriteValue("DIR_DPQtyPZ", txtDPQtyPZ.Text);
-            UserClass.AppConfig.WriteValue("DIR_MinQtyPZ", txtMinQtyPZ.Text);
-
-            //
-            string IsUseCL = chbIsUseCL.Checked ? "1" : "0";
-            UserClass.AppConfig.WriteValue("DIR_IsUseCL", IsUseCL);
-            UserClass.AppConfig.WriteValue("DIR_MaxQtyCL", txtMaxQtyCL.Text);
-            UserClass.AppConfig.WriteValue("DIR_PianYiCL", txtPianYiCL.Text);
-
-            //
-            string strDepartment = cbxDepartment.SelectedValue.ToString(), strStock = cbxStock.SelectedValue.ToString();
-            UserClass.AppConfig.WriteValue("DIR_CPDB_Department", strDepartment);
-            UserClass.AppConfig.WriteValue("DIR_CPDB_Stock", strStock);
-
-            //
-            UserClass.AppConfig.WriteValue("SQL_IP", txtIP.Text);
-            UserClass.AppConfig.WriteValue("SQL_Catalog", txtCatalog.Text);
-            UserClass.AppConfig.WriteValue("SQL_User", txtUser.Text);
-            UserClass.AppConfig.WriteValue("SQL_PWD", txtPWD.Text);
-
-            Model.Globa.GlobalParameter.Tmp_Params = DirType;
-            Model.Globa.GlobalParameter.Dir_DPQtyPZ = int.Parse(txtDPQtyPZ.Text);
-            Model.Globa.GlobalParameter.Dir_MinQtyPZ = int.Parse(txtMinQtyPZ.Text);
-            Model.Globa.GlobalParameter.Dir_CPDB_Department = strDepartment;
-            Model.Globa.GlobalParameter.Dir_CPDB_Stock = strStock;
-
-            Model.Globa.GlobalParameter.SQLInf.ConnectionString = "Data Source=" + txtIP.Text + ";Initial Catalog=" + txtCatalog.Text + ";User ID=" + txtUser.Text + ";Password=" + txtPWD.Text + ";Max Pool Size=1024;";
-
-            MessageBox.Show("保存成功");
-            DialogResult = DialogResult.OK;
-            Close();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            DialogResult = DialogResult.Cancel;
-            Close();
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '\b')
@@ -222,10 +163,69 @@ namespace ERPSupport.SupForm.Menu
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnStock_Click(object sender, EventArgs e)
+        private void bnBottom_btnStock_Click(object sender, EventArgs e)
         {
             frmPro_Dir_Stock frm = new frmPro_Dir_Stock();
             frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// 保存信息并退出
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bnBottom_btnOK_Click(object sender, EventArgs e)
+        {
+            string DirType = rbtERP.Checked ? "1" : "0";
+            UserClass.AppConfig.WriteValue("DIR_DirType", DirType);
+
+            //
+            string IsUsePZ = chbIsUsePZ.Checked ? "1" : "0";
+            UserClass.AppConfig.WriteValue("DIR_IsUsePZ", IsUsePZ);
+            UserClass.AppConfig.WriteValue("DIR_MaxQtyPZ", txtMaxQtyPZ.Text);
+            UserClass.AppConfig.WriteValue("DIR_PianYiPZ", txtPianYiPZ.Text);
+            UserClass.AppConfig.WriteValue("DIR_DPQtyPZ", txtDPQtyPZ.Text);
+            UserClass.AppConfig.WriteValue("DIR_MinQtyPZ", txtMinQtyPZ.Text);
+
+            //
+            string IsUseCL = chbIsUseCL.Checked ? "1" : "0";
+            UserClass.AppConfig.WriteValue("DIR_IsUseCL", IsUseCL);
+            UserClass.AppConfig.WriteValue("DIR_MaxQtyCL", txtMaxQtyCL.Text);
+            UserClass.AppConfig.WriteValue("DIR_PianYiCL", txtPianYiCL.Text);
+
+            //
+            string strDepartment = cbxDepartment.SelectedValue.ToString(), strStock = cbxStock.SelectedValue.ToString();
+            UserClass.AppConfig.WriteValue("DIR_CPDB_Department", strDepartment);
+            UserClass.AppConfig.WriteValue("DIR_CPDB_Stock", strStock);
+
+            //
+            UserClass.AppConfig.WriteValue("SQL_IP", txtIP.Text);
+            UserClass.AppConfig.WriteValue("SQL_Catalog", txtCatalog.Text);
+            UserClass.AppConfig.WriteValue("SQL_User", txtUser.Text);
+            UserClass.AppConfig.WriteValue("SQL_PWD", txtPWD.Text);
+
+            Model.Globa.GlobalParameter.Tmp_Params = DirType;
+            Model.Globa.GlobalParameter.Dir_DPQtyPZ = int.Parse(txtDPQtyPZ.Text);
+            Model.Globa.GlobalParameter.Dir_MinQtyPZ = int.Parse(txtMinQtyPZ.Text);
+            Model.Globa.GlobalParameter.Dir_CPDB_Department = strDepartment;
+            Model.Globa.GlobalParameter.Dir_CPDB_Stock = strStock;
+
+            Model.Globa.GlobalParameter.SQLInf.ConnectionString = "Data Source=" + txtIP.Text + ";Initial Catalog=" + txtCatalog.Text + ";User ID=" + txtUser.Text + ";Password=" + txtPWD.Text + ";Max Pool Size=1024;";
+
+            MessageBox.Show("保存成功");
+            DialogResult = DialogResult.OK;
+            Close();
+        }
+
+        /// <summary>
+        /// 取消并退出
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bnBottom_btnCancel_Click(object sender, EventArgs e)
+        {
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
     }
 }
