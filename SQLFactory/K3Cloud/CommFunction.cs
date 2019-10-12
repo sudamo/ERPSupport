@@ -1375,7 +1375,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetDM_Dir_Stock()
         {
-            _SQL = @"SELECT A.PID,B.FNAME OUTSTOCK,C.FNAME INSTOCK,A.CREATOR,A.CREATIONDATE
+            _SQL = @"SELECT A.PID,A.OUTSTOCKID,B.FNAME OUTSTOCK,A.INSTOCKID,C.FNAME INSTOCK,A.CREATOR,A.CREATIONDATE
             FROM DM_DIR_STOCK A
             INNER JOIN T_BD_STOCK_L B ON A.OUTSTOCKID = B.FSTOCKID AND B.FLOCALEID = 2052
             INNER JOIN T_BD_STOCK_L C ON A.INSTOCKID = C.FSTOCKID AND C.FLOCALEID = 2052
@@ -1426,7 +1426,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pInStockId"></param>
         public static void DelDM_Dir_Stock(int pPID)
         {
-            _SQL = "UPDATE DM_DIR_STOCK SET ISDELETE = 1 WHERE ISDELETE = 0 AND PID = " + pPID;
+            _SQL = "UPDATE DM_DIR_STOCK SET ISDELETE = 1 WHERE PID = " + pPID;
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }

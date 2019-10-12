@@ -1567,12 +1567,33 @@ namespace ERPSupport.SupForm
 
             List<string> lstDepSet = CommFunction.GetPickMtlDepartment();
 
-            DataTable dtPZ = PrdAllocation.GetTransPZ(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID);
-            DataTable dtCL = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, false);
-            int iPZ = dtPZ == null ? 0 : dtPZ.Rows.Count;
-            int iCL = dtCL == null ? 0 : dtCL.Rows.Count;
-            int iCurrent = 0, iCount = iPZ + iCL;
+            string strCondition = string.Empty, strConditionEx = string.Empty;//过滤条件，用于筛选或排除指定调出调入仓            
+            DataTable dtDir_Stock = CommFunction.GetDM_Dir_Stock();//获取指定仓调拨
+            if (dtDir_Stock != null && dtDir_Stock.Rows.Count > 0)
+            {
+                for (int i = 0; i < dtDir_Stock.Rows.Count; i++)
+                {
+                    if (i > 0)
+                    {
+                        strCondition += "OR";
+                        strConditionEx += "AND";
+                    }
+                    strCondition += "(MST.FSTOCKID = " + dtDir_Stock.Rows[i]["OUTSTOCKID"].ToString() + " AND DEP.FINSTOCKID = " + dtDir_Stock.Rows[i]["INSTOCKID"].ToString() + ")";
+                    strConditionEx += "(MST.FSTOCKID != " + dtDir_Stock.Rows[i]["OUTSTOCKID"].ToString() + " OR DEP.FINSTOCKID != " + dtDir_Stock.Rows[i]["INSTOCKID"].ToString() + ")";
+                }
+                strCondition = "(" + strCondition + ")";
+                strConditionEx = "(" + strConditionEx + ")";
+            }
 
+            DataTable dtPZ = PrdAllocation.GetTransPZ(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID);
+            DataTable dtZD = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strCondition);
+            DataTable dtCL = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, false);
+            DataTable dtCL_Tran = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, true);
+            int iPZ = dtPZ == null ? 0 : dtPZ.Rows.Count;
+            int iZD = dtZD == null ? 0 : dtZD.Rows.Count;
+            int iCL = dtCL == null ? 0 : dtCL.Rows.Count;
+            int iCL_Tran = dtCL_Tran == null ? 0 : dtCL_Tran.Rows.Count;
+            int iCurrent = 0, iCount = iPZ + iZD + iCL + iCL_Tran;//当前执行数和总记录数
 
             #region 盆子调拨
 
@@ -1863,6 +1884,18 @@ namespace ERPSupport.SupForm
 
             #region 材料调拨
 
+            #region 处理指定仓调拨
+            if (dtZD != null && dtZD.Rows.Count > 0)
+            {
+                tmp = PrdAllocation.TransferDirERP(dtZD, _dateFrom.Value);
+                iCurrent++;
+                ReportProgreess(e, iCount, iCurrent);
+
+                if (tmp != "")
+                    strBillNos += "[" + tmp + "]";
+            }
+            #endregion
+
             #region 处理没有中间仓 
             if (dtCL == null || dtCL.Rows.Count == 0)
                 goto Transit;
@@ -1928,36 +1961,36 @@ namespace ERPSupport.SupForm
 
             Transit:
             #region 处理有中间仓
-            dtCL = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, true);
-            if (dtCL == null || dtCL.Rows.Count == 0)
+            //dtCL_Tran = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, true);
+            if (dtCL_Tran == null || dtCL_Tran.Rows.Count == 0)
                 goto SHOW;
 
             lstOutStock = new List<string>();
             lstType = new List<string>();
             lstDep = new List<string>();
-            for (int i = 0; i < dtCL.Rows.Count; i++)
+            for (int i = 0; i < dtCL_Tran.Rows.Count; i++)
             {
-                if (!lstOutStock.Contains(dtCL.Rows[i]["调出仓库编码"].ToString()))
-                    lstOutStock.Add(dtCL.Rows[i]["调出仓库编码"].ToString());
-                if (!lstType.Contains(dtCL.Rows[i]["调拨类型"].ToString()))
-                    lstType.Add(dtCL.Rows[i]["调拨类型"].ToString());
-                if (!lstDep.Contains(dtCL.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtCL.Rows[i]["领料部门编码"].ToString()))
-                    lstDep.Add(dtCL.Rows[i]["领料部门编码"].ToString());
+                if (!lstOutStock.Contains(dtCL_Tran.Rows[i]["调出仓库编码"].ToString()))
+                    lstOutStock.Add(dtCL_Tran.Rows[i]["调出仓库编码"].ToString());
+                if (!lstType.Contains(dtCL_Tran.Rows[i]["调拨类型"].ToString()))
+                    lstType.Add(dtCL_Tran.Rows[i]["调拨类型"].ToString());
+                if (!lstDep.Contains(dtCL_Tran.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtCL_Tran.Rows[i]["领料部门编码"].ToString()))
+                    lstDep.Add(dtCL_Tran.Rows[i]["领料部门编码"].ToString());
             }
 
             for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
             {
-                DataTable dt_2 = dtCL.Clone();
-                for (int j = 0; j < dtCL.Rows.Count; j++)
+                DataTable dt_2 = dtCL_Tran.Clone();
+                for (int j = 0; j < dtCL_Tran.Rows.Count; j++)
                 {
-                    if (lstOutStock[i] == dtCL.Rows[j]["调出仓库编码"].ToString())
-                        dt_2.ImportRow(dtCL.Rows[j]);
+                    if (lstOutStock[i] == dtCL_Tran.Rows[j]["调出仓库编码"].ToString())
+                        dt_2.ImportRow(dtCL_Tran.Rows[j]);
                 }
                 if (dt_2.Rows.Count > 0)
                 {
                     for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
                     {
-                        DataTable dt_3 = dtCL.Clone();
+                        DataTable dt_3 = dtCL_Tran.Clone();
                         for (int n = 0; n < dt_2.Rows.Count; n++)
                         {
                             if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
@@ -1967,7 +2000,7 @@ namespace ERPSupport.SupForm
                         {
                             for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
                             {
-                                DataTable dt_4 = dtCL.Clone();
+                                DataTable dt_4 = dtCL_Tran.Clone();
                                 for (int q = 0; q < dt_3.Rows.Count; q++)
                                 {
                                     if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
@@ -1979,12 +2012,13 @@ namespace ERPSupport.SupForm
                                     //生成单据-WMS（调出仓库->中间仓）
                                     tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"), true);
 
+                                    //生成单据-ERP（中间仓->调入仓库）
+                                    tmp += " " + PrdAllocation.TransferDirERP(dt_4, _dateFrom.Value);
+
                                     iCurrent++;
                                     ReportProgreess(e, iCount, iCurrent);
 
-                                    //生成单据-ERP（中间仓->调入仓库）
-                                    tmp += PrdAllocation.TransferDirERP(dt_4, _dateFrom.Value);
-                                    if (tmp != "")
+                                    if (tmp.Trim() != "")
                                         strBillNos += "[" + tmp + "]";
                                 }
                             }

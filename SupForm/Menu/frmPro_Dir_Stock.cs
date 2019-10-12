@@ -56,11 +56,11 @@ namespace ERPSupport.SupForm.Menu
         /// </summary>
         private void SetDataSource()
         {
+            libStock.Text = string.Empty;
+            libStock.Items.Clear();
             _dtSource = CommFunction.GetDM_Dir_Stock();
             if (_dtSource == null || _dtSource.Rows.Count == 0)
                 return;
-
-            libStock.Items.Clear();
             for (int i = 0; i < _dtSource.Rows.Count; i++)
             {
                 libStock.Items.Add((i + 1).ToString() + ": " + _dtSource.Rows[i]["OUTSTOCK"].ToString() + " --> " + _dtSource.Rows[i]["INSTOCK"].ToString());

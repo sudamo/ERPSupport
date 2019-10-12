@@ -924,21 +924,49 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pCustomerId">客户内码</param>
         /// <param name="pOutStock">是否关联修改出库单</param>
         /// <param name="pReceivable">是否关联修改应收单</param>
-        public static void UpdateCustomer(string pFBillNo, int pFEntryId, int pCustomerId, bool pOutStock, bool pReceivable)
+        /// <param name="pReturnNotice">是否关联修改退货通知单</param>
+        ///<param name="pReturnStock">是否关联修改销售退货单</param>
+        public static void UpdateCustomer(string pFBillNo, int pFEntryId, int pCustomerId, bool pOutStock, bool pReceivable, bool pReturnNotice, bool pReturnStock)
         {
-            _SQL = "BEGIN";
+            //_SQL = "BEGIN";
+            //_SQL += " UPDATE T_SAL_ORDER SET FCUSTID = " + pCustomerId + " WHERE FBILLNO = '" + pFBillNo + "';";
+
+            //if (pOutStock && !pReceivable)//只更新出库单
+            //{
+            //    _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + " WHERE FBILLNO IN(SELECT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
+            //}
+            //else if (pOutStock && pReceivable)//更新出库单和应收单
+            //{
+            //    _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + " WHERE FBILLNO IN(SELECT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
+
+            //    _SQL += " UPDATE T_AR_RECEIVABLE SET FCUSTOMERID = " + pCustomerId + " WHERE FBILLNO IN(SELECT A.FBILLNO FROM T_AR_RECEIVABLE A INNER JOIN T_AR_RECEIVABLEENTRY AE ON A.FID = AE.FID WHERE AE.FORDERENTRYID = " + pFEntryId + ");";
+            //}
+
+            //_SQL += " END;";
+
+            //ORAHelper.ExecuteNonQuery(_SQL);
+
+            //20191012
+            _SQL = @"DECLARE
+            V_CUSTID NUMBER(10);
+            BEGIN
+            SELECT FCUSTID INTO V_CUSTID FROM T_SAL_ORDER WHERE FBILLNO = '" + pFBillNo + "';";
             _SQL += " UPDATE T_SAL_ORDER SET FCUSTID = " + pCustomerId + " WHERE FBILLNO = '" + pFBillNo + "';";
 
             if (pOutStock && !pReceivable)//只更新出库单
             {
-                _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + " WHERE FBILLNO IN(SELECT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
+                _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + " WHERE FCUSTOMERID = V_CUSTID AND FBILLNO IN(SELECT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
             }
             else if (pOutStock && pReceivable)//更新出库单和应收单
             {
-                _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + " WHERE FBILLNO IN(SELECT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
+                _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + " WHERE FCUSTOMERID = V_CUSTID AND FBILLNO IN(SELECT DISTINCT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
 
-                _SQL += " UPDATE T_AR_RECEIVABLE SET FCUSTOMERID = " + pCustomerId + " WHERE FBILLNO IN(SELECT A.FBILLNO FROM T_AR_RECEIVABLE A INNER JOIN T_AR_RECEIVABLEENTRY AE ON A.FID = AE.FID WHERE AE.FORDERENTRYID = " + pFEntryId + ");";
+                _SQL += " UPDATE T_AR_RECEIVABLE SET FCUSTOMERID = " + pCustomerId + " WHERE FCUSTOMERID = V_CUSTID AND FBILLNO IN(SELECT DISTINCT A.FBILLNO FROM T_AR_RECEIVABLE A INNER JOIN T_AR_RECEIVABLEENTRY AE ON A.FID = AE.FID WHERE AE.FORDERENTRYID = " + pFEntryId + ");";
             }
+            if (pReturnNotice)
+                _SQL += " UPDATE T_SAL_RETURNNOTICE SET FRETCUSTID = " + pCustomerId + " WHERE FRETCUSTID = V_CUSTID AND FID IN(SELECT DISTINCT A.FID FROM T_SAL_RETURNNOTICE A INNER JOIN T_SAL_RETURNNOTICEENTRY AE ON A.FID = AE.FID WHERE AE.FSOENTRYID = " + pFEntryId + ");";
+            if (pReturnStock)
+                _SQL += " UPDATE T_SAL_RETURNSTOCK SET FRETCUSTID = " + pCustomerId + " WHERE FRETCUSTID = V_CUSTID AND FID IN(SELECT DISTINCT A.FID FROM T_SAL_RETURNSTOCK A INNER JOIN T_SAL_RETURNSTOCKENTRY AE ON A.FID = AE.FID WHERE AE.FSOENTRYID = " + pFEntryId + ");";
 
             _SQL += " END;";
 

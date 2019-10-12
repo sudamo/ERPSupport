@@ -4,11 +4,12 @@ using System.Drawing;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using ERPSupport.SQL.K3Cloud;
-using ERPSupport.Model.Globa;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
+    using SQL.K3Cloud;
+    using Model.Globa;
+
     /// <summary>
     /// 单据修改
     /// </summary>
@@ -29,11 +30,19 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <summary>
         /// ToolStrip销售出库单
         /// </summary>
-        private ToolStripCheckBox _chbOutStock;
+        private ToolStripCheckBox _chbSo;
         /// <summary>
         /// ToolStrip应收单
         /// </summary>
         private ToolStripCheckBox _chbAr;
+        /// <summary>
+        /// ToolStrip销售退货通知单
+        /// </summary>
+        private ToolStripCheckBox _chbSn;
+        /// <summary>
+        /// ToolStrip销售退货单
+        /// </summary>
+        private ToolStripCheckBox _chbSr;
         /// <summary>
         /// 正则表达式
         /// </summary>
@@ -46,6 +55,11 @@ namespace ERPSupport.SupForm.UserCrtl
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 窗体加载
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ucCS_BillEdit_Load(object sender, EventArgs e)
         {
             //-----bnTop
@@ -90,23 +104,29 @@ namespace ERPSupport.SupForm.UserCrtl
             foreach (ToolStripItem item in list)
                 bnR1.Items.Add(item);
             //-----bnR3
-            _chbOutStock = new ToolStripCheckBox();
-            _chbOutStock.Text = "销售出库单";
-            _chbOutStock.ToolTipText = "同时修改销售出库单";
-            ((CheckBox)_chbOutStock.Control).CheckedChanged += new EventHandler(OutStockCheckedChanged);
-            //_chbOutStock.Checked = true;
+            _chbSo = new ToolStripCheckBox();
+            _chbSo.Text = "销售出库单";
+            _chbSo.ToolTipText = "同时修改关联的销售出库单";
+            ((CheckBox)_chbSo.Control).CheckedChanged += new EventHandler(OutStockCheckedChanged);
             _chbAr = new ToolStripCheckBox();
             _chbAr.Text = "应收单";
-            _chbAr.ToolTipText = "同时修改应收单";
+            _chbAr.ToolTipText = "同时修改关联的应收单";
             ((CheckBox)_chbAr.Control).CheckedChanged += new EventHandler(ArCheckedChanged);
-            //_chbAr.Checked = true;
+            _chbSn = new ToolStripCheckBox();
+            _chbSn.Text = "退货通知单";
+            _chbSn.ToolTipText = "同时修改关联的退货通知单";
+            _chbSr = new ToolStripCheckBox();
+            _chbSr.Text = "销售退货单";
+            _chbSr.ToolTipText = "同时修改关联的销售退货单";
             //重新排列Items
             list = new List<ToolStripItem>();
             list.Add(bnR3.Items[0]);
             list.Add(bnR3.Items[1]);
             list.Add(bnR3.Items[2]);
-            list.Add(_chbOutStock);
+            list.Add(_chbSo);
             list.Add(_chbAr);
+            list.Add(_chbSn);
+            list.Add(_chbSr);
             list.Add(bnR3.Items[3]);
             list.Add(bnR3.Items[4]);
             bnR3.Items.Clear();
@@ -120,7 +140,7 @@ namespace ERPSupport.SupForm.UserCrtl
         }
 
         /// <summary>
-        /// 
+        /// 填充下拉框
         /// </summary>
         private void FillCombobox()
         {
@@ -180,6 +200,9 @@ namespace ERPSupport.SupForm.UserCrtl
             }
         }
 
+        /// <summary>
+        /// 设置数据源
+        /// </summary>
         private void SetDataSource()
         {
             if (bnTop_txtBillNo.Text.Trim().Equals(string.Empty))
@@ -235,7 +258,6 @@ namespace ERPSupport.SupForm.UserCrtl
             MessageBox.Show(SalOrder.UpdateSingle(strBillNo, bSingle));
             SetDataSource();
         }
-
         private void bnR2_btnEdit_Click(object sender, EventArgs e)
         {
             if (bnR2_txtMTLNumber.Text.Trim().Equals(string.Empty) || bnR2_txtCanOutQty.Text.Trim().Equals(string.Empty))
@@ -252,10 +274,9 @@ namespace ERPSupport.SupForm.UserCrtl
                 return;
             }
         }
-
         private void bnR3_btnEdit_Click(object sender, EventArgs e)
         {
-            if(bnR2_txtCustomer.Text.Trim().Equals(string.Empty))
+            if (bnR2_txtCustomer.Text.Trim().Equals(string.Empty))
             {
                 MessageBox.Show("请输入客户。");
                 return;
@@ -272,7 +293,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
             string strBillNo = dgv1.Rows[0].Cells[0].Value.ToString();
             int iFEntryId = int.Parse(dgv1.Rows[0].Cells[13].Value.ToString());
-            SalOrder.UpdateCustomer(strBillNo, iFEntryId, iCustomerId, _chbOutStock.Checked, _chbAr.Checked);
+            SalOrder.UpdateCustomer(strBillNo, iFEntryId, iCustomerId, _chbSo.Checked, _chbAr.Checked, _chbSn.Checked, _chbSr.Checked);
             MessageBox.Show("修改成功。");
             SetDataSource();
         }
@@ -320,7 +341,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_btnPPBom.Visible = false;
                 bnTop_btnBom.Visible = false;
             }
-            else if(bnTop_cbxType.ComboBox.SelectedValue.ToString() == "PRD_MO")
+            else if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "PRD_MO")
             {
                 tpl1.Visible = false;
                 bnTop_lblBillNo.Visible = false;
@@ -397,13 +418,14 @@ namespace ERPSupport.SupForm.UserCrtl
 
         private void OutStockCheckedChanged(object sender, EventArgs e)
         {
-            if (!_chbOutStock.Checked)
+            if (!_chbSo.Checked)
                 _chbAr.Checked = false;
         }
         private void ArCheckedChanged(object sender, EventArgs e)
         {
             if (_chbAr.Checked)
-                _chbOutStock.Checked = true;
+                _chbSo.Checked = true;
         }
     }
 }
+
