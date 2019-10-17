@@ -407,7 +407,7 @@ namespace ERPSupport.SupForm.Bussiness
         {
             string retrunValue = string.Empty;
             string sLeft, sField, sCompare, sValue, sRight, sLogic;
-            DataTable dtOrg = CommFunction.GetOrganization(2);
+            DataTable dtOrg = CommFunction.GetOrganization();
             DataTable dtBillType = CommFunction.GetBillType("SAL_SALEORDER");
             DataTable dtDWay = CommFunction.GetAssistantDataEntryByFID("801e1892b8824299936cb07c1fd1694d");
 

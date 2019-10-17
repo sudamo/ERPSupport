@@ -2,6 +2,7 @@
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
@@ -13,6 +14,22 @@ namespace ERPSupport.SupForm.UserCrtl
     /// </summary>
     public partial class ucRP_Bom : UserControl
     {
+        /// <summary>
+        /// 选择类型
+        /// </summary>
+        private int _Type;
+        /// <summary>
+        /// ToolStripBOM重复查询
+        /// </summary>
+        private ToolStripRadioButton _rbtBom;
+        /// <summary>
+        /// ToolStripBOM项次重复查询
+        /// </summary>
+        private ToolStripRadioButton _rbtBomChild;
+        /// <summary>
+        /// ToolStripBOM项次查询
+        /// </summary>
+        private ToolStripRadioButton _rbtBomChild_Times;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -28,11 +45,42 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void ucRP_Bom_Load(object sender, EventArgs e)
         {
+            _Type = 1;
+
+            _rbtBom = new ToolStripRadioButton();
+            _rbtBom.Text = "BOM重复查询";
+            _rbtBom.Checked = true;
+            ((RadioButton)_rbtBom.Control).CheckedChanged += new EventHandler(rbt_CheckedChanged);
+
+            _rbtBomChild = new ToolStripRadioButton();
+            _rbtBomChild.Text = "BOM项次重复查询";
+            ((RadioButton)_rbtBomChild.Control).CheckedChanged += new EventHandler(rbt_CheckedChanged);
+
+            _rbtBomChild_Times = new ToolStripRadioButton();
+            _rbtBomChild_Times.Text = "BOM项次查询";
+
+            //重新排列Items
+            List<ToolStripItem> list = new List<ToolStripItem>();
+            list.Add(bnTop.Items[0]);
+            list.Add(_rbtBom);
+            list.Add(_rbtBomChild);
+            list.Add(_rbtBomChild_Times);
+            list.Add(bnTop.Items[1]);
+            list.Add(bnTop.Items[2]);
+            list.Add(bnTop.Items[3]);
+            list.Add(bnTop.Items[4]);
+            list.Add(bnTop.Items[5]);
+            list.Add(bnTop.Items[6]);
+
+            bnTop.Items.Clear();
+            foreach (ToolStripItem item in list)
+                bnTop.Items.Add(item);
+
+            bnTop_lblTimes.Visible = false;
+            bnTop_cbxLogic.Visible = false;
+            bnTop_cbxValue.Visible = false;
+
             FillComboBox();
-            rbtBom.Checked = true;
-            rbtReplaceGroup.Checked = false;
-            rbtBOMChild.Checked = false;
-            btnReport.Enabled = false;
         }
 
         /// <summary>
@@ -40,71 +88,65 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void FillComboBox()
         {
-            DataTable dt = null;
-            DataRow dr = null;
-
-            cbxUseOrg.DataSource = CommFunction.GetOrganization("LOCKSTOCK");
-            cbxUseOrg.DisplayMember = "FName";
-            cbxUseOrg.ValueMember = "FValue";
-            cbxUseOrg.SelectedIndex = 2;
+            DataTable dtLogic,dtValue;
+            DataRow dr;
 
             //cbxLogic
-            dt = new DataTable();
-            dt.Columns.Add("FName");
-            dt.Columns.Add("FValue");
+            dtLogic = new DataTable();
+            dtLogic.Columns.Add("FName");
+            dtLogic.Columns.Add("FValue");
 
-            dr = dt.NewRow();
+            dr = dtLogic.NewRow();
             dr["FName"] = "等于";
             dr["FValue"] = "=";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "小于";
             dr["FValue"] = "<";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
-            dr["FName"] = "大于";
-            dr["FValue"] = ">";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "小于等于";
             dr["FValue"] = "<=";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
+            dr["FName"] = "大于";
+            dr["FValue"] = ">";
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "大于等于";
             dr["FValue"] = ">=";
-            dt.Rows.Add(dr);
+            dtLogic.Rows.Add(dr);
 
-            cbxLogic.DataSource = dt;
-            cbxLogic.DisplayMember = "FName";
-            cbxLogic.ValueMember = "FValue";
-            cbxLogic.SelectedIndex = 2;
+            bnTop_cbxLogic.ComboBox.DataSource = dtLogic;
+            bnTop_cbxLogic.ComboBox.DisplayMember = "FName";
+            bnTop_cbxLogic.ComboBox.ValueMember = "FValue";
+            bnTop_cbxLogic.SelectedIndex = 3;
 
-            //Times
-            dt = new DataTable();
-            dt.Columns.Add("FName");
-            dt.Columns.Add("FValue");
+            //Value
+            dtValue = new DataTable();
+            dtValue.Columns.Add("FName");
+            dtValue.Columns.Add("FValue");
 
-            dr = dt.NewRow();
+            dr = dtValue.NewRow();
             dr["FName"] = "1";
             dr["FValue"] = "1";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtValue.Rows.Add(dr);
+            dr = dtValue.NewRow();
             dr["FName"] = "2";
             dr["FValue"] = "2";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtValue.Rows.Add(dr);
+            dr = dtValue.NewRow();
             dr["FName"] = "5";
             dr["FValue"] = "5";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtValue.Rows.Add(dr);
+            dr = dtValue.NewRow();
             dr["FName"] = "10";
             dr["FValue"] = "10";
-            dt.Rows.Add(dr);
+            dtValue.Rows.Add(dr);
 
-            cbxTimes.DataSource = dt;
-            cbxTimes.DisplayMember = "FName";
-            cbxTimes.ValueMember = "FValue";
-            cbxTimes.SelectedIndex = 0;
+            bnTop_cbxValue.ComboBox.DataSource = dtValue;
+            bnTop_cbxValue.ComboBox.DisplayMember = "FName";
+            bnTop_cbxValue.ComboBox.ValueMember = "FValue";
         }
 
         /// <summary>
@@ -112,29 +154,74 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnSearch_Click(object sender, EventArgs e)
+        private void bnTop_btnSearch_Click(object sender, EventArgs e)
         {
-            //dgv1.DataSource = CommonFunction.BOMQuery(rbtBom.Checked, rbtBOMChild.Checked, rbtReplaceGroup.Checked, cbxUseOrg.SelectedIndex, cbxUseOrg.SelectedValue.ToString(), cbxLogic.SelectedValue.ToString(), cbxTimes.SelectedValue.ToString());
-            //btnReport.Enabled = true;
+            DataTable dt = CommFunction.BOMQuery(_Type, SetFilter());
+            if (dt == null || dt.Rows.Count == 0)
+                return;
+
+            dgv1.DataSource = dt;
+            bnTop_btnReport.Enabled = true;
         }
 
         /// <summary>
-        /// 导出报表
+        /// 设置过滤条件
+        /// </summary>
+        /// <returns></returns>
+        private string SetFilter()
+        {
+            return bnTop_cbxLogic.ComboBox.ValueMember + bnTop_cbxValue.ComboBox.ValueMember;
+        }
+
+        /// <summary>
+        /// rbtBom_CheckedChanged
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnReport_Click(object sender, EventArgs e)
+        private void rbt_CheckedChanged(object sender, EventArgs e)
         {
-            //Export_Bom();
+            if (_rbtBom.Checked)
+            {
+                _Type = 1;
+                bnTop_lblTimes.Visible = false;
+                bnTop_cbxLogic.Visible = false;
+                bnTop_cbxValue.Visible = false;
+            }
+            else if (_rbtBomChild.Checked)
+            {
+                _Type = 2;
+                bnTop_lblTimes.Visible = false;
+                bnTop_cbxLogic.Visible = false;
+                bnTop_cbxValue.Visible = false;
+            }
+            else if (_rbtBomChild_Times.Checked)
+            {
+                _Type = 3;
+                bnTop_lblTimes.Visible = true;
+                bnTop_cbxLogic.Visible = true;
+                bnTop_cbxValue.Visible = true;
+            }
+
+            bnTop_btnReport.Enabled = false;
         }
 
-        #region 导出报表
         /// <summary>
-        /// 导出盘子物料报表
+        /// 
         /// </summary>
-        private void Export_Bom()
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bnTop_btnReport_Click(object sender, EventArgs e)
         {
-            if (dgv1.Rows.Count <= 0) return;
+
+        }
+
+        #region 报表
+        /// <summary>
+        /// 导出报表
+        /// </summary>
+        private void Report_Bom()
+        {
+            if (dgv1 == null || dgv1.Rows.Count == 0) return;
 
             Excel.Application xlApp = new Excel.Application();
             xlApp.DisplayAlerts = false;
@@ -143,9 +230,9 @@ namespace ERPSupport.SupForm.UserCrtl
 
             //标题
             string strTitle = string.Empty;
-            if (rbtBom.Checked || rbtReplaceGroup.Checked)
+            if (_rbtBom.Checked || _rbtBomChild_Times.Checked)
             {
-                strTitle += rbtBom.Checked ? "BOM重复报表" : "BOM项次查询报表";
+                strTitle += _rbtBom.Checked ? "BOM重复报表" : "BOM项次查询报表";
 
                 //生成表头
                 (worksheet.Columns["A:A", Type.Missing] as Excel.Range).ColumnWidth = "20";         //物料编码
@@ -158,7 +245,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 worksheet.Cells[2, 2] = "物料名称";
                 worksheet.Cells[2, 3] = "使用组织";
                 worksheet.Cells[2, 4] = "BOM";
-                worksheet.Cells[2, 5] = rbtBom.Checked ? "重复次数" : "项次";
+                worksheet.Cells[2, 5] = _rbtBom.Checked ? "重复次数" : "项次";
 
                 worksheet.Cells[1, 1] = strTitle;
                 Excel.Range rTitle = worksheet.Range[worksheet.Cells[1, 1], worksheet.Cells[1, 5]];
@@ -238,61 +325,5 @@ namespace ERPSupport.SupForm.UserCrtl
             xlApp.Visible = true;
         }
         #endregion
-
-        /// <summary>
-        /// rbtBom_CheckedChanged
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void rbtBom_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbtBom.Checked)
-            {
-                cbxUseOrg.Enabled = false;
-                cbxLogic.Enabled = false;
-                cbxTimes.Enabled = false;
-            }
-            else if (rbtBOMChild.Checked)
-            {
-                cbxUseOrg.Enabled = false;
-                cbxLogic.Enabled = false;
-                cbxTimes.Enabled = false;
-            }
-            else if (rbtReplaceGroup.Checked)
-            {
-                cbxUseOrg.Enabled = true;
-                cbxLogic.Enabled = true;
-                cbxTimes.Enabled = true;
-            }
-            btnReport.Enabled = false;
-        }
-
-        /// <summary>
-        /// rbtBOMChild_CheckedChanged
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void rbtBOMChild_CheckedChanged(object sender, EventArgs e)
-        {
-            if (rbtBom.Checked)
-            {
-                cbxUseOrg.Enabled = false;
-                cbxLogic.Enabled = false;
-                cbxTimes.Enabled = false;
-            }
-            else if (rbtBOMChild.Checked)
-            {
-                cbxUseOrg.Enabled = false;
-                cbxLogic.Enabled = false;
-                cbxTimes.Enabled = false;
-            }
-            else if (rbtReplaceGroup.Checked)
-            {
-                cbxUseOrg.Enabled = true;
-                cbxLogic.Enabled = true;
-                cbxTimes.Enabled = true;
-            }
-            btnReport.Enabled = false;
-        }
     }
 }

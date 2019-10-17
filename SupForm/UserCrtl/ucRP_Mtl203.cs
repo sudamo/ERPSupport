@@ -2,6 +2,7 @@
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Collections.Generic;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
@@ -13,6 +14,10 @@ namespace ERPSupport.SupForm.UserCrtl
     /// </summary>
     public partial class ucRP_Mtl203 : UserControl
     {
+        /// <summary>
+        /// ToolStrip日期
+        /// </summary>
+        private ToolStripDateTimePicker _dtpValue;
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -28,6 +33,24 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void ucRP_Mtl203_Load(object sender, EventArgs e)
         {
+            _dtpValue = new ToolStripDateTimePicker();
+            _dtpValue.Size = new Size(120, 27);
+
+            //重新排列Items
+            List<ToolStripItem> list = new List<ToolStripItem>();
+            list.Add(bnTop.Items[0]);
+            list.Add(bnTop.Items[1]);
+            list.Add(bnTop.Items[2]);
+            list.Add(bnTop.Items[3]);
+            list.Add(_dtpValue);
+            list.Add(bnTop.Items[4]);
+            list.Add(bnTop.Items[5]);
+            list.Add(bnTop.Items[6]);
+
+            bnTop.Items.Clear();
+            foreach (ToolStripItem item in list)
+                bnTop.Items.Add(item);
+
             FillComboBox();
         }
 
@@ -38,142 +61,104 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="pFormId"></param>
         private void FillComboBox()
         {
-            DataTable dt = null;
-            DataRow dr = null;
-            dt = new DataTable();
-            dt.Columns.Add("FName");
-            dt.Columns.Add("FValue");
-            dr = dt.NewRow();
-            dr["FName"] = "";
-            dr["FValue"] = "";
-            dt.Rows.Add(dr);
+            DataTable dtCondition, dtLogic;
+            DataRow dr;
 
-            dr = dt.NewRow();
-            dr["FName"] = "日期";
-            dr["FValue"] = "A.FDATE";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtCondition = new DataTable();
+            dtCondition.Columns.Add("FName");
+            dtCondition.Columns.Add("FValue");
+
+            dr = dtCondition.NewRow();
+            dr["FName"] = "请选择";
+            dr["FValue"] = "";
+
+            dtCondition.Rows.Add(dr);
+            dr = dtCondition.NewRow();
             dr["FName"] = "单据编号";
             dr["FValue"] = "A.FBILLNO";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtCondition.Rows.Add(dr);
+            dr = dtCondition.NewRow();
+            dr["FName"] = "日期";
+            dr["FValue"] = "A.FDATE";
+            dtCondition.Rows.Add(dr);
+            dr = dtCondition.NewRow();
             dr["FName"] = "客户";
             dr["FValue"] = "HL.FName";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
-            dr["FName"] = "销售组织";
-            dr["FValue"] = "CL3.FName";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtCondition.Rows.Add(dr);
+            dr = dtCondition.NewRow();
             dr["FName"] = "物料编码";
             dr["FValue"] = "D.FNumber";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtCondition.Rows.Add(dr);
+            dr = dtCondition.NewRow();
             dr["FName"] = "物料名称";
             dr["FValue"] = "DL.FName";
-            dt.Rows.Add(dr);
+            dtCondition.Rows.Add(dr);
+            dr = dtCondition.NewRow();
+            dr["FName"] = "销售组织";
+            dr["FValue"] = "CL3.FName";
+            dtCondition.Rows.Add(dr);
 
-            cbxCondition.DataSource = dt;
-            cbxCondition.DisplayMember = "FName";
-            cbxCondition.ValueMember = "FValue";
-            cbxCondition.SelectedIndex = 1;
+            bnTop_cbxCondition.ComboBox.DataSource = dtCondition;
+            bnTop_cbxCondition.ComboBox.DisplayMember = "FName";
+            bnTop_cbxCondition.ComboBox.ValueMember = "FValue";
 
             //cbxLogic
-            dt = new DataTable();
-            dt.Columns.Add("FName");
-            dt.Columns.Add("FValue");
+            dtLogic = new DataTable();
+            dtLogic.Columns.Add("FName");
+            dtLogic.Columns.Add("FValue");
 
-            dr = dt.NewRow();
-            dr["FName"] = "";
-            dr["FValue"] = "";
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
+            dr = dtLogic.NewRow();
             dr["FName"] = "等于";
             dr["FValue"] = "=";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "不等于";
             dr["FValue"] = "<>";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "包含";
             dr["FValue"] = "LIKE";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
-            dr["FName"] = "不包含";
-            dr["FValue"] = "NOT LIKE";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "左包含";
             dr["FValue"] = "LIKE";
-            dt.Rows.Add(dr);
-
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "右包含";
             dr["FValue"] = "LIKE";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+
+            dr = dtLogic.NewRow();
+            dr["FName"] = "不包含";
+            dr["FValue"] = "NOT LIKE";
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "大于";
             dr["FValue"] = ">";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "大于等于";
             dr["FValue"] = ">=";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "小于";
             dr["FValue"] = "<";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
+            dtLogic.Rows.Add(dr);
+            dr = dtLogic.NewRow();
             dr["FName"] = "小于等于";
             dr["FValue"] = "<=";
-            dt.Rows.Add(dr);
+            dtLogic.Rows.Add(dr);
 
-            dr = dt.NewRow();
-            dr["FName"] = "为空";
-            dr["FValue"] = "EMPTY";
-            dt.Rows.Add(dr);
-            dr = dt.NewRow();
-            dr["FName"] = "不为空";
-            dr["FValue"] = "NOT EMPTY";
-            dt.Rows.Add(dr);
+            bnTop_cbxLogic.ComboBox.DataSource = dtLogic;
+            bnTop_cbxLogic.ComboBox.DisplayMember = "FName";
+            bnTop_cbxLogic.ComboBox.ValueMember = "FValue";
 
-            cbxLogic.DataSource = dt;
-            cbxLogic.DisplayMember = "FName";
-            cbxLogic.ValueMember = "FValue";
-            cbxLogic.SelectedIndex = 1;
+            //Org
+            bnTop_cbxValue.ComboBox.DataSource = CommFunction.GetOrganization();
+            bnTop_cbxValue.ComboBox.DisplayMember = "FName";
+            bnTop_cbxValue.ComboBox.ValueMember = "FValue";
         }
         #endregion
-
-        /// <summary>
-        /// cbxCondition_SelectedIndexChanged
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void cbxCondition_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (cbxCondition.SelectedIndex == 1)
-            {
-                txtCondition.Visible = false;
-                dtpDate.Visible = true;
-            }
-            else
-            {
-                txtCondition.Visible = true;
-                dtpDate.Visible = false;
-            }
-        }
-
-        /// <summary>
-        /// 查询数据
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnSearch_Click(object sender, EventArgs e)
-        {
-            dgv1.DataSource = CommFunction.MTL203(SetFilter());
-        }
 
         /// <summary>
         /// 筛选条件
@@ -182,86 +167,71 @@ namespace ERPSupport.SupForm.UserCrtl
         private string SetFilter()
         {
             string strFilter = string.Empty;
-            if (cbxCondition.SelectedIndex == 0 || cbxLogic.SelectedIndex == 0) return string.Empty;//不选择筛选条件
-            if (cbxCondition.SelectedIndex == 1 || cbxCondition.SelectedIndex == 11)//日期类型
+            if (bnTop_cbxCondition.SelectedIndex == 0) return string.Empty;//不选择筛选条件
+            if (bnTop_cbxCondition.SelectedIndex == 2)//日期类型
             {
-                switch (cbxLogic.SelectedIndex)
+                switch (bnTop_cbxLogic.SelectedIndex)
                 {
                     case 1:
-                        strFilter = "TO_CHAR(" + cbxCondition.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " = '" + dtpDate.Value.ToString("yyyy-MM-dd") + "'";
+                        strFilter = "TO_CHAR(" + bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " <> '" + _dtpValue.Value.ToString("yyyy-MM-dd") + "'";
                         break;
-                    case 2:
-                        strFilter = "TO_CHAR(" + cbxCondition.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " <> '" + dtpDate.Value.ToString("yyyy-MM-dd") + "'";
+                    case 6:
+                        strFilter = "TO_CHAR(" + bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " > '" + _dtpValue.Value.ToString("yyyy-MM-dd") + "'";
                         break;
                     case 7:
-                        strFilter = "TO_CHAR(" + cbxCondition.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " > '" + dtpDate.Value.ToString("yyyy-MM-dd") + "'";
+                        strFilter = "TO_CHAR(" + bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " >= '" + _dtpValue.Value.ToString("yyyy-MM-dd") + "'";
                         break;
                     case 8:
-                        strFilter = "TO_CHAR(" + cbxCondition.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " >= '" + dtpDate.Value.ToString("yyyy-MM-dd") + "'";
+                        strFilter = "TO_CHAR(" + bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " < '" + _dtpValue.Value.ToString("yyyy-MM-dd") + "'";
                         break;
                     case 9:
-                        strFilter = "TO_CHAR(" + cbxCondition.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " < '" + dtpDate.Value.ToString("yyyy-MM-dd") + "'";
-                        break;
-                    case 10:
-                        strFilter = "TO_CHAR(" + cbxCondition.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " <= '" + dtpDate.Value.ToString("yyyy-MM-dd") + "'";
+                        strFilter = "TO_CHAR(" + bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " <= '" + _dtpValue.Value.ToString("yyyy-MM-dd") + "'";
                         break;
                     default:
-                        strFilter = "";
+                        strFilter = "TO_CHAR(" + bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + ", 'yyyy-MM-dd')" + " = '" + _dtpValue.Value.ToString("yyyy-MM-dd") + "'";
                         break;
                 }
             }
-            else//非日期类型
+            else if (bnTop_cbxCondition.SelectedIndex == 6)//组织类型
             {
-                if (txtCondition.Text.Trim().Length == 0) return string.Empty;//没输入筛选条件
-                switch (cbxLogic.SelectedIndex)
+                if (bnTop_cbxLogic.SelectedIndex == 1)
+                    strFilter = "";
+                else
+                    strFilter = "";
+            }
+            else//其他类型
+            {
+                if (bnTop_txtValue.Text.Trim().Length == 0)return string.Empty;//没输入筛选条件
+                switch (bnTop_cbxLogic.SelectedIndex)
                 {
                     case 1:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " = '" + txtCondition.Text.Trim() + "'";
+                        strFilter = bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + " <> '" + bnTop_txtValue.Text.Trim() + "'";
                         break;
                     case 2:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " <> '" + txtCondition.Text.Trim() + "'";
+                        strFilter = bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + " LIKE '%" + bnTop_txtValue.Text.Trim() + "%'";
                         break;
                     case 3:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " LIKE '%" + txtCondition.Text.Trim() + "%'";
+                        strFilter = bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + " LIKE '" + bnTop_txtValue.Text.Trim() + "%'";
                         break;
                     case 4:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " NOT LIKE '%" + txtCondition.Text.Trim() + "%'";
+                        strFilter = bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + " LIKE '%" + bnTop_txtValue.Text.Trim() + "'";
                         break;
                     case 5:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " LIKE '" + txtCondition.Text.Trim() + "%'";
-                        break;
-                    case 6:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " LIKE '%" + txtCondition.Text.Trim() + "'";
-                        break;
-                    case 11:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " IS NULL ";
-                        break;
-                    case 12:
-                        strFilter = cbxCondition.SelectedValue.ToString() + " IS NOT NULL ";
+                        strFilter = bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + " NOT LIKE '%" + bnTop_txtValue.Text.Trim() + "%'";
                         break;
                     default:
-                        strFilter = "";
+                        strFilter = bnTop_cbxCondition.ComboBox.SelectedValue.ToString() + " = '" + bnTop_txtValue.Text.Trim() + "'";
                         break;
                 }
             }
             return strFilter;
         }
 
-        /// <summary>
-        /// 导报表
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnExport_Click(object sender, EventArgs e)
-        {
-            Export_203();
-        }
-
-        #region 导出报表
+        #region 报表
         /// <summary>
         /// 导出盘子物料报表
         /// </summary>
-        private void Export_203()
+        private void Report_203()
         {
             Excel.Application xlApp = new Excel.Application();
             xlApp.DisplayAlerts = false;
@@ -344,5 +314,42 @@ namespace ERPSupport.SupForm.UserCrtl
             xlApp.Visible = true;
         }
         #endregion
+
+        private void bnTop_cbxCondition_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (bnTop_cbxCondition == null || bnTop_cbxCondition.ComboBox.Items.Count < 7)
+                return;
+            switch(bnTop_cbxCondition.ComboBox.SelectedIndex)
+            {
+                case 2:
+                    bnTop_txtValue.Visible = false;
+                    bnTop_cbxValue.Visible = false;
+                    _dtpValue.Visible = true;
+                    break;
+                case 6:
+                    bnTop_txtValue.Visible = false;
+                    bnTop_cbxValue.Visible = true;
+                    _dtpValue.Visible = false;
+                    break;
+                default:
+                    bnTop_txtValue.Visible = true;
+                    bnTop_cbxValue.Visible = false;
+                    _dtpValue.Visible = false;
+                    break;
+            }
+        }
+
+        private void bnTop_btnSearch_Click(object sender, EventArgs e)
+        {
+            dgv1.DataSource = CommFunction.MTL203(SetFilter());
+        }
+
+        private void bnTop_btnReport_Click(object sender, EventArgs e)
+        {
+            if (dgv1 == null || dgv1.Rows.Count == 0)
+                return;
+
+            Report_203();
+        }
     }
 }

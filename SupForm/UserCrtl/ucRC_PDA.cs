@@ -28,11 +28,21 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void ucRC_PDA_Load(object sender, EventArgs e)
         {
-            FillComboBox();
-            dtpFrom.Value = DateTime.Now.AddDays(-7);
-            dtpFrom.Value = DateTime.Now;
-            chbSucc.Checked = true;
-            chbFailed.Checked = true;
+            dgv1.Visible = false;
+            pl1.Visible = false;
+
+            Label lblNotefication = new Label();
+            lblNotefication.Text = "此功能已经暂停使用，如有需要请联系信息部员工。";
+            lblNotefication.Location = new Point(0, 0);
+            lblNotefication.Dock = DockStyle.Top;
+
+            Controls.Add(lblNotefication);
+            
+            //FillComboBox();
+            //dtpFrom.Value = DateTime.Now.AddDays(-7);
+            //dtpFrom.Value = DateTime.Now;
+            //chbSucc.Checked = true;
+            //chbFailed.Checked = true;
         }
 
         /// <summary>

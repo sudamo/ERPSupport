@@ -357,7 +357,7 @@ namespace ERPSupport.SupForm.Bussiness
                 }
                 else if (ctl.Name.Contains("cbxValue"))
                 {
-                    dtValue = CommFunction.GetOrganization(2);
+                    dtValue = CommFunction.GetOrganization();
 
                     ((ComboBox)ctl).DataSource = dtValue;
                     ((ComboBox)ctl).DisplayMember = "FName";
@@ -674,7 +674,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 10:
                                 {
                                     //组织下拉框
-                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetOrganization(2);
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetOrganization();
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
                                     ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
@@ -760,7 +760,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 4:
                                 {
                                     //组织下拉框
-                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetOrganization(2);
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetOrganization();
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
                                     ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;

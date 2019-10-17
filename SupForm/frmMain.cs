@@ -80,7 +80,11 @@ namespace ERPSupport.SupForm
         /// </summary>
         private string _FilterName;
         /// <summary>
-        /// 业务标识
+        /// 旧业务标识
+        /// </summary>
+        private FormID _FormId_Pre;
+        /// <summary>
+        /// 当前业务标识
         /// </summary>
         private FormID _FormId;
         /// <summary>
@@ -189,7 +193,7 @@ namespace ERPSupport.SupForm
             _CurrentRow = 0;
             _ChildCount = 0;
             _FilterName = string.Empty;
-            _FormId = FormID.PRD_INSTOCK;
+            _FormId = _FormId_Pre = FormID.PRD_INSTOCK;
             _DataSource = new DataTable();
             _ListUC = CommFunction.GetNavigation();
             _ListOpenUC = new List<string>();
@@ -650,103 +654,107 @@ namespace ERPSupport.SupForm
         /// </summary>
         private void FormIDChange()
         {
-            _col.Visible = false;
-            _chb.Visible = false;
-            _chb.Checked = false;
-
-            _ListFilter = new List<Filter>();
-            dgv1.DataSource = null;
-
-            if (_FormId == FormID.PRD_INSTOCK)
+            if (_FormId != _FormId_Pre)
             {
-                bnTop_btnCommit.Text = "领料";
-                bnTop_btnCommit.Enabled = true;
-                bnTop_btnCommit.Image = Properties.Resources.accept;
+                _col.Visible = false;
+                _chb.Visible = false;
+                _chb.Checked = false;
 
-                bnTop_btnCheck.Visible = false;
-                bnTop_btnSearch.Text = "查找";
-                bnTop_btnSearch.Enabled = true;
-                bnTop_btnFilter.Visible = false;
-                bnTop_btnUnLock.Visible = false;
+                _ListFilter = new List<Filter>();
+                dgv1.DataSource = null;
 
-                bnTop_lblDate.Text = "日期:";
-                bnTop_lblDate.Visible = true;
-                bnTop_lblTo.Visible = true;
-                _dateFrom.Visible = true;
-                _dateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                _dateTo.Visible = true;
-                _dateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
-            }
-            else if (_FormId == FormID.PRD_PPBOM)
-            {
-                bnTop_btnCommit.Text = "材料调拨";
-                bnTop_btnCommit.Enabled = true;
-                bnTop_btnCommit.Image = Properties.Resources.accept;
-
-                bnTop_btnCheck.Visible = true;
-                bnTop_btnSearch.Text = "汇总";
-                bnTop_btnSearch.Enabled = false;
-                bnTop_btnFilter.Visible = false;
-
-                bnTop_lblDate.Text = "计划开工日期:";
-                bnTop_lblDate.Visible = true;
-                bnTop_lblTo.Visible = false;
-                _dateFrom.Visible = true;
-                _dateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
-                _dateTo.Visible = false;
-
-                bnTop.Location = new Point(210, 0);
-
-                if (GlobalParameter.Tmp_Params != null && GlobalParameter.Tmp_Params.ToString() == "1")
+                if (_FormId == FormID.PRD_INSTOCK)
                 {
+                    bnTop_btnCommit.Text = "领料";
+                    bnTop_btnCommit.Enabled = true;
+                    bnTop_btnCommit.Image = Properties.Resources.accept;
+
+                    bnTop_btnCheck.Visible = false;
+                    bnTop_btnSearch.Text = "查找";
+                    bnTop_btnSearch.Enabled = true;
+                    bnTop_btnFilter.Visible = false;
                     bnTop_btnUnLock.Visible = false;
+
+                    bnTop_lblDate.Text = "日期:";
+                    bnTop_lblDate.Visible = true;
+                    bnTop_lblTo.Visible = true;
+                    _dateFrom.Visible = true;
+                    _dateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                    _dateTo.Visible = true;
+                    _dateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
                 }
-                else
+                else if (_FormId == FormID.PRD_PPBOM)
                 {
-                    bnTop_btnUnLock.Visible = true;
-                    bnTop_btnUnLock.Text = "成品调拨";
-                    bnTop_btnUnLock.ToolTipText = "产成品调拨";
-                    bnTop_btnUnLock.Image = Properties.Resources.direction;
+                    bnTop_btnCommit.Text = "材料调拨";
+                    bnTop_btnCommit.Enabled = true;
+                    bnTop_btnCommit.Image = Properties.Resources.accept;
+
+                    bnTop_btnCheck.Visible = true;
+                    bnTop_btnSearch.Text = "汇总";
+                    bnTop_btnSearch.Enabled = false;
+                    bnTop_btnFilter.Visible = false;
+
+                    bnTop_lblDate.Text = "计划开工日期:";
+                    bnTop_lblDate.Visible = true;
+                    bnTop_lblTo.Visible = false;
+                    _dateFrom.Visible = true;
+                    _dateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                    _dateTo.Visible = false;
+
+                    bnTop.Location = new Point(210, 0);
+
+                    if (GlobalParameter.Tmp_Params != null && GlobalParameter.Tmp_Params.ToString() == "1")
+                    {
+                        bnTop_btnUnLock.Visible = false;
+                    }
+                    else
+                    {
+                        bnTop_btnUnLock.Visible = true;
+                        bnTop_btnUnLock.Text = "成品调拨";
+                        bnTop_btnUnLock.ToolTipText = "产成品调拨";
+                        bnTop_btnUnLock.Image = Properties.Resources.direction;
+                    }
                 }
-            }
-            else if (_FormId == FormID.SAL_SaleOrder)
-            {
-                bnTop_btnCommit.Text = "锁库";
-                bnTop_btnCommit.Enabled = true;
-                bnTop_btnCommit.Image = Properties.Resources._lock;
+                else if (_FormId == FormID.SAL_SaleOrder)
+                {
+                    bnTop_btnCommit.Text = "锁库";
+                    bnTop_btnCommit.Enabled = true;
+                    bnTop_btnCommit.Image = Properties.Resources._lock;
 
-                bnTop_btnCheck.Visible = false;
-                bnTop_btnSearch.Text = "查找";
-                bnTop_btnSearch.Enabled = true;
-                bnTop_btnFilter.Visible = true;
-                bnTop_btnUnLock.Visible = true;
-                bnTop_btnUnLock.Text = "解锁";
-                bnTop_btnUnLock.ToolTipText = "库存解锁";
-                bnTop_btnUnLock.Image = Properties.Resources.key;
+                    bnTop_btnCheck.Visible = false;
+                    bnTop_btnSearch.Text = "查找";
+                    bnTop_btnSearch.Enabled = true;
+                    bnTop_btnFilter.Visible = true;
+                    bnTop_btnUnLock.Visible = true;
+                    bnTop_btnUnLock.Text = "解锁";
+                    bnTop_btnUnLock.ToolTipText = "库存解锁";
+                    bnTop_btnUnLock.Image = Properties.Resources.key;
 
-                bnTop_lblDate.Visible = false;
-                bnTop_lblTo.Visible = false;
-                _dateFrom.Visible = false;
-                _dateTo.Visible = false;
+                    bnTop_lblDate.Visible = false;
+                    bnTop_lblTo.Visible = false;
+                    _dateFrom.Visible = false;
+                    _dateTo.Visible = false;
 
-                bnTop.Location = new Point(2, 0);
-            }
-            else if (_FormId == FormID.SAL_SaleOrderRun)
-            {
-                bnTop_btnCommit.Text = "订单运算";
-                bnTop_btnCommit.Enabled = true;
-                bnTop_btnCommit.Image = Properties.Resources.accept;
+                    bnTop.Location = new Point(2, 0);
+                }
+                else if (_FormId == FormID.SAL_SaleOrderRun)
+                {
+                    bnTop_btnCommit.Text = "订单运算";
+                    bnTop_btnCommit.Enabled = true;
+                    bnTop_btnCommit.Image = Properties.Resources.accept;
 
-                bnTop_btnCheck.Visible = false;
-                bnTop_btnSearch.Text = "查找";
-                bnTop_btnSearch.Enabled = true;
-                bnTop_btnFilter.Visible = true;
-                bnTop_btnUnLock.Visible = false;
+                    bnTop_btnCheck.Visible = false;
+                    bnTop_btnSearch.Text = "查找";
+                    bnTop_btnSearch.Enabled = true;
+                    bnTop_btnFilter.Visible = true;
+                    bnTop_btnUnLock.Visible = false;
 
-                bnTop_lblDate.Visible = false;
-                bnTop_lblTo.Visible = false;
-                _dateFrom.Visible = false;
-                _dateTo.Visible = false;
+                    bnTop_lblDate.Visible = false;
+                    bnTop_lblTo.Visible = false;
+                    _dateFrom.Visible = false;
+                    _dateTo.Visible = false;
+                }
+                _FormId_Pre = _FormId;
             }
         }
         #endregion
@@ -1247,7 +1255,7 @@ namespace ERPSupport.SupForm
         {
             string retrunValue = string.Empty;
             string sLeft, sField, sCompare, sValue, sRight, sLogic;
-            DataTable dtOrg = CommFunction.GetOrganization(2);
+            DataTable dtOrg = CommFunction.GetOrganization();
             DataTable dtBillType = CommFunction.GetBillType("SAL_SALEORDER");
 
             for (int i = 0; i < _ListFilter.Count; i++)

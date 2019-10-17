@@ -36,7 +36,7 @@ namespace ERPSupport.SupForm.UserCrtl
         private void FillComboBox()
         {
             //cbxOrg
-            bnTop_cbxOrg.ComboBox.DataSource = CommFunction.GetOrganization(2);
+            bnTop_cbxOrg.ComboBox.DataSource = CommFunction.GetOrganization();
             bnTop_cbxOrg.ComboBox.DisplayMember = "FName";
             bnTop_cbxOrg.ComboBox.ValueMember = "FValue";
             bnTop_cbxOrg.SelectedIndex = 1;

@@ -331,7 +331,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pAcctype">类型：1、法人组织；2、利润中心</param>
         /// <returns></returns>
-        public static DataTable GetOrganization(int pAcctype)
+        public static DataTable GetOrganization(int pAcctype = 2)
         {
             _SQL = @"SELECT ORG.FORGID FVALUE,ORGL.FNAME
             FROM T_ORG_ORGANIZATIONS ORG
@@ -348,18 +348,24 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetOrganization(string pType)
         {
-            if (pType == "LOCKSTOCK")
-                _SQL = @"SELECT -1 FVALUE,'全部' FNAME FROM DUAL
-                UNION
-                SELECT ORG.FORGID,TO_CHAR(ORGL.FNAME)
-                FROM T_ORG_ORGANIZATIONS ORG
-                INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
-                WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A' AND ORG.FISSYSPRESET = 0 AND ORG.FISBUSINESSORG = 1 AND ORG.FACCTORGTYPE = 2 AND ORG.FORGID <> 100507";
-            else
-                _SQL = @"SELECT ORG.FORGID FVALUE,TO_CHAR(ORGL.FNAME) FNAME
-                FROM T_ORG_ORGANIZATIONS ORG
-                INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
-                WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A'";
+            switch (pType.ToUpper())
+            {
+                case "LOCKSTOCK":
+                case "BOM":
+                    _SQL = @"SELECT -1 FVALUE,'全部' FNAME FROM DUAL
+                    UNION
+                    SELECT ORG.FORGID,TO_CHAR(ORGL.FNAME)
+                    FROM T_ORG_ORGANIZATIONS ORG
+                    INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+                    WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A' AND ORG.FISSYSPRESET = 0 AND ORG.FISBUSINESSORG = 1 AND ORG.FACCTORGTYPE = 2 AND ORG.FORGID <> 100507";
+                    break;
+                default:
+                    _SQL = @"SELECT ORG.FORGID FVALUE,TO_CHAR(ORGL.FNAME) FNAME
+                    FROM T_ORG_ORGANIZATIONS ORG
+                    INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
+                    WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A'";
+                    break;
+            }
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -1078,53 +1084,45 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// BOM查询
         /// </summary>
-        /// <param name="pBom">BomChecked</param>
-        /// <param name="pBomC">BomChildChecked</param>
-        /// <param name="pRG">ReplaceGroupChecked</param>
-        /// <param name="pUseOrgIndex">使用组织Index</param>
-        /// <param name="pUseOrgValue">使用组织Value</param>
-        /// <param name="pLogicValue">LogicValue</param>
-        /// <param name="TimesValue">TimesValue</param>
+        /// <param name="pType">类型</param>
+        /// <param name="pFilter">过滤条件</param>
         /// <returns></returns>
-        public static DataTable BOMQuery(bool pBom, bool pBomC, bool pRG, int pUseOrgIndex, string pUseOrgValue, string pLogicValue, string TimesValue)
+        public static DataTable BOMQuery(int pType, string pFilter)
         {
-            if (pBom)
+            switch (pType)
             {
-                _SQL = @"SELECT B.FNUMBER 物料编码,BL.FNAME 物料名称,CL.FNAME 使用组织, A.FNUMBER BOM,COUNT(A.FNUMBER) 重复次数
-                FROM T_ENG_BOM A
-                INNER JOIN T_BD_MATERIAL B ON A.FMATERIALID = B.FMATERIALID AND B.FDOCUMENTSTATUS = 'C' AND B.FFORBIDSTATUS = 'A' AND B.FNUMBER LIKE '3%'
-                INNER JOIN T_BD_MATERIAL_L BL ON B.FMATERIALID = BL.FMATERIALID AND BL.FLOCALEID = 2052
-                INNER JOIN T_ORG_ORGANIZATIONS_L CL ON A.FUSEORGID = CL.FORGID AND CL.FLOCALEID = 2052
-                WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A'
-                GROUP BY B.FNUMBER,BL.FNAME,A.FNUMBER,CL.FNAME
-                HAVING COUNT(A.FNUMBER) > 1";
-            }
-            else if (pBomC)
-            {
-                _SQL = @"SELECT B.FNUMBER 物料编码,BL.FNAME 物料名称,CL.FNAME 使用组织, A.FNUMBER BOM,B2.FNUMBER 子项物料编码, COUNT(B2.FNUMBER) 重复次数
-                FROM T_ENG_BOM A
-                INNER JOIN T_ENG_BOMCHILD AC ON A.FID = AC.FID
-                INNER JOIN T_BD_MATERIAL B ON A.FMATERIALID = B.FMATERIALID AND B.FDOCUMENTSTATUS = 'C' AND B.FFORBIDSTATUS = 'A' AND B.FNUMBER LIKE '3%'
-                INNER JOIN T_BD_MATERIAL_L BL ON B.FMATERIALID = BL.FMATERIALID AND BL.FLOCALEID = 2052
-                INNER JOIN T_BD_MATERIAL B2 ON AC.FMATERIALID = B2.FMATERIALID
-                INNER JOIN T_ORG_ORGANIZATIONS_L CL ON A.FUSEORGID = CL.FORGID AND CL.FLOCALEID = 2052
-                WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND TO_CHAR(A.FCREATEDATE, 'yyyy-MM-dd') >= '" + DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd") + @"'
-                GROUP BY B.FNUMBER,BL.FNAME,A.FNUMBER,CL.FNAME,B2.FNUMBER
-                HAVING COUNT(B2.FNUMBER) > 1";
-            }
-            else if (pRG)
-            {
-                _SQL = @"SELECT B.FNUMBER 物料编码,BL.FNAME 物料名称,CL.FNAME 使用组织, A.FNUMBER BOM,COUNT(AC.FREPLACEGROUP) 项次
-                FROM T_ENG_BOM A
-                INNER JOIN T_ENG_BOMCHILD AC ON A.FID = AC.FID
-                INNER JOIN T_BD_MATERIAL B ON A.FMATERIALID = B.FMATERIALID AND B.FDOCUMENTSTATUS = 'C' AND B.FFORBIDSTATUS = 'A' AND B.FNUMBER LIKE '3%'
-                INNER JOIN T_BD_MATERIAL_L BL ON B.FMATERIALID = BL.FMATERIALID AND BL.FLOCALEID = 2052
-                INNER JOIN T_ORG_ORGANIZATIONS_L CL ON A.FUSEORGID = CL.FORGID AND CL.FLOCALEID = 2052
-                WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' ";
-
-                if (pUseOrgIndex != 0)
-                    _SQL += " AND A.FUSEORGID = " + pUseOrgValue;
-                _SQL += " GROUP BY B.FNUMBER,BL.FNAME,CL.FNAME,A.FNUMBER HAVING COUNT(AC.FREPLACEGROUP) " + pLogicValue + TimesValue;
+                case 1:
+                    _SQL = @"SELECT B.FNUMBER 物料编码,BL.FNAME 物料名称,CL.FNAME 使用组织, A.FNUMBER BOM,COUNT(A.FNUMBER) 重复次数
+                    FROM T_ENG_BOM A
+                    INNER JOIN T_BD_MATERIAL B ON A.FMATERIALID = B.FMATERIALID AND B.FDOCUMENTSTATUS = 'C' AND B.FFORBIDSTATUS = 'A' AND B.FNUMBER LIKE '3%'
+                    INNER JOIN T_BD_MATERIAL_L BL ON B.FMATERIALID = BL.FMATERIALID AND BL.FLOCALEID = 2052
+                    INNER JOIN T_ORG_ORGANIZATIONS_L CL ON A.FUSEORGID = CL.FORGID AND CL.FLOCALEID = 2052
+                    WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A'
+                    GROUP BY B.FNUMBER,BL.FNAME,A.FNUMBER,CL.FNAME
+                    HAVING COUNT(A.FNUMBER) > 1";
+                    break;
+                case 2:
+                    _SQL = @"SELECT B.FNUMBER 物料编码,BL.FNAME 物料名称,CL.FNAME 使用组织, A.FNUMBER BOM,B2.FNUMBER 子项物料编码, COUNT(B2.FNUMBER) 重复次数
+                    FROM T_ENG_BOM A
+                    INNER JOIN T_ENG_BOMCHILD AC ON A.FID = AC.FID
+                    INNER JOIN T_BD_MATERIAL B ON A.FMATERIALID = B.FMATERIALID AND B.FDOCUMENTSTATUS = 'C' AND B.FFORBIDSTATUS = 'A' AND B.FNUMBER LIKE '3%'
+                    INNER JOIN T_BD_MATERIAL_L BL ON B.FMATERIALID = BL.FMATERIALID AND BL.FLOCALEID = 2052
+                    INNER JOIN T_BD_MATERIAL B2 ON AC.FMATERIALID = B2.FMATERIALID
+                    INNER JOIN T_ORG_ORGANIZATIONS_L CL ON A.FUSEORGID = CL.FORGID AND CL.FLOCALEID = 2052
+                    WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND TO_CHAR(A.FCREATEDATE, 'yyyy-MM-dd') >= '" + DateTime.Now.AddMonths(-1).ToString("yyyy-MM-dd") + @"'
+                    GROUP BY B.FNUMBER,BL.FNAME,A.FNUMBER,CL.FNAME,B2.FNUMBER
+                    HAVING COUNT(B2.FNUMBER) > 1";
+                    break;
+                default:
+                    _SQL = @"SELECT B.FNUMBER 物料编码,BL.FNAME 物料名称,CL.FNAME 使用组织, A.FNUMBER BOM,COUNT(AC.FREPLACEGROUP) 项次
+                    FROM T_ENG_BOM A
+                    INNER JOIN T_ENG_BOMCHILD AC ON A.FID = AC.FID
+                    INNER JOIN T_BD_MATERIAL B ON A.FMATERIALID = B.FMATERIALID AND B.FDOCUMENTSTATUS = 'C' AND B.FFORBIDSTATUS = 'A' AND B.FNUMBER LIKE '3%'
+                    INNER JOIN T_BD_MATERIAL_L BL ON B.FMATERIALID = BL.FMATERIALID AND BL.FLOCALEID = 2052
+                    INNER JOIN T_ORG_ORGANIZATIONS_L CL ON A.FUSEORGID = CL.FORGID AND CL.FLOCALEID = 2052
+                    WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND A.FUSEORGID =  100508
+                    GROUP BY B.FNUMBER,BL.FNAME,CL.FNAME,A.FNUMBER HAVING COUNT(AC.FREPLACEGROUP) " + pFilter;
+                    break;
             }
 
             return ORAHelper.ExecuteTable(_SQL);
@@ -1133,7 +1131,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 203物料
         /// </summary>
-        /// <param name="pFilter">筛选条件</param>
+        /// <param name="pFilter">过滤条件</param>
         /// <returns></returns>
         public static DataTable MTL203(string pFilter)
         {

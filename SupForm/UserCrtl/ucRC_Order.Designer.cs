@@ -181,7 +181,7 @@
             // 
             // bnTop_btnExport
             // 
-            this.bnTop_btnExport.Image = global::ERPSupport.SupForm.Properties.Resources.text;
+            this.bnTop_btnExport.Image = global::ERPSupport.SupForm.Properties.Resources.page_excel;
             this.bnTop_btnExport.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnTop_btnExport.Name = "bnTop_btnExport";
             this.bnTop_btnExport.Size = new System.Drawing.Size(76, 22);
