@@ -32,7 +32,7 @@ namespace ERPSupport.SupForm.UserClass
         }
 
         /// <summary>
-        /// 根据key写入value
+        /// 根据字段写入值-App.config
         /// </summary>
         /// <param name="pKey">key</param>
         /// <param name="pValue">value</param>
@@ -70,5 +70,30 @@ namespace ERPSupport.SupForm.UserClass
             doc.Save(strFileName);
             ConfigurationManager.RefreshSection("appSettings");
         }
+
+        ///// <summary>
+        ///// 根据节点和字段写入值-Web.config
+        ///// </summary>
+        ///// <param name="item">节点</param>
+        ///// <param name="key">字段</param>
+        ///// <param name="value">值</param>
+        //private static void WriteConfig(string item, string key, string value)
+        //{
+        //    if (item == "") item = "appSettings";
+
+        //    Configuration config = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration(System.Web.HttpContext.Current.Request.ApplicationPath);
+        //    AppSettingsSection appSection = (AppSettingsSection)config.GetSection(item);
+        //    if (appSection.Settings[key] == null)
+        //    {
+        //        appSection.Settings.Add(key, value);
+        //        config.Save();
+        //    }
+        //    else
+        //    {
+        //        appSection.Settings.Remove(key);
+        //        appSection.Settings.Add(key, value);
+        //        config.Save();
+        //    }
+        //}
     }
 }
