@@ -20,6 +20,16 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             InitializeComponent();
         }
+        public ucLogin(bool pRemember)
+        {
+            InitializeComponent();
+
+            if(pRemember)
+            {
+                txtUser.Text = System.Configuration.ConfigurationManager.AppSettings["LOG_Users"];
+                txtPWD.Text = System.Configuration.ConfigurationManager.AppSettings["LOG_Passwords"];
+            }
+        }
 
         /// <summary>
         /// btnLogin_Click

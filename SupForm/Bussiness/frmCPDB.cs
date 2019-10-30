@@ -475,11 +475,16 @@ namespace ERPSupport.SupForm.Bussiness
                             sValue = GetValue(_ListFilter[i], new DataTable());
                             break;
                         case 9:
+                            sField = "STKL.FNAME";
+                            sCompare = GetCompare(_ListFilter[i], false);
+                            sValue = GetValue(_ListFilter[i], new DataTable());
+                            break;
+                        case 10:
                             sField = "O.FFULLLOCK";
                             sCompare = " = ";
                             sValue = GetValue(_ListFilter[i], new DataTable());
                             break;
-                        case 10:
+                        case 11:
                             sField = "";
                             sCompare = "";
                             sValue = GetValue(_ListFilter[i], new DataTable());
@@ -594,45 +599,46 @@ namespace ERPSupport.SupForm.Bussiness
 
             switch (pFilter.Field)
             {
-                case 1:
-                case 2:
+                case 1://日期
+                case 2://审核日期
                     retrunValue = "'" + pFilter.FilterValue.FilterDateTime.ToString("yyyy-MM-dd") + "'";
                     break;
-                case 3:
-                case 7:
-                case 8:
+                case 3://单据编号
+                case 7://物料代码
+                case 8://物料名称
+                case 9://调出仓库
                     switch (pFilter.Compare)
                     {
-                        case 7:
-                        case 10:
+                        case 7://包含
+                        case 10://不包含
                             retrunValue = "'%" + pFilter.FilterValue.FilterText + "%'";
                             break;
-                        case 8:
+                        case 8://左包含
                             retrunValue = "'" + pFilter.FilterValue.FilterText + "%'";
                             break;
-                        case 9:
+                        case 9://右包含
                             retrunValue = "'%" + pFilter.FilterValue.FilterText + "'";
                             break;
-                        case 11:
+                        case 11://涵括
                             string str = pFilter.FilterValue.FilterText.Replace("，", ",").Replace(",", "','");
                             retrunValue = "('" + str + "')";
                             break;
-                        default:
+                        default://等于
                             retrunValue = "'" + pFilter.FilterValue.FilterText + "'";
                             break;
                     }
                     break;
-                case 4:
+                case 4://销售组织
                     retrunValue = pDT.Rows[pFilter.FilterValue.FilterIndex]["FValue"].ToString();
                     break;
-                case 5:
-                case 6:
+                case 5://单据类型
+                case 6://发货类别
                     retrunValue = "'" + pDT.Rows[pFilter.FilterValue.FilterIndex]["FValue"].ToString() + "'";
                     break;
-                case 9:
+                case 10://完全锁库
                     retrunValue = pFilter.FilterValue.FilterCheck ? "'1'" : "'0'";
                     break;
-                case 10:
+                case 11://通知单数>锁库调拨数
                     retrunValue = pFilter.FilterValue.FilterCheck ? "OER.FBASEDELIQTY > OE.F_PAEZ_LOCKALLOTQTY" : "OER.FBASEDELIQTY <= OE.F_PAEZ_LOCKALLOTQTY";
                     break;
             }

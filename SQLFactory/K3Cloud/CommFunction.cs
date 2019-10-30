@@ -599,7 +599,11 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetSolution(FormID pFormID)
         {
-            _SQL = "SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'" + pFormID + "') > 0 AND (ISSHARE = '1' OR CREATOR = '" + Model.Globa.GlobalParameter.K3Inf.UserName + "') ORDER BY SNAME";
+            if (GlobalParameter.K3Inf.UserName.ToUpper() == "DAMO")
+                _SQL = "SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'" + pFormID + "') > 0 ORDER BY SNAME";
+            else
+                _SQL = "SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'" + pFormID + "') > 0 AND (ISSHARE = '1' OR CREATOR = '" + GlobalParameter.K3Inf.UserName + "') ORDER BY SNAME";
+
             return ORAHelper.ExecuteTable(_SQL);
         }
 

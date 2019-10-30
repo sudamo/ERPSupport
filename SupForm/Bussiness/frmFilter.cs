@@ -273,6 +273,11 @@ namespace ERPSupport.SupForm.Bussiness
                                 dr["FValue"] = "MTLL.FNAME";
                                 dtField.Rows.Add(dr);
                                 dr = dtField.NewRow();
+                                dr["FName"] = "调出仓库";
+                                dr["FValue"] = "STKL.FNAME";
+                                dtField.Rows.Add(dr);
+
+                                dr = dtField.NewRow();
                                 dr["FName"] = "完全锁库";
                                 dr["FValue"] = "O.FFULLLOCK";
                                 dtField.Rows.Add(dr);
@@ -320,16 +325,16 @@ namespace ERPSupport.SupForm.Bussiness
                     dr["FName"] = "大于等于";
                     dr["FValue"] = ">=";
                     dtCompare.Rows.Add(dr);
-                    dr = dtCompare.NewRow();
+                    dr = dtCompare.NewRow();//5
                     dr["FName"] = "小于";
                     dr["FValue"] = "<";
-                    dtCompare.Rows.Add(dr);//5
+                    dtCompare.Rows.Add(dr);
                     dr = dtCompare.NewRow();
                     dr["FName"] = "小于等于";
                     dr["FValue"] = "<=";
                     dtCompare.Rows.Add(dr);
 
-                    dr = dtCompare.NewRow();
+                    dr = dtCompare.NewRow();//7
                     dr["FName"] = "包含";
                     dr["FValue"] = "LIKE";
                     dtCompare.Rows.Add(dr);
@@ -341,10 +346,10 @@ namespace ERPSupport.SupForm.Bussiness
                     dr["FName"] = "右包含";
                     dr["FValue"] = "LIKE";
                     dtCompare.Rows.Add(dr);
-                    dr = dtCompare.NewRow();
+                    dr = dtCompare.NewRow();//10
                     dr["FName"] = "不包含";
                     dr["FValue"] = "NOT LIKE";
-                    dtCompare.Rows.Add(dr);//10
+                    dtCompare.Rows.Add(dr);
 
                     dr = dtCompare.NewRow();
                     dr["FName"] = "涵括";
@@ -495,7 +500,7 @@ namespace ERPSupport.SupForm.Bussiness
 
                 entry.FilterValue = new FilterValue(((TextBox)sc1.Panel2.Controls.Find("txtValue" + (i + 1).ToString(), false)[0]).Text.Trim(), ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + (i + 1).ToString(), false)[0]).Value, ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + (i + 1).ToString(), false)[0]).SelectedIndex, ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + (i + 1).ToString(), false)[0]).Checked);
 
-                if ((entry.Field > 0 && entry.Compare > 0) || ((_FormID == FormID.SAL_SaleOrder || _FormID == FormID.SAL_SaleOrderRun) && entry.Field > 10) || (_FormID == FormID.STK_TransferDirect && entry.Field > 8))//复选框可以没有比较逻辑
+                if ((entry.Field > 0 && entry.Compare > 0) || ((_FormID == FormID.SAL_SaleOrder || _FormID == FormID.SAL_SaleOrderRun) && entry.Field > 10) || (_FormID == FormID.STK_TransferDirect && entry.Field > 9))//复选框可以没有比较逻辑
                 {
                     iLeft += entry.ParenthesesLeft;
                     iRight += entry.ParenthesesRight;
@@ -746,6 +751,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 3:
                             case 7:
                             case 8:
+                            case 9:
                                 {
                                     //文本
                                     ((TextBox)sc1.Panel2.Controls.Find("txtValue" + iSeq, false)[0]).Visible = true;
@@ -796,8 +802,8 @@ namespace ERPSupport.SupForm.Bussiness
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxCompare" + iSeq, false)[0]).Visible = true;
                                 }
                                 break;
-                            case 9:
                             case 10:
+                            case 11:
                                 {
                                     //复选框
                                     ((CheckBox)sc1.Panel2.Controls.Find("chbValue" + iSeq, false)[0]).Visible = true;

@@ -31,7 +31,12 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void frmLogin_Load(object sender, EventArgs e)
         {
-            UserCrtl.ucLogin ucLG = new UserCrtl.ucLogin();
+            if (ConfigurationManager.AppSettings["LOG_Remember"] == "1")
+                chbRemenber.Checked = true;
+            else
+                chbRemenber.Checked = false;
+
+            UserCrtl.ucLogin ucLG = new UserCrtl.ucLogin(chbRemenber.Checked);
             ucLG.Name = "Login";
             ucLG.Dock = DockStyle.Fill;
             ucLG._LoginClick += new EventHandler(UserLogin);
@@ -162,6 +167,19 @@ namespace ERPSupport.SupForm
             GlobalParameter.Dir_CPDB_Department = ConfigurationManager.AppSettings["DIR_CPDB_Department"];
             GlobalParameter.Dir_CPDB_Stock = ConfigurationManager.AppSettings["DIR_CPDB_Stock"];
             #endregion
+
+            string IsRemember = chbRemenber.Checked ? "1" : "0";
+            UserClass.AppConfig.WriteValue("LOG_Remember", IsRemember);
+            if(chbRemenber.Checked)
+            {
+                UserClass.AppConfig.WriteValue("LOG_Users", userName);
+                UserClass.AppConfig.WriteValue("LOG_Passwords", PWD);
+            }
+            else
+            {
+                UserClass.AppConfig.WriteValue("LOG_Users", "");
+                UserClass.AppConfig.WriteValue("LOG_Passwords", "");
+            }
 
             //主窗体
             frmMain fMain = new frmMain();
