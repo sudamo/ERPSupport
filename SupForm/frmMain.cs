@@ -3238,6 +3238,17 @@ namespace ERPSupport.SupForm
         }
 
         /// <summary>
+        /// 同步K3数据到WMS系统
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsmiPro_WMSData_Click(object sender, EventArgs e)
+        {
+            frmPro_WMSData frm = new frmPro_WMSData();
+            frm.Show(this);
+        }
+
+        /// <summary>
         /// 注册
         /// </summary>
         /// <param name="sender"></param>

@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>23</ApplicationRevision>
+    <ApplicationRevision>24</ApplicationRevision>
     <ApplicationVersion>1.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -210,6 +210,12 @@
     </Compile>
     <Compile Include="Menu\frmPro_Dir_Stock.Designer.cs">
       <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\frmPro_WMSData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\frmPro_WMSData.Designer.cs">
+      <DependentUpon>frmPro_WMSData.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu\frmTool_Timer.cs">
       <SubType>Form</SubType>
@@ -397,6 +403,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir_Stock.resx">
       <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\frmPro_WMSData.resx">
+      <DependentUpon>frmPro_WMSData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmTool_Timer.resx">
       <DependentUpon>frmTool_Timer.cs</DependentUpon>

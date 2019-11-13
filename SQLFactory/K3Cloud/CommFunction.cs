@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Data;
+using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
@@ -1488,6 +1489,27 @@ namespace ERPSupport.SQL.K3Cloud
             WHERE TO_CHAR(A.FDATETIME,'YYYY-MM-DD') = '" + pDate.ToString("yyyy-MM-dd") + "' AND B.FNAME = '" + pUser + "'";
 
             return ORAHelper.ExecuteTable(_SQL);
+        }
+        #endregion
+
+        #region WMS
+
+        /// <summary>
+        /// 同步K3数据到WMS系统
+        /// </summary>
+        /// <param name="pIsAll"></param>
+        /// <param name="pFNumber"></param>
+        public static void SynMTLForWMS(bool pIsAll, string pFNumber)
+        {
+            SqlParameter[] parms = new SqlParameter[]
+            {
+                new SqlParameter("@FNumber",SqlDbType.Bit),
+                new SqlParameter("@All",SqlDbType.VarChar)
+            };
+            parms[0].Value = pFNumber;
+            parms[1].Value = pIsAll;
+
+            SQLHelper.ExecuteNonQuery(CommandType.StoredProcedure, "DM_P_SynMTL2", parms);
         }
         #endregion
 

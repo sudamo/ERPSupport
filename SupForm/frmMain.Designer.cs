@@ -92,6 +92,7 @@
             this.tSumSecond = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.bs1 = new System.Windows.Forms.BindingSource(this.components);
+            this.tsmiPro_WMSData = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.sc1)).BeginInit();
             this.sc1.Panel2.SuspendLayout();
             this.sc1.SuspendLayout();
@@ -577,7 +578,8 @@
             // tsmiPro
             // 
             this.tsmiPro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmiPro_Dir});
+            this.tsmiPro_Dir,
+            this.tsmiPro_WMSData});
             this.tsmiPro.Name = "tsmiPro";
             this.tsmiPro.Size = new System.Drawing.Size(83, 22);
             this.tsmiPro.Text = "项目(&P)";
@@ -585,7 +587,7 @@
             // tsmiPro_Dir
             // 
             this.tsmiPro_Dir.Name = "tsmiPro_Dir";
-            this.tsmiPro_Dir.Size = new System.Drawing.Size(199, 26);
+            this.tsmiPro_Dir.Size = new System.Drawing.Size(208, 26);
             this.tsmiPro_Dir.Text = "调拨单设置(&D)";
             this.tsmiPro_Dir.Click += new System.EventHandler(this.tsmiPro_Dir_Click);
             // 
@@ -637,6 +639,14 @@
             // tSumSecond
             // 
             this.tSumSecond.Interval = 1000;
+            // 
+            // tsmiPro_WMSData
+            // 
+            this.tsmiPro_WMSData.Name = "tsmiPro_WMSData";
+            this.tsmiPro_WMSData.Size = new System.Drawing.Size(208, 26);
+            this.tsmiPro_WMSData.Text = "WMS数据同步(&W)";
+            this.tsmiPro_WMSData.ToolTipText = "同步K3数据到WMS系统";
+            this.tsmiPro_WMSData.Click += new System.EventHandler(this.tsmiPro_WMSData_Click);
             // 
             // frmMain
             // 
@@ -739,5 +749,6 @@
         private System.Windows.Forms.ToolStripButton bnB_btnLast;
         private System.Windows.Forms.ToolStripLabel bnTop_lblDate;
         private System.Windows.Forms.ToolStripLabel bnTop_lblTo;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_WMSData;
     }
 }
