@@ -1613,35 +1613,35 @@ namespace ERPSupport.SQL.K3Cloud
             if (pFName.Equals(string.Empty))
             {
                 if (pFNameTran == " 请选择")
-                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + "',FCREATEDATE = SYSDATE,FTRANSTOCKID = 0 WHERE FID = " + pFID;
+                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + "',FMODIFYDATE = SYSDATE,FTRANSTOCKID = 0 WHERE FID = " + pFID;
                 else
-                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,FTRANSTOCKID =
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + @"',FMODIFYDATE = SYSDATE,FTRANSTOCKID =
                     (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
                     WHERE FID = " + pFID;
             }
             else if (pFNameTran.Equals(string.Empty))
             {
                 if (pFName == " 请选择")
-                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + "',FCREATEDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ' WHERE FID = " + pFID;
+                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + "',FMODIFYDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ' WHERE FID = " + pFID;
                 else
-                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + @"',FMODIFYDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
                     (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"')
                     WHERE FID = " + pFID;
             }
             else
             {
                 if (pFName == " 请选择" && pFNameTran == " 请选择")
-                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + "',FCREATEDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ',FTRANSTOCKID = 0 WHERE FID = " + pFID;
+                    _SQL = "UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + "',FMODIFYDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ',FTRANSTOCKID = 0 WHERE FID = " + pFID;
                 else if (pFName == " 请选择")
-                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ',
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + @"',FMODIFYDATE = SYSDATE,FSTOCKID = 0,FSTOCKNUMBER = ' ',
                     FTRANSTOCKID = (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
                     WHERE FID = " + pFID;
                 else if (pFNameTran == " 请选择")
-                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + @"',FMODIFYDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
                     (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"'),
                     FTRANSTOCKID = 0 WHERE FID = " + pFID;
                 else
-                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FCREATOR = '" + GlobalParameter.K3Inf.UserName + @"',FCREATEDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
+                    _SQL = @"UPDATE T_AUTO_MSTOCKSETTING MST SET FMODIFIER = '" + GlobalParameter.K3Inf.UserName + @"',FMODIFYDATE = SYSDATE,(FSTOCKID, FSTOCKNUMBER) =
                     (SELECT STK.FSTOCKID,STK.FNUMBER FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFName + @"'),
                     FTRANSTOCKID = (SELECT STK.FSTOCKID FROM T_BD_STOCK STK,T_BD_STOCK_L STKL WHERE STK.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 AND STKL.FNAME = '" + pFNameTran + @"')
                     WHERE FID = " + pFID;
