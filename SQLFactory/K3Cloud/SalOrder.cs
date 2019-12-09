@@ -951,11 +951,11 @@ namespace ERPSupport.SQL.K3Cloud
             V_CUSTID NUMBER(10);
             BEGIN
             SELECT FCUSTID INTO V_CUSTID FROM T_SAL_ORDER WHERE FBILLNO = '" + pFBillNo + "';";
-            _SQL += " UPDATE T_SAL_ORDER SET FCUSTID = " + pCustomerId + " WHERE FBILLNO = '" + pFBillNo + "';";
+            _SQL += " UPDATE T_SAL_ORDER SET FCUSTID = " + pCustomerId + ",FSETTLEID = " + pCustomerId + " WHERE FBILLNO = '" + pFBillNo + "';";
 
             if (pOutStock && !pReceivable)//只更新出库单
             {
-                _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + " WHERE FCUSTOMERID = V_CUSTID AND FBILLNO IN(SELECT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
+                _SQL += " UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pCustomerId + ",FSETTLEID = " + pCustomerId + " WHERE FCUSTOMERID = V_CUSTID AND FBILLNO IN(SELECT A.FBILLNO FROM T_SAL_OUTSTOCK A INNER JOIN T_SAL_OUTSTOCKENTRY_R AR ON A.FID = AR.FID WHERE AR.FSOENTRYID = " + pFEntryId + ");";
             }
             else if (pOutStock && pReceivable)//更新出库单和应收单
             {

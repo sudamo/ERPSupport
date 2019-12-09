@@ -111,6 +111,8 @@ namespace ERPSupport.SQL
                 SqlCommand cmd = conn.CreateCommand();
                 cmd.CommandType = pCommandType;
                 cmd.CommandText = pCommandText;
+                if (cmd.CommandType == CommandType.StoredProcedure)
+                    cmd.CommandTimeout = 1200;
                 if (pParameters != null)
                 {
                     foreach (SqlParameter parm in pParameters)
@@ -119,7 +121,7 @@ namespace ERPSupport.SQL
                 cmd.ExecuteNonQuery();
                 cmd.Parameters.Clear();
             }
-            catch { return; }
+            catch(Exception ex) { return; }
             finally
             {
                 if (conn.State == ConnectionState.Open)
