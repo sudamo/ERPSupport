@@ -1510,7 +1510,8 @@ namespace ERPSupport.SQL.K3Cloud
             //parms[1].Value = pIsAll;
 
             if (pIsAll)
-                SQLHelper.ExecuteNonQuery(CommandType.StoredProcedure, "DM_P_SynMTLForWMS", null);
+                SQLHelper.ExecuteNonQuery("DM_P_SynMTLForWMS");
+            //SQLHelper.ExecuteNonQuery(CommandType.StoredProcedure, "DM_P_SynMTLForWMS", null);
             else
             {
                 _SQL = @"SELECT M.FMATERIALID,ML.FNAME,M.FNUMBER,M.FOLDNUMBER OLDNUMBER,M.FUSEORGID USERORGID,U.FUNITID BASICUNITID, M.F_PAEZ_MAJOR BIGSORTID,A1.FNUMBER BIGSORTNUMBER,AL1.FDATAVALUE BIGSORTNAME,MB.FCATEGORYID MATERIALTYPEID,M.F_PAEZ_MEDIUM MIDDLESORTID,A2.FNUMBER MIDDLESORTNUMBER,AL2.FDATAVALUE MIDDLESORTNAME,M.F_PAEZ_MINOR SMALLSORTID,A3.FNUMBER SMALLSORTNUMBER,AL3.FDATAVALUE SMALLSORTNAME,M.F_PAEZ_SUBCLASS THINSORTID,M.F_PAEZ_BRAND BRANDID,A5.FNUMBER BRANDNUMBER,AL5.FDATAVALUE BRANDNAME,M.F_PAEZ_SERIES SERIESID, A6.FNUMBER SERIESNUMBER,AL6.FDATAVALUE SERIESNAME,M.F_PAEZ_TRADE PRODUCTID,A7.FNUMBER PRODUCTNUMBER,AL7.FDATAVALUE PRODUCTNAME,
@@ -1567,70 +1568,70 @@ namespace ERPSupport.SQL.K3Cloud
 
                 _SQL += "SELECT " + dtOracle.Rows[0]["FMATERIALID"].ToString() + " FMATERIALID,'" + dtOracle.Rows[0]["FNAME"].ToString() + "' FNAME,'" + dtOracle.Rows[0]["FNUMBER"].ToString() + "' FNUMBER,'" + dtOracle.Rows[0]["OLDNUMBER"].ToString() + "' OLDNUMBER," + dtOracle.Rows[0]["USERORGID"].ToString() + " USERORGID," + dtOracle.Rows[0]["BASICUNITID"].ToString() + " BASICUNITID,'" + dtOracle.Rows[0]["BIGSORTID"].ToString() + "' BIGSORTID,'" + dtOracle.Rows[0]["BIGSORTNUMBER"].ToString() + "' BIGSORTNUMBER,'" + dtOracle.Rows[0]["BIGSORTNAME"].ToString() + "' BIGSORTNAME,'" + dtOracle.Rows[0]["MATERIALTYPEID"].ToString() + "' MATERIALTYPEID,'" + dtOracle.Rows[0]["MIDDLESORTID"].ToString() + "' MIDDLESORTID,'" + dtOracle.Rows[0]["MIDDLESORTNUMBER"].ToString() + "' MIDDLESORTNUMBER,'" + dtOracle.Rows[0]["MIDDLESORTNAME"].ToString() + "' MIDDLESORTNAME,'" + dtOracle.Rows[0]["SMALLSORTID"].ToString() + "' SMALLSORTID,'" + dtOracle.Rows[0]["SMALLSORTNUMBER"].ToString() + "' SMALLSORTNUMBER,'" + dtOracle.Rows[0]["SMALLSORTNAME"].ToString() + "' SMALLSORTNAME,'" + dtOracle.Rows[0]["THINSORTID"].ToString() + "' THINSORTID,'" + dtOracle.Rows[0]["BRANDID"].ToString() + "' BRANDID,'" + dtOracle.Rows[0]["BRANDNUMBER"].ToString() + "' BRANDNUMBER,'" + dtOracle.Rows[0]["BRANDNAME"].ToString() + "' BRANDNAME,'" + dtOracle.Rows[0]["SERIESID"].ToString() + "' SERIESID,'" + dtOracle.Rows[0]["SERIESNUMBER"].ToString() + "' SERIESNUMBER,'" + dtOracle.Rows[0]["SERIESNAME"].ToString() + "' SERIESNAME,'" + dtOracle.Rows[0]["PRODUCTID"].ToString() + "' PRODUCTID,'" + dtOracle.Rows[0]["PRODUCTNUMBER"].ToString() + "' PRODUCTNUMBER,'" + dtOracle.Rows[0]["PRODUCTNAME"].ToString() + "' PRODUCTNAME,'" + dtOracle.Rows[0]["CARSERIESID"].ToString() + "' CARSERIESID,'" + dtOracle.Rows[0]["CARSERIESNUMBER"].ToString() + "' CARSERIESNUMBER,'" + dtOracle.Rows[0]["CARSERIESNAME"].ToString() + "' CARSERIESNAME,'" + dtOracle.Rows[0]["CARTYPEID"].ToString() + "' CARTYPEID,'" + dtOracle.Rows[0]["CARTYPENUMBER"].ToString() + "' CARTYPENUMBER,'" + dtOracle.Rows[0]["CARTYPENAME"].ToString() + "' CARTYPENAME,'" + dtOracle.Rows[0]["COLORID"].ToString() + "' COLORID,'" + dtOracle.Rows[0]["COLORNUMBER"].ToString() + "' COLORNUMBER,'" + dtOracle.Rows[0]["COLORNAME"].ToString() + "' COLORNAME,'" + dtOracle.Rows[0]["PRICEELEMENTID"].ToString() + "' PRICEELEMENTID,'" + dtOracle.Rows[0]["PRICEELEMENTNUMBER"].ToString() + "' PRICEELEMENTNUMBER,'" + dtOracle.Rows[0]["PRICEELEMENTNAME"].ToString() + "' PRICEELEMENTNAME,'" + dtOracle.Rows[0]["TECHNOLOGYID"].ToString() + "' TECHNOLOGYID,'" + dtOracle.Rows[0]["TECHNOLOGYNUMBER"].ToString() + "' TECHNOLOGYNUMBER,'" + dtOracle.Rows[0]["TECHNOLOGYNAME"].ToString() + "' TECHNOLOGYNAME,'" + dtOracle.Rows[0]["LINESID"].ToString() + "' LINESID,'" + dtOracle.Rows[0]["LINESNUMBER"].ToString() + "' LINESNUMBER,'" + dtOracle.Rows[0]["LINESNAME"].ToString() + "' LINESNAME,'" + dtOracle.Rows[0]["STRUCTUREID"].ToString() + "' STRUCTUREID,'" + dtOracle.Rows[0]["STRUCTURENUMBER"].ToString() + "' STRUCTURENUMBER,'" + dtOracle.Rows[0]["STRUCTURENAME"].ToString() + "' STRUCTURENAME,'" + dtOracle.Rows[0]["CATEGORYID"].ToString() + "' CATEGORYID,'" + dtOracle.Rows[0]["CATEGORYNUMBER"].ToString() + "' CATEGORYNUMBER,'" + dtOracle.Rows[0]["CATEGORYNAME"].ToString() + "' CATEGORYNAME,'" + dtOracle.Rows[0]["DATASTATUS"].ToString() + "' DATASTATUS,'" + dtOracle.Rows[0]["M_ENABLED"].ToString() + "' M_ENABLED,'" + dtOracle.Rows[0]["BATCHRULEID"].ToString() + "' BATCHRULEID,'" + dtOracle.Rows[0]["ISQUALITYPERIODMANAGER"].ToString() + "' ISQUALITYPERIODMANAGER,'" + dtOracle.Rows[0]["QUALITYPERIODUNIT"].ToString() + "' QUALITYPERIODUNIT,'" + dtOracle.Rows[0]["QUALITYPERIOD"].ToString() + "' QUALITYPERIOD,'" + dtOracle.Rows[0]["SNRULEID"].ToString() + "' SNRULEID,'" + dtOracle.Rows[0]["SNUNITID"].ToString() + "' SNUNITID,'" + dtOracle.Rows[0]["SNMANAGERTYPEID"].ToString() + "' SNMANAGERTYPEID,'" + dtOracle.Rows[0]["SAFETYSTOCK"].ToString() + "' SAFETYSTOCK,'" + dtOracle.Rows[0]["LASTUPDATEDATE"].ToString() + "' LASTUPDATEDATE,'" + dtOracle.Rows[0]["MATERIALSIZE"].ToString() + "' MATERIALSIZE,'" + dtOracle.Rows[0]["RECEIVEMAXSCALE"].ToString() + "' RECEIVEMAXSCALE,'" + dtOracle.Rows[0]["RECEIVEMINSCALE"].ToString() + "' RECEIVEMINSCALE,'" + dtOracle.Rows[0]["finishReceiptOverRate"].ToString() + "' finishReceiptOverRate,'" + dtOracle.Rows[0]["finishReceiptShortRate"].ToString() + "' finishReceiptShortRate,'" + dtOracle.Rows[0]["isSnManager"].ToString() + "' isSnManager,'" + dtOracle.Rows[0]["isBatchManager"].ToString() + "' isBatchManager,'" + dtOracle.Rows[0]["F_PAEZ_AUTOCATCH"].ToString() + "' F_PAEZ_AUTOCATCH,'" + dtOracle.Rows[0]["F_PAEZ_Place"].ToString() + "' F_PAEZ_Place";
                 _SQL += @") AS O ON T.fNumber = O.FNUMBER
-WHEN MATCHED
-    THEN UPDATE SET
-    FName = O.FNAME,fNumber = O.FNUMBER,oldNumber = O.OLDNUMBER,dataStatus = O.DATASTATUS,enabled = O.M_ENABLED,userOrgId = 100508,basicUnitId = O.BASICUNITID,materialSize = O.MATERIALSIZE,materialTypeid = O.MATERIALTYPEID
-    ,isBatchManager = O.ISBATCHMANAGER,isSnManager = O.ISSNMANAGER,isQualityPeriodManager = O.ISQUALITYPERIODMANAGER,batchRuleId = O.BATCHRULEID,snRuleId = O.SNRULEID,snUnitId = O.SNUNITID,snManagerTypeId = O.SNMANAGERTYPEID,qualityPeriodUnitId = O.QUALITYPERIODUNIT,qualityPeriod = O.QUALITYPERIOD
-    ,safetyStock = O.SAFETYSTOCK,lastUpdateDate = O.LASTUPDATEDATE,receiveMaxScale = O.RECEIVEMAXSCALE,receiveMinScale = O.RECEIVEMINSCALE,bigSortId = O.BIGSORTID,bigSortName = O.BIGSORTNAME,bigSortNumber = O.BIGSORTNUMBER
-    ,middleSortId = O.MIDDLESORTID,middleSortName = O.MIDDLESORTNAME,middleSortNumber = O.MIDDLESORTNUMBER
-    ,smallSortId = O.SMALLSORTID, smallSortName = O.SMALLSORTNAME,smallSortNumber = O.SMALLSORTNUMBER
-    ,thinSortName = O.THINSORTID
-    ,brandId = O.BRANDID,brandName = O.BRANDNAME,brandNumber = O.BRANDNUMBER
-    ,seriesId = O.SERIESID,seriesName = O.SERIESNAME,seriesNumber = O.SERIESNUMBER
-    ,productId = O.PRODUCTID,productName = O.PRODUCTNAME,productNumber = O.PRODUCTNUMBER
-    ,carSeriesId = O.CARSERIESID,carSeriesName = O.CARSERIESNAME,carSeriesNumber = O.CARSERIESNUMBER
-    ,carTypeId = O.CARTYPEID,carTypeName = O.CARTYPENAME,carTypeNumber = O.CARTYPENUMBER
-    ,colorId = O.COLORID,colorName = O.COLORNAME,colorNumber = O.COLORNUMBER
-    ,priceElementId = O.PRICEELEMENTID,priceElementName = O.PRICEELEMENTNAME,priceElementNumber = O.PRICEELEMENTNUMBER
-    ,technologyId = O.TECHNOLOGYID,technologyName = O.TECHNOLOGYNAME,technologyNumber = O.TECHNOLOGYNUMBER
-    ,structureId = O.STRUCTUREID,structureName = O.STRUCTURENAME,structureNumber = O.STRUCTURENUMBER,categoryId = O.CATEGORYID,categoryName = O.CATEGORYNAME,categoryNumber = O.CATEGORYNUMBER,linesId = O.LINESID,linesName = O.LINESNAME,linesNumber = O.LINESNUMBER,finishReceiptOverRate = O.FINISHRECEIPTOVERRATE,finishReceiptShortRate = O.FINISHRECEIPTSHORTRATE,isAotuBringOut = O.F_PAEZ_AUTOCATCH,mtlplace = O.F_PAEZ_Place
-WHEN NOT MATCHED
-    THEN INSERT
-    (
-		FMATERIALID,FName,fNumber,oldNumber,dataStatus,enabled,userOrgId,basicUnitId,materialSize,materialTypeid
-		,isBatchManager, isSnManager, isQualityPeriodManager
-		,batchRuleId,snRuleId,snUnitId,snManagerTypeId,qualityPeriodUnitId,qualityPeriod
-		,safetyStock,lastUpdateDate,receiveMaxScale,receiveMinScale
-		,bigSortId,bigSortName,bigSortNumber
-		,middleSortId,middleSortName,middleSortNumber
-		,smallSortId, smallSortName,smallSortNumber
-		,thinSortName
-		,brandId,brandName,brandNumber
-		,seriesId,seriesName,seriesNumber
-		,productId,productName,productNumber
-		,carSeriesId,carSeriesName,carSeriesNumber
-		,carTypeId,carTypeName,carTypeNumber
-		,colorId,colorName,colorNumber
-		,priceElementId,priceElementName,priceElementNumber
-		,technologyId,technologyName,technologyNumber
-		,structureId,structureName,structureNumber
-		,categoryId,categoryName,categoryNumber
-		,linesId,linesName,linesNumber
-		,finishReceiptOverRate,finishReceiptShortRate,isAotuBringOut,mtlplace
-	)
-	VALUES
-	(
-		O.FMATERIALID,O.FNAME,O.FNUMBER,O.OLDNUMBER,O.DATASTATUS,O.M_ENABLED,100508,O.BASICUNITID,O.MATERIALSIZE,O.MATERIALTYPEID
-		,O.ISBATCHMANAGER,O.ISSNMANAGER,O.ISQUALITYPERIODMANAGER
-		,O.BATCHRULEID,O.SNRULEID,O.SNUNITID,O.SNMANAGERTYPEID,O.QUALITYPERIODUNIT,O.QUALITYPERIOD
-		,O.SAFETYSTOCK,O.LASTUPDATEDATE,O.RECEIVEMAXSCALE,O.RECEIVEMINSCALE
-		,O.BIGSORTID,O.BIGSORTNAME,O.BIGSORTNUMBER
-		,O.MIDDLESORTID,O.MIDDLESORTNAME,O.MIDDLESORTNUMBER
-		,O.SMALLSORTID,O.SMALLSORTNAME,O.SMALLSORTNUMBER
-		,O.THINSORTID
-		,O.BRANDID,O.BRANDNAME,O.BRANDNUMBER
-		,O.SERIESID,O.SERIESNAME,O.SERIESNUMBER
-		,O.PRODUCTID,O.PRODUCTNAME,O.PRODUCTNUMBER
-		,O.CARSERIESID,O.CARSERIESNAME,O.CARSERIESNUMBER
-		,O.CARTYPEID,O.CARTYPENAME,O.CARTYPENUMBER
-		,O.COLORID,O.COLORNAME,O.COLORNUMBER
-		,O.PRICEELEMENTID,O.PRICEELEMENTNAME,O.PRICEELEMENTNUMBER
-		,O.TECHNOLOGYID,O.TECHNOLOGYNAME,O.TECHNOLOGYNUMBER
-		,O.STRUCTUREID,O.STRUCTURENAME,O.STRUCTURENUMBER
-		,O.CATEGORYID,O.CATEGORYNAME,O.CATEGORYNUMBER
-		,O.LINESID,O.LINESNAME,O.LINESNUMBER
-		,O.FINISHRECEIPTOVERRATE,O.FINISHRECEIPTSHORTRATE,O.F_PAEZ_AUTOCATCH,O.F_PAEZ_Place
-	);";
+                WHEN MATCHED
+                    THEN UPDATE SET
+                    FName = O.FNAME,fNumber = O.FNUMBER,oldNumber = O.OLDNUMBER,dataStatus = O.DATASTATUS,enabled = O.M_ENABLED,userOrgId = 100508,basicUnitId = O.BASICUNITID,materialSize = O.MATERIALSIZE,materialTypeid = O.MATERIALTYPEID
+                    ,isBatchManager = O.ISBATCHMANAGER,isSnManager = O.ISSNMANAGER,isQualityPeriodManager = O.ISQUALITYPERIODMANAGER,batchRuleId = O.BATCHRULEID,snRuleId = O.SNRULEID,snUnitId = O.SNUNITID,snManagerTypeId = O.SNMANAGERTYPEID,qualityPeriodUnitId = O.QUALITYPERIODUNIT,qualityPeriod = O.QUALITYPERIOD
+                    ,safetyStock = O.SAFETYSTOCK,lastUpdateDate = O.LASTUPDATEDATE,receiveMaxScale = O.RECEIVEMAXSCALE,receiveMinScale = O.RECEIVEMINSCALE,bigSortId = O.BIGSORTID,bigSortName = O.BIGSORTNAME,bigSortNumber = O.BIGSORTNUMBER
+                    ,middleSortId = O.MIDDLESORTID,middleSortName = O.MIDDLESORTNAME,middleSortNumber = O.MIDDLESORTNUMBER
+                    ,smallSortId = O.SMALLSORTID, smallSortName = O.SMALLSORTNAME,smallSortNumber = O.SMALLSORTNUMBER
+                    ,thinSortName = O.THINSORTID
+                    ,brandId = O.BRANDID,brandName = O.BRANDNAME,brandNumber = O.BRANDNUMBER
+                    ,seriesId = O.SERIESID,seriesName = O.SERIESNAME,seriesNumber = O.SERIESNUMBER
+                    ,productId = O.PRODUCTID,productName = O.PRODUCTNAME,productNumber = O.PRODUCTNUMBER
+                    ,carSeriesId = O.CARSERIESID,carSeriesName = O.CARSERIESNAME,carSeriesNumber = O.CARSERIESNUMBER
+                    ,carTypeId = O.CARTYPEID,carTypeName = O.CARTYPENAME,carTypeNumber = O.CARTYPENUMBER
+                    ,colorId = O.COLORID,colorName = O.COLORNAME,colorNumber = O.COLORNUMBER
+                    ,priceElementId = O.PRICEELEMENTID,priceElementName = O.PRICEELEMENTNAME,priceElementNumber = O.PRICEELEMENTNUMBER
+                    ,technologyId = O.TECHNOLOGYID,technologyName = O.TECHNOLOGYNAME,technologyNumber = O.TECHNOLOGYNUMBER
+                    ,structureId = O.STRUCTUREID,structureName = O.STRUCTURENAME,structureNumber = O.STRUCTURENUMBER,categoryId = O.CATEGORYID,categoryName = O.CATEGORYNAME,categoryNumber = O.CATEGORYNUMBER,linesId = O.LINESID,linesName = O.LINESNAME,linesNumber = O.LINESNUMBER,finishReceiptOverRate = O.FINISHRECEIPTOVERRATE,finishReceiptShortRate = O.FINISHRECEIPTSHORTRATE,isAotuBringOut = O.F_PAEZ_AUTOCATCH,mtlplace = O.F_PAEZ_Place
+                WHEN NOT MATCHED
+                    THEN INSERT
+                    (
+		                FMATERIALID,FName,fNumber,oldNumber,dataStatus,enabled,userOrgId,basicUnitId,materialSize,materialTypeid
+		                ,isBatchManager, isSnManager, isQualityPeriodManager
+		                ,batchRuleId,snRuleId,snUnitId,snManagerTypeId,qualityPeriodUnitId,qualityPeriod
+		                ,safetyStock,lastUpdateDate,receiveMaxScale,receiveMinScale
+		                ,bigSortId,bigSortName,bigSortNumber
+		                ,middleSortId,middleSortName,middleSortNumber
+		                ,smallSortId, smallSortName,smallSortNumber
+		                ,thinSortName
+		                ,brandId,brandName,brandNumber
+		                ,seriesId,seriesName,seriesNumber
+		                ,productId,productName,productNumber
+		                ,carSeriesId,carSeriesName,carSeriesNumber
+		                ,carTypeId,carTypeName,carTypeNumber
+		                ,colorId,colorName,colorNumber
+		                ,priceElementId,priceElementName,priceElementNumber
+		                ,technologyId,technologyName,technologyNumber
+		                ,structureId,structureName,structureNumber
+		                ,categoryId,categoryName,categoryNumber
+		                ,linesId,linesName,linesNumber
+		                ,finishReceiptOverRate,finishReceiptShortRate,isAotuBringOut,mtlplace
+	                )
+	                VALUES
+	                (
+		                O.FMATERIALID,O.FNAME,O.FNUMBER,O.OLDNUMBER,O.DATASTATUS,O.M_ENABLED,100508,O.BASICUNITID,O.MATERIALSIZE,O.MATERIALTYPEID
+		                ,O.ISBATCHMANAGER,O.ISSNMANAGER,O.ISQUALITYPERIODMANAGER
+		                ,O.BATCHRULEID,O.SNRULEID,O.SNUNITID,O.SNMANAGERTYPEID,O.QUALITYPERIODUNIT,O.QUALITYPERIOD
+		                ,O.SAFETYSTOCK,O.LASTUPDATEDATE,O.RECEIVEMAXSCALE,O.RECEIVEMINSCALE
+		                ,O.BIGSORTID,O.BIGSORTNAME,O.BIGSORTNUMBER
+		                ,O.MIDDLESORTID,O.MIDDLESORTNAME,O.MIDDLESORTNUMBER
+		                ,O.SMALLSORTID,O.SMALLSORTNAME,O.SMALLSORTNUMBER
+		                ,O.THINSORTID
+		                ,O.BRANDID,O.BRANDNAME,O.BRANDNUMBER
+		                ,O.SERIESID,O.SERIESNAME,O.SERIESNUMBER
+		                ,O.PRODUCTID,O.PRODUCTNAME,O.PRODUCTNUMBER
+		                ,O.CARSERIESID,O.CARSERIESNAME,O.CARSERIESNUMBER
+		                ,O.CARTYPEID,O.CARTYPENAME,O.CARTYPENUMBER
+		                ,O.COLORID,O.COLORNAME,O.COLORNUMBER
+		                ,O.PRICEELEMENTID,O.PRICEELEMENTNAME,O.PRICEELEMENTNUMBER
+		                ,O.TECHNOLOGYID,O.TECHNOLOGYNAME,O.TECHNOLOGYNUMBER
+		                ,O.STRUCTUREID,O.STRUCTURENAME,O.STRUCTURENUMBER
+		                ,O.CATEGORYID,O.CATEGORYNAME,O.CATEGORYNUMBER
+		                ,O.LINESID,O.LINESNAME,O.LINESNUMBER
+		                ,O.FINISHRECEIPTOVERRATE,O.FINISHRECEIPTSHORTRATE,O.F_PAEZ_AUTOCATCH,O.F_PAEZ_Place
+	                );";
                 SQLHelper.ExecuteNonQuery(_SQL);
             }
         }
