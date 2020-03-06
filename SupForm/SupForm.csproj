@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>26</ApplicationRevision>
+    <ApplicationRevision>27</ApplicationRevision>
     <ApplicationVersion>1.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -210,6 +210,12 @@
     </Compile>
     <Compile Include="Menu\frmPro_Dir_Stock.Designer.cs">
       <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\frmPro_K3SynData.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\frmPro_K3SynData.Designer.cs">
+      <DependentUpon>frmPro_K3SynData.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu\frmPro_WMSData.cs">
       <SubType>Form</SubType>
@@ -403,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir_Stock.resx">
       <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\frmPro_K3SynData.resx">
+      <DependentUpon>frmPro_K3SynData.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_WMSData.resx">
       <DependentUpon>frmPro_WMSData.cs</DependentUpon>
