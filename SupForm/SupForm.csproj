@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>27</ApplicationRevision>
+    <ApplicationRevision>31</ApplicationRevision>
     <ApplicationVersion>1.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -198,6 +198,12 @@
     </Compile>
     <Compile Include="Bussiness\frmSetDefaultStock.Designer.cs">
       <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmU1CityOrderEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmU1CityOrderEdit.Designer.cs">
+      <DependentUpon>frmU1CityOrderEdit.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu\frmPro_Dir.cs">
       <SubType>Form</SubType>
@@ -403,6 +409,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmSetDefaultStock.resx">
       <DependentUpon>frmSetDefaultStock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmU1CityOrderEdit.resx">
+      <DependentUpon>frmU1CityOrderEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir.resx">
       <DependentUpon>frmPro_Dir.cs</DependentUpon>

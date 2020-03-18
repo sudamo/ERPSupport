@@ -189,6 +189,13 @@ namespace ERPSupport.SQL.K3Cloud
                 case 4://获取领料部门信息
                     _SQL = "SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' ORDER BY FNUMBER";
                     break;
+                case 5:
+                    _SQL = @"SELECT A.FDEPTID FVALUE,AL.FNAME
+                    FROM T_BD_DEPARTMENT A
+                    INNER JOIN T_BD_DEPARTMENT_L AL ON A.FDEPTID = AL.FDEPTID AND AL.FLOCALEID = 2052
+                    WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND A.FUSEORGID = " + pUseOrgId + @"
+                    ORDER BY AL.FNAME";
+                    break;
                 default:
                     _SQL = @"SELECT A.FNUMBER FVALUE,AL.FNAME
                     FROM T_BD_DEPARTMENT A
@@ -236,6 +243,22 @@ namespace ERPSupport.SQL.K3Cloud
                 return 0;
             else
                 return Convert.ToInt32(o);
+        }
+
+        /// <summary>
+        /// 根据销售组织获取销售员列表
+        /// </summary>
+        /// <param name="pUseOrgId">使用组织</param>
+        /// <returns></returns>
+        public static DataTable GetSalerList(int pUseOrgId)
+        {
+            _SQL = @"SELECT B.FENTRYID FVALUE,EMPL.FNAME
+            FROM T_BD_OPERATORENTRY B
+            INNER JOIN T_HR_EMPINFO EMP ON B.FSTAFFID = EMP.FSTAFFID AND EMP.FFORBIDSTATUS = 'A'
+            INNER JOIN T_HR_EMPINFO_L EMPL ON EMP.FID = EMPL.FID
+            WHERE B.FOPERATORTYPE = 'XSY' AND B.FBIZORGID = " + pUseOrgId.ToString();
+
+            return ORAHelper.ExecuteTable(_SQL);
         }
 
         /// <summary>

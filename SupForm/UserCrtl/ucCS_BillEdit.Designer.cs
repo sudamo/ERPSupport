@@ -45,6 +45,7 @@
             this.bnTop_btnChangeDB = new System.Windows.Forms.ToolStripButton();
             this.bnTop_btnPPBom = new System.Windows.Forms.ToolStripButton();
             this.bnTop_btnBom = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnOrg = new System.Windows.Forms.ToolStripButton();
             this.bnR2 = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnR2_lblMTLNumber = new System.Windows.Forms.ToolStripLabel();
             this.bnR2_txtMTLNumber = new System.Windows.Forms.ToolStripTextBox();
@@ -127,7 +128,8 @@
             this.bnTop_btnSyn,
             this.bnTop_btnChangeDB,
             this.bnTop_btnPPBom,
-            this.bnTop_btnBom});
+            this.bnTop_btnBom,
+            this.bnTop_btnOrg});
             this.bnTop.Location = new System.Drawing.Point(0, 0);
             this.bnTop.MoveFirstItem = null;
             this.bnTop.MoveLastItem = null;
@@ -135,7 +137,7 @@
             this.bnTop.MovePreviousItem = null;
             this.bnTop.Name = "bnTop";
             this.bnTop.PositionItem = null;
-            this.bnTop.Size = new System.Drawing.Size(1024, 25);
+            this.bnTop.Size = new System.Drawing.Size(1024, 27);
             this.bnTop.TabIndex = 28;
             this.bnTop.Text = "bindingNavigator1";
             this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);
@@ -143,14 +145,14 @@
             // bnTop_lblType
             // 
             this.bnTop_lblType.Name = "bnTop_lblType";
-            this.bnTop_lblType.Size = new System.Drawing.Size(68, 22);
+            this.bnTop_lblType.Size = new System.Drawing.Size(68, 24);
             this.bnTop_lblType.Text = "单据类型：";
             // 
             // bnTop_cbxType
             // 
             this.bnTop_cbxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bnTop_cbxType.Name = "bnTop_cbxType";
-            this.bnTop_cbxType.Size = new System.Drawing.Size(90, 25);
+            this.bnTop_cbxType.Size = new System.Drawing.Size(90, 27);
             this.bnTop_cbxType.SelectedIndexChanged += new System.EventHandler(this.cbxType_SelectedIndexChanged);
             // 
             // bnTop_lblBillNo
@@ -169,7 +171,7 @@
             // bnTop_tss
             // 
             this.bnTop_tss.Name = "bnTop_tss";
-            this.bnTop_tss.Size = new System.Drawing.Size(6, 25);
+            this.bnTop_tss.Size = new System.Drawing.Size(6, 27);
             // 
             // bnTop_lblDash
             // 
@@ -181,7 +183,7 @@
             // bnTop_tss2
             // 
             this.bnTop_tss2.Name = "bnTop_tss2";
-            this.bnTop_tss2.Size = new System.Drawing.Size(6, 25);
+            this.bnTop_tss2.Size = new System.Drawing.Size(6, 27);
             // 
             // bnTop_btnSearch
             // 
@@ -237,6 +239,17 @@
             this.bnTop_btnBom.Text = "批改BOM";
             this.bnTop_btnBom.ToolTipText = "批量修改物料清单";
             this.bnTop_btnBom.Visible = false;
+            // 
+            // bnTop_btnOrg
+            // 
+            this.bnTop_btnOrg.Image = global::ERPSupport.SupForm.Properties.Resources.link_edit;
+            this.bnTop_btnOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnOrg.Name = "bnTop_btnOrg";
+            this.bnTop_btnOrg.Size = new System.Drawing.Size(80, 24);
+            this.bnTop_btnOrg.Tag = "6";
+            this.bnTop_btnOrg.Text = "调整组织";
+            this.bnTop_btnOrg.ToolTipText = "调整U1City下的订单信息";
+            this.bnTop_btnOrg.Visible = false;
             // 
             // bnR2
             // 
@@ -464,5 +477,6 @@
         private System.Windows.Forms.ToolStripButton bnTop_btnPPBom;
         private System.Windows.Forms.ToolStripButton bnTop_btnBom;
         private System.Windows.Forms.ToolStripButton bnTop_btnChangeDB;
+        private System.Windows.Forms.ToolStripButton bnTop_btnOrg;
     }
 }

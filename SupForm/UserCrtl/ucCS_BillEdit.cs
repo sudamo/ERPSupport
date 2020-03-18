@@ -87,6 +87,7 @@ namespace ERPSupport.SupForm.UserCrtl
             list.Add(bnTop.Items[9]);
             list.Add(bnTop.Items[10]);
             list.Add(bnTop.Items[11]);
+            list.Add(bnTop.Items[12]);
 
             bnTop.Items.Clear();
             foreach (ToolStripItem item in list)
@@ -196,6 +197,10 @@ namespace ERPSupport.SupForm.UserCrtl
                     break;
                 case "5":
                     MessageBox.Show("BOM批改功能还未开发，请联系信息部。");
+                    break;
+                case "6":
+                    Bussiness.frmU1CityOrderEdit frmU = new Bussiness.frmU1CityOrderEdit();
+                    frmU.Show(this);
                     break;
             }
         }
@@ -331,6 +336,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_lblBillNo.Visible = true;
                 bnTop_txtBillNo.Visible = true;
                 bnTop_btnSearch.Visible = true;
+                bnTop_btnOrg.Visible = true;
 
                 bnTop_btnSyn.Visible = false;
                 bnTop_btnChangeDB.Visible = false;
@@ -347,6 +353,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_lblBillNo.Visible = false;
                 bnTop_txtBillNo.Visible = false;
                 bnTop_btnSearch.Visible = false;
+                bnTop_btnOrg.Visible = false;
 
                 bnTop_btnSyn.Visible = true;
                 bnTop_btnChangeDB.Visible = true;
@@ -363,6 +370,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_lblBillNo.Visible = false;
                 bnTop_txtBillNo.Visible = false;
                 bnTop_btnSearch.Visible = false;
+                bnTop_btnOrg.Visible = false;
 
                 bnTop_btnSyn.Visible = false;
                 bnTop_btnChangeDB.Visible = false;

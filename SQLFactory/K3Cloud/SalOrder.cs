@@ -972,5 +972,31 @@ namespace ERPSupport.SQL.K3Cloud
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }
+
+        /// <summary>
+        /// UiCity对接单据调整
+        /// </summary>
+        /// <param name="pFBillNos"></param>
+        public static void UpdateUiCityOrders(int pSaleOrgId, int pSaleDeptId, int pSalerId, List<string> pFBillNos)
+        {
+            string strFBillNos = string.Empty;
+            if (pFBillNos == null || pFBillNos.Count == 0)
+                return;
+            for (int i = 0; i < pFBillNos.Count; i++)
+            {
+                if (i > 0)
+                    strFBillNos += ",";
+                strFBillNos += "'" + pFBillNos[i] + "'";
+            }
+
+            _SQL = @"BEGIN 
+                    ";
+            _SQL += string.Format("UPDATE T_SAL_ORDER SET FSALEORGID = {0},F_PAEZ_FACTORGID = {0},FSALEDEPTID = {1},FSALERID = {2} WHERE FBILLNO IN({3});", pSaleOrgId, pSaleDeptId, pSalerId, strFBillNos);
+            _SQL += string.Format("UPDATE T_SAL_ORDERENTRY SET FSTOCKORGID = {0},FOWNERID = {0} WHERE FID IN(SELECT FID FROM T_SAL_ORDER WHERE FBILLNO IN({1}));", pSaleOrgId, strFBillNos);
+            _SQL += string.Format("UPDATE T_SAL_ORDERENTRY_F SET FSETTLEORGID = {0} WHERE FID IN(SELECT FID FROM T_SAL_ORDER WHERE FBILLNO IN({1}));", pSaleOrgId, strFBillNos);
+            _SQL += "END;";
+
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
     }
 }
