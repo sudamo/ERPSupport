@@ -756,6 +756,29 @@ namespace ERPSupport.SupForm
                 }
                 _FormId_Pre = _FormId;
             }
+            else//?
+            {
+                if (_FormId == FormID.PRD_INSTOCK)
+                {
+                    bnTop_btnCommit.Text = "领料";
+                    bnTop_btnCommit.Enabled = true;
+                    bnTop_btnCommit.Image = Properties.Resources.accept;
+
+                    bnTop_btnCheck.Visible = false;
+                    bnTop_btnSearch.Text = "查找";
+                    bnTop_btnSearch.Enabled = true;
+                    bnTop_btnFilter.Visible = false;
+                    bnTop_btnUnLock.Visible = false;
+
+                    bnTop_lblDate.Text = "日期:";
+                    bnTop_lblDate.Visible = true;
+                    bnTop_lblTo.Visible = true;
+                    _dateFrom.Visible = true;
+                    _dateFrom.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                    _dateTo.Visible = true;
+                    _dateTo.Text = DateTime.Now.ToString("yyyy-MM-dd");
+                }
+            }
         }
         #endregion
 

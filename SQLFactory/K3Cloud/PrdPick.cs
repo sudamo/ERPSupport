@@ -207,6 +207,8 @@ namespace ERPSupport.SQL.K3Cloud
 
             if (dt.Rows.Count < 1) return "[" + pBillNO + "]生成失败,错误:在数据库找不到数据，或者领过料";
 
+            int iStar = 0, iEnd = 0, iIndex; string strMtlNumber = string.Empty, strMessTmep;
+
             K3CloudApiClient client = new K3CloudApiClient(GlobalParameter.K3Inf.C_ERPADDRESS);
             var bLogin = client.Login(GlobalParameter.K3Inf.C_ZTID, GlobalParameter.K3Inf.UserName, GlobalParameter.K3Inf.UserPWD, 2052);
 
@@ -350,7 +352,26 @@ namespace ERPSupport.SQL.K3Cloud
                 {
                     strPMBillNO = "[" + pBillNO + "]生成失败,错误:";
                     for (int i = 0; i < ((IList)jo["Result"]["ResponseStatus"]["Errors"]).Count; i++)
-                        strPMBillNO += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
+                    {
+                        strMessTmep = jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>();
+                        iStar = jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>().IndexOf("第");
+                        iEnd = jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>().IndexOf("行字段");
+
+                        if (iStar > 0)//获取出错物料编码
+                        {
+                            try
+                            {
+                                iIndex = int.Parse(strMessTmep.Substring(iStar + 1, iEnd - iStar - 1)) - 1;
+                                strMtlNumber = dt.Rows[iIndex]["FMATERIALID"].ToString();
+                            }
+                            catch { strMtlNumber = string.Empty; }
+                        }
+                        else
+                            strMtlNumber = string.Empty;
+
+                        strPMBillNO += strMessTmep + (strMtlNumber.Equals(string.Empty) ? "" : "[" + strMtlNumber + "]") + "\r\n";//保存不成功返错误信息
+                    }
+                        //strPMBillNO += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
                 }
                 else
                 {
