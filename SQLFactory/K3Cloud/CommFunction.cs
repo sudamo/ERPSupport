@@ -942,7 +942,7 @@ namespace ERPSupport.SQL.K3Cloud
             switch (pIndex)
             {
                 case 1:
-                    _SQL = @"SELECT FBILLNO 订单编号,FMTLNUMBER 物料代码,NVL(FUNTNUMBER,' ') 单位,NVL(FORGNUMBER,' ') 销售组织,FSALQTY 销售数量,FLOCKQTY 锁库数量,FSTOCKQTY 库存数量,FSTOCKAVBQTY 库存可用数量,FSTOCK 仓库,FREMARK,CASE WHEN FTYPE = 1 THEN '锁库' ELSE '解锁' END 锁库类型,TO_CHAR(FOPERATEDATE,'yyyy-mm-dd hh24:mm:ss') 操作日期,FOPERATOR 操作人,CASE FFLAG WHEN '1' THEN '成功' ELSE '失败' END 操作状态
+                    _SQL = @"SELECT FBILLNO 订单编号,FMTLNUMBER 物料代码,NVL(FUNTNUMBER,' ') 单位,NVL(FORGNUMBER,' ') 销售组织,FSALQTY 销售数量,FLOCKQTY 锁库数量,FSTOCKQTY 库存数量,FSTOCKAVBQTY 库存可用数量,FSTOCK 仓库,FREMARK,CASE WHEN FTYPE = 1 THEN '锁库' ELSE '解锁' END 锁库类型,TO_CHAR(FOPERATEDATE,'yyyy-mm-dd hh24:mi:ss') 操作日期,FOPERATOR 操作人,CASE FFLAG WHEN '1' THEN '成功' ELSE '失败' END 操作状态
                     FROM DM_LOG_ORDERLOCK
                     WHERE TO_CHAR(FOPERATEDATE,'yyyy-mm-dd') BETWEEN '" + pFrom.ToString("yyyy-MM-dd") + "' AND '" + pTo.ToString("yyyy-MM-dd") + "'";
 
@@ -957,7 +957,7 @@ namespace ERPSupport.SQL.K3Cloud
                 case 2:
                     _SQL = @"SELECT A.YSBILLNO 运单号,A.FBILLNO 销售订单,A.FBILLTYPE 单据类型,A.FCUSTNAME 客户,A.FMTLNUMBER 物料编码,A.FMTLNAME 物料名称,A.FUNIT 单位,A.BOM,A.FQTY 销售数量,A.FLOCKQTY 锁库数量,A.FLACKLEVEL 欠料等级
                            ,AE.FMTLNUMBER 子项物料编码,AE.FMTLNAME 子项物料名称,AE.FNUIT 子项单位,AE.BOM 子项BOM,AE.FSUBQTY 子项需求,AE.FSTOCKQTY 库存数量,AE.FSTOCKAVBQTY 库存可用数量,AE.FNETDEMANDQTY 净需求,AE.FPICQTY 领料数量
-                           ,AE.FMINSTOCK 最小库存,AE.FMAXSTOCK 最大库存,AE.FSAFESTOCK 安全库存,AE.FSTOCKDAYS 安全库存天数,AE.FOCCUPYQTY 本次占用数量,AE.FOCCUPYSUMQTY 累计占用数量,AE.FLACKQTY 欠料数量,AE.FSEQ 序号,TO_CHAR(A.FDATE,'yyyy-mm-dd hh24:mm:ss') 运算日期,A.FOPERATOR 操作人,A.F_PAEZ_SUBMITUSERID 提交人
+                           ,AE.FMINSTOCK 最小库存,AE.FMAXSTOCK 最大库存,AE.FSAFESTOCK 安全库存,AE.FSTOCKDAYS 安全库存天数,AE.FOCCUPYQTY 本次占用数量,AE.FOCCUPYSUMQTY 累计占用数量,AE.FLACKQTY 欠料数量,AE.FSEQ 序号,TO_CHAR(A.FDATE,'yyyy-mm-dd hh24:mi:ss') 运算日期,A.FOPERATOR 操作人,A.F_PAEZ_SUBMITUSERID 提交人
                     FROM DM_LOG_ORDERRUN A
                     INNER JOIN DM_LOG_ORDERRUNSUB AE ON A.PID = AE.PID
                     WHERE TO_CHAR(A.FDATE,'yyyy-mm-dd') BETWEEN '" + pFrom.ToString("yyyy-MM-dd") + "' AND '" + pTo.ToString("yyyy-MM-dd") + "'";
@@ -971,7 +971,7 @@ namespace ERPSupport.SQL.K3Cloud
                     _SQL += " ORDER BY A.FSEQ,AE.FSEQ";
                     break;
                 case 3:
-                    _SQL = @"SELECT FBILLNO 运单号, FMTLNUMBER 物料编码,FMTLNAME 物料名称,FMTLPRO 物料属性,FUNIT 单位,BOM,FREMAINSTOCKINQTY 采购在途,FQTY 生产自制,FSTOCKQTY 库存数量,FSTOCKAVBQTY 库存可用数量,FSTOCKDAYS 库存可用天数,FLOWQTY 最低订货量,FMINQTY 最小批量,FLACKQTY 欠料数量,FSUMQTY 需求汇总,FSEQ 序号,TO_CHAR(FDATE,'yyyy-mm-dd hh24:mm:ss') 汇总日期,FOPERATOR 操作人
+                    _SQL = @"SELECT FBILLNO 运单号, FMTLNUMBER 物料编码,FMTLNAME 物料名称,FMTLPRO 物料属性,FUNIT 单位,BOM,FREMAINSTOCKINQTY 采购在途,FQTY 生产自制,FSTOCKQTY 库存数量,FSTOCKAVBQTY 库存可用数量,FSTOCKDAYS 库存可用天数,FLOWQTY 最低订货量,FMINQTY 最小批量,FLACKQTY 欠料数量,FSUMQTY 需求汇总,FSEQ 序号,TO_CHAR(FDATE,'yyyy-mm-dd hh24:mi:ss') 汇总日期,FOPERATOR 操作人
                     FROM DM_LOG_ORDERRUNSUM WHERE FBILLNO = '" + pYSD + "'";
 
                     if (pMaterialiNo != string.Empty)
