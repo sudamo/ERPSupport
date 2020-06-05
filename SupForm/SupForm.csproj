@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>33</ApplicationRevision>
+    <ApplicationRevision>37</ApplicationRevision>
     <ApplicationVersion>1.0.6.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -162,6 +162,12 @@
     </Compile>
     <Compile Include="Bussiness\frmOrderOperation.Designer.cs">
       <DependentUpon>frmOrderOperation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmOrderPriceSyn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmOrderPriceSyn.Designer.cs">
+      <DependentUpon>frmOrderPriceSyn.cs</DependentUpon>
     </Compile>
     <Compile Include="Bussiness\frmOrderSummary.cs">
       <SubType>Form</SubType>
@@ -391,6 +397,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmOrderOperation.resx">
       <DependentUpon>frmOrderOperation.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmOrderPriceSyn.resx">
+      <DependentUpon>frmOrderPriceSyn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmOrderSummary.resx">
       <DependentUpon>frmOrderSummary.cs</DependentUpon>

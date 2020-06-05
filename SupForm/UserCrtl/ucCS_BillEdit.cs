@@ -88,6 +88,7 @@ namespace ERPSupport.SupForm.UserCrtl
             list.Add(bnTop.Items[10]);
             list.Add(bnTop.Items[11]);
             list.Add(bnTop.Items[12]);
+            list.Add(bnTop.Items[13]);
 
             bnTop.Items.Clear();
             foreach (ToolStripItem item in list)
@@ -201,6 +202,10 @@ namespace ERPSupport.SupForm.UserCrtl
                 case "6":
                     Bussiness.frmU1CityOrderEdit frmU = new Bussiness.frmU1CityOrderEdit();
                     frmU.Show(this);
+                    break;
+                case "7":
+                    Bussiness.frmOrderPriceSyn frmP = new Bussiness.frmOrderPriceSyn();
+                    frmP.Show(this);
                     break;
             }
         }
@@ -316,18 +321,19 @@ namespace ERPSupport.SupForm.UserCrtl
                 tpl1.Visible = false;
                 bnTop_lblBillNo.Visible = false;
                 bnTop_txtBillNo.Visible = false;
-                bnTop_btnSearch.Visible = false;
+                bnTop_Search.Visible = false;
 
-                bnTop_btnSyn.Visible = false;
-                bnTop_btnChangeDB.Visible = false;
+                bnTop_Syn.Visible = false;
+                bnTop_ChangeDB.Visible = false;
                 _dateFrom.Visible = false;
                 bnTop_lblDash.Visible = false;
                 _dateTo.Visible = false;
 
-                bnTop_btnPPBom.Visible = false;
-                bnTop_btnBom.Visible = false;
+                bnTop_PPBom.Visible = false;
+                bnTop_Bom.Visible = false;
+                bnTop_Price.Visible = false;
             }
-            if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "SAL_SaleOrder" && (GlobalParameter.K3Inf.DepartmentID == 619615 || GlobalParameter.K3Inf.DepartmentID == 481013))
+            if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "SAL_SaleOrder" && (GlobalParameter.K3Inf.DepartmentName.Contains("信息部") || GlobalParameter.K3Inf.DepartmentName == "客服部"))
             {
                 if (dgv1 != null)
                     tpl1.Visible = true;
@@ -335,51 +341,54 @@ namespace ERPSupport.SupForm.UserCrtl
                     tpl1.Visible = false;
                 bnTop_lblBillNo.Visible = true;
                 bnTop_txtBillNo.Visible = true;
-                bnTop_btnSearch.Visible = true;
-                bnTop_btnOrg.Visible = true;
+                bnTop_Search.Visible = true;
+                bnTop_Org.Visible = true;
+                bnTop_Price.Visible = true;
 
-                bnTop_btnSyn.Visible = false;
-                bnTop_btnChangeDB.Visible = false;
+                bnTop_Syn.Visible = false;
+                bnTop_ChangeDB.Visible = false;
                 _dateFrom.Visible = false;
                 bnTop_lblDash.Visible = false;
                 _dateTo.Visible = false;
 
-                bnTop_btnPPBom.Visible = false;
-                bnTop_btnBom.Visible = false;
+                bnTop_PPBom.Visible = false;
+                bnTop_Bom.Visible = false;
             }
             else if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "PRD_MO")
             {
                 tpl1.Visible = false;
                 bnTop_lblBillNo.Visible = false;
                 bnTop_txtBillNo.Visible = false;
-                bnTop_btnSearch.Visible = false;
-                bnTop_btnOrg.Visible = false;
+                bnTop_Search.Visible = false;
+                bnTop_Org.Visible = false;
+                bnTop_Price.Visible = false;
 
-                bnTop_btnSyn.Visible = true;
-                bnTop_btnChangeDB.Visible = true;
+                bnTop_Syn.Visible = true;
+                bnTop_ChangeDB.Visible = true;
                 _dateFrom.Visible = true;
                 bnTop_lblDash.Visible = true;
                 _dateTo.Visible = true;
 
-                bnTop_btnPPBom.Visible = false;
-                bnTop_btnBom.Visible = false;
+                bnTop_PPBom.Visible = false;
+                bnTop_Bom.Visible = false;
             }
             else if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "PRD_PPBOM")
             {
                 tpl1.Visible = false;
                 bnTop_lblBillNo.Visible = false;
                 bnTop_txtBillNo.Visible = false;
-                bnTop_btnSearch.Visible = false;
-                bnTop_btnOrg.Visible = false;
+                bnTop_Search.Visible = false;
+                bnTop_Org.Visible = false;
+                bnTop_Price.Visible = false;
 
-                bnTop_btnSyn.Visible = false;
-                bnTop_btnChangeDB.Visible = false;
+                bnTop_Syn.Visible = false;
+                bnTop_ChangeDB.Visible = false;
                 _dateFrom.Visible = false;
                 bnTop_lblDash.Visible = false;
                 _dateTo.Visible = false;
 
-                bnTop_btnPPBom.Visible = true;
-                bnTop_btnBom.Visible = true;
+                bnTop_PPBom.Visible = true;
+                bnTop_Bom.Visible = true;
             }
         }
 

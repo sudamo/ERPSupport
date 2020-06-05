@@ -80,16 +80,17 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetUserInfoByName(string pConnectionString, string pUserName)
         {
-            _SQL = @"SELECT US.FUSERID,NVL(UR.RIDS,' ') RIDS,NVL(WM_CONCAT(R.MIDS),' ') MIDS,US.FPHONE,NVL(DEP.FDEPTID,0) FDEPTID,NVL(DEP.FNUMBER,' ') FDEPTNUMBER,NVL(DEPL.FNAME,' ') FDEPTNAME
-            FROM T_SEC_USER US
-            LEFT JOIN dm_user_role UR ON US.Fuserid = UR.USERID
-            LEFT JOIN dm_role R ON INSTR(UR.RIDS,TO_CHAR(r.RID)) > 0
-            LEFT JOIN T_BD_STAFF_L STFL ON US.FUSERACCOUNT = STFL.FNAME
-            LEFT JOIN T_BD_STAFF STF ON STFL.FSTAFFID = STF.FSTAFFID
-            LEFT JOIN T_BD_DEPARTMENT DEP ON STF.FDEPTID = DEP.FDEPTID
-            LEFT JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID
-            WHERE US.FNAME = '" + pUserName + "' OR US.FUSERACCOUNT = '" + pUserName + @"'
-            GROUP BY US.FUSERID,UR.RIDS,US.FPHONE,DEP.FDEPTID,DEP.FNUMBER,DEPL.FNAME";
+            _SQL = string.Format("SELECT US.FUSERID,NVL(UR.RIDS,' ') RIDS,NVL(WM_CONCAT(R.MIDS),' ') MIDS,US.FPHONE,NVL(DEP.FDEPTID,0) FDEPTID,NVL(DEP.FNUMBER,' ') FDEPTNUMBER,GL.FNAME FDEPTNAME ");
+            _SQL += string.Format(" FROM T_SEC_USER US ");
+            _SQL += string.Format(" LEFT JOIN DM_USER_ROLE UR ON US.FUSERID = UR.USERID ");
+            _SQL += string.Format(" LEFT JOIN T_SEC_USERGROUP_L GL ON US.FPRIMARYGROUP = GL.FID ");
+            _SQL += string.Format(" LEFT JOIN DM_ROLE R ON INSTR(UR.RIDS,TO_CHAR(R.RID)) > 0 ");
+            _SQL += string.Format(" LEFT JOIN T_BD_STAFF_L STFL ON US.FUSERACCOUNT = STFL.FNAME ");
+            _SQL += string.Format(" LEFT JOIN T_BD_STAFF STF ON STFL.FSTAFFID = STF.FSTAFFID ");
+            _SQL += string.Format(" LEFT JOIN T_BD_DEPARTMENT DEP ON STF.FDEPTID = DEP.FDEPTID ");
+            _SQL += string.Format(" LEFT JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID ");
+            _SQL += string.Format(" WHERE US.FNAME = '{0}' OR US.FUSERACCOUNT = '{0}' ",pUserName);
+            _SQL += string.Format(" GROUP BY US.FUSERID,UR.RIDS,US.FPHONE,DEP.FDEPTID,DEP.FNUMBER,GL.FNAME ");
 
             return ORAHelper.ExecuteTable(pConnectionString, _SQL);
         }

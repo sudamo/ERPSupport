@@ -40,12 +40,12 @@
             this.bnTop_tss = new System.Windows.Forms.ToolStripSeparator();
             this.bnTop_lblDash = new System.Windows.Forms.ToolStripLabel();
             this.bnTop_tss2 = new System.Windows.Forms.ToolStripSeparator();
-            this.bnTop_btnSearch = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnSyn = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnChangeDB = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnPPBom = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnBom = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnOrg = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_Search = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_Syn = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_ChangeDB = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_PPBom = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_Bom = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_Org = new System.Windows.Forms.ToolStripButton();
             this.bnR2 = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnR2_lblMTLNumber = new System.Windows.Forms.ToolStripLabel();
             this.bnR2_txtMTLNumber = new System.Windows.Forms.ToolStripTextBox();
@@ -61,6 +61,7 @@
             this.bnR3_btnEdit = new System.Windows.Forms.ToolStripButton();
             this.tpl1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgv1 = new System.Windows.Forms.DataGridView();
+            this.bnTop_Price = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.bnR1)).BeginInit();
             this.bnR1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
@@ -124,12 +125,13 @@
             this.bnTop_tss,
             this.bnTop_lblDash,
             this.bnTop_tss2,
-            this.bnTop_btnSearch,
-            this.bnTop_btnSyn,
-            this.bnTop_btnChangeDB,
-            this.bnTop_btnPPBom,
-            this.bnTop_btnBom,
-            this.bnTop_btnOrg});
+            this.bnTop_Search,
+            this.bnTop_Syn,
+            this.bnTop_ChangeDB,
+            this.bnTop_PPBom,
+            this.bnTop_Bom,
+            this.bnTop_Org,
+            this.bnTop_Price});
             this.bnTop.Location = new System.Drawing.Point(0, 0);
             this.bnTop.MoveFirstItem = null;
             this.bnTop.MoveLastItem = null;
@@ -185,71 +187,71 @@
             this.bnTop_tss2.Name = "bnTop_tss2";
             this.bnTop_tss2.Size = new System.Drawing.Size(6, 27);
             // 
-            // bnTop_btnSearch
+            // bnTop_Search
             // 
-            this.bnTop_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
-            this.bnTop_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnSearch.Name = "bnTop_btnSearch";
-            this.bnTop_btnSearch.Size = new System.Drawing.Size(56, 24);
-            this.bnTop_btnSearch.Tag = "1";
-            this.bnTop_btnSearch.Text = "查找";
-            this.bnTop_btnSearch.ToolTipText = "查询";
-            this.bnTop_btnSearch.Visible = false;
+            this.bnTop_Search.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
+            this.bnTop_Search.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_Search.Name = "bnTop_Search";
+            this.bnTop_Search.Size = new System.Drawing.Size(56, 24);
+            this.bnTop_Search.Tag = "1";
+            this.bnTop_Search.Text = "查找";
+            this.bnTop_Search.ToolTipText = "查询";
+            this.bnTop_Search.Visible = false;
             // 
-            // bnTop_btnSyn
+            // bnTop_Syn
             // 
-            this.bnTop_btnSyn.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
-            this.bnTop_btnSyn.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnSyn.Name = "bnTop_btnSyn";
-            this.bnTop_btnSyn.Size = new System.Drawing.Size(104, 24);
-            this.bnTop_btnSyn.Tag = "2";
-            this.bnTop_btnSyn.Text = "同步需求日期";
-            this.bnTop_btnSyn.ToolTipText = "同步用料清单的需求日期为生产订单的计划开工时间";
-            this.bnTop_btnSyn.Visible = false;
+            this.bnTop_Syn.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
+            this.bnTop_Syn.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_Syn.Name = "bnTop_Syn";
+            this.bnTop_Syn.Size = new System.Drawing.Size(104, 24);
+            this.bnTop_Syn.Tag = "2";
+            this.bnTop_Syn.Text = "同步需求日期";
+            this.bnTop_Syn.ToolTipText = "同步用料清单的需求日期为生产订单的计划开工时间";
+            this.bnTop_Syn.Visible = false;
             // 
-            // bnTop_btnChangeDB
+            // bnTop_ChangeDB
             // 
-            this.bnTop_btnChangeDB.Image = global::ERPSupport.SupForm.Properties.Resources.direction;
-            this.bnTop_btnChangeDB.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnChangeDB.Name = "bnTop_btnChangeDB";
-            this.bnTop_btnChangeDB.Size = new System.Drawing.Size(104, 24);
-            this.bnTop_btnChangeDB.Tag = "3";
-            this.bnTop_btnChangeDB.Text = "修改调拨状态";
-            this.bnTop_btnChangeDB.ToolTipText = "根据生产订单修改生成调拨单状态";
-            this.bnTop_btnChangeDB.Visible = false;
+            this.bnTop_ChangeDB.Image = global::ERPSupport.SupForm.Properties.Resources.direction;
+            this.bnTop_ChangeDB.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_ChangeDB.Name = "bnTop_ChangeDB";
+            this.bnTop_ChangeDB.Size = new System.Drawing.Size(104, 24);
+            this.bnTop_ChangeDB.Tag = "3";
+            this.bnTop_ChangeDB.Text = "修改调拨状态";
+            this.bnTop_ChangeDB.ToolTipText = "根据生产订单修改生成调拨单状态";
+            this.bnTop_ChangeDB.Visible = false;
             // 
-            // bnTop_btnPPBom
+            // bnTop_PPBom
             // 
-            this.bnTop_btnPPBom.Image = global::ERPSupport.SupForm.Properties.Resources.text;
-            this.bnTop_btnPPBom.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnPPBom.Name = "bnTop_btnPPBom";
-            this.bnTop_btnPPBom.Size = new System.Drawing.Size(92, 24);
-            this.bnTop_btnPPBom.Tag = "4";
-            this.bnTop_btnPPBom.Text = "修改投料单";
-            this.bnTop_btnPPBom.ToolTipText = "修改生产用料清单的信息";
-            this.bnTop_btnPPBom.Visible = false;
+            this.bnTop_PPBom.Image = global::ERPSupport.SupForm.Properties.Resources.text;
+            this.bnTop_PPBom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_PPBom.Name = "bnTop_PPBom";
+            this.bnTop_PPBom.Size = new System.Drawing.Size(92, 24);
+            this.bnTop_PPBom.Tag = "4";
+            this.bnTop_PPBom.Text = "修改投料单";
+            this.bnTop_PPBom.ToolTipText = "修改生产用料清单的信息";
+            this.bnTop_PPBom.Visible = false;
             // 
-            // bnTop_btnBom
+            // bnTop_Bom
             // 
-            this.bnTop_btnBom.Image = global::ERPSupport.SupForm.Properties.Resources.note;
-            this.bnTop_btnBom.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnBom.Name = "bnTop_btnBom";
-            this.bnTop_btnBom.Size = new System.Drawing.Size(86, 24);
-            this.bnTop_btnBom.Tag = "5";
-            this.bnTop_btnBom.Text = "批改BOM";
-            this.bnTop_btnBom.ToolTipText = "批量修改物料清单";
-            this.bnTop_btnBom.Visible = false;
+            this.bnTop_Bom.Image = global::ERPSupport.SupForm.Properties.Resources.note;
+            this.bnTop_Bom.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_Bom.Name = "bnTop_Bom";
+            this.bnTop_Bom.Size = new System.Drawing.Size(86, 24);
+            this.bnTop_Bom.Tag = "5";
+            this.bnTop_Bom.Text = "批改BOM";
+            this.bnTop_Bom.ToolTipText = "批量修改物料清单";
+            this.bnTop_Bom.Visible = false;
             // 
-            // bnTop_btnOrg
+            // bnTop_Org
             // 
-            this.bnTop_btnOrg.Image = global::ERPSupport.SupForm.Properties.Resources.link_edit;
-            this.bnTop_btnOrg.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnOrg.Name = "bnTop_btnOrg";
-            this.bnTop_btnOrg.Size = new System.Drawing.Size(80, 24);
-            this.bnTop_btnOrg.Tag = "6";
-            this.bnTop_btnOrg.Text = "调整组织";
-            this.bnTop_btnOrg.ToolTipText = "调整U1City下的订单信息";
-            this.bnTop_btnOrg.Visible = false;
+            this.bnTop_Org.Image = global::ERPSupport.SupForm.Properties.Resources.link_edit;
+            this.bnTop_Org.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_Org.Name = "bnTop_Org";
+            this.bnTop_Org.Size = new System.Drawing.Size(80, 24);
+            this.bnTop_Org.Tag = "6";
+            this.bnTop_Org.Text = "调整组织";
+            this.bnTop_Org.ToolTipText = "调整U1City下的订单信息";
+            this.bnTop_Org.Visible = false;
             // 
             // bnR2
             // 
@@ -416,6 +418,16 @@
             this.dgv1.TabIndex = 33;
             this.dgv1.Click += new System.EventHandler(this.dgv1_Click);
             // 
+            // bnTop_Price
+            // 
+            this.bnTop_Price.Image = global::ERPSupport.SupForm.Properties.Resources.update;
+            this.bnTop_Price.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_Price.Name = "bnTop_Price";
+            this.bnTop_Price.Size = new System.Drawing.Size(80, 24);
+            this.bnTop_Price.Tag = "7";
+            this.bnTop_Price.Text = "更新价格";
+            this.bnTop_Price.Visible = false;
+            // 
             // ucCS_BillEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -456,8 +468,8 @@
         private System.Windows.Forms.ToolStripSeparator bnTop_tss;
         private System.Windows.Forms.ToolStripLabel bnTop_lblDash;
         private System.Windows.Forms.ToolStripSeparator bnTop_tss2;
-        private System.Windows.Forms.ToolStripButton bnTop_btnSearch;
-        private System.Windows.Forms.ToolStripButton bnTop_btnSyn;
+        private System.Windows.Forms.ToolStripButton bnTop_Search;
+        private System.Windows.Forms.ToolStripButton bnTop_Syn;
         private System.Windows.Forms.ToolStripLabel bnTop_lblType;
         private System.Windows.Forms.BindingNavigator bnR2;
         private System.Windows.Forms.ToolStripSeparator bnR2_tss;
@@ -474,9 +486,10 @@
         private System.Windows.Forms.TableLayoutPanel tpl1;
         private System.Windows.Forms.ToolStripSeparator bnR3_tss2;
         private System.Windows.Forms.DataGridView dgv1;
-        private System.Windows.Forms.ToolStripButton bnTop_btnPPBom;
-        private System.Windows.Forms.ToolStripButton bnTop_btnBom;
-        private System.Windows.Forms.ToolStripButton bnTop_btnChangeDB;
-        private System.Windows.Forms.ToolStripButton bnTop_btnOrg;
+        private System.Windows.Forms.ToolStripButton bnTop_PPBom;
+        private System.Windows.Forms.ToolStripButton bnTop_Bom;
+        private System.Windows.Forms.ToolStripButton bnTop_ChangeDB;
+        private System.Windows.Forms.ToolStripButton bnTop_Org;
+        private System.Windows.Forms.ToolStripButton bnTop_Price;
     }
 }
