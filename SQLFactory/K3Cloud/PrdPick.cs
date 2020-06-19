@@ -391,10 +391,10 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns>DataTable</returns>
         public static DataTable GetInstockBillNo(DateTime pDateTime)
         {
-            _SQL = @"SELECT DISTINCT A.FBILLNO
-            FROM T_PRD_INSTOCK A
-            LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON A.FID = PICA.FSRCBIZINTERID
-            WHERE TO_CHAR(A.FDATE, 'yyyy-MM-dd') >= '" + pDateTime.ToString("yyyy-MM-dd") + "' AND  A.FDOCUMENTSTATUS = 'C' AND PICA.FSRCBIZBILLNO IS NULL";
+            _SQL = string.Format("SELECT DISTINCT A.FBILLNO ");
+            _SQL += string.Format(" FROM T_PRD_INSTOCK A ");
+            _SQL += string.Format(" LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON A.FID = PICA.FSRCBIZINTERID ");
+            _SQL += string.Format(" WHERE TO_CHAR(A.FDATE, 'yyyy-MM-dd') >= '{0}' AND  A.FDOCUMENTSTATUS = 'C' AND PICA.FSRCBIZBILLNO IS NULL", pDateTime.ToString("yyyy-MM-dd"));
 
             return ORAHelper.ExecuteTable(_SQL);
         }

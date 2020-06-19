@@ -11,20 +11,32 @@ namespace ERPSupport.SupForm.Bussiness
     public partial class frmSetDefaultStock : Form
     {
         #region Variable & Constructor
+
+        private int _OrgId;
         /// <summary>
         /// 计划开工日期
         /// </summary>
         private string _PlanStartDate;
+        /// <summary>
+        /// 业务标识
+        /// </summary>
+        private Model.Enum.FormID _FormId;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="pFPlanStartDate">计划开工日期</param>
-        public frmSetDefaultStock(string pFPlanStartDate)
+        public frmSetDefaultStock(string pFPlanStartDate, Model.Enum.FormID pFormId)
         {
             InitializeComponent();
 
             _PlanStartDate = pFPlanStartDate;
+            _FormId = pFormId;
+
+            if (_FormId == Model.Enum.FormID.PRD_PPBOM)
+                _OrgId = 100508;
+            else
+                _OrgId = 492501088;
         }
         #endregion
 
@@ -35,13 +47,14 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void frmSetDefaultStock_Load(object sender, EventArgs e)
         {
-            dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate);
+            dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate, _FormId);
+            
 
             DataGridViewComboBoxColumn colcbx = new DataGridViewComboBoxColumn();
             colcbx.HeaderText = "默认仓库";
             colcbx.AutoComplete = true;
             colcbx.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            colcbx.DataSource = CommFunction.GetStock();
+            colcbx.DataSource = CommFunction.GetStock(5, _OrgId);
             dgv1.Columns.Add(colcbx);
             colcbx.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             colcbx.DisplayMember = "FName";
@@ -73,7 +86,7 @@ namespace ERPSupport.SupForm.Bussiness
                 {
                     string FName = (dgv1.Rows[i].Cells[4]).EditedFormattedValue.ToString();
                     if (strStockValue == string.Empty && (dgv1.Rows[i].Cells[4]).EditedFormattedValue != null && FName != string.Empty)
-                        strStockValue = CommFunction.GetStockNumber(FName);
+                        strStockValue = CommFunction.GetStockNumber(_OrgId, FName);
 
                     dgv1.Rows[i].Cells[4].Value = strStockValue;
                 }
@@ -102,11 +115,11 @@ namespace ERPSupport.SupForm.Bussiness
                     string FName = (dgv1.Rows[i].Cells[4]).EditedFormattedValue.ToString();
 
                     strMaterialNumber = dgv1.Rows[i].Cells[0].Value.ToString();
-                    strMaterialID = CommFunction.GetMTLIDByNumber(100508, dgv1.Rows[i].Cells[0].Value.ToString()).ToString();
+                    strMaterialID = CommFunction.GetMTLIDByNumber(_OrgId, dgv1.Rows[i].Cells[0].Value.ToString()).ToString();
                     strDeptNumber = dgv1.Rows[i].Cells[2].Value.ToString();
-                    strDeptID = CommFunction.GetDepartIdByNumber(100508, dgv1.Rows[i].Cells[2].Value.ToString()).ToString();
-                    strStockNumber = CommFunction.GetStockNumber(FName);
-                    strStockID = CommFunction.GetStockIdByNumber(100508, strStockNumber).ToString();
+                    strDeptID = CommFunction.GetDepartIdByNumber(_OrgId, dgv1.Rows[i].Cells[2].Value.ToString()).ToString();
+                    strStockNumber = CommFunction.GetStockNumber(_OrgId, FName);
+                    strStockID = CommFunction.GetStockIdByNumber(_OrgId, strStockNumber).ToString();
 
                     if (strStockID == null || strStockID == "-1") continue;
 

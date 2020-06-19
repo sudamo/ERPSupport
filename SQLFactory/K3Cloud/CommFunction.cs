@@ -63,7 +63,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns>int:UserId</returns>
         public static int GetUserId(string pConnectionString, string pUserName)
         {
-            _SQL = "SELECT FUSERID FROM T_SEC_USER WHERE FNAME = '" + pUserName + "'";
+            _SQL = string.Format("SELECT FUSERID FROM T_SEC_USER WHERE FNAME = '{0}'", pUserName);
             _obj = ORAHelper.ExecuteScalar(pConnectionString, _SQL);
 
             if (_obj == null)
@@ -101,11 +101,11 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns>DataTable</returns>
         public static DataTable User()
         {
-            _SQL = @"SELECT UR.FUSERID,UR.FNAME 姓名,URGL.FNAME 部门,UR.FUSERACCOUNT 账号,NVL(UR.FPHONE,' ') 电话
-            FROM T_SEC_USER UR
-            INNER JOIN T_SEC_USERGROUP_L URGL ON UR.FPRIMARYGROUP = URGL.FID AND URGL.FLOCALEID = 2052
-            WHERE UR.FUSERTYPE = '1' AND UR.FFORBIDSTATUS = 'A' AND UR.FPRIMARYGROUP <> 0
-            ORDER BY URGL.FNAME,UR.FNAME";
+            _SQL = string.Format("SELECT UR.FUSERID,UR.FNAME 姓名,URGL.FNAME 部门,UR.FUSERACCOUNT 账号,NVL(UR.FPHONE,' ') 电话 ");
+            _SQL += string.Format(" FROM T_SEC_USER UR ");
+            _SQL += string.Format(" INNER JOIN T_SEC_USERGROUP_L URGL ON UR.FPRIMARYGROUP = URGL.FID AND URGL.FLOCALEID = 2052 ");
+            _SQL += string.Format(" WHERE UR.FUSERTYPE = '1' AND UR.FFORBIDSTATUS = 'A' AND UR.FPRIMARYGROUP <> 0 ");
+            _SQL += string.Format(" ORDER BY URGL.FNAME,UR.FNAME");
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -117,11 +117,11 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetBillType(string pFbillFormId)
         {
-            _SQL = @"SELECT A.FBILLTYPEID FValue,AL.FNAME
-            FROM T_BAS_BILLTYPE A
-            INNER JOIN T_BAS_BILLTYPE_L AL ON A.FBILLTYPEID = AL.FBILLTYPEID AND AL.FLOCALEID = 2052
-            WHERE UPPER(FBILLFORMID) = '" + pFbillFormId.ToUpper() + @"' AND FDOCUMENTSTATUS = 'C' AND FFORBIDSTATUS = 'A'
-            ORDER BY A.FNUMBER";
+            _SQL = string.Format("SELECT A.FBILLTYPEID FValue,AL.FNAME ");
+            _SQL += string.Format(" FROM T_BAS_BILLTYPE A ");
+            _SQL += string.Format(" INNER JOIN T_BAS_BILLTYPE_L AL ON A.FBILLTYPEID = AL.FBILLTYPEID AND AL.FLOCALEID = 2052 ");
+            _SQL += string.Format(" WHERE UPPER(FBILLFORMID) = '{0}' AND FDOCUMENTSTATUS = 'C' AND FFORBIDSTATUS = 'A' ", pFbillFormId.ToUpper());
+            _SQL += string.Format(" ORDER BY A.FNUMBER");
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -134,7 +134,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static int GetDepartIdByNumber(int pFUseOrgId, string pFNumber)
         {
-            _SQL = "SELECT FDEPTID FROM T_BD_DEPARTMENT WHERE FUSEORGID = " + pFUseOrgId.ToString() + " AND FNUMBER = '" + pFNumber + "'";
+            _SQL = string.Format("SELECT FDEPTID FROM T_BD_DEPARTMENT WHERE FUSEORGID = {0} AND FNUMBER = '{1}'", pFUseOrgId, pFNumber);
             _obj = ORAHelper.ExecuteScalar(_SQL);
 
             if (_obj == null)
@@ -212,10 +212,11 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取领料部门信息
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetPickMtlDepartment()
+        public static List<string> GetPickMtlDepartment(int pUseOrgId = 100508)
         {
             List<string> lstReturn = new List<string>();
-            DataTable dt = ORAHelper.ExecuteTable("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' ORDER BY FNUMBER");
+            _SQL = string.Format("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' AND FUSEORGID = {0} ORDER BY FNUMBER", pUseOrgId);
+            DataTable dt = ORAHelper.ExecuteTable(_SQL);
 
             if (dt == null || dt.Rows.Count == 0)
                 return new List<string>();
@@ -237,7 +238,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static int GetCustomerId(string pCustomerName, int pUseOrgId)
         {
-            _SQL = "SELECT A.FCUSTID FROM T_BD_CUSTOMER A INNER JOIN T_BD_CUSTOMER_L AL ON A.FCUSTID = AL.FCUSTID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = " + pUseOrgId + " AND AL.FNAME = '" + pCustomerName + "'";
+            _SQL = string.Format("SELECT A.FCUSTID FROM T_BD_CUSTOMER A INNER JOIN T_BD_CUSTOMER_L AL ON A.FCUSTID = AL.FCUSTID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = {0} AND AL.FNAME = '{1}'", pUseOrgId, pCustomerName);
 
             object o = ORAHelper.ExecuteScalar(_SQL);
             if (o == null)
@@ -253,11 +254,11 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetSalerList(int pUseOrgId)
         {
-            _SQL = @"SELECT B.FENTRYID FVALUE,EMPL.FNAME
-            FROM T_BD_OPERATORENTRY B
-            INNER JOIN T_HR_EMPINFO EMP ON B.FSTAFFID = EMP.FSTAFFID AND EMP.FFORBIDSTATUS = 'A'
-            INNER JOIN T_HR_EMPINFO_L EMPL ON EMP.FID = EMPL.FID
-            WHERE B.FOPERATORTYPE = 'XSY' AND B.FBIZORGID = " + pUseOrgId.ToString();
+            _SQL = string.Format("SELECT B.FENTRYID FVALUE,EMPL.FNAME ");
+            _SQL += string.Format(" FROM T_BD_OPERATORENTRY B ");
+            _SQL += string.Format(" INNER JOIN T_HR_EMPINFO EMP ON B.FSTAFFID = EMP.FSTAFFID AND EMP.FFORBIDSTATUS = 'A' ");
+            _SQL += string.Format(" INNER JOIN T_HR_EMPINFO_L EMPL ON EMP.FID = EMPL.FID ");
+            _SQL += string.Format(" WHERE B.FOPERATORTYPE = 'XSY' AND B.FBIZORGID = {0}", pUseOrgId);
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -270,7 +271,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static int GetStockIdByNumber(int pFUseOrgId, string pFNumber)
         {
-            _SQL = "SELECT FSTOCKID FROM T_BD_STOCK WHERE FUSEORGID = " + pFUseOrgId.ToString() + " AND FNUMBER = '" + pFNumber + "'";
+            _SQL = string.Format("SELECT FSTOCKID FROM T_BD_STOCK WHERE FUSEORGID = {0} AND FNUMBER = '{1}'", pFUseOrgId, pFNumber);
             _obj = ORAHelper.ExecuteScalar(_SQL);
 
             if (_obj == null)
@@ -297,20 +298,18 @@ namespace ERPSupport.SQL.K3Cloud
                     ORDER BY SK.FNUMBER";
                     break;
                 case 2:
-                    _SQL = @"SELECT SK.FNUMBER||'|'||SK.FSTOCKID FVALUE,SKL.FNAME
-                    FROM T_BD_STOCK SK
-                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FUSEORGID = " + pUserOrgId.ToString() + @"
-                    ORDER BY SK.FNUMBER";
+                    _SQL = string.Format("SELECT SK.FNUMBER||'|'||SK.FSTOCKID FVALUE,SKL.FNAME ");
+                    _SQL += string.Format(" FROM T_BD_STOCK SK ");
+                    _SQL += string.Format(" INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052 ");
+                    _SQL += string.Format(" WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FUSEORGID = {0} ORDER BY SK.FNUMBER ", pUserOrgId);
                     break;
                 case 3:
-                    _SQL = @"SELECT N'-1' FVALUE,N'请选择' FNAME FROM DUAL
-                    UNION ALL
-                    SELECT SK.FNUMBER||'|'||SK.FSTOCKID FVALUE,SKL.FNAME
-                    FROM T_BD_STOCK SK
-                    INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FDEFSTOCKSTATUSID = 10000 AND SK.FUSEORGID = 100508
-                    ORDER BY FVALUE";
+                    _SQL = string.Format("SELECT N'-1' FVALUE,N'请选择' FNAME FROM DUAL ");
+                    _SQL += string.Format(" UNION ALL ");
+                    _SQL += string.Format(" SELECT SK.FNUMBER||'|'||SK.FSTOCKID FVALUE,SKL.FNAME ");
+                    _SQL += string.Format(" FROM T_BD_STOCK SK ");
+                    _SQL += string.Format(" INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052 ");
+                    _SQL += string.Format(" WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FDEFSTOCKSTATUSID = 10000 AND SK.FUSEORGID = {0} ORDER BY FVALUE ", pUserOrgId);
                     break;
                 case 4:
                     _SQL = @"SELECT N' 请选择' FVALUE,N' 请选择' FNAME FROM DUAL
@@ -321,6 +320,13 @@ namespace ERPSupport.SQL.K3Cloud
                     INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
                     WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2')
                     ORDER BY FVALUE";
+                    break;
+                case 5:
+                    _SQL = string.Format("SELECT SK.FNUMBER FVALUE,SKL.FNAME ");
+                    _SQL += string.Format(" FROM T_BD_STOCK SK ");
+                    _SQL += string.Format(" INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052 ");
+                    //_SQL += string.Format(" INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID ");
+                    _SQL += string.Format(" WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SK.FUSEORGID = {0} AND SKL.FNAME NOT LIKE '%VMI%' ORDER BY SK.FNUMBER", pUserOrgId);
                     break;
                 default:
                     _SQL = @"SELECT SK.FNUMBER FVALUE,SKL.FNAME
@@ -340,9 +346,9 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFName">仓库名</param>
         /// <returns></returns>
-        public static string GetStockNumber(string pFName)
+        public static string GetStockNumber(int pUseOrgId, string pFName)
         {
-            _SQL = "SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE AL.FNAME = '" + pFName + "'";
+            _SQL = string.Format("SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = {0} AND AL.FNAME = '{1}'", pUseOrgId, pFName);
             _obj = ORAHelper.ExecuteScalar(_SQL);
 
             if (_obj != null)
@@ -356,12 +362,16 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pAcctype">类型：1、法人组织；2、利润中心</param>
         /// <returns></returns>
-        public static DataTable GetOrganization(int pAcctype = 2)
+        public static DataTable GetOrganization(int pAcctype = 2, bool pIsContains = false)
         {
-            _SQL = @"SELECT ORG.FORGID FVALUE,ORGL.FNAME
-            FROM T_ORG_ORGANIZATIONS ORG
-            INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
-            WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A' AND ORG.FACCTORGTYPE = " + pAcctype.ToString() + " ORDER BY ORGL.FNAME";
+            _SQL = string.Format("SELECT ORG.FORGID FVALUE,ORGL.FNAME ");
+            _SQL += string.Format(" FROM T_ORG_ORGANIZATIONS ORG ");
+            _SQL += string.Format(" INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON ORG.FORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052 ");
+
+            if (pIsContains)
+                _SQL += string.Format(" WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A' AND (ORG.FACCTORGTYPE = {0} OR ORG.FORGID = 492501088) ORDER BY ORGL.FNAME ", pAcctype);
+            else
+                _SQL += string.Format(" WHERE ORG.FDOCUMENTSTATUS = 'C' AND ORG.FFORBIDSTATUS = 'A' AND ORG.FACCTORGTYPE = {0} ORDER BY ORGL.FNAME ", pAcctype);
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -402,10 +412,10 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetAssistantDataEntryByFID(string pFID)
         {
-            _SQL = @"SELECT ASS.FENTRYID FVALUE,ASSL.FDATAVALUE FNAME
-            FROM T_BAS_ASSISTANTDATAENTRY ASS
-            INNER JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL ON ASS.FENTRYID = ASSL.FENTRYID AND ASSL.FLOCALEID = 2052
-            WHERE ASS.FID = '" + pFID + "'";
+            _SQL = string.Format("SELECT ASS.FENTRYID FVALUE,ASSL.FDATAVALUE FNAME ");
+            _SQL += string.Format(" FROM T_BAS_ASSISTANTDATAENTRY ASS ");
+            _SQL += string.Format(" INNER JOIN T_BAS_ASSISTANTDATAENTRY_L ASSL ON ASS.FENTRYID = ASSL.FENTRYID AND ASSL.FLOCALEID = 2052 ");
+            _SQL += string.Format(" WHERE ASS.FID = '{0}'", pFID);
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -421,7 +431,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns>整形 -1：没有记录；0：未启用；1：启用；2或其他：弃用</returns>
         public static int ApplicationFlag(string pConnectionString, string pAppName)
         {
-            _SQL = "SELECT FLAG FROM DM_APP_MANAGE WHERE ISDEL = '0' AND APPNAME = '" + pAppName + "'";
+            _SQL = string.Format("SELECT FLAG FROM DM_APP_MANAGE WHERE ISDEL = '0' AND APPNAME = '{0}'", pAppName);
 
             _obj = ORAHelper.ExecuteScalar(pConnectionString, _SQL);
 
@@ -472,12 +482,15 @@ namespace ERPSupport.SQL.K3Cloud
             pRIDs = string.Empty;
             pMIDs = string.Empty;
             pFunctionIds = string.Empty;
-            oTemp = ORAHelper.ExecuteScalar("SELECT RIDS FROM DM_USER_ROLE WHERE USERID = " + GlobalParameter.K3Inf.UserId);
+
+            _SQL = string.Format("SELECT RIDS FROM DM_USER_ROLE WHERE USERID = {0}", GlobalParameter.K3Inf.UserId);
+            oTemp = ORAHelper.ExecuteScalar(_SQL);
 
             if (oTemp != null && oTemp.ToString().Trim() != string.Empty)
             {
                 pRIDs = oTemp.ToString();
-                dtRuleS = ORAHelper.ExecuteTable("SELECT MIDS,FUNCTIONID FROM DM_ROLE WHERE RID IN(" + pRIDs + ")");
+                _SQL = string.Format("SELECT MIDS,FUNCTIONID FROM DM_ROLE WHERE RID IN({0})", pRIDs);
+                dtRuleS = ORAHelper.ExecuteTable(_SQL);
 
                 if (dtRuleS != null && dtRuleS.Rows.Count > 0)
                 {
@@ -521,7 +534,7 @@ namespace ERPSupport.SQL.K3Cloud
             }
             else
             {
-                strSQLControls = "SELECT NODEID,NODENAME,PARENTID,LV FROM DM_EXPRESS_NAVIGATION WHERE NODEID IN(" + pMIDs + ") ORDER BY NODEID";
+                strSQLControls = string.Format("SELECT NODEID,NODENAME,PARENTID,LV FROM DM_EXPRESS_NAVIGATION WHERE NODEID IN({0}) ORDER BY NODEID", pMIDs);
             }
 
             return ORAHelper.ExecuteTable(strSQLControls);
@@ -535,7 +548,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static int ChildNumber(string pParentId)
         {
-            _SQL = "SELECT COUNT(*) FROM DM_EXPRESS_NAVIGATION WHERE PARENTID = " + pParentId;
+            _SQL = string.Format("SELECT COUNT(*) FROM DM_EXPRESS_NAVIGATION WHERE PARENTID = {0}", pParentId);
             return int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString());
         }
 
@@ -546,7 +559,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetLockObjectInfo(string pCategory)
         {
-            _SQL = "SELECT FSTATUS,FUSER FROM DM_LOCKOBJECT WHERE CATEGORY = '" + pCategory + "'";
+            _SQL = string.Format("SELECT FSTATUS,FUSER FROM DM_LOCKOBJECT WHERE CATEGORY = '{0}'", pCategory);
             return ORAHelper.ExecuteTable(_SQL);
         }
 
@@ -558,7 +571,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static object GetLockObjectInfo(string pCategory, int pStatus)
         {
-            _SQL = "SELECT FUSER FROM DM_LOCKOBJECT WHERE CATEGORY = '" + pCategory + "' AND FSTATUS = " + pStatus;
+            _SQL = string.Format("SELECT FUSER FROM DM_LOCKOBJECT WHERE CATEGORY = '{0}' AND FSTATUS = {1}", pCategory, pStatus);
             return ORAHelper.ExecuteScalar(_SQL);
         }
 
@@ -571,11 +584,11 @@ namespace ERPSupport.SQL.K3Cloud
         {
             if (pStatus == 1)//设置占用状态
             {
-                _SQL = "UPDATE DM_LOCKOBJECT SET MODIFYDATE = SYSDATE, FSTATUS = '1', FUSER = '" + GlobalParameter.K3Inf.UserName + "' WHERE Category = '" + pCategory + "'";
+                _SQL = string.Format("UPDATE DM_LOCKOBJECT SET MODIFYDATE = SYSDATE, FSTATUS = '1', FUSER = '{0}' WHERE Category = '{1}'", GlobalParameter.K3Inf.UserName, pCategory);
             }
             else if (pStatus == 0)//解除占用状态
             {
-                _SQL = "UPDATE DM_LOCKOBJECT SET MODIFYDATE = SYSDATE, FSTATUS = '0', FUSER = 'None' WHERE Category = '" + pCategory + "'";
+                _SQL = string.Format("UPDATE DM_LOCKOBJECT SET MODIFYDATE = SYSDATE, FSTATUS = '0', FUSER = 'None' WHERE Category = '{0}'", pCategory);
             }
 
             if (_SQL != string.Empty)
@@ -589,7 +602,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable DM_LockObjectInfo(string pCategory)
         {
-            _SQL = "SELECT CASE WHEN CEIL((SYSDATE - MODIFYDATE) * 24 * 60) >= 5 THEN '0' ELSE FSTATUS END FSTATUS, FUSER,FTYPE FROM DM_LOCKOBJECT WHERE CATEGORY = '" + pCategory + "'";
+            _SQL = string.Format("SELECT CASE WHEN CEIL((SYSDATE - MODIFYDATE) * 24 * 60) >= 5 THEN '0' ELSE FSTATUS END FSTATUS, FUSER,FTYPE FROM DM_LOCKOBJECT WHERE CATEGORY = '{0}'", pCategory);
             return ORAHelper.ExecuteTable(_SQL);
         }
 
@@ -602,7 +615,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pCategory">分类</param>
         public static void DM_LockObject_Add(string pObName, string pFType, string pDescription, string pCategory)
         {
-            _SQL = "INSERT INTO DM_LOCKOBJECT(OBNAME,FUSER,FSTATUS,FTYPE,DESCRIPTION,CATEGORY) VALUES('" + pObName + "','None',0,'" + pFType + "','" + pDescription + "','" + pCategory + "')";
+            _SQL = string.Format("INSERT INTO DM_LOCKOBJECT(OBNAME,FUSER,FSTATUS,FTYPE,DESCRIPTION,CATEGORY) VALUES('{0}','None',0,'{1}','{2}','{3}')", pObName, pFType, pDescription, pCategory);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -613,7 +626,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static int SolutionName(string pName)
         {
-            _SQL = "SELECT COUNT(*) FROM DM_FILTER_SOLUTION WHERE SNAME = '" + pName + "'";
+            _SQL = string.Format("SELECT COUNT(*) FROM DM_FILTER_SOLUTION WHERE SNAME = '{0}'", pName);
             return int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString());
         }
 
@@ -625,9 +638,9 @@ namespace ERPSupport.SQL.K3Cloud
         public static DataTable GetSolution(FormID pFormID)
         {
             if (GlobalParameter.K3Inf.UserName.ToUpper() == "DAMO")
-                _SQL = "SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'" + pFormID + "') > 0 ORDER BY SNAME";
+                _SQL = string.Format("SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'{0}') > 0 ORDER BY SNAME", pFormID);
             else
-                _SQL = "SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'" + pFormID + "') > 0 AND (ISSHARE = '1' OR CREATOR = '" + GlobalParameter.K3Inf.UserName + "') ORDER BY SNAME";
+                _SQL = string.Format("SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'{0}') > 0 AND (ISSHARE = '1' OR CREATOR = '{1}') ORDER BY SNAME", pFormID, GlobalParameter.K3Inf.UserName);
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -639,7 +652,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetSolution(string pName)
         {
-            _SQL = "SELECT SCONTENT,SROWS,CREATOR FROM DM_FILTER_SOLUTION WHERE SNAME = '" + pName + "'";
+            _SQL = string.Format("SELECT SCONTENT,SROWS,CREATOR FROM DM_FILTER_SOLUTION WHERE SNAME = '{0}'", pName);
             return ORAHelper.ExecuteTable(_SQL);
         }
 

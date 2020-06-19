@@ -125,14 +125,14 @@ namespace ERPSupport.SupForm.UserCrtl
                         if (FName == " 请选择")
                             FValue = " 请选择";
                         else
-                            FValue = CommFunction.GetStockNumber(FName);
+                            FValue = CommFunction.GetStockNumber(100508, FName);
                     }
                     if (FValueTran == string.Empty && FNameTran != string.Empty)
                     {
                         if (FNameTran == " 请选择")
                             FValueTran = " 请选择";
                         else
-                            FValueTran = CommFunction.GetStockNumber(FNameTran);
+                            FValueTran = CommFunction.GetStockNumber(100508, FNameTran);
                     }
 
                     if (FValue != string.Empty)

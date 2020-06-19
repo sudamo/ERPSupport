@@ -64,7 +64,7 @@
             this.lblVersion.Name = "lblVersion";
             this.lblVersion.Size = new System.Drawing.Size(41, 23);
             this.lblVersion.TabIndex = 13;
-            this.lblVersion.Text = "V6.0";
+            this.lblVersion.Text = "V7.0";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pl1
@@ -98,7 +98,7 @@
             this.Controls.Add(this.lblTitle);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximumSize = new System.Drawing.Size(304, 248);
             this.MinimumSize = new System.Drawing.Size(304, 248);
             this.Name = "frmLogin";

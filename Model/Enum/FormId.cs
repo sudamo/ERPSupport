@@ -29,6 +29,11 @@ namespace ERPSupport.Model.Enum
         /// </summary>
         [Description("销售订单-订单运算")]
         SAL_SaleOrderRun = 4,
+        /// <summary>
+        /// 生产用料清单
+        /// </summary>
+        [Description("生产用料清单-德旭生产调拨")]
+        PRD_PPBOM_DX = 5,
         #endregion
 
         #region 供应链

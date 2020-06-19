@@ -41,10 +41,19 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         private void FillComboBox()
         {
-            cbxOrg.DataSource = SQL.K3Cloud.CommFunction.GetOrganization();
-            cbxOrg.DisplayMember = "FNAME";
-            cbxOrg.ValueMember = "FVALUE";
-            cbxOrg.SelectedIndex = 24;
+            DataTable dt, dt2;
+            dt = SQL.K3Cloud.CommFunction.GetOrganization();
+
+            cbxFacOrg.DataSource = dt;
+            cbxFacOrg.DisplayMember = "FNAME";
+            cbxFacOrg.ValueMember = "FVALUE";
+            cbxFacOrg.SelectedIndex = 24;
+
+            dt2 = SQL.K3Cloud.CommFunction.GetOrganization();
+            cbxSaleOrg.DataSource = dt2;
+            cbxSaleOrg.DisplayMember = "FNAME";
+            cbxSaleOrg.ValueMember = "FVALUE";
+            cbxSaleOrg.SelectedIndex = 24;
         }
 
         /// <summary>
@@ -54,12 +63,12 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void SelectedIndexChange(object sender,EventArgs e)
         {
-            if (((ComboBox)sender).Name == "cbxOrg")
+            if (((ComboBox)sender).Name == "cbxSaleOrg")
             {
                 int iOrgId;
                 try
                 {
-                    iOrgId = int.Parse(cbxOrg.SelectedValue.ToString());
+                    iOrgId = int.Parse(cbxSaleOrg.SelectedValue.ToString());
                 }
                 catch { return; }
 
@@ -118,7 +127,7 @@ namespace ERPSupport.SupForm.Bussiness
                 return;
             }
 
-            string FBillNo;
+            string FBillNo, FBillNos = string.Empty;
             List<string> list = new List<string>();
 
             object missing = Type.Missing;
@@ -138,20 +147,26 @@ namespace ERPSupport.SupForm.Bussiness
             {
                 FBillNo = worksheet.Cells[i, 1].Text == null ? "" : worksheet.Cells[i, 1].Text;
                 if (FBillNo != "")
+                {
                     list.Add(FBillNo);
+                    FBillNos += FBillNos;
+                }
             }
 
-            int iOrg, iDep, iSaler;
+            int iSaleOrg, iFacOrg, iDep, iSaler;
             try
             {
-                iOrg = int.Parse(cbxOrg.SelectedValue.ToString());
+                iSaleOrg = int.Parse(cbxSaleOrg.SelectedValue.ToString());
+                iFacOrg = int.Parse(cbxFacOrg.SelectedValue.ToString());
                 iDep = int.Parse(cbxDep.SelectedValue.ToString());
                 iSaler = int.Parse(cbxSaler.SelectedValue.ToString());
             }
             catch { goto A; }
 
-            SQL.K3Cloud.SalOrder.UpdateUiCityOrders(iOrg, iDep, iSaler, list);
-            
+            SQL.K3Cloud.SalOrder.UpdateUiCityOrders(iFacOrg, iSaleOrg, iDep, iSaler, list);
+            //日志
+            string strMessage = string.Format("调整U1City销售订单:", FBillNos);
+            SQL.K3Cloud.CommFunction.DM_Log_Local("单据信息调整", "辅助功能//配置//单据信息调整", strMessage);
 
             A:
             myApp.Quit();

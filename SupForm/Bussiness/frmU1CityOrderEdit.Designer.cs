@@ -34,15 +34,17 @@
             this.txtPath = new System.Windows.Forms.TextBox();
             this.btnSearch = new System.Windows.Forms.Button();
             this.gbxFields = new System.Windows.Forms.GroupBox();
-            this.lblOrg = new System.Windows.Forms.Label();
-            this.lblDep = new System.Windows.Forms.Label();
-            this.lblSaler = new System.Windows.Forms.Label();
-            this.cbxOrg = new System.Windows.Forms.ComboBox();
-            this.cbxDep = new System.Windows.Forms.ComboBox();
             this.cbxSaler = new System.Windows.Forms.ComboBox();
+            this.cbxDep = new System.Windows.Forms.ComboBox();
+            this.cbxSaleOrg = new System.Windows.Forms.ComboBox();
+            this.lblSaler = new System.Windows.Forms.Label();
+            this.lblDep = new System.Windows.Forms.Label();
+            this.lblSaleOrg = new System.Windows.Forms.Label();
             this.bnBottom = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnBottom_btnClose = new System.Windows.Forms.ToolStripButton();
             this.bnBottom_btnOK = new System.Windows.Forms.ToolStripButton();
+            this.lblFacOrg = new System.Windows.Forms.Label();
+            this.cbxFacOrg = new System.Windows.Forms.ComboBox();
             this.gbxFields.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).BeginInit();
             this.bnBottom.SuspendLayout();
@@ -79,10 +81,12 @@
             // 
             this.gbxFields.Controls.Add(this.cbxSaler);
             this.gbxFields.Controls.Add(this.cbxDep);
-            this.gbxFields.Controls.Add(this.cbxOrg);
+            this.gbxFields.Controls.Add(this.cbxFacOrg);
+            this.gbxFields.Controls.Add(this.cbxSaleOrg);
             this.gbxFields.Controls.Add(this.lblSaler);
+            this.gbxFields.Controls.Add(this.lblFacOrg);
             this.gbxFields.Controls.Add(this.lblDep);
-            this.gbxFields.Controls.Add(this.lblOrg);
+            this.gbxFields.Controls.Add(this.lblSaleOrg);
             this.gbxFields.Location = new System.Drawing.Point(14, 49);
             this.gbxFields.Name = "gbxFields";
             this.gbxFields.Size = new System.Drawing.Size(258, 141);
@@ -90,60 +94,60 @@
             this.gbxFields.TabStop = false;
             this.gbxFields.Text = "调整为";
             // 
-            // lblOrg
+            // cbxSaler
             // 
-            this.lblOrg.AutoSize = true;
-            this.lblOrg.Location = new System.Drawing.Point(18, 26);
-            this.lblOrg.Name = "lblOrg";
-            this.lblOrg.Size = new System.Drawing.Size(41, 12);
-            this.lblOrg.TabIndex = 0;
-            this.lblOrg.Text = "组织：";
-            // 
-            // lblDep
-            // 
-            this.lblDep.AutoSize = true;
-            this.lblDep.Location = new System.Drawing.Point(18, 67);
-            this.lblDep.Name = "lblDep";
-            this.lblDep.Size = new System.Drawing.Size(41, 12);
-            this.lblDep.TabIndex = 0;
-            this.lblDep.Text = "部门：";
-            // 
-            // lblSaler
-            // 
-            this.lblSaler.AutoSize = true;
-            this.lblSaler.Location = new System.Drawing.Point(6, 104);
-            this.lblSaler.Name = "lblSaler";
-            this.lblSaler.Size = new System.Drawing.Size(53, 12);
-            this.lblSaler.TabIndex = 0;
-            this.lblSaler.Text = "销售员：";
-            // 
-            // cbxOrg
-            // 
-            this.cbxOrg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxOrg.FormattingEnabled = true;
-            this.cbxOrg.Location = new System.Drawing.Point(66, 23);
-            this.cbxOrg.Name = "cbxOrg";
-            this.cbxOrg.Size = new System.Drawing.Size(160, 20);
-            this.cbxOrg.TabIndex = 1;
-            this.cbxOrg.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChange);
+            this.cbxSaler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxSaler.FormattingEnabled = true;
+            this.cbxSaler.Location = new System.Drawing.Point(79, 98);
+            this.cbxSaler.Name = "cbxSaler";
+            this.cbxSaler.Size = new System.Drawing.Size(160, 20);
+            this.cbxSaler.TabIndex = 1;
             // 
             // cbxDep
             // 
             this.cbxDep.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbxDep.FormattingEnabled = true;
-            this.cbxDep.Location = new System.Drawing.Point(66, 64);
+            this.cbxDep.Location = new System.Drawing.Point(79, 72);
             this.cbxDep.Name = "cbxDep";
             this.cbxDep.Size = new System.Drawing.Size(160, 20);
             this.cbxDep.TabIndex = 1;
             // 
-            // cbxSaler
+            // cbxSaleOrg
             // 
-            this.cbxSaler.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxSaler.FormattingEnabled = true;
-            this.cbxSaler.Location = new System.Drawing.Point(66, 101);
-            this.cbxSaler.Name = "cbxSaler";
-            this.cbxSaler.Size = new System.Drawing.Size(160, 20);
-            this.cbxSaler.TabIndex = 1;
+            this.cbxSaleOrg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxSaleOrg.FormattingEnabled = true;
+            this.cbxSaleOrg.Location = new System.Drawing.Point(79, 46);
+            this.cbxSaleOrg.Name = "cbxSaleOrg";
+            this.cbxSaleOrg.Size = new System.Drawing.Size(160, 20);
+            this.cbxSaleOrg.TabIndex = 1;
+            this.cbxSaleOrg.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChange);
+            // 
+            // lblSaler
+            // 
+            this.lblSaler.AutoSize = true;
+            this.lblSaler.Location = new System.Drawing.Point(20, 101);
+            this.lblSaler.Name = "lblSaler";
+            this.lblSaler.Size = new System.Drawing.Size(53, 12);
+            this.lblSaler.TabIndex = 0;
+            this.lblSaler.Text = "销售员：";
+            // 
+            // lblDep
+            // 
+            this.lblDep.AutoSize = true;
+            this.lblDep.Location = new System.Drawing.Point(32, 75);
+            this.lblDep.Name = "lblDep";
+            this.lblDep.Size = new System.Drawing.Size(41, 12);
+            this.lblDep.TabIndex = 0;
+            this.lblDep.Text = "部门：";
+            // 
+            // lblSaleOrg
+            // 
+            this.lblSaleOrg.AutoSize = true;
+            this.lblSaleOrg.Location = new System.Drawing.Point(8, 49);
+            this.lblSaleOrg.Name = "lblSaleOrg";
+            this.lblSaleOrg.Size = new System.Drawing.Size(65, 12);
+            this.lblSaleOrg.TabIndex = 0;
+            this.lblSaleOrg.Text = "销售组织：";
             // 
             // bnBottom
             // 
@@ -188,6 +192,25 @@
             this.bnBottom_btnOK.ToolTipText = "确定修改订单信息";
             this.bnBottom_btnOK.Click += new System.EventHandler(this.bnBottom_btnOK_Click);
             // 
+            // lblFacOrg
+            // 
+            this.lblFacOrg.AutoSize = true;
+            this.lblFacOrg.Location = new System.Drawing.Point(8, 23);
+            this.lblFacOrg.Name = "lblFacOrg";
+            this.lblFacOrg.Size = new System.Drawing.Size(65, 12);
+            this.lblFacOrg.TabIndex = 0;
+            this.lblFacOrg.Text = "生产组织：";
+            // 
+            // cbxFacOrg
+            // 
+            this.cbxFacOrg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxFacOrg.FormattingEnabled = true;
+            this.cbxFacOrg.Location = new System.Drawing.Point(79, 20);
+            this.cbxFacOrg.Name = "cbxFacOrg";
+            this.cbxFacOrg.Size = new System.Drawing.Size(160, 20);
+            this.cbxFacOrg.TabIndex = 1;
+            this.cbxFacOrg.SelectedIndexChanged += new System.EventHandler(this.SelectedIndexChange);
+            // 
             // frmU1CityOrderEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -224,12 +247,14 @@
         private System.Windows.Forms.GroupBox gbxFields;
         private System.Windows.Forms.Label lblSaler;
         private System.Windows.Forms.Label lblDep;
-        private System.Windows.Forms.Label lblOrg;
+        private System.Windows.Forms.Label lblSaleOrg;
         private System.Windows.Forms.ComboBox cbxSaler;
         private System.Windows.Forms.ComboBox cbxDep;
-        private System.Windows.Forms.ComboBox cbxOrg;
+        private System.Windows.Forms.ComboBox cbxSaleOrg;
         private System.Windows.Forms.BindingNavigator bnBottom;
         private System.Windows.Forms.ToolStripButton bnBottom_btnClose;
         private System.Windows.Forms.ToolStripButton bnBottom_btnOK;
+        private System.Windows.Forms.ComboBox cbxFacOrg;
+        private System.Windows.Forms.Label lblFacOrg;
     }
 }

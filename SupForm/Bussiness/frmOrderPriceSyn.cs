@@ -102,6 +102,11 @@ namespace ERPSupport.SupForm.Bussiness
             dtComboBox.Columns.Add("FValue");
 
             dr = dtComboBox.NewRow();
+            dr["FName"] = "20";
+            dr["FValue"] = "20";
+            dtComboBox.Rows.Add(dr);
+
+            dr = dtComboBox.NewRow();
             dr["FName"] = "50";
             dr["FValue"] = "50";
             dtComboBox.Rows.Add(dr);
@@ -109,6 +114,11 @@ namespace ERPSupport.SupForm.Bussiness
             dr = dtComboBox.NewRow();
             dr["FName"] = "100";
             dr["FValue"] = "100";
+            dtComboBox.Rows.Add(dr);
+
+            dr = dtComboBox.NewRow();
+            dr["FName"] = "200";
+            dr["FValue"] = "200";
             dtComboBox.Rows.Add(dr);
 
             dr = dtComboBox.NewRow();
@@ -402,7 +412,7 @@ namespace ERPSupport.SupForm.Bussiness
 
             //日志
             string strMessage = string.Format("更新销售订单单价[{0}],", strBillNos) + strReturn;
-            CommFunction.DM_Log_Local("成品调拨", "辅助功能//配置//单据信息调整", strMessage);
+            CommFunction.DM_Log_Local("单据信息调整", "辅助功能//配置//单据信息调整", strMessage);
 
             Search();
         }

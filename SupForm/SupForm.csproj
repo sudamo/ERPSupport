@@ -40,8 +40,8 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>37</ApplicationRevision>
-    <ApplicationVersion>1.0.6.%2a</ApplicationVersion>
+    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationVersion>1.0.7.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -211,6 +211,12 @@
     <Compile Include="Bussiness\frmU1CityOrderEdit.Designer.cs">
       <DependentUpon>frmU1CityOrderEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="Comm\frmCategory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Comm\frmCategory.Designer.cs">
+      <DependentUpon>frmCategory.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu\frmPro_Dir.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -371,6 +377,12 @@
     <Compile Include="UserCrtl\ucCS_OutStockMaterial.Designer.cs">
       <DependentUpon>ucCS_OutStockMaterial.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserCrtl\usCom_lblcbx.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserCrtl\usCom_lblcbx.Designer.cs">
+      <DependentUpon>usCom_lblcbx.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Bussiness\frmAddFilter.resx">
       <DependentUpon>frmAddFilter.cs</DependentUpon>
     </EmbeddedResource>
@@ -421,6 +433,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmU1CityOrderEdit.resx">
       <DependentUpon>frmU1CityOrderEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Comm\frmCategory.resx">
+      <DependentUpon>frmCategory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir.resx">
       <DependentUpon>frmPro_Dir.cs</DependentUpon>
@@ -506,6 +521,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserCrtl\ucCS_OutStockMaterial.resx">
       <DependentUpon>ucCS_OutStockMaterial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserCrtl\usCom_lblcbx.resx">
+      <DependentUpon>usCom_lblcbx.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -675,6 +693,184 @@
     <Content Include="ICON\PNG\32.32\wrench_orange.png" />
     <Content Include="ICON\PNG\32.32\zoom.png" />
     <Content Include="ICON\PNG\32.32\zootool.png" />
+    <Content Include="ICON\PNG\lst\activity_monitor.png" />
+    <Content Include="ICON\PNG\lst\activity_monitor_add.png" />
+    <Content Include="ICON\PNG\lst\activity_monitor_chart.png" />
+    <Content Include="ICON\PNG\lst\activity_monitor_close.png" />
+    <Content Include="ICON\PNG\lst\activity_monitor_warning.png" />
+    <Content Include="ICON\PNG\lst\address_book_32.png" />
+    <Content Include="ICON\PNG\lst\address_book_add_32.png" />
+    <Content Include="ICON\PNG\lst\address_book_close_32.png" />
+    <Content Include="ICON\PNG\lst\address_book_search_32.png" />
+    <Content Include="ICON\PNG\lst\address_book_warning_32.png" />
+    <Content Include="ICON\PNG\lst\add_16.png" />
+    <Content Include="ICON\PNG\lst\add_32.png" />
+    <Content Include="ICON\PNG\lst\arrow_down_16.png" />
+    <Content Include="ICON\PNG\lst\arrow_down_32.png" />
+    <Content Include="ICON\PNG\lst\arrow_left_16.png" />
+    <Content Include="ICON\PNG\lst\arrow_left_32.png" />
+    <Content Include="ICON\PNG\lst\arrow_right_16.png" />
+    <Content Include="ICON\PNG\lst\arrow_right_32.png" />
+    <Content Include="ICON\PNG\lst\arrow_up_16.png" />
+    <Content Include="ICON\PNG\lst\arrow_up_32.png" />
+    <Content Include="ICON\PNG\lst\basket_32.png" />
+    <Content Include="ICON\PNG\lst\basket_add_32.png" />
+    <Content Include="ICON\PNG\lst\basket_back_32.png" />
+    <Content Include="ICON\PNG\lst\basket_chart_32.png" />
+    <Content Include="ICON\PNG\lst\basket_close_32.png" />
+    <Content Include="ICON\PNG\lst\basket_go_32.png" />
+    <Content Include="ICON\PNG\lst\basket_search_32.png" />
+    <Content Include="ICON\PNG\lst\blue_arrow_down_32.png" />
+    <Content Include="ICON\PNG\lst\blue_arrow_left_32.png" />
+    <Content Include="ICON\PNG\lst\blue_arrow_right_32.png" />
+    <Content Include="ICON\PNG\lst\blue_arrow_up_32.png" />
+    <Content Include="ICON\PNG\lst\book_32.png" />
+    <Content Include="ICON\PNG\lst\book_add_32.png" />
+    <Content Include="ICON\PNG\lst\book_bookmarks_32.png" />
+    <Content Include="ICON\PNG\lst\book_close_32.png" />
+    <Content Include="ICON\PNG\lst\book_search_32.png" />
+    <Content Include="ICON\PNG\lst\book_warning_32.png" />
+    <Content Include="ICON\PNG\lst\camera_32.png" />
+    <Content Include="ICON\PNG\lst\camera_add_32.png" />
+    <Content Include="ICON\PNG\lst\camera_close_32.png" />
+    <Content Include="ICON\PNG\lst\chart_16.png" />
+    <Content Include="ICON\PNG\lst\chart_32.png" />
+    <Content Include="ICON\PNG\lst\chart_flipped_16.png" />
+    <Content Include="ICON\PNG\lst\chart_flipped_32.png" />
+    <Content Include="ICON\PNG\lst\clock_32.png" />
+    <Content Include="ICON\PNG\lst\close_16.png" />
+    <Content Include="ICON\PNG\lst\close_32.png" />
+    <Content Include="ICON\PNG\lst\comment_32.png" />
+    <Content Include="ICON\PNG\lst\comment_add_32.png" />
+    <Content Include="ICON\PNG\lst\comment_page_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_add_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_chart_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_close_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_info_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_page_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_rss_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_search_32.png" />
+    <Content Include="ICON\PNG\lst\comment_user_warning_32.png" />
+    <Content Include="ICON\PNG\lst\database_32.png" />
+    <Content Include="ICON\PNG\lst\database_add_32.png" />
+    <Content Include="ICON\PNG\lst\database_chart_32.png" />
+    <Content Include="ICON\PNG\lst\database_close_32.png" />
+    <Content Include="ICON\PNG\lst\database_page_32.png" />
+    <Content Include="ICON\PNG\lst\database_search_32.png" />
+    <Content Include="ICON\PNG\lst\database_warning_32.png" />
+    <Content Include="ICON\PNG\lst\email_32.png" />
+    <Content Include="ICON\PNG\lst\email_add_32.png" />
+    <Content Include="ICON\PNG\lst\email_close_32.png" />
+    <Content Include="ICON\PNG\lst\email_forward_32.png" />
+    <Content Include="ICON\PNG\lst\email_reply_32.png" />
+    <Content Include="ICON\PNG\lst\email_reply_all_32.png" />
+    <Content Include="ICON\PNG\lst\error_button.png" />
+    <Content Include="ICON\PNG\lst\error_button_16.png" />
+    <Content Include="ICON\PNG\lst\folder_32.png" />
+    <Content Include="ICON\PNG\lst\folder_add_32.png" />
+    <Content Include="ICON\PNG\lst\folder_chart_32.png" />
+    <Content Include="ICON\PNG\lst\folder_close_32.png" />
+    <Content Include="ICON\PNG\lst\folder_page_32.png" />
+    <Content Include="ICON\PNG\lst\folder_search_32.png" />
+    <Content Include="ICON\PNG\lst\folder_warning_32.png" />
+    <Content Include="ICON\PNG\lst\hammer_32.png" />
+    <Content Include="ICON\PNG\lst\heart_16.png" />
+    <Content Include="ICON\PNG\lst\heart_32.png" />
+    <Content Include="ICON\PNG\lst\home_32.png" />
+    <Content Include="ICON\PNG\lst\home_back_32.png" />
+    <Content Include="ICON\PNG\lst\home_go_32.png" />
+    <Content Include="ICON\PNG\lst\info_button_16.png" />
+    <Content Include="ICON\PNG\lst\info_button_32.png" />
+    <Content Include="ICON\PNG\lst\lightbulb_32.png" />
+    <Content Include="ICON\PNG\lst\lightbulb_off_32.png" />
+    <Content Include="ICON\PNG\lst\lock_32.png" />
+    <Content Include="ICON\PNG\lst\lock_open_32.png" />
+    <Content Include="ICON\PNG\lst\newspaper_32.png" />
+    <Content Include="ICON\PNG\lst\newspaper_add_32.png" />
+    <Content Include="ICON\PNG\lst\newspaper_close_32.png" />
+    <Content Include="ICON\PNG\lst\newspaper_info_32.png" />
+    <Content Include="ICON\PNG\lst\newspaper_rss_32.png" />
+    <Content Include="ICON\PNG\lst\newspaper_search_32.png" />
+    <Content Include="ICON\PNG\lst\page_16.png" />
+    <Content Include="ICON\PNG\lst\page_blank_32.png" />
+    <Content Include="ICON\PNG\lst\page_blank_add_32.png" />
+    <Content Include="ICON\PNG\lst\page_blank_chart_32.png" />
+    <Content Include="ICON\PNG\lst\page_blank_close_32.png" />
+    <Content Include="ICON\PNG\lst\page_blank_warning_32.png" />
+    <Content Include="ICON\PNG\lst\page_table_32.png" />
+    <Content Include="ICON\PNG\lst\page_table_add_32.png" />
+    <Content Include="ICON\PNG\lst\page_table_chart_32.png" />
+    <Content Include="ICON\PNG\lst\page_table_close_32.png" />
+    <Content Include="ICON\PNG\lst\page_table_warning_32.png" />
+    <Content Include="ICON\PNG\lst\page_text_32.png" />
+    <Content Include="ICON\PNG\lst\page_text_add_32.png" />
+    <Content Include="ICON\PNG\lst\page_text_chart_32.png" />
+    <Content Include="ICON\PNG\lst\page_text_close_32.png" />
+    <Content Include="ICON\PNG\lst\page_text_warning_32.png" />
+    <Content Include="ICON\PNG\lst\pencil_32.png" />
+    <Content Include="ICON\PNG\lst\rss_16.png" />
+    <Content Include="ICON\PNG\lst\rss_32.png" />
+    <Content Include="ICON\PNG\lst\save_32.png" />
+    <Content Include="ICON\PNG\lst\save_download_32.png" />
+    <Content Include="ICON\PNG\lst\save_upload_32.png" />
+    <Content Include="ICON\PNG\lst\screen_32.png" />
+    <Content Include="ICON\PNG\lst\screen_off_32.png" />
+    <Content Include="ICON\PNG\lst\screwdriver_32.png" />
+    <Content Include="ICON\PNG\lst\search_32.png" />
+    <Content Include="ICON\PNG\lst\search_button_16.png" />
+    <Content Include="ICON\PNG\lst\search_button_32.png" />
+    <Content Include="ICON\PNG\lst\search_button_green_16.png" />
+    <Content Include="ICON\PNG\lst\search_button_green_32.png" />
+    <Content Include="ICON\PNG\lst\search_chart_32.png" />
+    <Content Include="ICON\PNG\lst\search_warning_32.png" />
+    <Content Include="ICON\PNG\lst\star_16.png" />
+    <Content Include="ICON\PNG\lst\star_32.png" />
+    <Content Include="ICON\PNG\lst\star_off16.png" />
+    <Content Include="ICON\PNG\lst\star_off_32.png" />
+    <Content Include="ICON\PNG\lst\tools_32.png" />
+    <Content Include="ICON\PNG\lst\twitter_16.png" />
+    <Content Include="ICON\PNG\lst\twitter_32.png" />
+    <Content Include="ICON\PNG\lst\users_32.png" />
+    <Content Include="ICON\PNG\lst\users_business_32.png" />
+    <Content Include="ICON\PNG\lst\user_32.png" />
+    <Content Include="ICON\PNG\lst\user_add_32.png" />
+    <Content Include="ICON\PNG\lst\user_blue_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_add_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_chart_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_close_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_info_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_rss_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_search_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_twitter_32.png" />
+    <Content Include="ICON\PNG\lst\user_business_warning_32.png" />
+    <Content Include="ICON\PNG\lst\user_close_32.png" />
+    <Content Include="ICON\PNG\lst\user_info_32.png" />
+    <Content Include="ICON\PNG\lst\user_rss_32.png" />
+    <Content Include="ICON\PNG\lst\user_search_32.png" />
+    <Content Include="ICON\PNG\lst\user_twitter_32.png" />
+    <Content Include="ICON\PNG\lst\user_warning_32.png" />
+    <Content Include="ICON\PNG\lst\warning_16.png" />
+    <Content Include="ICON\PNG\lst\warning_32.png" />
+    <Content Include="ICON\PNG\lst\web_layout_32.png" />
+    <Content Include="ICON\PNG\lst\web_layout_chart_32.png" />
+    <Content Include="ICON\PNG\lst\web_layout_error_32.png" />
+    <Content Include="ICON\PNG\lst\web_layout_error_32_add.png" />
+    <Content Include="ICON\PNG\lst\web_layout_error_32_close.png" />
+    <Content Include="ICON\PNG\lst\web_layout_info_32.png" />
+    <Content Include="ICON\PNG\lst\web_layout_rss_32.png" />
+    <Content Include="ICON\PNG\lst\web_layout_search_32.png" />
+    <Content Include="ICON\PNG\lst\web_layout_twitter_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_blank_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_list_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_list_add_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_list_chart_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_list_close_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_list_error_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_list_info_32.png" />
+    <Content Include="ICON\PNG\lst\window_app_list_search_32.png" />
     <Content Include="ICON\Timer.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -733,9 +929,7 @@
       <Name>SQL</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Comm\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

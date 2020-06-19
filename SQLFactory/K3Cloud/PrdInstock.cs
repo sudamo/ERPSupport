@@ -65,19 +65,33 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pPlanStartDate">计划开工日期</param>
         /// <returns></returns>
-        public static DataTable GetMo(string pPlanStartDate)
+        public static DataTable GetMo(string pPlanStartDate, Model.Enum.FormID pFormId)
         {
-            _SQL = @"SELECT DISTINCT MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, DEP.FNUMBER 部门编码, DEPL.FNAME 部门--, MST.FSTOCKID 仓库
-            FROM T_PRD_MO A
-            INNER JOIN T_PRD_MOENTRY AE ON A.FID = AE.FID
-            INNER JOIN T_PRD_MOENTRY_A AA ON AE.FENTRYID = AA.FENTRYID AND AA.FSTATUS IN(3,4)
-            INNER JOIN T_BD_DEPARTMENT DEP ON AE.FWORKSHOPID = DEP.FDEPTID
-            INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
-            INNER JOIN T_PRD_PPBOMENTRY PBE ON AA.FENTRYID = PBE.FMOENTRYID
-            INNER JOIN T_BD_MATERIAL MTL ON PBE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = 100508
-            INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
-            LEFT JOIN T_AUTO_MSTOCKSETTING MST ON MTL.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID
-            WHERE (MST.FMATERIALID IS NULL OR MST.FSTOCKID IS NULL) AND A.FDOCUMENTSTATUS = 'C' AND A.FPRDORGID = 100508 AND TO_CHAR(AE.FPLANSTARTDATE,'yyyy-mm-dd') = '" + pPlanStartDate + "'";
+            string strOrg;
+            switch (pFormId)
+            {
+                case Model.Enum.FormID.PRD_PPBOM:
+                    strOrg = "100508";
+                    break;
+                case Model.Enum.FormID.PRD_PPBOM_DX:
+                    strOrg = "492501088";
+                    break;
+                default:
+                    strOrg = "100508";
+                    break;
+            }
+
+            _SQL = string.Format("SELECT DISTINCT MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, DEP.FNUMBER 部门编码, DEPL.FNAME 部门 ");
+            _SQL += string.Format(" FROM T_PRD_MO A ");
+            _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY AE ON A.FID = AE.FID ");
+            _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A AA ON AE.FENTRYID = AA.FENTRYID AND AA.FSTATUS IN(3,4) ");
+            _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT DEP ON AE.FWORKSHOPID = DEP.FDEPTID ");
+            _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052 ");
+            _SQL += string.Format(" INNER JOIN T_PRD_PPBOMENTRY PBE ON AA.FENTRYID = PBE.FMOENTRYID ");
+            _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTL ON PBE.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = {0} ", strOrg);
+            _SQL += string.Format(" INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ");
+            _SQL += string.Format(" LEFT JOIN T_AUTO_MSTOCKSETTING MST ON MTL.FMATERIALID = MST.FMATERIALID AND DEP.FDEPTID = MST.FDEPTID ");
+            _SQL += string.Format(" WHERE (MST.FMATERIALID IS NULL OR MST.FSTOCKID IS NULL) AND A.FDOCUMENTSTATUS = 'C' AND A.FPRDORGID = {0} AND TO_CHAR(AE.FPLANSTARTDATE,'yyyy-mm-dd') = '{1}'", strOrg, pPlanStartDate);
 
             return ORAHelper.ExecuteTable(_SQL);
         }
