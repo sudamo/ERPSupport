@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="INOrder\CommFunction.cs" />
     <Compile Include="K3Cloud\CommFunction.cs" />
     <Compile Include="K3Cloud\FileSetting.cs" />
     <Compile Include="K3Cloud\PrdAllocation.cs" />
@@ -63,6 +64,10 @@
     <Compile Include="SQLHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\IDAL\IDAL.csproj">
+      <Project>{c4401e2c-f1ee-45b1-b565-e2399568a50b}</Project>
+      <Name>IDAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{94fad769-72f9-44ce-8b93-204462fa3679}</Project>
       <Name>Model</Name>

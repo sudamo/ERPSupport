@@ -46,6 +46,13 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.lblUserList = new System.Windows.Forms.Label();
+            this.chbWMSData = new System.Windows.Forms.CheckBox();
+            this.chbDir = new System.Windows.Forms.CheckBox();
+            this.chbK3Data = new System.Windows.Forms.CheckBox();
+            this.chbINOrder = new System.Windows.Forms.CheckBox();
+            this.lblTool = new System.Windows.Forms.Label();
+            this.lblPro = new System.Windows.Forms.Label();
+            this.lblOther = new System.Windows.Forms.Label();
             this.pl1.SuspendLayout();
             this.pl3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
@@ -84,8 +91,15 @@
             this.pl3.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.pl3.Controls.Add(this.lblOther);
+            this.pl3.Controls.Add(this.lblPro);
+            this.pl3.Controls.Add(this.lblTool);
+            this.pl3.Controls.Add(this.chbDir);
             this.pl3.Controls.Add(this.chbOccupy);
             this.pl3.Controls.Add(this.chbExport);
+            this.pl3.Controls.Add(this.chbINOrder);
+            this.pl3.Controls.Add(this.chbK3Data);
+            this.pl3.Controls.Add(this.chbWMSData);
             this.pl3.Controls.Add(this.chbImport);
             this.pl3.Controls.Add(this.chbTimerPick);
             this.pl3.Location = new System.Drawing.Point(384, 28);
@@ -96,7 +110,7 @@
             // chbOccupy
             // 
             this.chbOccupy.AutoSize = true;
-            this.chbOccupy.Location = new System.Drawing.Point(3, 3);
+            this.chbOccupy.Location = new System.Drawing.Point(5, 27);
             this.chbOccupy.Name = "chbOccupy";
             this.chbOccupy.Size = new System.Drawing.Size(72, 16);
             this.chbOccupy.TabIndex = 0;
@@ -107,7 +121,7 @@
             // 
             this.chbExport.AutoSize = true;
             this.chbExport.Enabled = false;
-            this.chbExport.Location = new System.Drawing.Point(3, 139);
+            this.chbExport.Location = new System.Drawing.Point(5, 431);
             this.chbExport.Name = "chbExport";
             this.chbExport.Size = new System.Drawing.Size(72, 16);
             this.chbExport.TabIndex = 3;
@@ -118,7 +132,7 @@
             // 
             this.chbImport.AutoSize = true;
             this.chbImport.Enabled = false;
-            this.chbImport.Location = new System.Drawing.Point(3, 117);
+            this.chbImport.Location = new System.Drawing.Point(5, 409);
             this.chbImport.Name = "chbImport";
             this.chbImport.Size = new System.Drawing.Size(72, 16);
             this.chbImport.TabIndex = 2;
@@ -128,7 +142,7 @@
             // chbTimerPick
             // 
             this.chbTimerPick.AutoSize = true;
-            this.chbTimerPick.Location = new System.Drawing.Point(3, 25);
+            this.chbTimerPick.Location = new System.Drawing.Point(5, 49);
             this.chbTimerPick.Name = "chbTimerPick";
             this.chbTimerPick.Size = new System.Drawing.Size(72, 16);
             this.chbTimerPick.TabIndex = 1;
@@ -171,7 +185,7 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv1.Location = new System.Drawing.Point(3, 28);
-            this.dgv1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dgv1.Margin = new System.Windows.Forms.Padding(2);
             this.dgv1.MultiSelect = false;
             this.dgv1.Name = "dgv1";
             this.dgv1.ReadOnly = true;
@@ -408,6 +422,73 @@
             this.lblUserList.TabIndex = 2;
             this.lblUserList.Text = "分配用户：";
             // 
+            // chbWMSData
+            // 
+            this.chbWMSData.AutoSize = true;
+            this.chbWMSData.Location = new System.Drawing.Point(5, 121);
+            this.chbWMSData.Name = "chbWMSData";
+            this.chbWMSData.Size = new System.Drawing.Size(90, 16);
+            this.chbWMSData.TabIndex = 1;
+            this.chbWMSData.Text = "WMS数据同步";
+            this.chbWMSData.UseVisualStyleBackColor = true;
+            // 
+            // chbDir
+            // 
+            this.chbDir.AutoSize = true;
+            this.chbDir.Location = new System.Drawing.Point(5, 99);
+            this.chbDir.Name = "chbDir";
+            this.chbDir.Size = new System.Drawing.Size(84, 16);
+            this.chbDir.TabIndex = 0;
+            this.chbDir.Text = "调拨单设置";
+            this.chbDir.UseVisualStyleBackColor = true;
+            // 
+            // chbK3Data
+            // 
+            this.chbK3Data.AutoSize = true;
+            this.chbK3Data.Location = new System.Drawing.Point(5, 143);
+            this.chbK3Data.Name = "chbK3Data";
+            this.chbK3Data.Size = new System.Drawing.Size(84, 16);
+            this.chbK3Data.TabIndex = 1;
+            this.chbK3Data.Text = "K3数据同步";
+            this.chbK3Data.UseVisualStyleBackColor = true;
+            // 
+            // chbINOrder
+            // 
+            this.chbINOrder.AutoSize = true;
+            this.chbINOrder.Location = new System.Drawing.Point(5, 165);
+            this.chbINOrder.Name = "chbINOrder";
+            this.chbINOrder.Size = new System.Drawing.Size(96, 16);
+            this.chbINOrder.TabIndex = 1;
+            this.chbINOrder.Text = "网上订单系统";
+            this.chbINOrder.UseVisualStyleBackColor = true;
+            // 
+            // lblTool
+            // 
+            this.lblTool.AutoSize = true;
+            this.lblTool.Location = new System.Drawing.Point(3, 12);
+            this.lblTool.Name = "lblTool";
+            this.lblTool.Size = new System.Drawing.Size(29, 12);
+            this.lblTool.TabIndex = 4;
+            this.lblTool.Text = "工具";
+            // 
+            // lblPro
+            // 
+            this.lblPro.AutoSize = true;
+            this.lblPro.Location = new System.Drawing.Point(3, 84);
+            this.lblPro.Name = "lblPro";
+            this.lblPro.Size = new System.Drawing.Size(29, 12);
+            this.lblPro.TabIndex = 4;
+            this.lblPro.Text = "项目";
+            // 
+            // lblOther
+            // 
+            this.lblOther.AutoSize = true;
+            this.lblOther.Location = new System.Drawing.Point(3, 394);
+            this.lblOther.Name = "lblOther";
+            this.lblOther.Size = new System.Drawing.Size(29, 12);
+            this.lblOther.TabIndex = 4;
+            this.lblOther.Text = "其他";
+            // 
             // ucSM_UserAcc
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -446,5 +527,12 @@
         private System.Windows.Forms.Panel pl3;
         private System.Windows.Forms.CheckBox chbExport;
         private System.Windows.Forms.CheckBox chbImport;
+        private System.Windows.Forms.CheckBox chbDir;
+        private System.Windows.Forms.CheckBox chbK3Data;
+        private System.Windows.Forms.CheckBox chbWMSData;
+        private System.Windows.Forms.CheckBox chbINOrder;
+        private System.Windows.Forms.Label lblTool;
+        private System.Windows.Forms.Label lblOther;
+        private System.Windows.Forms.Label lblPro;
     }
 }

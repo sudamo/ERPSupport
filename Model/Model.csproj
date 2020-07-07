@@ -58,6 +58,7 @@
     <Compile Include="Globa\GlobalRights.cs" />
     <Compile Include="Globa\LocalInfo.cs" />
     <Compile Include="Globa\OperationInfo.cs" />
+    <Compile Include="INOrder\OrderImportInfo.cs" />
     <Compile Include="K3Cloud\CheckStatus.cs" />
     <Compile Include="K3Cloud\Filter.cs" />
     <Compile Include="K3Cloud\K3Setting.cs" />

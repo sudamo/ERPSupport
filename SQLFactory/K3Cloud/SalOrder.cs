@@ -38,8 +38,8 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pRemark">失败信息</param>
         public static void Log_OrderLock(OrderInfo pEntry, int pType, string pRemark)
         {
-            _SQL = @"INSERT INTO DM_LOG_ORDERLOCK(FENTRYID,FBILLNO,FMTLNUMBER,FREMARK,FTYPE,FFLAG,FOPERATOR)
-            VALUES(" + pEntry.FEntryId.ToString() + ",'" + pEntry.FBillNo + "','" + pEntry.FMaterialNo + "','" + pRemark + "','1','0','" + GlobalParameter.K3Inf.UserName + "')";
+            _SQL = string.Format("INSERT INTO DM_LOG_ORDERLOCK(FENTRYID,FBILLNO,FMTLNUMBER,FREMARK,FTYPE,FFLAG,FOPERATOR) ");
+            _SQL += string.Format(" VALUES({0},'{1}','{2}','{3}','1','0','{4}')", pEntry.FEntryId, pEntry.FBillNo, pEntry.FMaterialNo, pRemark, GlobalParameter.K3Inf.UserName);
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }
@@ -78,19 +78,19 @@ namespace ERPSupport.SQL.K3Cloud
         {
             if (pFormId == FormID.PRD_INSTOCK)//倒冲领料
             {
-                _SQL = string.Format(@"SELECT A.FDATE 日期, BILL.FNAME 单据类型, A.FBILLNO 单据编号, '已审核' 单据状态, ORGL.FNAME 入库组织, ORGL2.FNAME 生产组织,MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, UNTL.FNAME 单位, AE.FMUSTQTY 应收数量, AE.FREALQTY 实收数量,STKL.FNAME 仓库
-                FROM T_PRD_INSTOCK A
-                INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID
-                INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID
-                INNER JOIN T_BD_MATERIAL_L MTLL ON AE.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052
-                INNER JOIN T_BAS_BILLTYPE_L BILL ON A.FBILLTYPE = BILL.FBILLTYPEID AND BILL.FLOCALEID = 2052
-                INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FSTOCKORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052
-                INNER JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON A.FPRDORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052
-                INNER JOIN T_BD_UNIT_L UNTL ON AE.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
-                INNER JOIN T_BD_STOCK_L STKL ON AE.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052
-                INNER JOIN T_BD_DEPARTMENT_L DEPL ON AE.FWORKSHOPID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052
-                LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON AE.FENTRYID = PICA.FSRCBIZENTRYID
-                WHERE {0} A.FDOCUMENTSTATUS = 'C' AND PICA.FSRCBIZBILLNO IS NULL ORDER BY A.FID DESC", pFilter);
+                _SQL = string.Format(@"SELECT A.FDATE 日期, BILL.FNAME 单据类型, A.FBILLNO 单据编号, '已审核' 单据状态, ORGL.FNAME 入库组织, ORGL2.FNAME 生产组织,MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, UNTL.FNAME 单位, AE.FMUSTQTY 应收数量, AE.FREALQTY 实收数量,STKL.FNAME 仓库 ");
+                _SQL += string.Format(" FROM T_PRD_INSTOCK A ");
+                _SQL += string.Format(" INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID ");
+                _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID ");
+                _SQL += string.Format(" INNER JOIN T_BD_MATERIAL_L MTLL ON AE.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ");
+                _SQL += string.Format(" INNER JOIN T_BAS_BILLTYPE_L BILL ON A.FBILLTYPE = BILL.FBILLTYPEID AND BILL.FLOCALEID = 2052 ");
+                _SQL += string.Format(" INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FSTOCKORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052 ");
+                _SQL += string.Format(" INNER JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON A.FPRDORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052 ");
+                _SQL += string.Format(" INNER JOIN T_BD_UNIT_L UNTL ON AE.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052 ");
+                _SQL += string.Format(" INNER JOIN T_BD_STOCK_L STKL ON AE.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 ");
+                _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT_L DEPL ON AE.FWORKSHOPID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052 ");
+                _SQL += string.Format(" LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON AE.FENTRYID = PICA.FSRCBIZENTRYID ");
+                _SQL += string.Format(" WHERE {0} A.FDOCUMENTSTATUS = 'C' AND PICA.FSRCBIZBILLNO IS NULL ORDER BY A.FID DESC", pFilter);
             }
             else if (pFormId == FormID.PRD_PPBOM || pFormId == FormID.PRD_PPBOM_DX)
             {
@@ -111,12 +111,7 @@ namespace ERPSupport.SQL.K3Cloud
                 _SQL = string.Format("SELECT MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,UNTL.FNAME 单位,SUM(A.FMUSTQTY) 实发数量,DEPL.FNAME 领料部门,STKL2.FNAME 调出仓库,NVL(INV2.FAVBQTY, 0) 调出仓库存,NVL(STKL3.FNAME,' ') 中间仓库,STKL.FNAME 调入仓库,NVL(INV.FAVBQTY, 0) 调入仓库存 ");
                 _SQL += string.Format(" FROM T_PRD_PPBOMENTRY A ");
                 _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY BE ON A.FMOENTRYID = BE.FENTRYID AND TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd') ");
-
-                if (strOrg == "100508")
-                    _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A BA ON BE.FENTRYID = BA.FENTRYID AND BA.FSTATUS IN(3,4) ");
-                else
-                    _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A BA ON BE.FENTRYID = BA.FENTRYID AND BA.FSTATUS IN(4) ");
-
+                _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A BA ON BE.FENTRYID = BA.FENTRYID AND BA.FSTATUS IN({0}) ", strOrg == "100508" ? "3,4" : "4");
                 _SQL += string.Format(" INNER JOIN T_PRD_MO B ON BE.FID = B.FID AND B.FDOCUMENTSTATUS = 'C' AND B.FPRDORGID = {0} ", strOrg);
                 _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTL ON A.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = {0} ", strOrg);
                 _SQL += string.Format(" INNER JOIN T_BD_MATERIAL_L MTLL ON A.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ");
@@ -304,7 +299,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFEntryId">销售订单分录ID</param>
         public static void UpdateOrderLock(string pCanLockQty, int pFEntryId)
         {
-            _SQL = "UPDATE T_SAL_ORDERENTRY SET FLOCKQTY = FLOCKQTY + " + pCanLockQty.ToString() + ",FLEFTQTY = CASE WHEN FLEFTQTY = 0 THEN 0 ELSE FLEFTQTY - " + pCanLockQty.ToString() + @" END,FBATCHFLAG = '1' WHERE FENTRYID = " + pFEntryId.ToString();
+            _SQL = string.Format("UPDATE T_SAL_ORDERENTRY SET FLOCKQTY = FLOCKQTY + {0},FLEFTQTY = CASE WHEN FLEFTQTY = 0 THEN 0 ELSE FLEFTQTY - {0} END,FBATCHFLAG = '1' WHERE FENTRYID = {1}", pCanLockQty, pFEntryId);
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }
@@ -765,7 +760,8 @@ namespace ERPSupport.SQL.K3Cloud
                 strTableName = "DM_" + pFormID;
             }
 
-            _obj = ORAHelper.ExecuteScalar("SELECT MAX(" + strKey + ") FROM " + strTableName);
+            _SQL = string.Format("SELECT MAX({0}) FROM {1}", strKey, strTableName);
+            _obj = ORAHelper.ExecuteScalar(_SQL);
 
             if (_obj == null)
                 return 1;
@@ -782,7 +778,7 @@ namespace ERPSupport.SQL.K3Cloud
         public static void UpdateOrderFields(int pFEntryID, string pOweLevel)
         {
             //首先更新销售订单分录的运算次数和欠料等级。
-            _SQL = "UPDATE T_SAL_ORDERENTRY SET F_PAEZ_RUNTIME = F_PAEZ_RUNTIME + 1,F_PAEZ_OWELEVEL = '" + pOweLevel + "' WHERE FENTRYID = " + pFEntryID.ToString();
+            _SQL = string.Format("UPDATE T_SAL_ORDERENTRY SET F_PAEZ_RUNTIME = F_PAEZ_RUNTIME + 1,F_PAEZ_OWELEVEL = '{0}' WHERE FENTRYID = {1}", pOweLevel, pFEntryID);
 
             ORAHelper.ExecuteNonQuery(_SQL);
 

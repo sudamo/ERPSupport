@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Data;
-using System.Data.SqlClient;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using Microsoft.Win32;
@@ -669,7 +668,8 @@ namespace ERPSupport.SQL.K3Cloud
             if (pFromID == FormID.SAL_SaleOrder)
                 pFromID = FormID.SAL_SaleOrderRun;//公用方案
 
-            _SQL = "INSERT INTO DM_FILTER_SOLUTION(SNAME,CREATOR,ISSHARE,SCONTENT,SROWS,FORMID) VALUES('" + pName + "','" + GlobalParameter.K3Inf.UserName + "','" + (pIsShare ? "1" : "0") + "','" + pContent + "'," + pRows.ToString() + ",'" + pFromID + "')";
+            _SQL = string.Format("INSERT INTO DM_FILTER_SOLUTION(SNAME,CREATOR,ISSHARE,SCONTENT,SROWS,FORMID) ");
+            _SQL += string.Format(" VALUES('{0}','{1}','{2}','{3}',{4},'{5}')", pName, GlobalParameter.K3Inf.UserName, pIsShare ? "1" : "0", pContent, pRows, pFromID);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -681,7 +681,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pRows">条件数</param>
         public static void UpdateSolution(string pName, string pContent, int pRows)
         {
-            _SQL = "UPDATE DM_FILTER_SOLUTION SET SCONTENT = '" + pContent + "',SROWS = " + pRows.ToString() + " WHERE SNAME = '" + pName + "'";
+            _SQL = string.Format("UPDATE DM_FILTER_SOLUTION SET SCONTENT = '{0}',SROWS = {1} WHERE SNAME = '{2}'", pContent, pRows, pName);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -691,7 +691,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pName">方案名</param>
         public static void DelSolution(string pName)
         {
-            _SQL = "DELETE FROM DM_FILTER_SOLUTION WHERE SNAME = '" + pName + "'";
+            _SQL = string.Format("DELETE FROM DM_FILTER_SOLUTION WHERE SNAME = '{0}'", pName);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -703,11 +703,12 @@ namespace ERPSupport.SQL.K3Cloud
         public static DataTable NumberMatch(string pType)
         {
             if (pType == "COMPANYNAME")
-                _SQL = @"SELECT FID 内码,FNUMBER 匹配运单号,FLENGTH 运单号位数,TYPENAME 快递公司,NVL(DESCRIPTION,' ') 描述 FROM DM_NUMBERMATCH WHERE FTYPE = 'COMPANYNAME' AND ISUSE = '1' AND ISDELETE = '0' ORDER BY FID DESC";
+                _SQL = "SELECT FID 内码,FNUMBER 匹配运单号,FLENGTH 运单号位数,TYPENAME 快递公司,NVL(DESCRIPTION,' ') 描述 FROM DM_NUMBERMATCH WHERE FTYPE = 'COMPANYNAME' AND ISUSE = '1' AND ISDELETE = '0' ORDER BY FID DESC";
             else if (pType == "UTMTL")
                 _SQL = "SELECT FID,FNUMBER 编码前缀,CASE WHEN ISMATCH = '1' THEN '携带' ELSE '排除' END 是否携带,NVL(TYPENAME,' ') 类型名称,NVL(DESCRIPTION,' ') 描述,NVL(CREATOR,' ') 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期,NVL(MODIFIER,' ') 修改人,TO_CHAR(MODIFYDATE,'yyyy-mm-dd') 修改日期 FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = 'UTMTL'";
-            if (_SQL.Equals(string.Empty))
+            else
                 return null;
+
             return ORAHelper.ExecuteTable(_SQL);
         }
 
@@ -719,7 +720,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static bool NumberMatchExists(string pType, string pNumber)
         {
-            _SQL = "SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '" + pType + "' AND FNUMBER LIKE '" + pNumber + "%'";
+            _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND FNUMBER LIKE '{1}%'", pType, pNumber);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
                 return true;
             else
@@ -735,7 +736,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static bool NumberMatchExists(string pType, int pFID, string pNumber)
         {
-            _SQL = "SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '" + pType + "' AND FID <> " + pFID.ToString() + " AND FNUMBER = '" + pNumber + "'";
+            _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND FID <> {1} AND FNUMBER = '{2}'", pType, pFID, pNumber);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
                 return true;
             else
@@ -752,7 +753,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static bool NumberMatchExists(string pType, string pNumber, int pLength, string pTypeName)
         {
-            _SQL = "SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '" + pType + "' AND ((FNUMBER = '" + pNumber + "' AND FLENGTH = " + pLength.ToString() + ") OR TYPENAME = '" + pTypeName + "')";
+            _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND ((FNUMBER = '{1}' AND FLENGTH = {2}) OR TYPENAME = '{3}')", pType, pNumber, pLength, pTypeName);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
                 return true;
             else
@@ -770,7 +771,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static bool NumberMatchExists(string pType, int pFID, string pNumber, int pLength, string pTypeName)
         {
-            _SQL = "SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE FTYPE = '" + pType + "' AND ISDELETE = '0' AND FID <> " + pFID.ToString() + " AND ((FNUMBER = '" + pNumber + "' AND FLENGTH = " + pLength.ToString() + ") OR TYPENAME = '" + pTypeName + "')";
+            _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND FID <> {1} AND ((FNUMBER = '{2}' AND FLENGTH = {3}) OR TYPENAME = '{4}')", pType, pFID, pNumber, pLength, pTypeName);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
                 return true;
             else
@@ -789,7 +790,8 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pIsMatch">是否匹配，默认'0'</param>
         public static void AddNumberMatch(string pNumber, int pLength, string pType, string pTypeNumber, string pTypeName, string pDescription, string pIsMatch)
         {
-            _SQL = @"INSERT INTO DM_NUMBERMATCH(FTYPE,FNUMBER,FLENGTH,TYPENUMBER,TYPENAME,CREATOR,DESCRIPTION,ISMATCH) VALUES('" + pType + "','" + pNumber + "'," + pLength.ToString() + ",'" + pTypeNumber + "','" + pTypeName + "','" + Model.Globa.GlobalParameter.K3Inf.UserName + "','" + pDescription + "','" + pIsMatch + "')";
+            _SQL = string.Format("INSERT INTO DM_NUMBERMATCH(FTYPE,FNUMBER,FLENGTH,TYPENUMBER,TYPENAME,CREATOR,DESCRIPTION,ISMATCH) ");
+            _SQL += string.Format(" VALUES('{0}','{1}',{2},'{3}','{4}','{5}','{6}','{7}')", pType, pNumber, pLength, pTypeNumber, pTypeName, GlobalParameter.K3Inf.UserName, pDescription, pIsMatch);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -802,7 +804,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pTypeName">类型名称</param>
         public static void UpdateNumberMatch(int pFID, string pNumber, int pLength, string pTypeName)
         {
-            _SQL = "UPDATE DM_NUMBERMATCH SET FNUMBER = '" + pNumber + "',FLENGTH = '" + pLength.ToString() + "',TYPENAME = '" + pTypeName + "',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFYDATE = SYSDATE WHERE FID = " + pFID.ToString();
+            _SQL = string.Format("UPDATE DM_NUMBERMATCH SET FNUMBER = '{0}',FLENGTH = {1},TYPENAME = '{2}',MODIFIER = '{3}',MODIFYDATE = SYSDATE WHERE FID = {4}", pNumber, pLength, pTypeName, GlobalParameter.K3Inf.UserName, pFID);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -815,7 +817,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pIsMatch">是否匹配，默认'0'</param>
         public static void UpdateNumberMatch(int pFID, string pNumber, string pDescription, string pIsMatch)
         {
-            _SQL = "UPDATE DM_NUMBERMATCH SET FNUMBER = '" + pNumber + "',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFYDATE = SYSDATE,DESCRIPTION = '" + pDescription + "',ISMATCH = '" + pIsMatch + "' WHERE FID = " + pFID.ToString();
+            _SQL = string.Format("UPDATE DM_NUMBERMATCH SET FNUMBER = '{0}',MODIFIER = '{1}',MODIFYDATE = SYSDATE,DESCRIPTION = '{2}',ISMATCH = '{3}' WHERE FID = {4}", pNumber, GlobalParameter.K3Inf.UserName, pDescription, pIsMatch, pFID);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -825,7 +827,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFID">内码</param>
         public static void DelNumberMatch(int pFID)
         {
-            _SQL = "UPDATE DM_NUMBERMATCH SET ISDELETE = '1',ISUSE = '0',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFYDATE = SYSDATE WHERE FID = " + pFID.ToString();
+            _SQL = string.Format("UPDATE DM_NUMBERMATCH SET ISDELETE = '1',ISUSE = '0',MODIFIER = '{0}',MODIFYDATE = SYSDATE WHERE FID = {1}", GlobalParameter.K3Inf.UserName, pFID);
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
@@ -859,26 +861,6 @@ namespace ERPSupport.SQL.K3Cloud
                     WHERE A.FTYPE = 'RUNSTOCK' AND A.ISDELETE = '0'AND B.FUSEORGID = " + pUserOrgId.ToString() + " ORDER BY A.FSEQ";
                     break;
             }
-            //if (pType == "LOCKSTOCK")
-            //{
-            //    if (pIndex == 0)
-            //        _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'LOCKSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
-            //    else
-            //        _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
-            //        FROM DM_CALCULATESTOCK A
-            //        INNER JOIN T_BD_STOCK B ON A.FSTOCKID = B.FSTOCKID
-            //        WHERE A.FTYPE = 'LOCKSTOCK' AND A.ISDELETE = '0'AND B.FUSEORGID = " + pUserOrgId.ToString() + " ORDER BY A.FSEQ";
-            //}
-            //else
-            //{
-            //    if (pIndex == 0)
-            //        _SQL = "SELECT FSEQ 序号,FNUMBER 仓库编码,FNAME 仓库名称,FID 内码 FROM DM_CALCULATESTOCK WHERE FTYPE = 'RUNSTOCK' AND ISDELETE = '0' ORDER BY FSEQ";
-            //    else
-            //        _SQL = @"SELECT A.FSEQ 序号,A.FNUMBER 仓库编码,A.FNAME 仓库名称,A.FID 内码
-            //        FROM DM_CALCULATESTOCK A
-            //        INNER JOIN T_BD_STOCK B ON A.FSTOCKID = B.FSTOCKID
-            //        WHERE A.FTYPE = 'RUNSTOCK' AND A.ISDELETE = '0'AND B.FUSEORGID = " + pUserOrgId.ToString() + " ORDER BY A.FSEQ";
-            //}
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -892,7 +874,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static bool CalculateNumberExists(string pType, int pSEQ, string pNumber)
         {
-            _SQL = "SELECT COUNT(1) FROM DM_CALCULATESTOCK WHERE FTYPE = '" + pType + "' AND ISDELETE = '0' AND (FSEQ = " + pSEQ.ToString() + " OR FNUMBER = '" + pNumber + "')";
+            _SQL = string.Format("SELECT COUNT(1) FROM DM_CALCULATESTOCK WHERE FTYPE = '{0}' AND ISDELETE = '0' AND (FSEQ = {1} OR FNUMBER = '{2}')", pType, pSEQ, pNumber);
             if (ORAHelper.ExecuteScalar(_SQL).ToString() != "0")
                 return true;
             else
@@ -909,7 +891,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pStockName">仓库名称</param>
         public static void AddCalculateStock(string pType, int pSEQ, int pStockId, string pStockNumber, string pStockName)
         {
-            _SQL = "INSERT INTO DM_CALCULATESTOCK(FTYPE,FSEQ,FSTOCKID,FNUMBER,FNAME,CREATOR) VALUES('" + pType + "'," + pSEQ.ToString() + "," + pStockId.ToString() + ",'" + pStockNumber + "','" + pStockName + "','" + Model.Globa.GlobalParameter.K3Inf.UserName + "')";
+            _SQL = "INSERT INTO DM_CALCULATESTOCK(FTYPE,FSEQ,FSTOCKID,FNUMBER,FNAME,CREATOR) VALUES('" + pType + "'," + pSEQ.ToString() + "," + pStockId.ToString() + ",'" + pStockNumber + "','" + pStockName + "','" + GlobalParameter.K3Inf.UserName + "')";
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 

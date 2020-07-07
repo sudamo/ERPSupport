@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>5</ApplicationRevision>
     <ApplicationVersion>1.0.7.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -144,6 +144,12 @@
     </Compile>
     <Compile Include="Bussiness\frmFilter.Designer.cs">
       <DependentUpon>frmFilter.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Bussiness\frmINOrder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bussiness\frmINOrder.Designer.cs">
+      <DependentUpon>frmINOrder.cs</DependentUpon>
     </Compile>
     <Compile Include="Bussiness\frmInstockSynchr.cs">
       <SubType>Form</SubType>
@@ -400,6 +406,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmFilter.resx">
       <DependentUpon>frmFilter.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Bussiness\frmINOrder.resx">
+      <DependentUpon>frmINOrder.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Bussiness\frmInstockSynchr.resx">
       <DependentUpon>frmInstockSynchr.cs</DependentUpon>
@@ -920,6 +929,14 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DALFactory\DALFactory.csproj">
+      <Project>{73986a07-2165-4e44-86f9-0411cc534337}</Project>
+      <Name>DALFactory</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\IDAL\IDAL.csproj">
+      <Project>{c4401e2c-f1ee-45b1-b565-e2399568a50b}</Project>
+      <Name>IDAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{94fad769-72f9-44ce-8b93-204462fa3679}</Project>
       <Name>Model</Name>

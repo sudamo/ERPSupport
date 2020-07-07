@@ -83,8 +83,8 @@
             this.tsmiTool_Timer = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro_Dir = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiPro_WMSData = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiProtss1 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiPro_K3Data = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp_Regedit = new System.Windows.Forms.ToolStripMenuItem();
@@ -95,6 +95,8 @@
             this.tSumSecond = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.bs1 = new System.Windows.Forms.BindingSource(this.components);
+            this.tsmiPro_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.tsmiPro_INOrder = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.sc1)).BeginInit();
             this.sc1.Panel2.SuspendLayout();
             this.sc1.SuspendLayout();
@@ -492,21 +494,21 @@
             // tsmiTool_Config
             // 
             this.tsmiTool_Config.Name = "tsmiTool_Config";
-            this.tsmiTool_Config.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Config.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Config.Text = "系统配置(&C)";
             this.tsmiTool_Config.Click += new System.EventHandler(this.tsmiTool_Config_Click);
             // 
             // tsmiTool_Parameter
             // 
             this.tsmiTool_Parameter.Name = "tsmiTool_Parameter";
-            this.tsmiTool_Parameter.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Parameter.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Parameter.Text = "参数(&P)";
             this.tsmiTool_Parameter.Click += new System.EventHandler(this.tsmiTool_Parameter_Click);
             // 
             // tsmiTool_tss1
             // 
             this.tsmiTool_tss1.Name = "tsmiTool_tss1";
-            this.tsmiTool_tss1.Size = new System.Drawing.Size(148, 6);
+            this.tsmiTool_tss1.Size = new System.Drawing.Size(149, 6);
             // 
             // tsmiTool_Occupy
             // 
@@ -518,58 +520,58 @@
             this.tssTool_Occupy_1,
             this.tsmiTool_Occupy_LockPickMtl});
             this.tsmiTool_Occupy.Name = "tsmiTool_Occupy";
-            this.tsmiTool_Occupy.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Occupy.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy.Text = "占用解除(&O)";
             // 
             // smiTool_Occupy_PickMtl
             // 
             this.smiTool_Occupy_PickMtl.Name = "smiTool_Occupy_PickMtl";
-            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(130, 22);
+            this.smiTool_Occupy_PickMtl.Size = new System.Drawing.Size(152, 22);
             this.smiTool_Occupy_PickMtl.Text = "倒冲领料";
             this.smiTool_Occupy_PickMtl.Click += new System.EventHandler(this.smiTool_Occupy_PickMtl_Click);
             // 
             // smiTool_Occupy_Trans
             // 
             this.smiTool_Occupy_Trans.Name = "smiTool_Occupy_Trans";
-            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(130, 22);
+            this.smiTool_Occupy_Trans.Size = new System.Drawing.Size(152, 22);
             this.smiTool_Occupy_Trans.Text = "调拨";
             this.smiTool_Occupy_Trans.Click += new System.EventHandler(this.smiTool_Occupy_Trans_Click);
             // 
             // tsmiTool_Occupy_LockStock
             // 
             this.tsmiTool_Occupy_LockStock.Name = "tsmiTool_Occupy_LockStock";
-            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(130, 22);
+            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy_LockStock.Text = "锁库";
             this.tsmiTool_Occupy_LockStock.Click += new System.EventHandler(this.tsmiTool_Occupy_LockStock_Click);
             // 
             // tsmiTool_Occupy_OrderRun
             // 
             this.tsmiTool_Occupy_OrderRun.Name = "tsmiTool_Occupy_OrderRun";
-            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(130, 22);
+            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy_OrderRun.Text = "订单运算";
             this.tsmiTool_Occupy_OrderRun.Click += new System.EventHandler(this.tsmiTool_Occupy_OrderRun_Click);
             // 
             // tssTool_Occupy_1
             // 
             this.tssTool_Occupy_1.Name = "tssTool_Occupy_1";
-            this.tssTool_Occupy_1.Size = new System.Drawing.Size(127, 6);
+            this.tssTool_Occupy_1.Size = new System.Drawing.Size(149, 6);
             // 
             // tsmiTool_Occupy_LockPickMtl
             // 
             this.tsmiTool_Occupy_LockPickMtl.Name = "tsmiTool_Occupy_LockPickMtl";
-            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(130, 22);
+            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Occupy_LockPickMtl.Text = "自动领料";
             this.tsmiTool_Occupy_LockPickMtl.Click += new System.EventHandler(this.tsmiTool_Occupy_LockPickMtl_Click);
             // 
             // tsmiTool_tss2
             // 
             this.tsmiTool_tss2.Name = "tsmiTool_tss2";
-            this.tsmiTool_tss2.Size = new System.Drawing.Size(148, 6);
+            this.tsmiTool_tss2.Size = new System.Drawing.Size(149, 6);
             // 
             // tsmiTool_Timer
             // 
             this.tsmiTool_Timer.Name = "tsmiTool_Timer";
-            this.tsmiTool_Timer.Size = new System.Drawing.Size(151, 22);
+            this.tsmiTool_Timer.Size = new System.Drawing.Size(152, 22);
             this.tsmiTool_Timer.Text = "定时器(&T)";
             this.tsmiTool_Timer.Click += new System.EventHandler(this.tsmiTool_Timer_Click);
             // 
@@ -577,9 +579,11 @@
             // 
             this.tsmiPro.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsmiPro_Dir,
+            this.tsmiPro_tss1,
             this.tsmiPro_WMSData,
-            this.tsmiProtss1,
-            this.tsmiPro_K3Data});
+            this.tsmiPro_K3Data,
+            this.tsmiPro_tss2,
+            this.tsmiPro_INOrder});
             this.tsmiPro.Name = "tsmiPro";
             this.tsmiPro.Size = new System.Drawing.Size(68, 20);
             this.tsmiPro.Text = "项目(&P)";
@@ -587,27 +591,27 @@
             // tsmiPro_Dir
             // 
             this.tsmiPro_Dir.Name = "tsmiPro_Dir";
-            this.tsmiPro_Dir.Size = new System.Drawing.Size(172, 22);
+            this.tsmiPro_Dir.Size = new System.Drawing.Size(179, 22);
             this.tsmiPro_Dir.Text = "调拨单设置(&D)";
             this.tsmiPro_Dir.Click += new System.EventHandler(this.tsmiPro_Dir_Click);
+            // 
+            // tsmiPro_tss1
+            // 
+            this.tsmiPro_tss1.Name = "tsmiPro_tss1";
+            this.tsmiPro_tss1.Size = new System.Drawing.Size(176, 6);
             // 
             // tsmiPro_WMSData
             // 
             this.tsmiPro_WMSData.Name = "tsmiPro_WMSData";
-            this.tsmiPro_WMSData.Size = new System.Drawing.Size(172, 22);
+            this.tsmiPro_WMSData.Size = new System.Drawing.Size(179, 22);
             this.tsmiPro_WMSData.Text = "WMS数据同步(&W)";
             this.tsmiPro_WMSData.ToolTipText = "同步K3数据到WMS系统";
             this.tsmiPro_WMSData.Click += new System.EventHandler(this.tsmiPro_WMSData_Click);
             // 
-            // tsmiProtss1
-            // 
-            this.tsmiProtss1.Name = "tsmiProtss1";
-            this.tsmiProtss1.Size = new System.Drawing.Size(169, 6);
-            // 
             // tsmiPro_K3Data
             // 
             this.tsmiPro_K3Data.Name = "tsmiPro_K3Data";
-            this.tsmiPro_K3Data.Size = new System.Drawing.Size(172, 22);
+            this.tsmiPro_K3Data.Size = new System.Drawing.Size(179, 22);
             this.tsmiPro_K3Data.Text = "K3数据同步(&K)";
             this.tsmiPro_K3Data.Click += new System.EventHandler(this.tsmiPro_K3Data_Click);
             // 
@@ -659,6 +663,18 @@
             // tSumSecond
             // 
             this.tSumSecond.Interval = 1000;
+            // 
+            // tsmiPro_tss2
+            // 
+            this.tsmiPro_tss2.Name = "tsmiPro_tss2";
+            this.tsmiPro_tss2.Size = new System.Drawing.Size(176, 6);
+            // 
+            // tsmiPro_INOrder
+            // 
+            this.tsmiPro_INOrder.Name = "tsmiPro_INOrder";
+            this.tsmiPro_INOrder.Size = new System.Drawing.Size(179, 22);
+            this.tsmiPro_INOrder.Text = "网上订单系统(&N)";
+            this.tsmiPro_INOrder.Click += new System.EventHandler(this.tsmiPro_INOrder_Click);
             // 
             // frmMain
             // 
@@ -762,6 +778,8 @@
         private System.Windows.Forms.ToolStripLabel bnTop_lblTo;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_WMSData;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data;
-        private System.Windows.Forms.ToolStripSeparator tsmiProtss1;
+        private System.Windows.Forms.ToolStripSeparator tsmiPro_tss1;
+        private System.Windows.Forms.ToolStripSeparator tsmiPro_tss2;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_INOrder;
     }
 }

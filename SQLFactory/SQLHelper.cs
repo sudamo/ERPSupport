@@ -80,6 +80,23 @@ namespace ERPSupport.SQL
                     conn.Close();
             }
         }
+        public static void ExecuteNonQuery(string pConnectionString, string pCommandText)
+        {
+            SqlConnection conn = new SqlConnection(pConnectionString);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = conn.CreateCommand();
+                cmd.CommandText = pCommandText;
+                cmd.ExecuteNonQuery();
+            }
+            catch { return; }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
+            }
+        }
         public static void ExecuteNonQuery(string pCommandText, SqlParameter[] pParameters)
         {
             SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);

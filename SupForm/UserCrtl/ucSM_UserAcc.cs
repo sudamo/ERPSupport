@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
@@ -263,6 +264,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
             string strMids = string.Empty;
             string sFunctionIds = string.Empty;
+            List<string> listF = new List<string>();
 
             for (int i = 0; i < trv1.Nodes[0].Nodes.Count; i++)
             {
@@ -276,15 +278,44 @@ namespace ERPSupport.SupForm.UserCrtl
                 }
             }
 
-            if (chbOccupy.Checked == true)
-                sFunctionIds += "tsmiTool_Occupy";
+            //if (chbOccupy.Checked == true)
+            //    sFunctionIds += "tsmiTool_Occupy";
+
+            //if (chbOccupy.Checked == true)
+            //{
+            //    if (sFunctionIds.Trim() == string.Empty)
+            //        sFunctionIds += "tsmiTool_Timer";
+            //    else
+            //        sFunctionIds += ",tsmiTool_Timer";
+            //}
 
             if (chbOccupy.Checked == true)
+                listF.Add("tsmiTool_Occupy");
+            if (chbTimerPick.Checked)
+                listF.Add("tsmiTool_Timer");
+            //--
+            if (chbDir.Checked)
+                listF.Add("tsmiPro_Dir");
+            if (chbWMSData.Checked)
+                listF.Add("tsmiPro_WMSData");
+            if (chbK3Data.Checked)
+                listF.Add("tsmiPro_K3Data");
+            if (chbINOrder.Checked)
+                listF.Add("tsmiPro_INOrder");
+            //--
+            if (chbImport.Checked)
+                listF.Add("Import");
+            if (chbExport.Checked)
+                listF.Add("Export");
+
+            if (listF.Count > 0)
             {
-                if (sFunctionIds.Trim() == string.Empty)
-                    sFunctionIds += "tsmiTool_Timer";
-                else
-                    sFunctionIds += ",tsmiTool_Timer";
+                for (int i = 0; i < listF.Count; i++)
+                {
+                    if (i > 0)
+                        sFunctionIds += ",";
+                    sFunctionIds += listF[i];
+                }
             }
 
 
@@ -359,11 +390,43 @@ namespace ERPSupport.SupForm.UserCrtl
                         chbTimerPick.Checked = true;
                     else
                         chbTimerPick.Checked = false;
+                    //--
+                    if (sFunctionIds.Contains("tsmiPro_Dir"))
+                        chbDir.Checked = true;
+                    else
+                        chbDir.Checked = false;
+                    if (sFunctionIds.Contains("tsmiPro_WMSData"))
+                        chbWMSData.Checked = true;
+                    else
+                        chbWMSData.Checked = false;
+                    if (sFunctionIds.Contains("tsmiPro_K3Data"))
+                        chbK3Data.Checked = true;
+                    else
+                        chbK3Data.Checked = false;
+                    if (sFunctionIds.Contains("tsmiPro_INOrder"))
+                        chbINOrder.Checked = true;
+                    else
+                        chbINOrder.Checked = false;
+                    //--
+                    if (sFunctionIds.Contains("Import"))
+                        chbTimerPick.Checked = true;
+                    else
+                        chbTimerPick.Checked = false;
+                    if (sFunctionIds.Contains("Export"))
+                        chbTimerPick.Checked = true;
+                    else
+                        chbTimerPick.Checked = false;
                 }
                 else
                 {
+                    //--
                     chbOccupy.Checked = false;
                     chbTimerPick.Checked = false;
+                    //--
+                    chbDir.Checked = false;
+                    chbWMSData.Checked = false;
+                    chbK3Data.Checked = false;
+                    chbINOrder.Checked = false;
                 }
 
                 if (sMids.Trim() == string.Empty)
@@ -401,6 +464,7 @@ namespace ERPSupport.SupForm.UserCrtl
             string strName = dgv1.CurrentRow.Cells[1].Value.ToString();
             string strMids = string.Empty;
             string sFunctionIds = string.Empty;
+            List<string> listF = new List<string>();
 
             for (int i = 0; i < trv1.Nodes[0].Nodes.Count; i++)
             {
@@ -414,15 +478,34 @@ namespace ERPSupport.SupForm.UserCrtl
                 }
             }
 
-            if (chbOccupy.Checked == true)
-                sFunctionIds += "tsmiTool_Occupy";
 
+            if (chbOccupy.Checked == true)
+                listF.Add("tsmiTool_Occupy");
             if (chbTimerPick.Checked)
+                listF.Add("tsmiTool_Timer");
+            //--
+            if (chbDir.Checked)
+                listF.Add("tsmiPro_Dir");
+            if (chbWMSData.Checked)
+                listF.Add("tsmiPro_WMSData");
+            if (chbK3Data.Checked)
+                listF.Add("tsmiPro_K3Data");
+            if (chbINOrder.Checked)
+                listF.Add("tsmiPro_INOrder");
+            //--
+            if (chbImport.Checked)
+                listF.Add("Import");
+            if (chbExport.Checked)
+                listF.Add("Export");
+
+            if (listF.Count > 0)
             {
-                if (sFunctionIds == string.Empty)
-                    sFunctionIds = "tsmiTool_Timer";
-                else
-                    sFunctionIds += ",tsmiTool_Timer";
+                for (int i = 0; i < listF.Count; i++)
+                {
+                    if (i > 0)
+                        sFunctionIds += ",";
+                    sFunctionIds += listF[i];
+                }
             }
 
             if (strMids.Trim().Equals(string.Empty)) strMids = " ";
