@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 
 namespace ERPSupport.SQL.INOrder
 {
@@ -11,12 +12,16 @@ namespace ERPSupport.SQL.INOrder
     public class CommFunction : IOrder
     {
         private string _SQL;
-        //private object _obj;
+        private object _obj;
+        private string _ConnectionString;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        public CommFunction() { }
+        public CommFunction()
+        {
+            _ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString_Order"].ConnectionString;
+        }
 
         /// <summary>
         /// 导入价格
@@ -25,8 +30,7 @@ namespace ERPSupport.SQL.INOrder
         /// <returns></returns>
         public void MegerPrice(OrderImportInfo pEntry)
         {
-            object oConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString_Order"].ConnectionString;
-            if (oConnectionString == null)
+            if (_ConnectionString == null)
                 return;
 
             _SQL = string.Format("MERGE INTO pO_PriceConfig T ");
@@ -47,7 +51,43 @@ namespace ERPSupport.SQL.INOrder
             _SQL += string.Format(" (BasicDataID,BrandID,SeriesID,CommodityID,PricingFactorID,GeneralFactoryPrice,BranchFactoryPrice,BeginDate,EndDate,IsEnable) ");
             _SQL += string.Format(" VALUES(O.BasicDataID,O.BrandID,O.SeriesID, O.CommodityID, O.PricingFactorID,O.GeneralFactoryPrice,O.BranchFactoryPrice,O.BeginDate,O.EndDate,O.IsEnable);");
 
-            SQLHelper.ExecuteNonQuery(oConnectionString.ToString(), _SQL);
+            SQLHelper.ExecuteNonQuery(_ConnectionString, _SQL);
+        }
+
+        /// <summary>
+        /// 添加客户
+        /// </summary>
+        /// <param name="pDataRow"></param>
+        /// <param name="pOrg"></param>
+        /// <param name="pSeller"></param>
+        public string AddCustomer(DataRow pDataRow, string pOrg, string pSeller)
+        {
+            if (_ConnectionString == null)
+                return "请正确设置服务器信息";
+
+            _SQL = string.Format("SELECT COUNT(*) FROM PO_Customer WHERE CustomerName = '{0}'", pDataRow["FNAME"].ToString());
+            _obj = SQLHelper.ExecuteScalar(_ConnectionString, _SQL);
+
+            if (_obj != null && int.Parse(_obj.ToString()) >= 1)
+                return "网上订单系统已经存在客户[" + pDataRow["FNAME"].ToString() + "],请不要重复添加。";
+
+            _SQL = "BEGIN TRANSACTION ";
+            _SQL += string.Format(" INSERT INTO PO_Customer(FCUSTID,CustomerCode,CustomerName,SellerID,CreateOrgName,IsVisible) VALUES({0},'{1}','{2}',{3},{4},0); ", pDataRow["FCUSTID"].ToString(), pDataRow["FNUMBER"].ToString(), pDataRow["FNAME"].ToString(), pSeller, pOrg);
+            _SQL += string.Format(" INSERT INTO PO_CustomerCE(CID,ManagementMode,ServiceMode) VALUES({0},1,1); ", pDataRow["FCUSTID"].ToString());
+            _SQL += string.Format(" INSERT INTO PO_CustomerDetailInfo(CID,SalesOrg,IsVisible) VALUES({0},{1},1); ", pDataRow["FCUSTID"].ToString(), pOrg);
+            _SQL += @"
+            IF @@ERROR = 0
+            BEGIN
+	            COMMIT
+	            SELECT '新增成功'
+            END
+            ELSE
+            BEGIN
+	            ROLLBACK
+	            SELECT '新增出错 请联系管理员'
+            END";
+
+            return SQLHelper.ExecuteScalar(_ConnectionString, _SQL).ToString();
         }
     }
 }

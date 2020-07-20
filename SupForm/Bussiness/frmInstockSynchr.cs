@@ -26,22 +26,22 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            DataTable dt = new DataTable();
-            dt = PrdInstock.GetInfo(txtBillno.Text.Trim());
+            //DataTable dt = new DataTable();
+            //dt = PrdInstock.GetInfo(txtBillno.Text.Trim());
 
-            if (dt != null && dt.Rows.Count > 0)
-            {
-                btnSynchr.Enabled = true;
-                MessageBox.Show("入库单[" + txtBillno.Text + "]有 " + dt.Rows.Count.ToString() + " 条未同步");
-            }
-            else
-            {
-                btnSynchr.Enabled = false;
-                MessageBox.Show("此入库单在系统上没找到未同步的条码");
-                return;
-            }
+            //if (dt != null && dt.Rows.Count > 0)
+            //{
+            //    btnSynchr.Enabled = true;
+            //    MessageBox.Show("入库单[" + txtBillno.Text + "]有 " + dt.Rows.Count.ToString() + " 条未同步");
+            //}
+            //else
+            //{
+            //    btnSynchr.Enabled = false;
+            //    MessageBox.Show("此入库单在系统上没找到未同步的条码");
+            //    return;
+            //}
 
-            dgv1.DataSource = dt;
+            //dgv1.DataSource = dt;
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void btnSynchr_Click(object sender, EventArgs e)
         {
-            PrdInstock.UpdateBarcode(txtBillno.Text.Trim());
-            MessageBox.Show("同步成功");
-            dgv1.DataSource = null;
+            //PrdInstock.UpdateBarcode(txtBillno.Text.Trim());
+            //MessageBox.Show("同步成功");
+            //dgv1.DataSource = null;
         }
 
         /// <summary>
@@ -63,8 +63,8 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void txtBillno_TextChanged(object sender, EventArgs e)
         {
-            if (btnSynchr.Enabled == true)
-                btnSynchr.Enabled = false;
+            //if (btnSynchr.Enabled == true)
+            //    btnSynchr.Enabled = false;
         }
     }
 }

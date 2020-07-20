@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 
@@ -12,6 +13,8 @@ namespace ERPSupport.SupForm.Bussiness
     /// </summary>
     public partial class frmINOrder : Form
     {
+        private DataRow _dataRow;
+
         /// <summary>
         /// 构造函数
         /// </summary>
@@ -137,6 +140,128 @@ namespace ERPSupport.SupForm.Bussiness
 
             //日志............
             SQL.K3Cloud.CommFunction.DM_Log_Local("价格导入", "项目->网上订单系统->导入新价格", pFilePath);
+        }
+
+        /// <summary>
+        /// 查询客户
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (txtCustomerName.Text.Trim().Equals(string.Empty))
+                return;
+
+            DataTable dt = SQL.K3Cloud.CommFunction.GetCustomerListByName(txtCustomerName.Text);
+
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                MessageBox.Show("未在金蝶ERP查询到客户，请检查是否输入完整客户名称！");
+                btnAddCustomer.Enabled = false;
+                cbxCreateOrg.Enabled = false;
+                cbxSeller.Enabled = false;
+                return;
+            }
+
+            //DataTable dtSource = new DataTable();
+            //DataRow drN;
+            //dtSource.Columns.Add("FValue");
+            //dtSource.Columns.Add("FName");
+
+            //DataColumn[] dtCS = new DataColumn[1];
+            //dtCS[0] = dtSource.Columns[0];
+            //dtSource.PrimaryKey = dtCS;
+
+            //foreach (DataRow dr in dt.Rows)
+            //{
+            //    if (dtSource.Rows.Contains(dr["FCREATEORGID"]))
+            //        continue;
+
+            //    drN = dtSource.NewRow();
+            //    drN["FValue"] = dr["FCREATEORGID"];
+            //    drN["FName"] = dr["ORGNAME"];
+            //    dtSource.Rows.Add(drN);
+            //}
+
+            DataView dv = dt.DefaultView;
+            DataTable dtSource = dv.ToTable("dtOrg", true, "FCREATEORGID", "ORGNAME");
+
+            FillComboBox(cbxCreateOrg, dtSource, "FCREATEORGID", "ORGNAME");
+
+            btnAddCustomer.Enabled = true;
+            cbxCreateOrg.Enabled = true;
+            cbxSeller.Enabled = true;
+
+            _dataRow = dt.Rows[0];
+        }
+
+        /// <summary>
+        /// 新增客户到网上订单系统
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnAddCustomer_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string creatorOrg = cbxCreateOrg.SelectedValue.ToString();
+                string sellerId = cbxSeller.SelectedValue.ToString();
+                MessageBox.Show(DALCreater.CommFunction.AddCustomer(_dataRow, creatorOrg, sellerId));
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+
+            //日志
+            SQL.K3Cloud.CommFunction.DM_Log_Local("新增客户", "项目->网上订单系统->新增客户", "新增客户：" + _dataRow["FNAME"].ToString());
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbxCreateOrg_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxCreateOrg == null || cbxCreateOrg.Items.Count == 0)
+                return;
+
+            int iOrgId;
+            try
+            {
+                iOrgId = int.Parse(cbxCreateOrg.SelectedValue.ToString());
+            }
+            catch
+            {
+                return;
+            }
+
+            DataTable dt = SQL.K3Cloud.CommFunction.GetSellerList(iOrgId);
+            FillComboBox(cbxSeller, dt, "FVALUE", "FNAME", 1);
+        }
+
+        /// <summary>
+        /// 填充下拉框
+        /// </summary>
+        /// <param name="pComboBox">下拉框控件</param>
+        /// <param name="pDT">数据源</param>
+        /// <param name="pFValue">ValueMember</param>
+        /// <param name="pFName">DisplayMember</param>
+        /// <param name="pSelectedIndex">SelectedIndex</param>
+        private void FillComboBox(ComboBox pComboBox, DataTable pDT, string pFValue, string pFName, int pSelectedIndex = 0)
+        {
+            if (pDT == null || pDT.Rows.Count == 0)
+                return;
+            try
+            {
+                pComboBox.DataSource = pDT;
+                pComboBox.ValueMember = pFValue;
+                pComboBox.DisplayMember = pFName;
+                pComboBox.SelectedIndex = pSelectedIndex;
+            }
+            catch { }
         }
     }
 }

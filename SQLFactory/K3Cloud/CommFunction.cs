@@ -239,11 +239,23 @@ namespace ERPSupport.SQL.K3Cloud
         {
             _SQL = string.Format("SELECT A.FCUSTID FROM T_BD_CUSTOMER A INNER JOIN T_BD_CUSTOMER_L AL ON A.FCUSTID = AL.FCUSTID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = {0} AND AL.FNAME = '{1}'", pUseOrgId, pCustomerName);
 
-            object o = ORAHelper.ExecuteScalar(_SQL);
-            if (o == null)
+            _obj = ORAHelper.ExecuteScalar(_SQL);
+            if (_obj == null)
                 return 0;
             else
-                return Convert.ToInt32(o);
+                return Convert.ToInt32(_obj);
+        }
+
+        public static DataTable GetCustomerListByName(string pCostomerName)
+        {
+            _SQL = "SELECT A.FCUSTID,A.FNUMBER,AL.FNAME,A.FSELLER,A.FUSEORGID,A.FCREATEORGID,ORGL.FNAME ORGNAME";
+            _SQL += " FROM T_BD_CUSTOMER A ";
+            _SQL += " INNER JOIN T_BD_CUSTOMER_L AL ON A.FCUSTID = AL.FCUSTID AND AL.FLOCALEID = 2052 ";
+            _SQL += " INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FCREATEORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052 ";
+            _SQL += string.Format(" WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND AL.FNAME = '{0}' ", pCostomerName);
+            _SQL += " ORDER BY A.FSELLER DESC";
+
+            return ORAHelper.ExecuteTable(_SQL);
         }
 
         /// <summary>
@@ -251,7 +263,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pUseOrgId">使用组织</param>
         /// <returns></returns>
-        public static DataTable GetSalerList(int pUseOrgId)
+        public static DataTable GetSellerList(int pUseOrgId)
         {
             _SQL = string.Format("SELECT B.FENTRYID FVALUE,EMPL.FNAME ");
             _SQL += string.Format(" FROM T_BD_OPERATORENTRY B ");

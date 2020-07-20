@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>5</ApplicationRevision>
+    <ApplicationRevision>7</ApplicationRevision>
     <ApplicationVersion>1.0.7.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -85,6 +85,10 @@
   <ItemGroup>
     <Reference Include="DMData.Code">
       <HintPath>..\..\..\DLL\DMData.Code.dll</HintPath>
+    </Reference>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Kingdee.BOS.WebApi.Client">
       <HintPath>..\..\..\DLL\Kingdee.BOS.WebApi.Client.dll</HintPath>
@@ -389,6 +393,7 @@
     <Compile Include="UserCrtl\usCom_lblcbx.Designer.cs">
       <DependentUpon>usCom_lblcbx.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\PasswordUtility.cs" />
     <EmbeddedResource Include="Bussiness\frmAddFilter.resx">
       <DependentUpon>frmAddFilter.cs</DependentUpon>
     </EmbeddedResource>
@@ -534,6 +539,7 @@
     <EmbeddedResource Include="UserCrtl\usCom_lblcbx.resx">
       <DependentUpon>usCom_lblcbx.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -553,6 +559,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Elmah.Errors\ElmahErrors.txt" />
+    <Content Include="App_Readme\Elmah.txt" />
     <Content Include="ICON\gzcb.ico" />
     <Content Include="ICON\gzcb48.ico" />
     <Content Include="ICON\kk.ico" />

@@ -28,16 +28,17 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public static DataTable GetInfo(string pBillNo)
         {
-            _SQL = @"SELECT DISTINCT C.BARCODE 条码,C.CREATEDATE 日期,D.FNUMBER 物料编码,DL.FNAME 物料名称
-            FROM T_PRD_INSTOCK A
-            INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID
-            INNER JOIN C##BARCODE2.PM_PRODUCETASK B ON AE.FMOENTRYID = B.FENTRYID
-            INNER JOIN C##BARCODE2.PM_BARCODE C ON B.ID = C.TASKID
-            INNER JOIN T_BD_MATERIAL D ON C.KDMTLID = D.FMATERIALID
-            INNER JOIN T_BD_MATERIAL_L DL ON D.FMATERIALID = DL.FMATERIALID AND DL.FLOCALEID = 2052
-            WHERE A.FBILLNO = '" + pBillNo + "' AND C.INSTOCKSTATUS = 0 AND KDINSTOCKID IS NULL";
+            //_SQL = @"SELECT DISTINCT C.BARCODE 条码,C.CREATEDATE 日期,D.FNUMBER 物料编码,DL.FNAME 物料名称
+            //FROM T_PRD_INSTOCK A
+            //INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID
+            //INNER JOIN C##BARCODE2.PM_PRODUCETASK B ON AE.FMOENTRYID = B.FENTRYID
+            //INNER JOIN C##BARCODE2.PM_BARCODE C ON B.ID = C.TASKID
+            //INNER JOIN T_BD_MATERIAL D ON C.KDMTLID = D.FMATERIALID
+            //INNER JOIN T_BD_MATERIAL_L DL ON D.FMATERIALID = DL.FMATERIALID AND DL.FLOCALEID = 2052
+            //WHERE A.FBILLNO = '" + pBillNo + "' AND C.INSTOCKSTATUS = 0 AND KDINSTOCKID IS NULL";
 
-            return ORAHelper.ExecuteTable(_SQL);
+            //return ORAHelper.ExecuteTable(_SQL);
+            return null;
         }
 
 
@@ -47,23 +48,24 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pBillNo">入库单编号</param>
         public static void UpdateBarcode(string pBillNo)
         {
-            _SQL = @"UPDATE C##BARCODE2.PM_BARCODE
-            SET KDINSTOCKID = (SELECT FID FROM T_PRD_INSTOCK WHERE FBILLNO = '" + pBillNo + @"'),INSTOCKSTATUS = 1
-            WHERE BARCODE IN
-            (SELECT DISTINCT C.BARCODE
-            FROM T_PRD_INSTOCK A
-            INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID
-            INNER JOIN C##BARCODE2.PM_PRODUCETASK B ON AE.FMOENTRYID = B.FENTRYID
-            INNER JOIN C##BARCODE2.PM_BARCODE C ON B.ID = C.TASKID
-            WHERE A.FBILLNO = '" + pBillNo + "' AND C.INSTOCKSTATUS = 0 AND KDINSTOCKID IS NULL)";
+            //_SQL = @"UPDATE C##BARCODE2.PM_BARCODE
+            //SET KDINSTOCKID = (SELECT FID FROM T_PRD_INSTOCK WHERE FBILLNO = '" + pBillNo + @"'),INSTOCKSTATUS = 1
+            //WHERE BARCODE IN
+            //(SELECT DISTINCT C.BARCODE
+            //FROM T_PRD_INSTOCK A
+            //INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID
+            //INNER JOIN C##BARCODE2.PM_PRODUCETASK B ON AE.FMOENTRYID = B.FENTRYID
+            //INNER JOIN C##BARCODE2.PM_BARCODE C ON B.ID = C.TASKID
+            //WHERE A.FBILLNO = '" + pBillNo + "' AND C.INSTOCKSTATUS = 0 AND KDINSTOCKID IS NULL)";
 
-            ORAHelper.ExecuteNonQuery(_SQL);
+            //ORAHelper.ExecuteNonQuery(_SQL);
         }
-
+        
         /// <summary>
         /// 生产订单信息
         /// </summary>
         /// <param name="pPlanStartDate">计划开工日期</param>
+        /// <param name="pFormId">业务标识</param>
         /// <returns></returns>
         public static DataTable GetMo(string pPlanStartDate, Model.Enum.FormID pFormId)
         {
@@ -84,7 +86,7 @@ namespace ERPSupport.SQL.K3Cloud
             _SQL = string.Format("SELECT DISTINCT MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, DEP.FNUMBER 部门编码, DEPL.FNAME 部门 ");
             _SQL += string.Format(" FROM T_PRD_MO A ");
             _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY AE ON A.FID = AE.FID ");
-            _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A AA ON AE.FENTRYID = AA.FENTRYID AND AA.FSTATUS IN(3,4) ");
+            _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A AA ON AE.FENTRYID = AA.FENTRYID AND AA.FSTATUS IN({0}) ", strOrg == "100508" ? "3,4" : "4");
             _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT DEP ON AE.FWORKSHOPID = DEP.FDEPTID ");
             _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052 ");
             _SQL += string.Format(" INNER JOIN T_PRD_PPBOMENTRY PBE ON AA.FENTRYID = PBE.FMOENTRYID ");

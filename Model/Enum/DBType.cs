@@ -11,6 +11,8 @@ namespace ERPSupport.Model.Enum
         [Description("SQLServer数据库")]
         SQLServer,
         [Description("Oracle数据库")]
-        Oracle
+        Oracle,
+        [Description("MySQL数据库")]
+        MySQL
     }
 }

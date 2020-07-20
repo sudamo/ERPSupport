@@ -53,6 +53,7 @@
     <Compile Include="Enum\FormId.cs" />
     <Compile Include="Enum\Foundation.cs" />
     <Compile Include="Enum\FStatus.cs" />
+    <Compile Include="Enum\SQLReturnType.cs" />
     <Compile Include="Enum\SupOperations.cs" />
     <Compile Include="Globa\GlobalParameter.cs" />
     <Compile Include="Globa\GlobalRights.cs" />

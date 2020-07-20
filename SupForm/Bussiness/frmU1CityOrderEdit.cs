@@ -80,7 +80,7 @@ namespace ERPSupport.SupForm.Bussiness
                 cbxDep.DisplayMember = "FNAME";
                 cbxDep.ValueMember = "FVALUE";
 
-                dt = SQL.K3Cloud.CommFunction.GetSalerList(iOrgId);
+                dt = SQL.K3Cloud.CommFunction.GetSellerList(iOrgId);
                 if (dt == null)
                     return;
 
