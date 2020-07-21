@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Data;
 
 namespace ERPSupport.SQL.INOrder
@@ -88,6 +89,76 @@ namespace ERPSupport.SQL.INOrder
             END";
 
             return SQLHelper.ExecuteScalar(_ConnectionString, _SQL).ToString();
+        }
+
+        /// <summary>
+        /// 添加行政地区信息
+        /// </summary>
+        /// <param name="pParentId">上级行政地区ID</param>
+        /// <param name="pLevel">行政地区级别</param>
+        /// <param name="pFirstChar">行政地区名第一个汉字</param>
+        /// <param name="pName">行政地区名称</param>
+        /// <returns></returns>
+        public string AddADD(int pParentId, int pLevel, string pFirstChar, string pName)
+        {
+            string sFirstLetter = GetSpell(pFirstChar);
+
+            _SQL = "BEGIN TRANSACTION ";
+            _SQL += " DECLARE @Code INT ";
+            _SQL += string.Format(" SELECT @Code = MAX(CODE) + 1 FROM PO_ChinaCity WHERE Parent_id = {0}; ", pParentId);
+            _SQL += " INSERT INTO PO_ChinaCity(Code,Name,Parent_id,First_letter,Level) ";
+            _SQL += string.Format(" VALUES(@Code, '{0}', {1}, '{2}', {3}); ", pName, pParentId, sFirstLetter, pLevel);
+            _SQL += @"
+            IF @@ERROR = 0
+            BEGIN
+	            COMMIT
+	            SELECT '添加成功'
+            END
+            ELSE
+            BEGIN
+	            ROLLBACK
+	            SELECT '添加出错 请联系管理员'
+            END";
+            return SQLHelper.ExecuteScalar(_ConnectionString, _SQL).ToString();
+        }
+
+        /// <summary>
+        /// 获取中国行政区域信息
+        /// </summary>
+        /// <param name="pParentId">上级行政区ID</param>
+        /// <returns></returns>
+        public DataTable GetChinaAddByParentId(int pParentId = 0)
+        {
+            _SQL = string.Format("SELECT ID,Code,Name,Parent_id,First_letter,Level FROM PO_ChinaCity WHERE Parent_id = {0}", pParentId);
+            return SQLHelper.ExecuteTable(_ConnectionString, _SQL);
+        }
+
+        /// <summary>
+        /// 取得一个汉字的拼音首字母
+        /// </summary>
+        /// <param name="pCNChar">一个汉字</param>
+        /// <returns>首字母</returns>
+        private string GetSpell(string pCNChar)
+        {
+            byte[] arrCN = Encoding.Default.GetBytes(pCNChar);
+            if (arrCN.Length > 1)
+            {
+                int area = arrCN[0];
+                int pos = arrCN[1];
+                int code = (area << 8) + pos;
+                int[] areacode = { 45217, 45253, 45761, 46318, 46826, 47010, 47297, 47614, 48119, 48119, 49062, 49324, 49896, 50371, 50614, 50622, 50906, 51387, 51446, 52218, 52698, 52698, 52698, 52980, 53689, 54481 };
+                for (int i = 0; i < 26; i++)
+                {
+                    int max = 55290;
+                    if (i != 25) max = areacode[i + 1];
+                    if (areacode[i] <= code && code < max)
+                    {
+                        return Encoding.Default.GetString(new byte[] { (byte)(65 + i) });
+                    }
+                }
+                return "*";
+            }
+            else return pCNChar;
         }
     }
 }

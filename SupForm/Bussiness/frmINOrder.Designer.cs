@@ -35,16 +35,25 @@
             this.txtFileDir = new System.Windows.Forms.TextBox();
             this.lblFile = new System.Windows.Forms.Label();
             this.gbxCustomer = new System.Windows.Forms.GroupBox();
-            this.cbxCreateOrg = new System.Windows.Forms.ComboBox();
-            this.btnSearch = new System.Windows.Forms.Button();
-            this.txtCustomerName = new System.Windows.Forms.TextBox();
-            this.lblCustomerName = new System.Windows.Forms.Label();
-            this.cbxSeller = new System.Windows.Forms.ComboBox();
-            this.btnAddCustomer = new System.Windows.Forms.Button();
-            this.lblCreateOrg = new System.Windows.Forms.Label();
             this.lblSaler = new System.Windows.Forms.Label();
+            this.lblCreateOrg = new System.Windows.Forms.Label();
+            this.lblCustomerName = new System.Windows.Forms.Label();
+            this.txtCustomerName = new System.Windows.Forms.TextBox();
+            this.btnAddCustomer = new System.Windows.Forms.Button();
+            this.btnSearch = new System.Windows.Forms.Button();
+            this.cbxSeller = new System.Windows.Forms.ComboBox();
+            this.cbxCreateOrg = new System.Windows.Forms.ComboBox();
+            this.gbxArea = new System.Windows.Forms.GroupBox();
+            this.btnAddADD = new System.Windows.Forms.Button();
+            this.lblProvince = new System.Windows.Forms.Label();
+            this.cbxProvince = new System.Windows.Forms.ComboBox();
+            this.cbxCity = new System.Windows.Forms.ComboBox();
+            this.txtDistrict = new System.Windows.Forms.TextBox();
+            this.lblCity = new System.Windows.Forms.Label();
+            this.lblDistrict = new System.Windows.Forms.Label();
             this.gbxReport.SuspendLayout();
             this.gbxCustomer.SuspendLayout();
+            this.gbxArea.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbxReport
@@ -83,10 +92,10 @@
             // 
             // txtFileDir
             // 
-            this.txtFileDir.Location = new System.Drawing.Point(89, 20);
+            this.txtFileDir.Location = new System.Drawing.Point(77, 20);
             this.txtFileDir.Name = "txtFileDir";
             this.txtFileDir.ReadOnly = true;
-            this.txtFileDir.Size = new System.Drawing.Size(264, 21);
+            this.txtFileDir.Size = new System.Drawing.Size(276, 21);
             this.txtFileDir.TabIndex = 1;
             // 
             // lblFile
@@ -94,9 +103,9 @@
             this.lblFile.AutoSize = true;
             this.lblFile.Location = new System.Drawing.Point(6, 23);
             this.lblFile.Name = "lblFile";
-            this.lblFile.Size = new System.Drawing.Size(77, 12);
+            this.lblFile.Size = new System.Drawing.Size(65, 12);
             this.lblFile.TabIndex = 0;
-            this.lblFile.Text = "导入新价格：";
+            this.lblFile.Text = "导入价格：";
             // 
             // gbxCustomer
             // 
@@ -115,33 +124,23 @@
             this.gbxCustomer.TabStop = false;
             this.gbxCustomer.Text = "客户";
             // 
-            // cbxCreateOrg
+            // lblSaler
             // 
-            this.cbxCreateOrg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxCreateOrg.Enabled = false;
-            this.cbxCreateOrg.FormattingEnabled = true;
-            this.cbxCreateOrg.Location = new System.Drawing.Point(89, 47);
-            this.cbxCreateOrg.Name = "cbxCreateOrg";
-            this.cbxCreateOrg.Size = new System.Drawing.Size(139, 20);
-            this.cbxCreateOrg.TabIndex = 0;
-            this.cbxCreateOrg.SelectedIndexChanged += new System.EventHandler(this.cbxCreateOrg_SelectedIndexChanged);
+            this.lblSaler.AutoSize = true;
+            this.lblSaler.Location = new System.Drawing.Point(222, 50);
+            this.lblSaler.Name = "lblSaler";
+            this.lblSaler.Size = new System.Drawing.Size(53, 12);
+            this.lblSaler.TabIndex = 3;
+            this.lblSaler.Text = "销售员：";
             // 
-            // btnSearch
+            // lblCreateOrg
             // 
-            this.btnSearch.Location = new System.Drawing.Point(359, 18);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnSearch.TabIndex = 1;
-            this.btnSearch.Text = "查询";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
-            // 
-            // txtCustomerName
-            // 
-            this.txtCustomerName.Location = new System.Drawing.Point(89, 20);
-            this.txtCustomerName.Name = "txtCustomerName";
-            this.txtCustomerName.Size = new System.Drawing.Size(264, 21);
-            this.txtCustomerName.TabIndex = 2;
+            this.lblCreateOrg.AutoSize = true;
+            this.lblCreateOrg.Location = new System.Drawing.Point(6, 50);
+            this.lblCreateOrg.Name = "lblCreateOrg";
+            this.lblCreateOrg.Size = new System.Drawing.Size(65, 12);
+            this.lblCreateOrg.TabIndex = 3;
+            this.lblCreateOrg.Text = "创建组织：";
             // 
             // lblCustomerName
             // 
@@ -152,15 +151,12 @@
             this.lblCustomerName.TabIndex = 3;
             this.lblCustomerName.Text = "客户全名：";
             // 
-            // cbxSeller
+            // txtCustomerName
             // 
-            this.cbxSeller.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbxSeller.Enabled = false;
-            this.cbxSeller.FormattingEnabled = true;
-            this.cbxSeller.Location = new System.Drawing.Point(293, 47);
-            this.cbxSeller.Name = "cbxSeller";
-            this.cbxSeller.Size = new System.Drawing.Size(60, 20);
-            this.cbxSeller.TabIndex = 0;
+            this.txtCustomerName.Location = new System.Drawing.Point(77, 20);
+            this.txtCustomerName.Name = "txtCustomerName";
+            this.txtCustomerName.Size = new System.Drawing.Size(276, 21);
+            this.txtCustomerName.TabIndex = 2;
             // 
             // btnAddCustomer
             // 
@@ -173,23 +169,115 @@
             this.btnAddCustomer.UseVisualStyleBackColor = true;
             this.btnAddCustomer.Click += new System.EventHandler(this.btnAddCustomer_Click);
             // 
-            // lblCreateOrg
+            // btnSearch
             // 
-            this.lblCreateOrg.AutoSize = true;
-            this.lblCreateOrg.Location = new System.Drawing.Point(6, 50);
-            this.lblCreateOrg.Name = "lblCreateOrg";
-            this.lblCreateOrg.Size = new System.Drawing.Size(65, 12);
-            this.lblCreateOrg.TabIndex = 3;
-            this.lblCreateOrg.Text = "创建组织：";
+            this.btnSearch.Location = new System.Drawing.Point(359, 18);
+            this.btnSearch.Name = "btnSearch";
+            this.btnSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnSearch.TabIndex = 1;
+            this.btnSearch.Text = "查询";
+            this.btnSearch.UseVisualStyleBackColor = true;
+            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
-            // lblSaler
+            // cbxSeller
             // 
-            this.lblSaler.AutoSize = true;
-            this.lblSaler.Location = new System.Drawing.Point(234, 50);
-            this.lblSaler.Name = "lblSaler";
-            this.lblSaler.Size = new System.Drawing.Size(53, 12);
-            this.lblSaler.TabIndex = 3;
-            this.lblSaler.Text = "销售员：";
+            this.cbxSeller.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxSeller.Enabled = false;
+            this.cbxSeller.FormattingEnabled = true;
+            this.cbxSeller.Location = new System.Drawing.Point(281, 47);
+            this.cbxSeller.Name = "cbxSeller";
+            this.cbxSeller.Size = new System.Drawing.Size(72, 20);
+            this.cbxSeller.TabIndex = 0;
+            // 
+            // cbxCreateOrg
+            // 
+            this.cbxCreateOrg.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxCreateOrg.Enabled = false;
+            this.cbxCreateOrg.FormattingEnabled = true;
+            this.cbxCreateOrg.Location = new System.Drawing.Point(77, 47);
+            this.cbxCreateOrg.Name = "cbxCreateOrg";
+            this.cbxCreateOrg.Size = new System.Drawing.Size(139, 20);
+            this.cbxCreateOrg.TabIndex = 0;
+            this.cbxCreateOrg.SelectedIndexChanged += new System.EventHandler(this.cbxCreateOrg_SelectedIndexChanged);
+            // 
+            // gbxArea
+            // 
+            this.gbxArea.Controls.Add(this.btnAddADD);
+            this.gbxArea.Controls.Add(this.lblDistrict);
+            this.gbxArea.Controls.Add(this.lblCity);
+            this.gbxArea.Controls.Add(this.lblProvince);
+            this.gbxArea.Controls.Add(this.txtDistrict);
+            this.gbxArea.Controls.Add(this.cbxProvince);
+            this.gbxArea.Controls.Add(this.cbxCity);
+            this.gbxArea.Location = new System.Drawing.Point(12, 176);
+            this.gbxArea.Name = "gbxArea";
+            this.gbxArea.Size = new System.Drawing.Size(440, 76);
+            this.gbxArea.TabIndex = 0;
+            this.gbxArea.TabStop = false;
+            this.gbxArea.Text = "地区";
+            // 
+            // btnAddADD
+            // 
+            this.btnAddADD.Location = new System.Drawing.Point(359, 47);
+            this.btnAddADD.Name = "btnAddADD";
+            this.btnAddADD.Size = new System.Drawing.Size(75, 23);
+            this.btnAddADD.TabIndex = 2;
+            this.btnAddADD.Text = "添加";
+            this.btnAddADD.UseVisualStyleBackColor = true;
+            this.btnAddADD.Click += new System.EventHandler(this.btnAddADD_Click);
+            // 
+            // lblProvince
+            // 
+            this.lblProvince.AutoSize = true;
+            this.lblProvince.Location = new System.Drawing.Point(42, 23);
+            this.lblProvince.Name = "lblProvince";
+            this.lblProvince.Size = new System.Drawing.Size(29, 12);
+            this.lblProvince.TabIndex = 0;
+            this.lblProvince.Text = "省：";
+            // 
+            // cbxProvince
+            // 
+            this.cbxProvince.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxProvince.FormattingEnabled = true;
+            this.cbxProvince.Location = new System.Drawing.Point(77, 20);
+            this.cbxProvince.Name = "cbxProvince";
+            this.cbxProvince.Size = new System.Drawing.Size(139, 20);
+            this.cbxProvince.TabIndex = 0;
+            this.cbxProvince.SelectedIndexChanged += new System.EventHandler(this.cbxProvince_SelectedIndexChanged);
+            // 
+            // cbxCity
+            // 
+            this.cbxCity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbxCity.FormattingEnabled = true;
+            this.cbxCity.Location = new System.Drawing.Point(257, 20);
+            this.cbxCity.Name = "cbxCity";
+            this.cbxCity.Size = new System.Drawing.Size(96, 20);
+            this.cbxCity.TabIndex = 0;
+            // 
+            // txtDistrict
+            // 
+            this.txtDistrict.Location = new System.Drawing.Point(77, 46);
+            this.txtDistrict.Name = "txtDistrict";
+            this.txtDistrict.Size = new System.Drawing.Size(139, 21);
+            this.txtDistrict.TabIndex = 1;
+            // 
+            // lblCity
+            // 
+            this.lblCity.AutoSize = true;
+            this.lblCity.Location = new System.Drawing.Point(222, 23);
+            this.lblCity.Name = "lblCity";
+            this.lblCity.Size = new System.Drawing.Size(29, 12);
+            this.lblCity.TabIndex = 0;
+            this.lblCity.Text = "市：";
+            // 
+            // lblDistrict
+            // 
+            this.lblDistrict.AutoSize = true;
+            this.lblDistrict.Location = new System.Drawing.Point(24, 52);
+            this.lblDistrict.Name = "lblDistrict";
+            this.lblDistrict.Size = new System.Drawing.Size(47, 12);
+            this.lblDistrict.TabIndex = 0;
+            this.lblDistrict.Text = "区/县：";
             // 
             // frmINOrder
             // 
@@ -197,6 +285,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 282);
             this.Controls.Add(this.gbxCustomer);
+            this.Controls.Add(this.gbxArea);
             this.Controls.Add(this.gbxReport);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(480, 320);
@@ -209,6 +298,8 @@
             this.gbxReport.PerformLayout();
             this.gbxCustomer.ResumeLayout(false);
             this.gbxCustomer.PerformLayout();
+            this.gbxArea.ResumeLayout(false);
+            this.gbxArea.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -229,5 +320,13 @@
         private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.ComboBox cbxSeller;
         private System.Windows.Forms.ComboBox cbxCreateOrg;
+        private System.Windows.Forms.GroupBox gbxArea;
+        private System.Windows.Forms.Button btnAddADD;
+        private System.Windows.Forms.Label lblProvince;
+        private System.Windows.Forms.Label lblCity;
+        private System.Windows.Forms.TextBox txtDistrict;
+        private System.Windows.Forms.ComboBox cbxProvince;
+        private System.Windows.Forms.ComboBox cbxCity;
+        private System.Windows.Forms.Label lblDistrict;
     }
 }

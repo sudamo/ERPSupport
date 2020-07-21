@@ -253,6 +253,24 @@ namespace ERPSupport.SQL
         }
 
         //DataTable
+        public static DataTable ExecuteTable(string pConnectionString, string pCommandText)
+        {
+            DataTable dt = new DataTable();
+            SqlConnection conn = new SqlConnection(pConnectionString);
+            try
+            {
+                conn.Open();
+                SqlDataAdapter adp = new SqlDataAdapter(pCommandText, conn);
+                adp.Fill(dt);
+            }
+            catch { return null; }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
+            }
+            return dt;
+        }
         public static DataTable ExecuteTable(string pCommandText)
         {
             DataTable dt = new DataTable();

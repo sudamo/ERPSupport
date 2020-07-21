@@ -30,7 +30,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void frmINOrder_Load(object sender, EventArgs e)
         {
-
+            FillComboBox();
         }
 
         /// <summary>
@@ -223,6 +223,47 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
+        private void btnAddADD_Click(object sender, EventArgs e)
+        {
+            int iParentId, iLevel;
+            string sFirstChar;
+            if (txtDistrict.Text.Trim().Equals(string.Empty))
+            {
+                MessageBox.Show("请输入行政区信息，如果没有市级信息，可以留空。");
+                return;
+            }
+            try
+            {
+                if (cbxCity != null && cbxCity.Items.Count > 0)
+                {
+                    iParentId = int.Parse(cbxCity.SelectedValue.ToString());
+                    iLevel = 2;
+                    sFirstChar = txtDistrict.Text.Substring(0, 1);
+                }
+                else
+                {
+                    iParentId = int.Parse(cbxProvince.SelectedValue.ToString());
+                    iLevel = 1;
+                    sFirstChar = txtDistrict.Text.Substring(0, 1);
+                }
+
+                MessageBox.Show(DALCreater.CommFunction.AddADD(iParentId, iLevel, sFirstChar, txtDistrict.Text));
+                //日志
+                SQL.K3Cloud.CommFunction.DM_Log_Local("新增地区", "项目->网上订单系统->新增地区", "新增地区信息");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                return;
+            }
+                
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cbxCreateOrg_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cbxCreateOrg == null || cbxCreateOrg.Items.Count == 0)
@@ -243,6 +284,47 @@ namespace ERPSupport.SupForm.Bussiness
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbxProvince_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbxProvince == null || cbxProvince.Items.Count == 0)
+                return;
+
+            int iParentId;
+            try
+            {
+                iParentId = int.Parse(cbxProvince.SelectedValue.ToString());
+            }
+            catch
+            {
+                return;
+            }
+
+            DataTable dt = DALCreater.CommFunction.GetChinaAddByParentId(iParentId);
+            DataRow dr = dt.NewRow();
+            dr["ID"] = 0;
+            dr["Name"] = "-请选择-";
+            dt.Rows.Add(dr);
+            int iSelectIndex = dt.Rows.Count;
+
+            FillComboBox(cbxCity, dt, "ID", "Name", iSelectIndex);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void FillComboBox()
+        {
+            DataTable dt = DALCreater.CommFunction.GetChinaAddByParentId();
+            if (dt == null || dt.Rows.Count == 0)
+                return;
+            FillComboBox(cbxProvince, dt, "ID", "Name");
+        }
+
+        /// <summary>
         /// 填充下拉框
         /// </summary>
         /// <param name="pComboBox">下拉框控件</param>
@@ -253,7 +335,12 @@ namespace ERPSupport.SupForm.Bussiness
         private void FillComboBox(ComboBox pComboBox, DataTable pDT, string pFValue, string pFName, int pSelectedIndex = 0)
         {
             if (pDT == null || pDT.Rows.Count == 0)
+            {
+                if (pComboBox != null && pComboBox.Items.Count > 0)
+                    pComboBox.Items.Clear();
+
                 return;
+            }
             try
             {
                 pComboBox.DataSource = pDT;
