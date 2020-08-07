@@ -1,0 +1,104 @@
+﻿using System;
+using System.Data;
+using System.Collections.Generic;
+
+namespace ERPSupport.IDAL.K3Cloud
+{
+    using Model.Enum;
+    using Model.K3Cloud;
+
+
+    public interface ICommFunction
+    {
+        string ConnectionCheck_ORA(string pConnectionString);
+        string ConnectionCheck_SQL(string pConnectionString);
+        int GetUserId(string pConnectionString, string pUserName);
+        DataTable GetUserInfoByName(string pConnectionString, string pUserName);
+        DataTable User();
+        DataTable GetBillType(string pFbillFormId);
+        int GetDepartIdByNumber(int pFUseOrgId, string pFNumber);
+        DataTable GetDepartment(int pType, int pUseOrgId, string pProperty);
+        List<string> GetPickMtlDepartment(int pUseOrgId = 100508);
+        int GetCustomerId(string pCustomerName, int pUseOrgId);
+        DataTable GetCustomerListByName(string pCostomerName);
+        DataTable GetSellerList(int pUseOrgId, int pType = 0);
+        int GetStockIdByNumber(int pFUseOrgId, string pFNumber);
+        DataTable GetStock(int pType = -1, int pUserOrgId = 100508);
+        string GetStockNumber(int pUseOrgId, string pFName);
+        DataTable GetOrganization(int pAcctype = 2, bool pIsContains = false);
+        DataTable GetOrganization(string pType);
+        DataTable GetAssistantDataEntryByFID(string pFID);
+        int ApplicationFlag(string pConnectionString, string pAppName);
+        List<string> GetNavigation();
+        DataTable GetNavigation(out string pRIDs, out string pMIDs, out string pFunctionIds);
+        int ChildNumber(string pParentId);
+        DataTable GetLockObjectInfo(string pCategory);
+        object GetLockObjectInfo(string pCategory, int pStatus);
+        void UpdateLockStatus(int pStatus, string pCategory);
+        DataTable DM_LockObjectInfo(string pCategory);
+        void DM_LockObject_Add(string pObName, string pFType, string pDescription, string pCategory);
+        int SolutionName(string pName);
+        DataTable GetSolution(FormID pFormID);
+        DataTable GetSolution(string pName);
+        void SaveSolution(string pName, bool pIsShare, string pContent, int pRows, FormID pFromID);
+        void UpdateSolution(string pName, string pContent, int pRows);
+        void DelSolution(string pName);
+        DataTable NumberMatch(string pType);
+        bool NumberMatchExists(string pType, string pNumber);
+        bool NumberMatchExists(string pType, int pFID, string pNumber);
+        bool NumberMatchExists(string pType, string pNumber, int pLength, string pTypeName);
+        bool NumberMatchExists(string pType, int pFID, string pNumber, int pLength, string pTypeName);
+        void AddNumberMatch(string pNumber, int pLength, string pType, string pTypeNumber, string pTypeName, string pDescription, string pIsMatch);
+        void UpdateNumberMatch(int pFID, string pNumber, int pLength, string pTypeName);
+        void UpdateNumberMatch(int pFID, string pNumber, string pDescription, string pIsMatch);
+        void DelNumberMatch(int pFID);
+        DataTable CalculateStock(string pType, int pIndex, int pUserOrgId);
+        bool CalculateNumberExists(string pType, int pSEQ, string pNumber);
+        void AddCalculateStock(string pType, int pSEQ, int pStockId, string pStockNumber, string pStockName);
+        void UpdateCalculateStock(int pFID);
+        void SaveCalculateStock(DataTable pDataTable);
+        DataTable Log_OrderLock(int pIndex, string pFBillNo, string pYSD, DateTime pFrom, DateTime pTo, string pFFLAG, string pMaterialiNo);
+        DataTable AssistantData();
+        DataTable ExceptionRecord();
+        DataTable ExceptionRecord(int pType, string pTypeValue, int pOperator, string pOperatorValue, string pFNumber, string pBarcode, string pCompany, DateTime pFrom, DateTime pTo, bool pSucc, bool pFailed);
+        DataTable PickMTLDepartment();
+        bool PickMTLDeptExists(string pFNumber);
+        void AddPickMTLDept(string pDeptId, string pFNumber, string pFName, string pUseOrgId);
+        void DelPickMTLDept(string pFNumber);
+        DataTable BOMQuery(int pType, string pFilter);
+        DataTable MTL203(string pFilter);
+        DataTable Role(int pType);
+        bool RoleExists(string pRName);
+        void AddRole(string pRName, string pMids, string pFunctionIds);
+        void UpdateRole(string pRName, string pMids, string pFunctionIds);
+        void DelRole(string pRName);
+        DataTable GetRoleByRIDS(string pRIDS);
+        object GetRIDSByUserId(string pUserId);
+        DataTable User_Role(string pRID);
+        bool User_RoleExists(string pUserId);
+        void AddUser_Role(string pUserId, string pRIDS);
+        void UpdateUser_Role(string pUserId, string pRIDS);
+        DataTable Navigation();
+        DataTable Navigation(int pParentId);
+        bool CheckMAC();
+        DataTable GetDM_Log_Local(string pUser, DateTime pDate);
+        void DM_Log_Local(string pOName, string pONavi, string pOContent, string pFlag = "1");
+        DataTable GetDM_Dir_Stock();
+        string AddDM_Dir_Stock(int pOutStockId, int pInStockId);
+        string EditDM_Dir_Stock(int pOutStockId, int pInStockId, int pPID);
+        void DelDM_Dir_Stock(int pPID);
+        void SynBarcodr(string pType, string pFBillNo, string pBarcodes);
+        DataTable ERPLog(string pUser, DateTime pDate);
+        void SynMTLForWMS(bool pIsAll, string pFNumber);
+        int GetMTLIDByNumber(int pFUseOrgId, string pFNumber);
+        string GetMTLByMTLNumber(string pFNumber, int pUseOrgId = 100508);
+        void UpdateMTLPara(MaterialParameter pMTLPara, int pMaterialId);
+        DataTable MStockSetting(string pMTLFNumber);
+        void AddMStockSetting(string pMaterialID, string pMaterialNumber, string pDeptID, string pDeptNumber, string pStockID, string pStockNumber);
+        void UpdateMStockSetting(string pFID, string pFName, string pFNameTran);
+        void DeleteMStockSetting(List<string> pFIDs);
+        void DelMStockSetting();
+        string GetLocalIP();
+        string GetMac();
+    }
+}

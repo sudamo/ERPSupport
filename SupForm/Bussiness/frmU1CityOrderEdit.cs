@@ -7,6 +7,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using DALFactory.K3Cloud;
+
     /// <summary>
     /// UiCity对接单据调整
     /// </summary>
@@ -42,14 +44,14 @@ namespace ERPSupport.SupForm.Bussiness
         private void FillComboBox()
         {
             DataTable dt, dt2;
-            dt = SQL.K3Cloud.CommFunction.GetOrganization();
+            dt = DALCreator.CommFunction.GetOrganization();
 
             cbxFacOrg.DataSource = dt;
             cbxFacOrg.DisplayMember = "FNAME";
             cbxFacOrg.ValueMember = "FVALUE";
             cbxFacOrg.SelectedIndex = 24;
 
-            dt2 = SQL.K3Cloud.CommFunction.GetOrganization();
+            dt2 = DALCreator.CommFunction.GetOrganization();
             cbxSaleOrg.DataSource = dt2;
             cbxSaleOrg.DisplayMember = "FNAME";
             cbxSaleOrg.ValueMember = "FVALUE";
@@ -72,7 +74,7 @@ namespace ERPSupport.SupForm.Bussiness
                 }
                 catch { return; }
 
-                DataTable dt = SQL.K3Cloud.CommFunction.GetDepartment(5, iOrgId, null);
+                DataTable dt = DALCreator.CommFunction.GetDepartment(5, iOrgId, null);
                 if (dt == null)
                     return;
 
@@ -80,7 +82,7 @@ namespace ERPSupport.SupForm.Bussiness
                 cbxDep.DisplayMember = "FNAME";
                 cbxDep.ValueMember = "FVALUE";
 
-                dt = SQL.K3Cloud.CommFunction.GetSellerList(iOrgId);
+                dt = DALCreator.CommFunction.GetSellerList(iOrgId);
                 if (dt == null)
                     return;
 
@@ -149,7 +151,7 @@ namespace ERPSupport.SupForm.Bussiness
                 if (FBillNo != "")
                 {
                     list.Add(FBillNo);
-                    FBillNos += FBillNos;
+                    FBillNos += FBillNo;
                 }
             }
 
@@ -163,10 +165,10 @@ namespace ERPSupport.SupForm.Bussiness
             }
             catch { goto A; }
 
-            SQL.K3Cloud.SalOrder.UpdateUiCityOrders(iFacOrg, iSaleOrg, iDep, iSaler, list);
+            DALFactory.K3Cloud.DALCreator.SalOrder.UpdateUiCityOrders(iFacOrg, iSaleOrg, iDep, iSaler, list);
             //日志
             string strMessage = string.Format("调整U1City销售订单:", FBillNos);
-            SQL.K3Cloud.CommFunction.DM_Log_Local("单据信息调整", "辅助功能//配置//单据信息调整", strMessage);
+            DALCreator.CommFunction.DM_Log_Local("单据信息调整", "辅助功能//配置//单据信息调整", strMessage);
 
             A:
             myApp.Quit();

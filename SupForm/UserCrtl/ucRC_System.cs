@@ -6,8 +6,6 @@ using System.Collections.Generic;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// ERP日志
     /// </summary>
@@ -66,7 +64,7 @@ namespace ERPSupport.SupForm.UserCrtl
                     return;
                 }
 
-                dt = CommFunction.ERPLog(bnTop_txtUser.Text.Trim(), _date.Value);
+                dt = DALFactory.K3Cloud.DALCreator.CommFunction.ERPLog(bnTop_txtUser.Text.Trim(), _date.Value);
                 if (dt.Rows.Count > 0)
                     dgv1.DataSource = dt;
                 else
@@ -74,7 +72,7 @@ namespace ERPSupport.SupForm.UserCrtl
             }
             else if (_RecordType == "ASSISTANT")
             {
-                dt = CommFunction.GetDM_Log_Local(bnTop_txtUser.Text.Trim(), _date.Value);
+                dt = DALFactory.K3Cloud.DALCreator.CommFunction.GetDM_Log_Local(bnTop_txtUser.Text.Trim(), _date.Value);
                 if (dt.Rows.Count > 0)
                     dgv1.DataSource = dt;
                 else

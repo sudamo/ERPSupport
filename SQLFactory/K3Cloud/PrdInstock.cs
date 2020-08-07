@@ -2,31 +2,29 @@
 
 namespace ERPSupport.SQL.K3Cloud
 {
+    using IDAL.K3Cloud;
+
     /// <summary>
     /// 生产入库
     /// </summary>
-    public static class PrdInstock
+    public class PrdInstock : IPrdInstock
     {
-        #region STATIC
         private static string _SQL;
-        //private static object _obj;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        static PrdInstock()
+        public PrdInstock()
         {
             _SQL = string.Empty;
-            //_obj = new object();
         }
-        #endregion
 
         /// <summary>
         /// 根据BIllNo获取信息
         /// </summary>
         /// <param name="pBillNo">入库单编号</param>
         /// <returns></returns>
-        public static DataTable GetInfo(string pBillNo)
+        public DataTable GetInfo(string pBillNo)
         {
             //_SQL = @"SELECT DISTINCT C.BARCODE 条码,C.CREATEDATE 日期,D.FNUMBER 物料编码,DL.FNAME 物料名称
             //FROM T_PRD_INSTOCK A
@@ -41,12 +39,11 @@ namespace ERPSupport.SQL.K3Cloud
             return null;
         }
 
-
         /// <summary>
         /// 同步条码仓库
         /// </summary>
         /// <param name="pBillNo">入库单编号</param>
-        public static void UpdateBarcode(string pBillNo)
+        public void UpdateBarcode(string pBillNo)
         {
             //_SQL = @"UPDATE C##BARCODE2.PM_BARCODE
             //SET KDINSTOCKID = (SELECT FID FROM T_PRD_INSTOCK WHERE FBILLNO = '" + pBillNo + @"'),INSTOCKSTATUS = 1
@@ -67,7 +64,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pPlanStartDate">计划开工日期</param>
         /// <param name="pFormId">业务标识</param>
         /// <returns></returns>
-        public static DataTable GetMo(string pPlanStartDate, Model.Enum.FormID pFormId)
+        public DataTable GetMo(string pPlanStartDate, Model.Enum.FormID pFormId)
         {
             string strOrg;
             switch (pFormId)

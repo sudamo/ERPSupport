@@ -106,19 +106,21 @@ namespace ERPSupport.SQL.INOrder
             _SQL = "BEGIN TRANSACTION ";
             _SQL += " DECLARE @Code INT ";
             _SQL += string.Format(" SELECT @Code = MAX(CODE) + 1 FROM PO_ChinaCity WHERE Parent_id = {0}; ", pParentId);
+            _SQL += " IF EXISTS(SELECT Name FROM PO_ChinaCity WHERE Parent_id = 284 AND Name = '市中区') ";
+            _SQL += string.Format(" SELECT '已经存在[' + '{0}' + ']请不要重复添加' ", pName);
+            _SQL += " ELSE BEGIN ";
             _SQL += " INSERT INTO PO_ChinaCity(Code,Name,Parent_id,First_letter,Level) ";
             _SQL += string.Format(" VALUES(@Code, '{0}', {1}, '{2}', {3}); ", pName, pParentId, sFirstLetter, pLevel);
-            _SQL += @"
-            IF @@ERROR = 0
-            BEGIN
-	            COMMIT
-	            SELECT '添加成功'
-            END
-            ELSE
-            BEGIN
-	            ROLLBACK
-	            SELECT '添加出错 请联系管理员'
-            END";
+            _SQL += " IF @@ERROR = 0 ";
+            _SQL += " BEGIN ";
+            _SQL += " COMMIT ";
+            _SQL += " SELECT '添加成功' ";
+            _SQL += " END ";
+            _SQL += " ELSE ";
+            _SQL += " BEGIN ";
+            _SQL += " ROLLBACK ";
+            _SQL += " SELECT '添加出错 请联系管理员' ";
+            _SQL += " END END";
             return SQLHelper.ExecuteScalar(_ConnectionString, _SQL).ToString();
         }
 

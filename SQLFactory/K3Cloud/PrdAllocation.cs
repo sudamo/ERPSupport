@@ -9,11 +9,12 @@ using Kingdee.BOS.WebApi.Client;
 namespace ERPSupport.SQL.K3Cloud
 {
     using Model.Globa;
+    using IDAL.K3Cloud;
 
     /// <summary>
     /// 调拨
     /// </summary>
-    public static class PrdAllocation
+    public class PrdAllocation : IPrdAllocation
     {
         #region STATIC
         private static string _SQL;
@@ -22,13 +23,13 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 构造函数
         /// </summary>
-        static PrdAllocation()
+        public PrdAllocation()
         {
             _SQL = string.Empty;
             _obj = new object();
         }
         #endregion
-        
+
         /// <summary>
         /// 获取调拨单数据-PZ-WMS
         /// </summary>
@@ -36,7 +37,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pStockID">调出仓库</param>
         /// <param name="pDeptID">领料部门</param>
         /// <returns></returns>
-        public static DataTable GetTransPZ(string pFNeedDate, int pStockID, int pDeptID)//盆子仓
+        public DataTable GetTransPZ(string pFNeedDate, int pStockID, int pDeptID)//盆子仓
         {
             _SQL = string.Format("SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称 ");
             _SQL += string.Format(" , AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称 ");
@@ -98,7 +99,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDeptID">领料部门</param>
         /// <param name="pCondition">指定条件</param>
         /// <returns></returns>
-        public static DataTable GetTransCL(string pFNeedDate, int pStockID, int pDeptID, string pCondition)
+        public DataTable GetTransCL(string pFNeedDate, int pStockID, int pDeptID, string pCondition)
         {
             _SQL = string.Format("SELECT AC.FOWNERID 货主,NVL(ORG.FNUMBER, 'HN02') 货主编码,NVL(ORGL.FNAME, '河南工厂') 货主名称, AC.FOWNERTYPEID 货主类型,AE.FMATERIALID 物料,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称 ");
             _SQL += string.Format(" ,AE.FUNITID 单位,UNT.FNUMBER 单位编码,UNTL.FNAME 单位名称,MOE.FWORKSHOPID 领料部门,DEP.FNUMBER 领料部门编码,DEPL.FNAME 领料部门名称 ");
@@ -163,7 +164,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pCondition">指定条件</param>
         /// <param name="pIsTran">是否存在中间仓调拨</param>
         /// <returns></returns>
-        public static DataTable GetTransCL(string pFNeedDate, int pStockID, int pDeptID, string pCondition, bool pIsTran, int pOrgId = 100508)//根据仓库属性-是否汇总 判断汇总信息。
+        public DataTable GetTransCL(string pFNeedDate, int pStockID, int pDeptID, string pCondition, bool pIsTran, int pOrgId = 100508)//根据仓库属性-是否汇总 判断汇总信息。
         {
             if (pIsTran)
             {
@@ -288,7 +289,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDataTable">数据表</param>
         /// <param name="pDate">日期</param>
         /// <returns></returns>
-        public static string TransferDirERP(DataTable pDataTable, DateTime pDate, Model.Enum.FormID pFormId = Model.Enum.FormID.PRD_PPBOM)
+        public string TransferDirERP(DataTable pDataTable, DateTime pDate, Model.Enum.FormID pFormId = Model.Enum.FormID.PRD_PPBOM)
         {
             if (pDataTable.Rows.Count <= 0)
                 return "";
@@ -415,7 +416,7 @@ namespace ERPSupport.SQL.K3Cloud
                 }
             }
 
-            return strPMBillNO;            
+            return strPMBillNO;
         }
 
         /// <summary>
@@ -423,7 +424,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFilter"></param>
         /// <returns></returns>
-        public static DataTable GetTransForP(string pFilter)
+        public DataTable GetTransForP(string pFilter)
         {
             _SQL = @"SELECT 0 chb,O.* FROM
             (
@@ -481,13 +482,13 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pList">发货通知单号</param>
         /// <returns></returns>
-        public static DataTable GetTransForP(List<string> pList)
+        public DataTable GetTransForP(List<string> pList)
         {
             if (pList == null || pList.Count == 0)
                 return new DataTable();
 
             string strBillNos = string.Empty;
-            for(int i=0;i<pList.Count;i++)
+            for (int i = 0; i < pList.Count; i++)
             {
                 if (i > 0)
                     strBillNos += ",";
@@ -538,7 +539,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pList">部门和日期</param>
         /// <param name="pIsDepart">是否按照调出仓库分单</param>
         /// <returns></returns>
-        public static string TransferDir(DataTable pDataTable, List<string> pList, bool pIsDepart)
+        public string TransferDir(DataTable pDataTable, List<string> pList, bool pIsDepart)
         {
             if (pDataTable == null || pDataTable.Rows.Count == 0)
                 return "";
@@ -718,7 +719,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFNeedDate">需求日期</param>
         /// <param name="pList">已弃用</param>
-        public static void UpdateDirFieldsCL(string pFNeedDate, int pOrgId = 100508)
+        public void UpdateDirFieldsCL(string pFNeedDate, int pOrgId = 100508)
         {
             _SQL = string.Format("UPDATE T_PRD_PPBOMENTRY ");
             _SQL += string.Format(" SET FPAEZHAVEDIRECT = 1,F_PAEZ_PICKTOWMS = 1 ");
@@ -744,7 +745,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pDateTime">开工日期</param>
         /// <returns></returns>
-        public static bool SetDefaultStock(DateTime pDateTime, Model.Enum.FormID pFormId)
+        public bool SetDefaultStock(DateTime pDateTime, Model.Enum.FormID pFormId)
         {
             string strOrg;
             switch (pFormId)
@@ -784,7 +785,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFrom">开始时间</param>
         /// <param name="pTo">结束时间</param>
         /// <returns></returns>
-        public static int Asyn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo)
+        public int Asyn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo)
         {
             _SQL = string.Format("SELECT COUNT(BE.FENTRYID) ");
             _SQL += string.Format(" FROM T_PRD_PPBOM A ");
@@ -801,7 +802,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFrom">开始时间</param>
         /// <param name="pTo">结束时间</param>
-        public static void Syn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo)
+        public void Syn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo)
         {
             _SQL = string.Format("UPDATE T_PRD_PPBOMENTRY AE SET FNEEDDATE = ( ");
             _SQL += string.Format(" SELECT FPLANSTARTDATE  ");
@@ -815,7 +816,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 物料默认设置-中间仓调整
         /// </summary>
-        public static void UpdateMST_Tran()
+        public void UpdateMST_Tran()
         {
             _SQL = string.Format("BEGIN ");
             _SQL += string.Format(" UPDATE T_AUTO_MSTOCKSETTING SET FSTOCKID = 467795671,FSTOCKNUMBER = 'HWL29',FTRANSTOCKID = 897782,FMODIFYDATE = SYSDATE WHERE FSTOCKID = 897782; ");
@@ -830,7 +831,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDataTable">数据源</param>
         /// <param name="pDate">单据日期</param>
         /// <returns></returns>
-        public static string TransferDir(DataTable pDataTable, string pDate)
+        public string TransferDir(DataTable pDataTable, string pDate)
         {
             if (pDataTable == null || pDataTable.Rows.Count <= 0)
                 return "";
@@ -947,7 +948,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDate">单据日期</param>
         /// <param name="pIsTran">用于区别没有中间仓方法</param>
         /// <returns></returns>
-        public static string TransferDir(DataTable pDataTable, string pDate, bool pIsTran)
+        public string TransferDir(DataTable pDataTable, string pDate, bool pIsTran)
         {
             if (pDataTable == null || pDataTable.Rows.Count <= 0)
                 return "";
@@ -1062,7 +1063,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pBillNo">产用料清单单号</param>
         /// <returns></returns>
-        public static DataTable GetPPBomByBillNo(string pBillNo)
+        public DataTable GetPPBomByBillNo(string pBillNo)
         {
             _SQL = @"SELECT AE.FENTRYID,MTL.FNUMBER 产品编码,BOM.FNUMBER BOM版本,MTLL.FNAME 产品名称,ORGL.FNAME 生产组织,DEPL.FNAME 生产车间,UNTL.FNAME 单位,A.FQTY 数量
                 ,MO.FBILLNO 生产订单编号,CASE MOA.FSTATUS WHEN '1' THEN '计划' WHEN '2' THEN '计划确认' WHEN '3' THEN '下达' WHEN '4' THEN '开工' WHEN '5' THEN '完工' WHEN '6' THEN '结案' WHEN '7' THEN '结算' END 生产订单状态,MOE.FSEQ 生产订单行号
@@ -1096,7 +1097,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pMustQty">应发数量</param>
         /// <param name="pNeedDate">需求日期</param>
         /// <returns></returns>
-        public static void UpdatePPBom(bool pSyn, bool pType, int pFEntryId, string pMTLNumber, string pNewMTLNumber, decimal pFZ, decimal pMustQty, DateTime pNeedDate)
+        public void UpdatePPBom(bool pSyn, bool pType, int pFEntryId, string pMTLNumber, string pNewMTLNumber, decimal pFZ, decimal pMustQty, DateTime pNeedDate)
         {
             if (pSyn)
             {
@@ -1121,7 +1122,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pMoBillNos">生产订单编号</param>
         /// <param name="pDir">是否生成调拨单</param>
-        public static void UpdatePPBom(string pMoBillNos, bool pDir)
+        public void UpdatePPBom(string pMoBillNos, bool pDir)
         {
             if (pDir)
                 _SQL = @"UPDATE T_PRD_PPBOMENTRY
@@ -1163,7 +1164,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFDate"></param>
         /// <param name="pFBillNo"></param>
         /// <returns></returns>
-        public static DataTable GetNotice(DateTime pFDate, string pFBillNo)
+        public DataTable GetNotice(DateTime pFDate, string pFBillNo)
         {
             _SQL = @"SELECT 0 CHB,A.FDATE 日期,A.FBILLNO 单据编号,CASE A.FDOCUMENTSTATUS WHEN 'A' THEN '创建' WHEN 'B' THEN '审核中' WHEN 'C' THEN '已审核' WHEN 'D' THEN '重新审核' WHEN 'Z' THEN '暂存' END 数据状态,CUSTL.FNAME 客户
                 ,MTL.FNUMBER 物料代码,MTLL.FNAME 物料名称,UNTL.FNAME 单位名称,AE.FQTY 发货通知数量
@@ -1195,7 +1196,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 反写发货通知单关联调拨数量
         /// </summary>
         /// <param name="pList"></param>
-        public static void UpdateNotice(List<string> pList)
+        public void UpdateNotice(List<string> pList)
         {
             string strBillNos = string.Empty;
             for (int i = 0; i < pList.Count; i++)
@@ -1211,6 +1212,51 @@ namespace ERPSupport.SQL.K3Cloud
             END;";
 
             ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 获取WMS系统所有仓位
+        /// </summary>
+        /// <returns></returns>
+        public DataTable GetWMSSP()
+        {
+            _SQL = "SELECT FNUMBER 物料编码,FNAME 物料名称,PNUMBER 仓位,SNAME 仓库,FMATERIALID FROM V_DM_MTLPosition ORDER BY FNUMBER,PNUMBER";
+
+            return SQLHelper.ExecuteTable(_SQL);
+        }
+
+
+        /// <summary>
+        /// 同步物料的仓位到ERP
+        /// </summary>
+        /// <param name="pData"></param>
+        public void SynSPToERP(DataTable pData)
+        {
+            int iTimes = 1;
+            _SQL = "BEGIN ";
+
+            for (int i = 0; i < pData.Rows.Count; i++)
+            {
+                if (i < 200 * iTimes)
+                {
+                    _SQL += string.Format(" UPDATE T_BD_MATERIAL SET F_m_stockplosition = '{0}' WHERE FMATERIALID = {1}; ", pData.Rows[i]["仓位"].ToString(), pData.Rows[i]["FMATERIALID"].ToString());
+
+                    if (i == pData.Rows.Count - 1)//当前是最后一条数据，提交SQL
+                    {
+                        _SQL += " END;";
+                        ORAHelper.ExecuteNonQuery(_SQL);
+                        return;
+                    }
+                }
+                else
+                {
+                    _SQL += " END;";
+                    ORAHelper.ExecuteNonQuery(_SQL);//提交前一批SQL
+
+                    iTimes++;
+                    _SQL = "BEGIN ";
+                }
+            }
         }
     }
 }

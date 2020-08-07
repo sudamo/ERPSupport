@@ -8,7 +8,7 @@ namespace ERPSupport.DALFacorty.INOrder
     /// <summary>
     /// Factory
     /// </summary>
-    public static class DALCreater
+    public static class DALCreator
     {
         public static IOrder CommFunction
         {

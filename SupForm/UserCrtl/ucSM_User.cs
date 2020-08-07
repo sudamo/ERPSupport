@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 用户
@@ -53,12 +53,12 @@ namespace ERPSupport.SupForm.UserCrtl
             _Count = 0;
             _Name = string.Empty;
             _UserId = string.Empty;
-            dgv1.DataSource = CommFunction.User();
+            dgv1.DataSource = DALCreator.CommFunction.User();
             dgv1.Columns[0].Visible = false;
 
             //填充角色到libRole
             _dtRole = new DataTable();
-            _dtRole = CommFunction.Role(0);
+            _dtRole = DALCreator.CommFunction.Role(0);
             for (int i = 0; i < _dtRole.Rows.Count; i++)
             {
                 libRole.Items.Add(_dtRole.Rows[i]["RNAME"].ToString());
@@ -85,11 +85,11 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 grbRole.Text = dgv1.CurrentRow.Cells[1].Value.ToString();
                 _UserId = dgv1.CurrentRow.Cells[0].Value.ToString();
-                object o = CommFunction.GetRIDSByUserId(_UserId);
+                object o = DALCreator.CommFunction.GetRIDSByUserId(_UserId);
                 if (o != null && o.ToString().Trim() != string.Empty)
                 {
                     _dtOwn = new DataTable();
-                    _dtOwn = CommFunction.GetRoleByRIDS(o.ToString());
+                    _dtOwn = DALCreator.CommFunction.GetRoleByRIDS(o.ToString());
                     for (int i = 0; i < _dtOwn.Rows.Count; i++)
                     {
                         libOwn.Items.Add(_dtOwn.Rows[i]["RNAME"].ToString());//填充已分配的角色到libOwn
@@ -151,13 +151,13 @@ namespace ERPSupport.SupForm.UserCrtl
                 }
             }
 
-            if (!CommFunction.User_RoleExists(_UserId))//未曾分配角色，新增
+            if (!DALCreator.CommFunction.User_RoleExists(_UserId))//未曾分配角色，新增
             {
-                CommFunction.AddUser_Role(_UserId, sRIDS);
+                DALCreator.CommFunction.AddUser_Role(_UserId, sRIDS);
             }
             else
             {
-                CommFunction.UpdateUser_Role(_UserId, sRIDS);
+                DALCreator.CommFunction.UpdateUser_Role(_UserId, sRIDS);
             }
 
             //操作日志
@@ -174,7 +174,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 }
                 strContent += "]";
             }
-            CommFunction.DM_Log_Local("用户管理", "系统管理\\用户管理", strContent);
+            DALCreator.CommFunction.DM_Log_Local("用户管理", "系统管理\\用户管理", strContent);
             MessageBox.Show("保存成功！");
         }
 

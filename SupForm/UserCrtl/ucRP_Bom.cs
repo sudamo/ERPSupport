@@ -7,8 +7,6 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// 物料清单报表
     /// </summary>
@@ -156,7 +154,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <param name="e"></param>
         private void bnTop_btnSearch_Click(object sender, EventArgs e)
         {
-            DataTable dt = CommFunction.BOMQuery(_Type, SetFilter());
+            DataTable dt = DALFactory.K3Cloud.DALCreator.CommFunction.BOMQuery(_Type, SetFilter());
             if (dt == null || dt.Rows.Count == 0)
                 return;
 

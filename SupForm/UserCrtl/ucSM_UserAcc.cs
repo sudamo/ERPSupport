@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
     using Model.Globa;
 
     /// <summary>
@@ -44,7 +44,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void SetDataSource()
         {
-            dgv1.DataSource = CommFunction.Role(1);
+            dgv1.DataSource = DALCreator.CommFunction.Role(1);
             dgv1.Columns[0].Visible = false;
             dgv1.Columns[2].Visible = false;
             dgv1.Columns[3].Visible = false;
@@ -57,7 +57,7 @@ namespace ERPSupport.SupForm.UserCrtl
         private void BindNode()
         {
             DataTable dt = new DataTable();
-            dt = CommFunction.Navigation();
+            dt = DALCreator.CommFunction.Navigation();
             if (dt.Rows.Count == 0) return;
 
             TreeNode root = new TreeNode();
@@ -112,7 +112,7 @@ namespace ERPSupport.SupForm.UserCrtl
         private void BingChildNode(int pNodeId, TreeNode pNode)
         {
             DataTable dt = new DataTable();
-            dt = CommFunction.Navigation(pNodeId);
+            dt = DALCreator.CommFunction.Navigation(pNodeId);
             if (dt.Rows.Count == 0) return;
             for (int i = 0; i < dt.Rows.Count; i++)
             {
@@ -254,7 +254,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 return;
             }
 
-            if (CommFunction.RoleExists(txtRoleName.Text.Trim()))
+            if (DALCreator.CommFunction.RoleExists(txtRoleName.Text.Trim()))
             {
                 lblPrompt.Text = "角色名已经存在";
                 return;
@@ -321,9 +321,9 @@ namespace ERPSupport.SupForm.UserCrtl
 
             if (strMids.Trim().Equals(string.Empty)) strMids = " ";
 
-            CommFunction.AddRole(txtRoleName.Text.Trim(), strMids, sFunctionIds);
+            DALCreator.CommFunction.AddRole(txtRoleName.Text.Trim(), strMids, sFunctionIds);
             //操作日志
-            CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "创建角色:" + txtRoleName.Text.Trim());
+            DALCreator.CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "创建角色:" + txtRoleName.Text.Trim());
             MessageBox.Show("创建角色成功");
             SetDataSource();
         }
@@ -344,9 +344,9 @@ namespace ERPSupport.SupForm.UserCrtl
             string strName = dgv1.CurrentRow.Cells[1].Value.ToString();
             if (MessageBox.Show("是否删除角色：" + strName, "删除角色", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                CommFunction.DelRole(strName);
+                DALCreator.CommFunction.DelRole(strName);
                 //操作日志
-                CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "删除角色:" + strName);
+                DALCreator.CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "删除角色:" + strName);
                 SetDataSource();
             }
         }
@@ -363,7 +363,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 //填充用户
                 string sRID = dgv1.CurrentRow.Cells[0].Value.ToString();
                 lblUserList.Text = "分配用户：\r\n";
-                DataTable dt = CommFunction.User_Role(sRID);
+                DataTable dt = DALCreator.CommFunction.User_Role(sRID);
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
@@ -511,9 +511,9 @@ namespace ERPSupport.SupForm.UserCrtl
             if (strMids.Trim().Equals(string.Empty)) strMids = " ";
             if (sFunctionIds.Trim().Equals(string.Empty)) sFunctionIds = " ";
 
-            CommFunction.UpdateRole(strName, strMids, sFunctionIds);
+            DALCreator.CommFunction.UpdateRole(strName, strMids, sFunctionIds);
             //操作日志
-            CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "修改角色:[" + strName + "]" + strMids + "|" + sFunctionIds);
+            DALCreator.CommFunction.DM_Log_Local("权限分配", "系统管理\\权限分配", "修改角色:[" + strName + "]" + strMids + "|" + sFunctionIds);
             MessageBox.Show("保存成功");
             SetDataSource();
         }

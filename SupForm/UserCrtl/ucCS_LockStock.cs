@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 锁库仓库
@@ -57,7 +57,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void FillComboBox()
         {
-            bnTop_cbxOrg.ComboBox.DataSource = CommFunction.GetOrganization("LOCKSTOCK");
+            bnTop_cbxOrg.ComboBox.DataSource = DALCreator.CommFunction.GetOrganization("LOCKSTOCK");
             bnTop_cbxOrg.ComboBox.DisplayMember = "FName";
             bnTop_cbxOrg.ComboBox.ValueMember = "FValue";
 
@@ -70,9 +70,9 @@ namespace ERPSupport.SupForm.UserCrtl
         private void FillStock()
         {
             if (bnTop_cbxOrg.SelectedIndex == 0)
-                bnTop_cbxStock.ComboBox.DataSource = CommFunction.GetStock(1);
+                bnTop_cbxStock.ComboBox.DataSource = DALCreator.CommFunction.GetStock(1);
             else
-                bnTop_cbxStock.ComboBox.DataSource = CommFunction.GetStock(2, int.Parse(bnTop_cbxOrg.ComboBox.SelectedValue.ToString()));
+                bnTop_cbxStock.ComboBox.DataSource = DALCreator.CommFunction.GetStock(2, int.Parse(bnTop_cbxOrg.ComboBox.SelectedValue.ToString()));
 
             bnTop_cbxStock.ComboBox.DisplayMember = "FName";
             bnTop_cbxStock.ComboBox.ValueMember = "FValue";
@@ -83,7 +83,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void SetDataSource()
         {
-            _dtSource = CommFunction.CalculateStock(_Type, bnTop_cbxOrg.SelectedIndex, bnTop_cbxOrg.SelectedIndex == 0 ? 0 : int.Parse(bnTop_cbxOrg.ComboBox.SelectedValue.ToString()));
+            _dtSource = DALCreator.CommFunction.CalculateStock(_Type, bnTop_cbxOrg.SelectedIndex, bnTop_cbxOrg.SelectedIndex == 0 ? 0 : int.Parse(bnTop_cbxOrg.ComboBox.SelectedValue.ToString()));
             dgv1.DataSource = _dtSource;
             dgv1.Columns[3].Visible = false;
         }
@@ -209,14 +209,14 @@ namespace ERPSupport.SupForm.UserCrtl
             strStockNo = strStockNo.Substring(0, strStockNo.IndexOf("|"));//获取仓库名称
 
             //唯一性检查
-            if (CommFunction.CalculateNumberExists(_Type, iSEQ, strStockNo))
+            if (DALCreator.CommFunction.CalculateNumberExists(_Type, iSEQ, strStockNo))
             {
                 MessageBox.Show("序号或仓库是唯一，不能重复录入。");
                 return;
             }
 
             //新增记录
-            CommFunction.AddCalculateStock(_Type, iSEQ, iStockId, strStockNo, strStockName);
+            DALCreator.CommFunction.AddCalculateStock(_Type, iSEQ, iStockId, strStockNo, strStockName);
 
             //操作日志
             string OName;
@@ -224,7 +224,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 OName = "锁库仓库";
             else
                 OName = "运算仓库";
-            CommFunction.DM_Log_Local("新增" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text);
+            DALCreator.CommFunction.DM_Log_Local("新增" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text);
 
             //重新获取数据
             SetDataSource();
@@ -313,7 +313,7 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             if (MessageBox.Show("你确定要保存修改吗？", "保存信息", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                CommFunction.SaveCalculateStock(_dtSource);
+                DALCreator.CommFunction.SaveCalculateStock(_dtSource);
 
                 //日志
                 string OName;
@@ -321,7 +321,7 @@ namespace ERPSupport.SupForm.UserCrtl
                     OName = "锁库仓库";
                 else
                     OName = "运算仓库";
-                CommFunction.DM_Log_Local("调整" + OName + "序号", "配置\\设置" + OName, "");
+                DALCreator.CommFunction.DM_Log_Local("调整" + OName + "序号", "配置\\设置" + OName, "");
 
                 MessageBox.Show("信息已经保存。");
             }
@@ -334,14 +334,14 @@ namespace ERPSupport.SupForm.UserCrtl
             _FID = int.Parse(dgv1.CurrentRow.Cells[3].Value.ToString());
 
             //根据序号删除数据
-            CommFunction.UpdateCalculateStock(_FID);
+            DALCreator.CommFunction.UpdateCalculateStock(_FID);
             //操作日志
             string OName;
             if (_Type == "LOCKSTOCK")
                 OName = "锁库仓库";
             else
                 OName = "运算仓库";
-            CommFunction.DM_Log_Local("删除" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text);
+            DALCreator.CommFunction.DM_Log_Local("删除" + OName, "配置\\设置" + OName, bnTop_txtSeq.Text + "|" + bnTop_cbxOrg.Text + "|" + bnTop_cbxStock.Text);
             //重新获取数据
             SetDataSource();
         }

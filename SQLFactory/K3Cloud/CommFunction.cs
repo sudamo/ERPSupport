@@ -11,11 +11,12 @@ namespace ERPSupport.SQL.K3Cloud
     using Model.Enum;
     using Model.Globa;
     using Model.K3Cloud;
+    using IDAL.K3Cloud;
 
     /// <summary>
     /// 公共方法
     /// </summary>
-    public static class CommFunction
+    public class CommFunction : ICommFunction
     {
         #region STATIC
         private static string _SQL;
@@ -24,7 +25,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 构造函数
         /// </summary>
-        static CommFunction()
+        public CommFunction()
         {
             _SQL = string.Empty;
             _obj = new object();
@@ -37,7 +38,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pConnectionString">数据库连接字符串</param>
         /// <returns></returns>
-        public static string ConnectionCheck_ORA(string pConnectionString)
+        public string ConnectionCheck_ORA(string pConnectionString)
         {
             return ORAHelper.ConnectionChecked(pConnectionString);
         }
@@ -47,7 +48,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pConnectionString">数据库连接字符串</param>
         /// <returns></returns>
-        public static string ConnectionCheck_SQL(string pConnectionString)
+        public string ConnectionCheck_SQL(string pConnectionString)
         {
             return SQLHelper.ConnectionChecked(pConnectionString);
         }
@@ -60,7 +61,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pConnectionString">数据库连接字符串</param>
         /// <param name="pUserName">用户名</param>
         /// <returns>int:UserId</returns>
-        public static int GetUserId(string pConnectionString, string pUserName)
+        public int GetUserId(string pConnectionString, string pUserName)
         {
             _SQL = string.Format("SELECT FUSERID FROM T_SEC_USER WHERE FNAME = '{0}'", pUserName);
             _obj = ORAHelper.ExecuteScalar(pConnectionString, _SQL);
@@ -77,7 +78,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pConnectionString">数据库连接字符串</param>
         /// <param name="pUserName">用户名</param>
         /// <returns></returns>
-        public static DataTable GetUserInfoByName(string pConnectionString, string pUserName)
+        public DataTable GetUserInfoByName(string pConnectionString, string pUserName)
         {
             _SQL = string.Format("SELECT US.FUSERID,NVL(UR.RIDS,' ') RIDS,NVL(WM_CONCAT(R.MIDS),' ') MIDS,US.FPHONE,NVL(DEP.FDEPTID,0) FDEPTID,NVL(DEP.FNUMBER,' ') FDEPTNUMBER,GL.FNAME FDEPTNAME ");
             _SQL += string.Format(" FROM T_SEC_USER US ");
@@ -88,7 +89,7 @@ namespace ERPSupport.SQL.K3Cloud
             _SQL += string.Format(" LEFT JOIN T_BD_STAFF STF ON STFL.FSTAFFID = STF.FSTAFFID ");
             _SQL += string.Format(" LEFT JOIN T_BD_DEPARTMENT DEP ON STF.FDEPTID = DEP.FDEPTID ");
             _SQL += string.Format(" LEFT JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID ");
-            _SQL += string.Format(" WHERE US.FNAME = '{0}' OR US.FUSERACCOUNT = '{0}' ",pUserName);
+            _SQL += string.Format(" WHERE US.FNAME = '{0}' OR US.FUSERACCOUNT = '{0}' ", pUserName);
             _SQL += string.Format(" GROUP BY US.FUSERID,UR.RIDS,US.FPHONE,DEP.FDEPTID,DEP.FNUMBER,GL.FNAME ");
 
             return ORAHelper.ExecuteTable(pConnectionString, _SQL);
@@ -98,7 +99,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取用户数据
         /// </summary>
         /// <returns>DataTable</returns>
-        public static DataTable User()
+        public DataTable User()
         {
             _SQL = string.Format("SELECT UR.FUSERID,UR.FNAME 姓名,URGL.FNAME 部门,UR.FUSERACCOUNT 账号,NVL(UR.FPHONE,' ') 电话 ");
             _SQL += string.Format(" FROM T_SEC_USER UR ");
@@ -114,7 +115,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFbillFormId">业务标识</param>
         /// <returns></returns>
-        public static DataTable GetBillType(string pFbillFormId)
+        public DataTable GetBillType(string pFbillFormId)
         {
             _SQL = string.Format("SELECT A.FBILLTYPEID FValue,AL.FNAME ");
             _SQL += string.Format(" FROM T_BAS_BILLTYPE A ");
@@ -131,7 +132,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFUseOrgId">使用组织</param>
         /// <param name="pFNumber">编码</param>
         /// <returns></returns>
-        public static int GetDepartIdByNumber(int pFUseOrgId, string pFNumber)
+        public int GetDepartIdByNumber(int pFUseOrgId, string pFNumber)
         {
             _SQL = string.Format("SELECT FDEPTID FROM T_BD_DEPARTMENT WHERE FUSEORGID = {0} AND FNUMBER = '{1}'", pFUseOrgId, pFNumber);
             _obj = ORAHelper.ExecuteScalar(_SQL);
@@ -149,7 +150,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pUseOrgId">使用组织ID</param>
         /// <param name="pProperty">部门属性名称</param>
         /// <returns></returns>
-        public static DataTable GetDepartment(int pType, int pUseOrgId, string pProperty)
+        public DataTable GetDepartment(int pType, int pUseOrgId, string pProperty)
         {
             switch (pType)
             {
@@ -211,7 +212,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取领料部门信息
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetPickMtlDepartment(int pUseOrgId = 100508)
+        public List<string> GetPickMtlDepartment(int pUseOrgId = 100508)
         {
             List<string> lstReturn = new List<string>();
             _SQL = string.Format("SELECT FNUMBER FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' AND FUSEORGID = {0} ORDER BY FNUMBER", pUseOrgId);
@@ -235,7 +236,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pCustomerName">客户名称</param>
         /// <param name="pUseOrgId">使用组织</param>
         /// <returns></returns>
-        public static int GetCustomerId(string pCustomerName, int pUseOrgId)
+        public int GetCustomerId(string pCustomerName, int pUseOrgId)
         {
             _SQL = string.Format("SELECT A.FCUSTID FROM T_BD_CUSTOMER A INNER JOIN T_BD_CUSTOMER_L AL ON A.FCUSTID = AL.FCUSTID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = {0} AND AL.FNAME = '{1}'", pUseOrgId, pCustomerName);
 
@@ -246,7 +247,12 @@ namespace ERPSupport.SQL.K3Cloud
                 return Convert.ToInt32(_obj);
         }
 
-        public static DataTable GetCustomerListByName(string pCostomerName)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pCostomerName"></param>
+        /// <returns></returns>
+        public DataTable GetCustomerListByName(string pCostomerName)
         {
             _SQL = "SELECT A.FCUSTID,A.FNUMBER,AL.FNAME,A.FSELLER,A.FUSEORGID,A.FCREATEORGID,ORGL.FNAME ORGNAME";
             _SQL += " FROM T_BD_CUSTOMER A ";
@@ -262,14 +268,25 @@ namespace ERPSupport.SQL.K3Cloud
         /// 根据销售组织获取销售员列表
         /// </summary>
         /// <param name="pUseOrgId">使用组织</param>
+        /// <param name="pType">FVALUE类型</param>
         /// <returns></returns>
-        public static DataTable GetSellerList(int pUseOrgId)
+        public DataTable GetSellerList(int pUseOrgId, int pType = 0)
         {
-            _SQL = string.Format("SELECT B.FENTRYID FVALUE,EMPL.FNAME ");
+            if (pType == 0)
+                _SQL = string.Format("SELECT B.FENTRYID FVALUE,EMPL.FNAME ");
+            else
+                _SQL = string.Format("SELECT B.FSTAFFID FVALUE,EMPL.FNAME ");
+
             _SQL += string.Format(" FROM T_BD_OPERATORENTRY B ");
             _SQL += string.Format(" INNER JOIN T_HR_EMPINFO EMP ON B.FSTAFFID = EMP.FSTAFFID AND EMP.FFORBIDSTATUS = 'A' ");
             _SQL += string.Format(" INNER JOIN T_HR_EMPINFO_L EMPL ON EMP.FID = EMPL.FID ");
             _SQL += string.Format(" WHERE B.FOPERATORTYPE = 'XSY' AND B.FBIZORGID = {0}", pUseOrgId);
+
+            //_SQL = @"SELECT B.FENTRYID FVALUE,EMPL.FNAME
+            //FROM T_BD_OPERATORENTRY B
+            //INNER JOIN T_HR_EMPINFO EMP ON B.FSTAFFID = EMP.FSTAFFID AND EMP.FFORBIDSTATUS = 'A'
+            //INNER JOIN T_HR_EMPINFO_L EMPL ON EMP.FID = EMPL.FID
+            //WHERE B.FOPERATORTYPE = 'XSY' AND B.FBIZORGID = 100504";
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -280,7 +297,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFUseOrgId">使用组织</param>
         /// <param name="pFNumber">编码</param>
         /// <returns></returns>
-        public static int GetStockIdByNumber(int pFUseOrgId, string pFNumber)
+        public int GetStockIdByNumber(int pFUseOrgId, string pFNumber)
         {
             _SQL = string.Format("SELECT FSTOCKID FROM T_BD_STOCK WHERE FUSEORGID = {0} AND FNUMBER = '{1}'", pFUseOrgId, pFNumber);
             _obj = ORAHelper.ExecuteScalar(_SQL);
@@ -297,7 +314,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型</param>
         /// <param name="pUserOrgId">使用组织</param>
         /// <returns></returns>
-        public static DataTable GetStock(int pType = -1, int pUserOrgId = 100508)
+        public DataTable GetStock(int pType = -1, int pUserOrgId = 100508)
         {
             switch (pType)
             {
@@ -357,7 +374,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFName">仓库名</param>
         /// <returns></returns>
-        public static string GetStockNumber(int pUseOrgId, string pFName)
+        public string GetStockNumber(int pUseOrgId, string pFName)
         {
             _SQL = string.Format("SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = {0} AND AL.FNAME = '{1}'", pUseOrgId, pFName);
             _obj = ORAHelper.ExecuteScalar(_SQL);
@@ -373,7 +390,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pAcctype">类型：1、法人组织；2、利润中心</param>
         /// <returns></returns>
-        public static DataTable GetOrganization(int pAcctype = 2, bool pIsContains = false)
+        public DataTable GetOrganization(int pAcctype = 2, bool pIsContains = false)
         {
             _SQL = string.Format("SELECT ORG.FORGID FVALUE,ORGL.FNAME ");
             _SQL += string.Format(" FROM T_ORG_ORGANIZATIONS ORG ");
@@ -392,7 +409,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pType">所需信息类型</param>
         /// <returns></returns>
-        public static DataTable GetOrganization(string pType)
+        public DataTable GetOrganization(string pType)
         {
             switch (pType.ToUpper())
             {
@@ -421,7 +438,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFID">内码</param>
         /// <returns></returns>
-        public static DataTable GetAssistantDataEntryByFID(string pFID)
+        public DataTable GetAssistantDataEntryByFID(string pFID)
         {
             _SQL = string.Format("SELECT ASS.FENTRYID FVALUE,ASSL.FDATAVALUE FNAME ");
             _SQL += string.Format(" FROM T_BAS_ASSISTANTDATAENTRY ASS ");
@@ -440,7 +457,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pConnectionString">数据库连接字符串</param>
         /// <param name="pAppName">应用程序名</param>
         /// <returns>整形 -1：没有记录；0：未启用；1：启用；2或其他：弃用</returns>
-        public static int ApplicationFlag(string pConnectionString, string pAppName)
+        public int ApplicationFlag(string pConnectionString, string pAppName)
         {
             _SQL = string.Format("SELECT FLAG FROM DM_APP_MANAGE WHERE ISDEL = '0' AND APPNAME = '{0}'", pAppName);
 
@@ -456,7 +473,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取所有二级模块NodeNo
         /// </summary>
         /// <returns></returns>
-        public static List<string> GetNavigation()
+        public List<string> GetNavigation()
         {
             List<string> list;
             DataTable dt;
@@ -484,7 +501,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pMIDs">模块</param>
         /// <param name="pFunctionIds">功能</param>
         /// <returns></returns>
-        public static DataTable GetNavigation(out string pRIDs, out string pMIDs, out string pFunctionIds)
+        public DataTable GetNavigation(out string pRIDs, out string pMIDs, out string pFunctionIds)
         {
             //获取二级菜单NODEID
             DataTable dtRuleS;
@@ -557,7 +574,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pK3Inf">配置</param>
         /// <param name="pParentId">父项ID</param>
         /// <returns></returns>
-        public static int ChildNumber(string pParentId)
+        public int ChildNumber(string pParentId)
         {
             _SQL = string.Format("SELECT COUNT(*) FROM DM_EXPRESS_NAVIGATION WHERE PARENTID = {0}", pParentId);
             return int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString());
@@ -568,7 +585,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pCategory">类别</param>
         /// <returns></returns>
-        public static DataTable GetLockObjectInfo(string pCategory)
+        public DataTable GetLockObjectInfo(string pCategory)
         {
             _SQL = string.Format("SELECT FSTATUS,FUSER FROM DM_LOCKOBJECT WHERE CATEGORY = '{0}'", pCategory);
             return ORAHelper.ExecuteTable(_SQL);
@@ -580,7 +597,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pCategory">类别</param>
         /// <param name="pStatus">状态</param>
         /// <returns></returns>
-        public static object GetLockObjectInfo(string pCategory, int pStatus)
+        public object GetLockObjectInfo(string pCategory, int pStatus)
         {
             _SQL = string.Format("SELECT FUSER FROM DM_LOCKOBJECT WHERE CATEGORY = '{0}' AND FSTATUS = {1}", pCategory, pStatus);
             return ORAHelper.ExecuteScalar(_SQL);
@@ -591,7 +608,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pStatus">状态:0、解除占用；1、占用</param>
         /// <param name="pCategory">类别</param>
-        public static void UpdateLockStatus(int pStatus, string pCategory)
+        public void UpdateLockStatus(int pStatus, string pCategory)
         {
             if (pStatus == 1)//设置占用状态
             {
@@ -611,7 +628,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pCategory">分类</param>
         /// <returns></returns>
-        public static DataTable DM_LockObjectInfo(string pCategory)
+        public DataTable DM_LockObjectInfo(string pCategory)
         {
             _SQL = string.Format("SELECT CASE WHEN CEIL((SYSDATE - MODIFYDATE) * 24 * 60) >= 5 THEN '0' ELSE FSTATUS END FSTATUS, FUSER,FTYPE FROM DM_LOCKOBJECT WHERE CATEGORY = '{0}'", pCategory);
             return ORAHelper.ExecuteTable(_SQL);
@@ -624,7 +641,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFType">对象类型</param>
         /// <param name="pDescription">描述</param>
         /// <param name="pCategory">分类</param>
-        public static void DM_LockObject_Add(string pObName, string pFType, string pDescription, string pCategory)
+        public void DM_LockObject_Add(string pObName, string pFType, string pDescription, string pCategory)
         {
             _SQL = string.Format("INSERT INTO DM_LOCKOBJECT(OBNAME,FUSER,FSTATUS,FTYPE,DESCRIPTION,CATEGORY) VALUES('{0}','None',0,'{1}','{2}','{3}')", pObName, pFType, pDescription, pCategory);
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -635,7 +652,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pName">方案名</param>
         /// <returns></returns>
-        public static int SolutionName(string pName)
+        public int SolutionName(string pName)
         {
             _SQL = string.Format("SELECT COUNT(*) FROM DM_FILTER_SOLUTION WHERE SNAME = '{0}'", pName);
             return int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString());
@@ -646,7 +663,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFormID">业务标识</param>
         /// <returns></returns>
-        public static DataTable GetSolution(FormID pFormID)
+        public DataTable GetSolution(FormID pFormID)
         {
             if (GlobalParameter.K3Inf.UserName.ToUpper() == "DAMO")
                 _SQL = string.Format("SELECT SNAME 方案名,CREATOR 创建人,TO_CHAR(CREATEDATE,'yyyy-mm-dd') 创建日期 FROM DM_FILTER_SOLUTION WHERE INSTR(FORMID,'{0}') > 0 ORDER BY SNAME", pFormID);
@@ -661,7 +678,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pName">方案名</param>
         /// <returns></returns>
-        public static DataTable GetSolution(string pName)
+        public DataTable GetSolution(string pName)
         {
             _SQL = string.Format("SELECT SCONTENT,SROWS,CREATOR FROM DM_FILTER_SOLUTION WHERE SNAME = '{0}'", pName);
             return ORAHelper.ExecuteTable(_SQL);
@@ -675,7 +692,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pContent">内文</param>
         /// <param name="pRows">条件数</param>
         /// <param name="pFromID">业务标识</param>
-        public static void SaveSolution(string pName, bool pIsShare, string pContent, int pRows, FormID pFromID)
+        public void SaveSolution(string pName, bool pIsShare, string pContent, int pRows, FormID pFromID)
         {
             if (pFromID == FormID.SAL_SaleOrder)
                 pFromID = FormID.SAL_SaleOrderRun;//公用方案
@@ -691,7 +708,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pName">方案名</param>
         /// <param name="pContent">内文</param>
         /// <param name="pRows">条件数</param>
-        public static void UpdateSolution(string pName, string pContent, int pRows)
+        public void UpdateSolution(string pName, string pContent, int pRows)
         {
             _SQL = string.Format("UPDATE DM_FILTER_SOLUTION SET SCONTENT = '{0}',SROWS = {1} WHERE SNAME = '{2}'", pContent, pRows, pName);
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -701,7 +718,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 根据名称删除方案
         /// </summary>
         /// <param name="pName">方案名</param>
-        public static void DelSolution(string pName)
+        public void DelSolution(string pName)
         {
             _SQL = string.Format("DELETE FROM DM_FILTER_SOLUTION WHERE SNAME = '{0}'", pName);
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -712,7 +729,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pType">类型</param>
         /// <returns></returns>
-        public static DataTable NumberMatch(string pType)
+        public DataTable NumberMatch(string pType)
         {
             if (pType == "COMPANYNAME")
                 _SQL = "SELECT FID 内码,FNUMBER 匹配运单号,FLENGTH 运单号位数,TYPENAME 快递公司,NVL(DESCRIPTION,' ') 描述 FROM DM_NUMBERMATCH WHERE FTYPE = 'COMPANYNAME' AND ISUSE = '1' AND ISDELETE = '0' ORDER BY FID DESC";
@@ -730,7 +747,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型</param>
         /// <param name="pNumber">编码</param>
         /// <returns></returns>
-        public static bool NumberMatchExists(string pType, string pNumber)
+        public bool NumberMatchExists(string pType, string pNumber)
         {
             _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND FNUMBER LIKE '{1}%'", pType, pNumber);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
@@ -746,7 +763,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFID">内码</param>
         /// <param name="pNumber">编码</param>
         /// <returns></returns>
-        public static bool NumberMatchExists(string pType, int pFID, string pNumber)
+        public bool NumberMatchExists(string pType, int pFID, string pNumber)
         {
             _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND FID <> {1} AND FNUMBER = '{2}'", pType, pFID, pNumber);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
@@ -763,7 +780,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pLength">编码长度</param>
         /// <param name="pTypeName">类型</param>
         /// <returns></returns>
-        public static bool NumberMatchExists(string pType, string pNumber, int pLength, string pTypeName)
+        public bool NumberMatchExists(string pType, string pNumber, int pLength, string pTypeName)
         {
             _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND ((FNUMBER = '{1}' AND FLENGTH = {2}) OR TYPENAME = '{3}')", pType, pNumber, pLength, pTypeName);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
@@ -781,7 +798,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pLength">编码长度</param>
         /// <param name="pTypeName">类型</param>
         /// <returns></returns>
-        public static bool NumberMatchExists(string pType, int pFID, string pNumber, int pLength, string pTypeName)
+        public bool NumberMatchExists(string pType, int pFID, string pNumber, int pLength, string pTypeName)
         {
             _SQL = string.Format("SELECT COUNT(*) FROM DM_NUMBERMATCH WHERE ISUSE = '1' AND ISDELETE = '0' AND FTYPE = '{0}' AND FID <> {1} AND ((FNUMBER = '{2}' AND FLENGTH = {3}) OR TYPENAME = '{4}')", pType, pFID, pNumber, pLength, pTypeName);
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
@@ -800,7 +817,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pTypeName">类型名称</param>
         /// <param name="pDescription">描述</param>
         /// <param name="pIsMatch">是否匹配，默认'0'</param>
-        public static void AddNumberMatch(string pNumber, int pLength, string pType, string pTypeNumber, string pTypeName, string pDescription, string pIsMatch)
+        public void AddNumberMatch(string pNumber, int pLength, string pType, string pTypeNumber, string pTypeName, string pDescription, string pIsMatch)
         {
             _SQL = string.Format("INSERT INTO DM_NUMBERMATCH(FTYPE,FNUMBER,FLENGTH,TYPENUMBER,TYPENAME,CREATOR,DESCRIPTION,ISMATCH) ");
             _SQL += string.Format(" VALUES('{0}','{1}',{2},'{3}','{4}','{5}','{6}','{7}')", pType, pNumber, pLength, pTypeNumber, pTypeName, GlobalParameter.K3Inf.UserName, pDescription, pIsMatch);
@@ -814,7 +831,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pNumber">编码</param>
         /// <param name="pLength">编码长度</param>
         /// <param name="pTypeName">类型名称</param>
-        public static void UpdateNumberMatch(int pFID, string pNumber, int pLength, string pTypeName)
+        public void UpdateNumberMatch(int pFID, string pNumber, int pLength, string pTypeName)
         {
             _SQL = string.Format("UPDATE DM_NUMBERMATCH SET FNUMBER = '{0}',FLENGTH = {1},TYPENAME = '{2}',MODIFIER = '{3}',MODIFYDATE = SYSDATE WHERE FID = {4}", pNumber, pLength, pTypeName, GlobalParameter.K3Inf.UserName, pFID);
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -827,7 +844,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pNumber">编码</param>
         /// <param name="pDescription">描述</param>
         /// <param name="pIsMatch">是否匹配，默认'0'</param>
-        public static void UpdateNumberMatch(int pFID, string pNumber, string pDescription, string pIsMatch)
+        public void UpdateNumberMatch(int pFID, string pNumber, string pDescription, string pIsMatch)
         {
             _SQL = string.Format("UPDATE DM_NUMBERMATCH SET FNUMBER = '{0}',MODIFIER = '{1}',MODIFYDATE = SYSDATE,DESCRIPTION = '{2}',ISMATCH = '{3}' WHERE FID = {4}", pNumber, GlobalParameter.K3Inf.UserName, pDescription, pIsMatch, pFID);
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -837,7 +854,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 删除NumberMatch
         /// </summary>
         /// <param name="pFID">内码</param>
-        public static void DelNumberMatch(int pFID)
+        public void DelNumberMatch(int pFID)
         {
             _SQL = string.Format("UPDATE DM_NUMBERMATCH SET ISDELETE = '1',ISUSE = '0',MODIFIER = '{0}',MODIFYDATE = SYSDATE WHERE FID = {1}", GlobalParameter.K3Inf.UserName, pFID);
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -850,7 +867,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pIndex">序号</param>
         /// <param name="pUserOrgId">使用组织</param>
         /// <returns></returns>
-        public static DataTable CalculateStock(string pType, int pIndex, int pUserOrgId)
+        public DataTable CalculateStock(string pType, int pIndex, int pUserOrgId)
         {
             switch (pType)
             {
@@ -884,7 +901,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pSEQ">序号</param>
         /// <param name="pNumber">编码</param>
         /// <returns></returns>
-        public static bool CalculateNumberExists(string pType, int pSEQ, string pNumber)
+        public bool CalculateNumberExists(string pType, int pSEQ, string pNumber)
         {
             _SQL = string.Format("SELECT COUNT(1) FROM DM_CALCULATESTOCK WHERE FTYPE = '{0}' AND ISDELETE = '0' AND (FSEQ = {1} OR FNUMBER = '{2}')", pType, pSEQ, pNumber);
             if (ORAHelper.ExecuteScalar(_SQL).ToString() != "0")
@@ -901,7 +918,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pStockId">仓库ID</param>
         /// <param name="pStockNumber">仓库编码</param>
         /// <param name="pStockName">仓库名称</param>
-        public static void AddCalculateStock(string pType, int pSEQ, int pStockId, string pStockNumber, string pStockName)
+        public void AddCalculateStock(string pType, int pSEQ, int pStockId, string pStockNumber, string pStockName)
         {
             _SQL = "INSERT INTO DM_CALCULATESTOCK(FTYPE,FSEQ,FSTOCKID,FNUMBER,FNAME,CREATOR) VALUES('" + pType + "'," + pSEQ.ToString() + "," + pStockId.ToString() + ",'" + pStockNumber + "','" + pStockName + "','" + GlobalParameter.K3Inf.UserName + "')";
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -911,7 +928,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 更新CalculateStock
         /// </summary>
         /// <param name="pFID">内码</param>
-        public static void UpdateCalculateStock(int pFID)
+        public void UpdateCalculateStock(int pFID)
         {
             _SQL = "UPDATE DM_CALCULATESTOCK SET ISDELETE = '1',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFYDATE = SYSDATE WHERE FID = " + pFID.ToString();
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -921,7 +938,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 调整锁库/运算仓库序号
         /// </summary>
         /// <param name="pDataTable">修改数据</param>
-        public static void SaveCalculateStock(DataTable pDataTable)
+        public void SaveCalculateStock(DataTable pDataTable)
         {
             if (pDataTable == null || pDataTable.Rows.Count == 0)
                 return;
@@ -945,7 +962,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFrom">开始时间</param>
         /// <param name="pTo">结束时间</param>
         /// <returns></returns>
-        public static DataTable Log_OrderLock(int pIndex, string pFBillNo, string pYSD, DateTime pFrom, DateTime pTo, string pFFLAG, string pMaterialiNo)
+        public DataTable Log_OrderLock(int pIndex, string pFBillNo, string pYSD, DateTime pFrom, DateTime pTo, string pFFLAG, string pMaterialiNo)
         {
             switch (pIndex)
             {
@@ -995,7 +1012,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取Log_OrderLock
         /// </summary>
         /// <returns></returns>
-        public static DataTable AssistantData()
+        public DataTable AssistantData()
         {
             _SQL = @"SELECT SUBNO FValue,SUBNAME FName
             FROM DM_ASSISTANTDATA
@@ -1008,7 +1025,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取ExceptionRecord
         /// </summary>
         /// <returns></returns>
-        public static DataTable ExceptionRecord()
+        public DataTable ExceptionRecord()
         {
             _SQL = @"SELECT '-1' FValue,'全部' FName FROM DUAL
             UNION
@@ -1032,7 +1049,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pSucc">成功</param>
         /// <param name="pFailed">失败</param>
         /// <returns></returns>
-        public static DataTable ExceptionRecord(int pType, string pTypeValue, int pOperator, string pOperatorValue, string pFNumber, string pBarcode, string pCompany, DateTime pFrom, DateTime pTo, bool pSucc, bool pFailed)
+        public DataTable ExceptionRecord(int pType, string pTypeValue, int pOperator, string pOperatorValue, string pFNumber, string pBarcode, string pCompany, DateTime pFrom, DateTime pTo, bool pSucc, bool pFailed)
         {
             _SQL = @"SELECT A.CREATEDATE 日期,NVL(A.FNUMBER,' ') 单号,A.CREATOR 员工,NVL(B.SUBNAME, ' ') 类型,CASE A.FFLAGE WHEN 1 THEN '成功' ELSE '失败' END 状态,NVL(A.BARCODES,' ') 条码,A.DESCRIPTION 说明,NVL(A.ERMESSAGE,' ') 异常信息,A.FIP IP地址
             FROM DM_EXCEPTIONRECORD A
@@ -1069,7 +1086,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取PickMTLDepartment
         /// </summary>
         /// <returns></returns>
-        public static DataTable PickMTLDepartment()
+        public DataTable PickMTLDepartment()
         {
             _SQL = @"SELECT A.FNUMBER 部门编码,A.FNAME 部门名称,BL.FNAME 使用组织
             FROM DM_PICKMTLDEPARTMENT A
@@ -1085,7 +1102,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFNumber">部门编码</param>
         /// <returns></returns>
-        public static bool PickMTLDeptExists(string pFNumber)
+        public bool PickMTLDeptExists(string pFNumber)
         {
             _SQL = "SELECT COUNT(1) FROM DM_PICKMTLDEPARTMENT WHERE ISDELETE = '0' AND FNUMBER = '" + pFNumber + "'";
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
@@ -1101,7 +1118,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFNumber">部门编码</param>
         /// <param name="pFName">部门名称</param>
         /// <param name="pUseOrgId">使用组织ID</param>
-        public static void AddPickMTLDept(string pDeptId, string pFNumber, string pFName, string pUseOrgId)
+        public void AddPickMTLDept(string pDeptId, string pFNumber, string pFName, string pUseOrgId)
         {
             _SQL = "INSERT INTO DM_PICKMTLDEPARTMENT(FDEPTID,FNUMBER,FNAME,FUSEORGID) VALUES(" + pDeptId + ",'" + pFNumber + "','" + pFName + "'," + pUseOrgId + ")";
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -1111,7 +1128,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 删除领料部门
         /// </summary>
         /// <param name="pFNumber">部门编码</param>
-        public static void DelPickMTLDept(string pFNumber)
+        public void DelPickMTLDept(string pFNumber)
         {
             _SQL = "UPDATE DM_PICKMTLDEPARTMENT SET ISDELETE = '1' WHERE FNUMBER = '" + pFNumber + "'";
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -1123,7 +1140,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型</param>
         /// <param name="pFilter">过滤条件</param>
         /// <returns></returns>
-        public static DataTable BOMQuery(int pType, string pFilter)
+        public DataTable BOMQuery(int pType, string pFilter)
         {
             switch (pType)
             {
@@ -1169,7 +1186,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFilter">过滤条件</param>
         /// <returns></returns>
-        public static DataTable MTL203(string pFilter)
+        public DataTable MTL203(string pFilter)
         {
             _SQL = @"SELECT D.FNAME 部门, B.FSRCBILLNO 销售订单号, E.FNUMBER 产品代码, F.FNAME 产品名称, G.FDATAVALUE 车型
                 , H.FDATAVALUE 颜色, B.FQTY 数量, J.FNUMBER 盆子编码, K.FNAME 盆子名称, B.FPRODUCTIONSEQ 生产顺序号
@@ -1198,7 +1215,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pType">类型</param>
         /// <returns></returns>
-        public static DataTable Role(int pType)
+        public DataTable Role(int pType)
         {
             if (pType == 0)
                 _SQL = "SELECT RID,RNAME FROM DM_ROLE WHERE ISFORBIDDEN = '0'";
@@ -1213,7 +1230,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pRName">角色名</param>
         /// <returns></returns>
-        public static bool RoleExists(string pRName)
+        public bool RoleExists(string pRName)
         {
             _SQL = "SELECT COUNT(*) FROM DM_ROLE WHERE ISFORBIDDEN = '0' AND RNAME = '" + pRName + "'";
             if (int.Parse(ORAHelper.ExecuteScalar(_SQL).ToString()) > 0)
@@ -1227,7 +1244,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pRName">角色名</param>
         /// <param name="pMids">Mids</param>
-        public static void AddRole(string pRName, string pMids, string pFunctionIds)
+        public void AddRole(string pRName, string pMids, string pFunctionIds)
         {
             _SQL = "INSERT INTO DM_ROLE(RNAME,MIDS,FUNCTIONID,CREATOR) VALUES('" + pRName + "','" + pMids + "','" + pFunctionIds + "','" + GlobalParameter.K3Inf.UserName + "')";
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -1238,7 +1255,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pRName">角色名</param>
         /// <param name="pMids">Mids</param>
-        public static void UpdateRole(string pRName, string pMids, string pFunctionIds)
+        public void UpdateRole(string pRName, string pMids, string pFunctionIds)
         {
             _SQL = "UPDATE DM_ROLE SET MIDS = '" + pMids + "',FUNCTIONID = '" + pFunctionIds + "',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFICATIONDATE = SYSDATE WHERE RNAME = '" + pRName + "'";
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -1248,7 +1265,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 根据RName删除角色
         /// </summary>
         /// <param name="pRName">角色名</param>
-        public static void DelRole(string pRName)
+        public void DelRole(string pRName)
         {
             _SQL = "DELETE FROM DM_ROLE WHERE RNAME = '" + pRName + "'";
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -1259,7 +1276,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pRIDS">RIDS</param>
         /// <returns></returns>
-        public static DataTable GetRoleByRIDS(string pRIDS)
+        public DataTable GetRoleByRIDS(string pRIDS)
         {
             _SQL = "SELECT RID,RNAME FROM DM_ROLE WHERE ISFORBIDDEN = '0' AND RID IN(" + pRIDS.ToString() + ")";
             return ORAHelper.ExecuteTable(_SQL);
@@ -1270,7 +1287,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pUserId">用户ID</param>
         /// <returns></returns>
-        public static object GetRIDSByUserId(string pUserId)
+        public object GetRIDSByUserId(string pUserId)
         {
             _SQL = "SELECT RIDS FROM DM_USER_ROLE WHERE USERID = " + pUserId;
             return ORAHelper.ExecuteScalar(_SQL);
@@ -1281,7 +1298,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pRID">RID</param>
         /// <returns></returns>
-        public static DataTable User_Role(string pRID)
+        public DataTable User_Role(string pRID)
         {
             _SQL = @"SELECT UR.USERID,SU.FNAME
             FROM DM_USER_ROLE UR
@@ -1296,7 +1313,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pUserId">用户ID</param>
         /// <returns></returns>
-        public static bool User_RoleExists(string pUserId)
+        public bool User_RoleExists(string pUserId)
         {
             _SQL = "SELECT COUNT(*) FROM DM_USER_ROLE WHERE USERID = " + pUserId;
 
@@ -1311,7 +1328,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pUserId">用户ID</param>
         /// <param name="pRIDS">RIDS</param>
-        public static void AddUser_Role(string pUserId, string pRIDS)
+        public void AddUser_Role(string pUserId, string pRIDS)
         {
             _SQL = "INSERT INTO DM_USER_ROLE(USERID,RIDS,CREATOR) VALUES(" + pUserId + ", '" + pRIDS + "','" + GlobalParameter.K3Inf.UserName + "')";
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -1322,7 +1339,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pUserId">用户ID</param>
         /// <param name="pRIDS">RIDS</param>
-        public static void UpdateUser_Role(string pUserId, string pRIDS)
+        public void UpdateUser_Role(string pUserId, string pRIDS)
         {
             _SQL = "UPDATE DM_USER_ROLE SET RIDS = '" + pRIDS + "',MODIFIER = '" + GlobalParameter.K3Inf.UserName + "',MODIFICATIONDATE = SYSDATE WHERE USERID = " + pUserId;
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -1332,7 +1349,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取Navigation
         /// </summary>
         /// <returns></returns>
-        public static DataTable Navigation()
+        public DataTable Navigation()
         {
             _SQL = "SELECT NODEID,NODENAME FROM DM_EXPRESS_NAVIGATION WHERE LV = 1 ORDER BY NODEID";
 
@@ -1344,7 +1361,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pParentId">父项ID</param>
         /// <returns></returns>
-        public static DataTable Navigation(int pParentId)
+        public DataTable Navigation(int pParentId)
         {
             _SQL = "SELECT NODEID,NODENAME FROM DM_EXPRESS_NAVIGATION WHERE PARENTID = " + pParentId.ToString() + " ORDER BY NODEID";
 
@@ -1355,7 +1372,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 检查MAC是否注册
         /// </summary>
         /// <returns></returns>
-        public static bool CheckMAC()
+        public bool CheckMAC()
         {
             string strMAC = GetMac();
             _SQL = "SELECT COUNT(1) FROM DM_MAC WHERE ISDELETE = 0 AND MAC = '" + strMAC + "'";
@@ -1371,7 +1388,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pUser"></param>
         /// <param name="pDate"></param>
         /// <returns></returns>
-        public static DataTable GetDM_Log_Local(string pUser, DateTime pDate)
+        public DataTable GetDM_Log_Local(string pUser, DateTime pDate)
         {
             if (pUser.Equals(string.Empty))
                 _SQL = @"SELECT OUSER 用户,IP IP地址,MAC,TO_CHAR(LOGINTIME,'YYYY-MM-DD HH24:MI:SS') 登录时间,TO_CHAR(OTIME,'YYYY-MM-DD HH24:MI:SS') 操作时间,ONAME 操作名称,ONAVI 模块,OCONTENT 操作内容描述,CASE WHEN FLAG = '1' THEN '操作成功' ELSE '操作失败' END 操作状态
@@ -1392,7 +1409,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pONavi">业务模块</param>
         /// <param name="pOContent">操作信息</param>
         /// <param name="pFlag">是否操作成功</param>
-        public static void DM_Log_Local(string pOName, string pONavi, string pOContent, string pFlag = "1")
+        public void DM_Log_Local(string pOName, string pONavi, string pOContent, string pFlag = "1")
         {
             if (!GlobalParameter.IsJournal)
                 return;
@@ -1407,7 +1424,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取对应仓库调拨
         /// </summary>
         /// <returns></returns>
-        public static DataTable GetDM_Dir_Stock()
+        public DataTable GetDM_Dir_Stock()
         {
             _SQL = @"SELECT A.PID,A.OUTSTOCKID,B.FNAME OUTSTOCK,A.INSTOCKID,C.FNAME INSTOCK,A.CREATOR,A.CREATIONDATE
             FROM DM_DIR_STOCK A
@@ -1423,7 +1440,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pOutStockId"></param>
         /// <param name="pInStockId"></param>
-        public static string AddDM_Dir_Stock(int pOutStockId, int pInStockId)
+        public string AddDM_Dir_Stock(int pOutStockId, int pInStockId)
         {
             _SQL = "SELECT COUNT(*) FROM DM_DIR_STOCK WHERE ISDELETE = 0 AND OUTSTOCKID = " + pOutStockId + " AND INSTOCKID = " + pInStockId;
             _obj = ORAHelper.ExecuteScalar(_SQL);
@@ -1441,7 +1458,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pOutStockId"></param>
         /// <param name="pInStockId"></param>
-        public static string EditDM_Dir_Stock(int pOutStockId, int pInStockId, int pPID)
+        public string EditDM_Dir_Stock(int pOutStockId, int pInStockId, int pPID)
         {
             _SQL = "SELECT COUNT(*) FROM DM_DIR_STOCK WHERE ISDELETE = 0 AND OUTSTOCKID = " + pOutStockId + " AND INSTOCKID = " + pInStockId;
             _obj = ORAHelper.ExecuteScalar(_SQL);
@@ -1458,7 +1475,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pOutStockId"></param>
         /// <param name="pInStockId"></param>
-        public static void DelDM_Dir_Stock(int pPID)
+        public void DelDM_Dir_Stock(int pPID)
         {
             _SQL = "UPDATE DM_DIR_STOCK SET ISDELETE = 1 WHERE PID = " + pPID;
 
@@ -1473,7 +1490,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型</param>
         /// <param name="pFBillNo">单据编号</param>
         /// <param name="pBarcodes">条码</param>
-        public static void SynBarcodr(string pType, string pFBillNo, string pBarcodes)
+        public void SynBarcodr(string pType, string pFBillNo, string pBarcodes)
         {
             if (pType == "入库")
             {
@@ -1507,7 +1524,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pUser">用户</param>
         /// <param name="pDate">日期</param>
         /// <returns></returns>
-        public static DataTable ERPLog(string pUser, DateTime pDate)
+        public DataTable ERPLog(string pUser, DateTime pDate)
         {
             _SQL = @"SELECT A.FDATETIME 操作时间,B.FNAME 操作用户,ORGL.FNAME 当前组织,SUBL.FNAME 子系统,OBJL.FNAME 业务对象
                 ,CASE WHEN A.FENVIRONMENT = 0 THEN '登入系统' WHEN A.FENVIRONMENT = 1 THEN '进入业务对象' WHEN A.FENVIRONMENT = 2 THEN '退出业务对象' WHEN A.FENVIRONMENT = 3 THEN '业务操作'ELSE '退出系统' END 操作场景
@@ -1530,7 +1547,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pIsAll"></param>
         /// <param name="pFNumber"></param>
-        public static void SynMTLForWMS(bool pIsAll, string pFNumber)
+        public void SynMTLForWMS(bool pIsAll, string pFNumber)
         {
             //SqlParameter[] parms = new SqlParameter[]
             //{
@@ -1675,7 +1692,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFUseOrgId">使用组织</param>
         /// <param name="pFNumber">物料编码</param>
         /// <returns></returns>
-        public static int GetMTLIDByNumber(int pFUseOrgId, string pFNumber)
+        public int GetMTLIDByNumber(int pFUseOrgId, string pFNumber)
         {
             _SQL = "SELECT FMATERIALID FROM T_BD_MATERIAL WHERE FDOCUMENTSTATUS = 'C' AND FFORBIDSTATUS = 'A' AND FUSEORGID = " + pFUseOrgId.ToString() + " AND FNUMBER = '" + pFNumber + "'";
             _obj = ORAHelper.ExecuteScalar(_SQL);
@@ -1692,7 +1709,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFNumber"></param>
         /// <param name="pUseOrgId"></param>
         /// <returns></returns>
-        public static string GetMTLByMTLNumber(string pFNumber, int pUseOrgId = 100508)
+        public string GetMTLByMTLNumber(string pFNumber, int pUseOrgId = 100508)
         {
             //_SQL = "SELECT A.FMATERIALID||'|'||AL.FNAME FROM T_BD_MATERIAL A INNER JOIN T_BD_MATERIAL_L AL ON A.FMATERIALID = AL.FMATERIALID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = " + pUseOrgId + " AND A.FNUMBER = '" + pFNumber + "'";
             _SQL = "SELECT AL.FNAME FROM T_BD_MATERIAL A INNER JOIN T_BD_MATERIAL_L AL ON A.FMATERIALID = AL.FMATERIALID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = " + pUseOrgId + " AND A.FNUMBER = '" + pFNumber + "'";
@@ -1708,7 +1725,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pMTLPara">物料参数</param>
         /// <param name="pMaterialId">物料ID</param>
-        public static void UpdateMTLPara(MaterialParameter pMTLPara, int pMaterialId)
+        public void UpdateMTLPara(MaterialParameter pMTLPara, int pMaterialId)
         {
             _SQL = @"UPDATE T_BD_MATERIALSTOCK
             SET F_PAEZ_SAFEDAYS = " + pMTLPara.F_PAEZ_SAFEDAYS.ToString() + ",F_PAEZ_LOGISTICSDAYS = " + pMTLPara.F_PAEZ_LOGISTICSDAYS.ToString() + ",F_PAEZ_LOWQTY = " + pMTLPara.F_PAEZ_LOWQTY.ToString() + ", F_PAEZ_MINQTY = " + pMTLPara.F_PAEZ_MINQTY.ToString() + ",F_PAEZ_REPLENISHMENT = " + pMTLPara.F_PAEZ_REPLENISHMENT.ToString() + @"
@@ -1724,7 +1741,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pMTLFNumber">物料编码</param>
         /// <returns></returns>
-        public static DataTable MStockSetting(string pMTLFNumber)
+        public DataTable MStockSetting(string pMTLFNumber)
         {
             _SQL = @"SELECT MST.FID 内码,MST.FMATERIALNUMBER 物料编码,MTLL.FNAME 物料名称,DEPL.FNAME 部门名称,MST.FSTOCKNUMBER 调出仓编码,NVL(STKL.FNAME,' ') 调出仓,NVL(STKL2.FNAME,' ') 中间仓
             FROM T_AUTO_MSTOCKSETTING MST
@@ -1746,7 +1763,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDeptNumber">部门编码</param>
         /// <param name="pStockID">仓库ID</param>
         /// <param name="pStockNumber">仓库编码</param>
-        public static void AddMStockSetting(string pMaterialID, string pMaterialNumber, string pDeptID, string pDeptNumber, string pStockID, string pStockNumber)
+        public void AddMStockSetting(string pMaterialID, string pMaterialNumber, string pDeptID, string pDeptNumber, string pStockID, string pStockNumber)
         {
             _SQL = @"INSERT INTO T_AUTO_MSTOCKSETTING(FMATERIALID,FMATERIALNUMBER,FDEPTID,FDEPTNUMBER,FSTOCKID,FSTOCKNUMBER,FCREATOR)
             VALUES(" + pMaterialID + ",'" + pMaterialNumber + "'," + pDeptID + ",'" + pDeptNumber + "'," + pStockID + ",'" + pStockNumber + "','" + GlobalParameter.K3Inf.UserName + "')";
@@ -1760,7 +1777,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFID">内码</param>
         /// <param name="pFName">调出仓名称</param>
         /// <param name="pFNameTran">中间仓名称</param>
-        public static void UpdateMStockSetting(string pFID, string pFName, string pFNameTran)
+        public void UpdateMStockSetting(string pFID, string pFName, string pFNameTran)
         {
             if (pFName.Equals(string.Empty) && pFNameTran.Equals(string.Empty))
                 return;
@@ -1809,7 +1826,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 根据FID删除默认仓库设置
         /// </summary>
         /// <param name="pFIDs"></param>
-        public static void DeleteMStockSetting(List<string> pFIDs)
+        public void DeleteMStockSetting(List<string> pFIDs)
         {
             if (pFIDs == null || pFIDs.Count == 0)
                 return;
@@ -1830,7 +1847,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 清除空值仓库MStockSetting
         /// </summary>
-        public static void DelMStockSetting()
+        public void DelMStockSetting()
         {
             ORAHelper.ExecuteNonQuery("DELETE FROM T_AUTO_MSTOCKSETTING WHERE FSTOCKID IS NULL");
         }
@@ -1841,7 +1858,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取本机IP地址
         /// </summary>
         /// <returns></returns>
-        public static string GetLocalIP()
+        public string GetLocalIP()
         {
             //string strIP = string.Empty;
             //try
@@ -1879,7 +1896,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 获取本机MAC地址
         /// </summary>
         /// <returns></returns>
-        public static string GetMac()
+        public string GetMac()
         {
             string Mac = string.Empty;
             try
@@ -1920,7 +1937,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型：0、Non；1、Scalar；2、Reader；3、DataTable；4、DataSet</param>
         /// <param name="pStrSQL">SQL语句</param>
         /// <returns></returns>
-        private static object SqlOperation(int pType, string pStrSQL)
+        private object SqlOperation(int pType, string pStrSQL)
         {
             object obj;
             OracleDataAdapter adp;
@@ -1974,3 +1991,4 @@ namespace ERPSupport.SQL.K3Cloud
         #endregion
     }
 }
+

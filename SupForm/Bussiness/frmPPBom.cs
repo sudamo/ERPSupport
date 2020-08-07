@@ -54,7 +54,7 @@ namespace ERPSupport.SupForm.Bussiness
             if (bnTop_txtBillNo.Text.Trim().Equals(string.Empty))
                 return;
 
-            _dtDataSource = SQL.K3Cloud.PrdAllocation.GetPPBomByBillNo(bnTop_txtBillNo.Text.Trim());
+            _dtDataSource = DALFactory.K3Cloud.DALCreator.PrdAllocation.GetPPBomByBillNo(bnTop_txtBillNo.Text.Trim());
             if (_dtDataSource == null || _dtDataSource.Rows.Count == 0)
                 return;
 
@@ -136,7 +136,7 @@ namespace ERPSupport.SupForm.Bussiness
                 return;
             }
 
-            string strMTL = SQL.K3Cloud.CommFunction.GetMTLByMTLNumber(bnC_txtMTLNumber.Text.Trim());
+            string strMTL = DALFactory.K3Cloud.DALCreator.CommFunction.GetMTLByMTLNumber(bnC_txtMTLNumber.Text.Trim());
             if (strMTL.Equals(string.Empty))
             {
                 MessageBox.Show("未找到物料信息。");

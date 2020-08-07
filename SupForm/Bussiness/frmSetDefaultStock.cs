@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.Bussiness
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 默认仓库设置
@@ -47,14 +47,13 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void frmSetDefaultStock_Load(object sender, EventArgs e)
         {
-            dgv1.DataSource = PrdInstock.GetMo(_PlanStartDate, _FormId);
-            
+            dgv1.DataSource = DALFactory.K3Cloud.DALCreator.PrdInstock.GetMo(_PlanStartDate, _FormId);            
 
             DataGridViewComboBoxColumn colcbx = new DataGridViewComboBoxColumn();
             colcbx.HeaderText = "默认仓库";
             colcbx.AutoComplete = true;
             colcbx.DisplayStyle = DataGridViewComboBoxDisplayStyle.Nothing;
-            colcbx.DataSource = CommFunction.GetStock(5, _OrgId);
+            colcbx.DataSource = DALCreator.CommFunction.GetStock(5, _OrgId);
             dgv1.Columns.Add(colcbx);
             colcbx.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             colcbx.DisplayMember = "FName";
@@ -86,7 +85,7 @@ namespace ERPSupport.SupForm.Bussiness
                 {
                     string FName = (dgv1.Rows[i].Cells[4]).EditedFormattedValue.ToString();
                     if (strStockValue == string.Empty && (dgv1.Rows[i].Cells[4]).EditedFormattedValue != null && FName != string.Empty)
-                        strStockValue = CommFunction.GetStockNumber(_OrgId, FName);
+                        strStockValue = DALCreator.CommFunction.GetStockNumber(_OrgId, FName);
 
                     dgv1.Rows[i].Cells[4].Value = strStockValue;
                 }
@@ -115,15 +114,15 @@ namespace ERPSupport.SupForm.Bussiness
                     string FName = (dgv1.Rows[i].Cells[4]).EditedFormattedValue.ToString();
 
                     strMaterialNumber = dgv1.Rows[i].Cells[0].Value.ToString();
-                    strMaterialID = CommFunction.GetMTLIDByNumber(_OrgId, dgv1.Rows[i].Cells[0].Value.ToString()).ToString();
+                    strMaterialID = DALCreator.CommFunction.GetMTLIDByNumber(_OrgId, dgv1.Rows[i].Cells[0].Value.ToString()).ToString();
                     strDeptNumber = dgv1.Rows[i].Cells[2].Value.ToString();
-                    strDeptID = CommFunction.GetDepartIdByNumber(_OrgId, dgv1.Rows[i].Cells[2].Value.ToString()).ToString();
-                    strStockNumber = CommFunction.GetStockNumber(_OrgId, FName);
-                    strStockID = CommFunction.GetStockIdByNumber(_OrgId, strStockNumber).ToString();
+                    strDeptID = DALCreator.CommFunction.GetDepartIdByNumber(_OrgId, dgv1.Rows[i].Cells[2].Value.ToString()).ToString();
+                    strStockNumber = DALCreator.CommFunction.GetStockNumber(_OrgId, FName);
+                    strStockID = DALCreator.CommFunction.GetStockIdByNumber(_OrgId, strStockNumber).ToString();
 
                     if (strStockID == null || strStockID == "-1") continue;
 
-                    CommFunction.AddMStockSetting(strMaterialID, strMaterialNumber, strDeptID, strDeptNumber, strStockID, strStockNumber);
+                    DALCreator.CommFunction.AddMStockSetting(strMaterialID, strMaterialNumber, strDeptID, strDeptNumber, strStockID, strStockNumber);
                 }
             }
 

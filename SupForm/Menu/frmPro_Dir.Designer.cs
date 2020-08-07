@@ -73,10 +73,12 @@
             this.lblStock = new System.Windows.Forms.Label();
             this.lblDepartment = new System.Windows.Forms.Label();
             this.bnBottom = new System.Windows.Forms.BindingNavigator(this.components);
-            this.bnBottom_btnOK = new System.Windows.Forms.ToolStripButton();
             this.bnBottom_btnCancel = new System.Windows.Forms.ToolStripButton();
-            this.bnBottom_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnBottom_tss2 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnBottom_btnOK = new System.Windows.Forms.ToolStripButton();
             this.bnBottom_btnStock = new System.Windows.Forms.ToolStripButton();
+            this.bnBottom_tss = new System.Windows.Forms.ToolStripSeparator();
+            this.bnBottom_btnSynPosition = new System.Windows.Forms.ToolStripButton();
             this.gbxDirType.SuspendLayout();
             this.gbxDB_WMS.SuspendLayout();
             this.gbxPenZi.SuspendLayout();
@@ -143,7 +145,7 @@
             // btnCheckConnect
             // 
             this.btnCheckConnect.Location = new System.Drawing.Point(156, 161);
-            this.btnCheckConnect.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnCheckConnect.Margin = new System.Windows.Forms.Padding(2);
             this.btnCheckConnect.Name = "btnCheckConnect";
             this.btnCheckConnect.Size = new System.Drawing.Size(75, 24);
             this.btnCheckConnect.TabIndex = 6;
@@ -256,9 +258,9 @@
             this.gbxPenZi.Controls.Add(this.lblPianYiPZ);
             this.gbxPenZi.Controls.Add(this.lblMaxQtyPZ);
             this.gbxPenZi.Location = new System.Drawing.Point(278, 67);
-            this.gbxPenZi.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbxPenZi.Margin = new System.Windows.Forms.Padding(2);
             this.gbxPenZi.Name = "gbxPenZi";
-            this.gbxPenZi.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbxPenZi.Padding = new System.Windows.Forms.Padding(2);
             this.gbxPenZi.Size = new System.Drawing.Size(225, 135);
             this.gbxPenZi.TabIndex = 2;
             this.gbxPenZi.TabStop = false;
@@ -287,7 +289,7 @@
             // txtMinQtyPZ
             // 
             this.txtMinQtyPZ.Location = new System.Drawing.Point(109, 106);
-            this.txtMinQtyPZ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtMinQtyPZ.Margin = new System.Windows.Forms.Padding(2);
             this.txtMinQtyPZ.Name = "txtMinQtyPZ";
             this.txtMinQtyPZ.Size = new System.Drawing.Size(61, 21);
             this.txtMinQtyPZ.TabIndex = 4;
@@ -295,7 +297,7 @@
             // txtDPQtyPZ
             // 
             this.txtDPQtyPZ.Location = new System.Drawing.Point(109, 81);
-            this.txtDPQtyPZ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtDPQtyPZ.Margin = new System.Windows.Forms.Padding(2);
             this.txtDPQtyPZ.Name = "txtDPQtyPZ";
             this.txtDPQtyPZ.Size = new System.Drawing.Size(61, 21);
             this.txtDPQtyPZ.TabIndex = 3;
@@ -344,7 +346,7 @@
             // 
             this.chbIsUsePZ.AutoSize = true;
             this.chbIsUsePZ.Location = new System.Drawing.Point(176, 17);
-            this.chbIsUsePZ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chbIsUsePZ.Margin = new System.Windows.Forms.Padding(2);
             this.chbIsUsePZ.Name = "chbIsUsePZ";
             this.chbIsUsePZ.Size = new System.Drawing.Size(48, 16);
             this.chbIsUsePZ.TabIndex = 0;
@@ -355,7 +357,7 @@
             // txtPianYiPZ
             // 
             this.txtPianYiPZ.Location = new System.Drawing.Point(109, 56);
-            this.txtPianYiPZ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPianYiPZ.Margin = new System.Windows.Forms.Padding(2);
             this.txtPianYiPZ.Name = "txtPianYiPZ";
             this.txtPianYiPZ.Size = new System.Drawing.Size(61, 21);
             this.txtPianYiPZ.TabIndex = 2;
@@ -364,7 +366,7 @@
             // txtMaxQtyPZ
             // 
             this.txtMaxQtyPZ.Location = new System.Drawing.Point(109, 32);
-            this.txtMaxQtyPZ.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtMaxQtyPZ.Margin = new System.Windows.Forms.Padding(2);
             this.txtMaxQtyPZ.Name = "txtMaxQtyPZ";
             this.txtMaxQtyPZ.Size = new System.Drawing.Size(61, 21);
             this.txtMaxQtyPZ.TabIndex = 1;
@@ -401,9 +403,9 @@
             this.gbxCaiLiao.Controls.Add(this.lblMaxQtyCL);
             this.gbxCaiLiao.Enabled = false;
             this.gbxCaiLiao.Location = new System.Drawing.Point(278, 209);
-            this.gbxCaiLiao.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbxCaiLiao.Margin = new System.Windows.Forms.Padding(2);
             this.gbxCaiLiao.Name = "gbxCaiLiao";
-            this.gbxCaiLiao.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbxCaiLiao.Padding = new System.Windows.Forms.Padding(2);
             this.gbxCaiLiao.Size = new System.Drawing.Size(225, 100);
             this.gbxCaiLiao.TabIndex = 3;
             this.gbxCaiLiao.TabStop = false;
@@ -433,7 +435,7 @@
             // 
             this.chbIsUseCL.AutoSize = true;
             this.chbIsUseCL.Location = new System.Drawing.Point(172, 18);
-            this.chbIsUseCL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chbIsUseCL.Margin = new System.Windows.Forms.Padding(2);
             this.chbIsUseCL.Name = "chbIsUseCL";
             this.chbIsUseCL.Size = new System.Drawing.Size(48, 16);
             this.chbIsUseCL.TabIndex = 0;
@@ -444,7 +446,7 @@
             // txtPianYiCL
             // 
             this.txtPianYiCL.Location = new System.Drawing.Point(104, 58);
-            this.txtPianYiCL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtPianYiCL.Margin = new System.Windows.Forms.Padding(2);
             this.txtPianYiCL.Name = "txtPianYiCL";
             this.txtPianYiCL.Size = new System.Drawing.Size(62, 21);
             this.txtPianYiCL.TabIndex = 2;
@@ -453,7 +455,7 @@
             // txtMaxQtyCL
             // 
             this.txtMaxQtyCL.Location = new System.Drawing.Point(104, 34);
-            this.txtMaxQtyCL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtMaxQtyCL.Margin = new System.Windows.Forms.Padding(2);
             this.txtMaxQtyCL.Name = "txtMaxQtyCL";
             this.txtMaxQtyCL.Size = new System.Drawing.Size(62, 21);
             this.txtMaxQtyCL.TabIndex = 1;
@@ -537,9 +539,11 @@
             this.bnBottom.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.bnBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.bnBottom_btnCancel,
-            this.bnBottom_tss,
+            this.bnBottom_tss2,
             this.bnBottom_btnOK,
-            this.bnBottom_btnStock});
+            this.bnBottom_btnStock,
+            this.bnBottom_tss,
+            this.bnBottom_btnSynPosition});
             this.bnBottom.Location = new System.Drawing.Point(0, 343);
             this.bnBottom.MoveFirstItem = null;
             this.bnBottom.MoveLastItem = null;
@@ -551,17 +555,6 @@
             this.bnBottom.TabIndex = 5;
             this.bnBottom.Text = "Bottom";
             // 
-            // bnBottom_btnOK
-            // 
-            this.bnBottom_btnOK.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.bnBottom_btnOK.Image = global::ERPSupport.SupForm.Properties.Resources.accept;
-            this.bnBottom_btnOK.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnBottom_btnOK.Name = "bnBottom_btnOK";
-            this.bnBottom_btnOK.Size = new System.Drawing.Size(56, 24);
-            this.bnBottom_btnOK.Text = "确定";
-            this.bnBottom_btnOK.ToolTipText = "保存信息并退出";
-            this.bnBottom_btnOK.Click += new System.EventHandler(this.bnBottom_btnOK_Click);
-            // 
             // bnBottom_btnCancel
             // 
             this.bnBottom_btnCancel.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -569,25 +562,54 @@
             this.bnBottom_btnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnCancel.Name = "bnBottom_btnCancel";
             this.bnBottom_btnCancel.Size = new System.Drawing.Size(56, 24);
+            this.bnBottom_btnCancel.Tag = "4";
             this.bnBottom_btnCancel.Text = "取消";
             this.bnBottom_btnCancel.ToolTipText = "取消并退出";
             this.bnBottom_btnCancel.Click += new System.EventHandler(this.bnBottom_btnCancel_Click);
             // 
-            // bnBottom_tss
+            // bnBottom_tss2
             // 
-            this.bnBottom_tss.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.bnBottom_tss.Name = "bnBottom_tss";
-            this.bnBottom_tss.Size = new System.Drawing.Size(6, 27);
+            this.bnBottom_tss2.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.bnBottom_tss2.Name = "bnBottom_tss2";
+            this.bnBottom_tss2.Size = new System.Drawing.Size(6, 27);
+            // 
+            // bnBottom_btnOK
+            // 
+            this.bnBottom_btnOK.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.bnBottom_btnOK.Image = global::ERPSupport.SupForm.Properties.Resources.accept;
+            this.bnBottom_btnOK.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnBottom_btnOK.Name = "bnBottom_btnOK";
+            this.bnBottom_btnOK.Size = new System.Drawing.Size(56, 24);
+            this.bnBottom_btnOK.Tag = "3";
+            this.bnBottom_btnOK.Text = "确定";
+            this.bnBottom_btnOK.ToolTipText = "保存信息并退出";
+            this.bnBottom_btnOK.Click += new System.EventHandler(this.bnBottom_btnOK_Click);
             // 
             // bnBottom_btnStock
             // 
-            this.bnBottom_btnStock.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
+            this.bnBottom_btnStock.Image = global::ERPSupport.SupForm.Properties.Resources.setting_tools;
             this.bnBottom_btnStock.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnStock.Name = "bnBottom_btnStock";
             this.bnBottom_btnStock.Size = new System.Drawing.Size(116, 24);
+            this.bnBottom_btnStock.Tag = "1";
             this.bnBottom_btnStock.Text = "设置仓库间调拨";
             this.bnBottom_btnStock.ToolTipText = "设置两个仓库间只在ERP上生成调拨单";
             this.bnBottom_btnStock.Click += new System.EventHandler(this.bnBottom_btnStock_Click);
+            // 
+            // bnBottom_tss
+            // 
+            this.bnBottom_tss.Name = "bnBottom_tss";
+            this.bnBottom_tss.Size = new System.Drawing.Size(6, 27);
+            // 
+            // bnBottom_btnSynPosition
+            // 
+            this.bnBottom_btnSynPosition.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
+            this.bnBottom_btnSynPosition.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnBottom_btnSynPosition.Name = "bnBottom_btnSynPosition";
+            this.bnBottom_btnSynPosition.Size = new System.Drawing.Size(80, 24);
+            this.bnBottom_btnSynPosition.Tag = "2";
+            this.bnBottom_btnSynPosition.Text = "同步仓位";
+            this.bnBottom_btnSynPosition.Click += new System.EventHandler(this.bnBottom_btnSynPosition_Click);
             // 
             // frmPro_Dir
             // 
@@ -673,7 +695,9 @@
         private System.Windows.Forms.BindingNavigator bnBottom;
         private System.Windows.Forms.ToolStripButton bnBottom_btnOK;
         private System.Windows.Forms.ToolStripButton bnBottom_btnCancel;
-        private System.Windows.Forms.ToolStripSeparator bnBottom_tss;
+        private System.Windows.Forms.ToolStripSeparator bnBottom_tss2;
         private System.Windows.Forms.ToolStripButton bnBottom_btnStock;
+        private System.Windows.Forms.ToolStripSeparator bnBottom_tss;
+        private System.Windows.Forms.ToolStripButton bnBottom_btnSynPosition;
     }
 }

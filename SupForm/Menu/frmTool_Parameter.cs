@@ -5,7 +5,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.Menu
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
     using Model.K3Cloud;
 
     /// <summary>
@@ -90,7 +90,7 @@ namespace ERPSupport.SupForm.Menu
 
             //操作日志
             string OContent = string.Format("LockType:{0}|IsUse:{1}|LockNumber:{2}|LockPercent:{3}|SafeStockDays:{4}|LogisticsDays:{5}|AddGoodsDays:{6}|LowGoods:{7}|MinBats:{8}|StarTime:{9}|EndTime:{10}|SumMoonths:{11}|AddJoinQty:{12}", LockType, IsUse, txtNumber.Text, txtPercent.Text, txtSafeStockDays.Text, txtLogisticsDays.Text, txtAddGoodsDays.Text, txtLowBook.Text, txtMinBats.Text, dtpStar.Value.ToString(), dtpEnd.Value.ToString(), txtSumDays.Text, AddJoinQty);
-            CommFunction.DM_Log_Local("参数设定", "菜单->工具->参数", OContent);
+            DALCreator.CommFunction.DM_Log_Local("参数设定", "菜单->工具->参数", OContent);
 
             MessageBox.Show("保存成功");
             DialogResult = DialogResult.OK;
@@ -170,7 +170,7 @@ namespace ERPSupport.SupForm.Menu
                 try
                 {
                     FNumber = worksheet.Cells[i, 1].Text;
-                    FNumber = CommFunction.GetMTLIDByNumber(100508, FNumber.ToString());
+                    FNumber = DALCreator.CommFunction.GetMTLIDByNumber(100508, FNumber.ToString());
                     if (FNumber == null) continue;
                     F_PAEZ_SAFEDAYS = worksheet.Cells[i, 2].Text;
                     F_PAEZ_LOGISTICSDAYS = worksheet.Cells[i, 3].Text;
@@ -178,7 +178,7 @@ namespace ERPSupport.SupForm.Menu
                     F_PAEZ_MINQTY = worksheet.Cells[i, 5].Text;
                     F_PAEZ_REPLENISHMENT = worksheet.Cells[i, 6].Text;
 
-                    CommFunction.UpdateMTLPara(new MaterialParameter(int.Parse(F_PAEZ_SAFEDAYS), int.Parse(F_PAEZ_LOGISTICSDAYS), int.Parse(F_PAEZ_REPLENISHMENT), decimal.Parse(F_PAEZ_LOWQTY), decimal.Parse(F_PAEZ_MINQTY)), int.Parse(FNumber.ToString()));
+                    DALCreator.CommFunction.UpdateMTLPara(new MaterialParameter(int.Parse(F_PAEZ_SAFEDAYS), int.Parse(F_PAEZ_LOGISTICSDAYS), int.Parse(F_PAEZ_REPLENISHMENT), decimal.Parse(F_PAEZ_LOWQTY), decimal.Parse(F_PAEZ_MINQTY)), int.Parse(FNumber.ToString()));
                 }
                 catch (Exception ex)
                 {

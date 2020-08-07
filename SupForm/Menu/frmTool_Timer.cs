@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 
 namespace ERPSupport.SupForm.Menu
 {
-    using SQL.K3Cloud;
     using Model.Basic;
     using Model.Globa;
 
@@ -192,7 +191,7 @@ namespace ERPSupport.SupForm.Menu
             //目前只能设置自动领料功能
 
             //最多只能一个客户端设置自动领料
-            DataTable dt = CommFunction.GetLockObjectInfo("LOCKPICKMTL");
+            DataTable dt = DALFactory.K3Cloud.DALCreator.CommFunction.GetLockObjectInfo("LOCKPICKMTL");
             if (dt == null || dt.Rows.Count == 0)
             {
                 MessageBox.Show("自动领料数据查询失败，未能启动自动领料");
@@ -230,11 +229,11 @@ namespace ERPSupport.SupForm.Menu
 
             if (_TimerPara.PauseStatus)//更新占用自动领料功能状态。
             {
-                CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
+                DALFactory.K3Cloud.DALCreator.CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
             }
             else
             {
-                CommFunction.UpdateLockStatus(1, "LOCKPICKMTL");
+                DALFactory.K3Cloud.DALCreator.CommFunction.UpdateLockStatus(1, "LOCKPICKMTL");
             }
 
             string AutoExit = chbExit.Checked ? "1" : "0";

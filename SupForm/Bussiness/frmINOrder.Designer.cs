@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmINOrder));
             this.gbxReport = new System.Windows.Forms.GroupBox();
             this.btnImport = new System.Windows.Forms.Button();
@@ -45,15 +46,19 @@
             this.cbxCreateOrg = new System.Windows.Forms.ComboBox();
             this.gbxArea = new System.Windows.Forms.GroupBox();
             this.btnAddADD = new System.Windows.Forms.Button();
+            this.lblDistrict = new System.Windows.Forms.Label();
+            this.lblCity = new System.Windows.Forms.Label();
             this.lblProvince = new System.Windows.Forms.Label();
+            this.txtDistrict = new System.Windows.Forms.TextBox();
             this.cbxProvince = new System.Windows.Forms.ComboBox();
             this.cbxCity = new System.Windows.Forms.ComboBox();
-            this.txtDistrict = new System.Windows.Forms.TextBox();
-            this.lblCity = new System.Windows.Forms.Label();
-            this.lblDistrict = new System.Windows.Forms.Label();
+            this.bnBottom = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnTop_Price = new System.Windows.Forms.ToolStripButton();
             this.gbxReport.SuspendLayout();
             this.gbxCustomer.SuspendLayout();
             this.gbxArea.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).BeginInit();
+            this.bnBottom.SuspendLayout();
             this.SuspendLayout();
             // 
             // gbxReport
@@ -226,6 +231,24 @@
             this.btnAddADD.UseVisualStyleBackColor = true;
             this.btnAddADD.Click += new System.EventHandler(this.btnAddADD_Click);
             // 
+            // lblDistrict
+            // 
+            this.lblDistrict.AutoSize = true;
+            this.lblDistrict.Location = new System.Drawing.Point(24, 52);
+            this.lblDistrict.Name = "lblDistrict";
+            this.lblDistrict.Size = new System.Drawing.Size(47, 12);
+            this.lblDistrict.TabIndex = 0;
+            this.lblDistrict.Text = "区/县：";
+            // 
+            // lblCity
+            // 
+            this.lblCity.AutoSize = true;
+            this.lblCity.Location = new System.Drawing.Point(222, 23);
+            this.lblCity.Name = "lblCity";
+            this.lblCity.Size = new System.Drawing.Size(29, 12);
+            this.lblCity.TabIndex = 0;
+            this.lblCity.Text = "市：";
+            // 
             // lblProvince
             // 
             this.lblProvince.AutoSize = true;
@@ -234,6 +257,13 @@
             this.lblProvince.Size = new System.Drawing.Size(29, 12);
             this.lblProvince.TabIndex = 0;
             this.lblProvince.Text = "省：";
+            // 
+            // txtDistrict
+            // 
+            this.txtDistrict.Location = new System.Drawing.Point(77, 46);
+            this.txtDistrict.Name = "txtDistrict";
+            this.txtDistrict.Size = new System.Drawing.Size(139, 21);
+            this.txtDistrict.TabIndex = 1;
             // 
             // cbxProvince
             // 
@@ -254,36 +284,41 @@
             this.cbxCity.Size = new System.Drawing.Size(96, 20);
             this.cbxCity.TabIndex = 0;
             // 
-            // txtDistrict
+            // bnBottom
             // 
-            this.txtDistrict.Location = new System.Drawing.Point(77, 46);
-            this.txtDistrict.Name = "txtDistrict";
-            this.txtDistrict.Size = new System.Drawing.Size(139, 21);
-            this.txtDistrict.TabIndex = 1;
+            this.bnBottom.AddNewItem = null;
+            this.bnBottom.CountItem = null;
+            this.bnBottom.DeleteItem = null;
+            this.bnBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.bnBottom.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnTop_Price});
+            this.bnBottom.Location = new System.Drawing.Point(0, 257);
+            this.bnBottom.MoveFirstItem = null;
+            this.bnBottom.MoveLastItem = null;
+            this.bnBottom.MoveNextItem = null;
+            this.bnBottom.MovePreviousItem = null;
+            this.bnBottom.Name = "bnBottom";
+            this.bnBottom.PositionItem = null;
+            this.bnBottom.Size = new System.Drawing.Size(464, 25);
+            this.bnBottom.TabIndex = 2;
+            this.bnBottom.Text = "bindingNavigator1";
             // 
-            // lblCity
+            // bnTop_Price
             // 
-            this.lblCity.AutoSize = true;
-            this.lblCity.Location = new System.Drawing.Point(222, 23);
-            this.lblCity.Name = "lblCity";
-            this.lblCity.Size = new System.Drawing.Size(29, 12);
-            this.lblCity.TabIndex = 0;
-            this.lblCity.Text = "市：";
-            // 
-            // lblDistrict
-            // 
-            this.lblDistrict.AutoSize = true;
-            this.lblDistrict.Location = new System.Drawing.Point(24, 52);
-            this.lblDistrict.Name = "lblDistrict";
-            this.lblDistrict.Size = new System.Drawing.Size(47, 12);
-            this.lblDistrict.TabIndex = 0;
-            this.lblDistrict.Text = "区/县：";
+            this.bnTop_Price.Image = global::ERPSupport.SupForm.Properties.Resources.update;
+            this.bnTop_Price.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_Price.Name = "bnTop_Price";
+            this.bnTop_Price.Size = new System.Drawing.Size(76, 22);
+            this.bnTop_Price.Tag = "1";
+            this.bnTop_Price.Text = "更新价格";
+            this.bnTop_Price.Click += new System.EventHandler(this.bnTop_Price_Click);
             // 
             // frmINOrder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(464, 282);
+            this.Controls.Add(this.bnBottom);
             this.Controls.Add(this.gbxCustomer);
             this.Controls.Add(this.gbxArea);
             this.Controls.Add(this.gbxReport);
@@ -300,7 +335,11 @@
             this.gbxCustomer.PerformLayout();
             this.gbxArea.ResumeLayout(false);
             this.gbxArea.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).EndInit();
+            this.bnBottom.ResumeLayout(false);
+            this.bnBottom.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -328,5 +367,7 @@
         private System.Windows.Forms.ComboBox cbxProvince;
         private System.Windows.Forms.ComboBox cbxCity;
         private System.Windows.Forms.Label lblDistrict;
+        private System.Windows.Forms.BindingNavigator bnBottom;
+        private System.Windows.Forms.ToolStripButton bnTop_Price;
     }
 }

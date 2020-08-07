@@ -13,8 +13,8 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.Bussiness
 {
-    using SQL.K3Cloud;
     using Model.Globa;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 订单运算
@@ -213,7 +213,7 @@ namespace ERPSupport.SupForm.Bussiness
         private void timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             //每5分钟更新一次正在使用时间
-            CommFunction.UpdateLockStatus(1, "ORDERRUN");
+            DALCreator.CommFunction.UpdateLockStatus(1, "ORDERRUN");
         }
         #endregion
 
@@ -225,7 +225,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="e"></param>
         private void btnRun_Click(object sender, EventArgs e)
         {
-            _dtRunResult = SalOrder.OrderRun(_dtRun, _AddJoinQty);
+            _dtRunResult = DALCreator.SalOrder.OrderRun(_dtRun, _AddJoinQty);
 
             if (_dtRunResult == null || _dtRunResult.Rows.Count == 0)
             {
@@ -305,7 +305,7 @@ namespace ERPSupport.SupForm.Bussiness
         private int ExpandMTL(DoWorkEventArgs e)
         {
             _dtDtl = new DataTable();
-            _dtDtl = SalOrder.OrderRun(_ListRunEntryId, _StarTime, _EndTime, _AddJoinQty);
+            _dtDtl = DALCreator.SalOrder.OrderRun(_ListRunEntryId, _StarTime, _EndTime, _AddJoinQty);
 
             if (_dtDtl == null || _dtDtl.Rows.Count == 0)
             {
@@ -834,15 +834,16 @@ namespace ERPSupport.SupForm.Bussiness
                 if (_ListRunEntryId.Contains(int.Parse(_dtRunResult.Rows[i]["FENTRYID"].ToString())))
                 {
                     iSEQ++;
-                    strSQL = "INSERT INTO DM_LOG_ORDERRUN(YSBILLNO,FID,FENTRYID,FBILLNO,FBILLTYPE,FMTLNUMBER,FMTLNAME,FCUSTNAME,F_PAEZ_SUBMITUSERID,FUNIT,FQTY,FLOCKQTY,FDEMANDQTY,BOM,FLACKLEVEL,ISLACK,FSEQ) VALUES('" + YSBILLNO + "'," + _dtRunResult.Rows[i]["FID"].ToString() + "," + _dtRunResult.Rows[i]["FENTRYID"].ToString() + ",'" + _dtRunResult.Rows[i]["单据编号"].ToString() + "','" + _dtRunResult.Rows[i]["单据类型"].ToString() + "','" + _dtRunResult.Rows[i]["物料编码"].ToString() + "','" + _dtRunResult.Rows[i]["物料名称"].ToString() + "','" + _dtRunResult.Rows[i]["客户名称"].ToString() + "','" + _dtRunResult.Rows[i]["提交人"].ToString() + "','" + _dtRunResult.Rows[i]["单位"].ToString() + "'," + _dtRunResult.Rows[i]["订单数量"].ToString() + "," + _dtRunResult.Rows[i]["锁库数量"].ToString() + "," + _dtRunResult.Rows[i]["订单需求"].ToString() + ",'" + _dtRunResult.Rows[i]["BOM版本"].ToString() + "','" + _dtRunResult.Rows[i]["欠料等级"].ToString() + "'," + (_dtRunResult.Rows[i]["是否欠料"].ToString() == "是" ? "1" : "0") + "," + iSEQ + ")";
 
-                    SQL.ORAHelper.ExecuteNonQuery(strSQL);
+                    DALCreator.SalOrder.SaveOrderRun(_dtDtlResult.Rows[i], YSBILLNO, iSEQ);
+                    //strSQL = "INSERT INTO DM_LOG_ORDERRUN(YSBILLNO,FID,FENTRYID,FBILLNO,FBILLTYPE,FMTLNUMBER,FMTLNAME,FCUSTNAME,F_PAEZ_SUBMITUSERID,FUNIT,FQTY,FLOCKQTY,FDEMANDQTY,BOM,FLACKLEVEL,ISLACK,FSEQ) VALUES('" + YSBILLNO + "'," + _dtRunResult.Rows[i]["FID"].ToString() + "," + _dtRunResult.Rows[i]["FENTRYID"].ToString() + ",'" + _dtRunResult.Rows[i]["单据编号"].ToString() + "','" + _dtRunResult.Rows[i]["单据类型"].ToString() + "','" + _dtRunResult.Rows[i]["物料编码"].ToString() + "','" + _dtRunResult.Rows[i]["物料名称"].ToString() + "','" + _dtRunResult.Rows[i]["客户名称"].ToString() + "','" + _dtRunResult.Rows[i]["提交人"].ToString() + "','" + _dtRunResult.Rows[i]["单位"].ToString() + "'," + _dtRunResult.Rows[i]["订单数量"].ToString() + "," + _dtRunResult.Rows[i]["锁库数量"].ToString() + "," + _dtRunResult.Rows[i]["订单需求"].ToString() + ",'" + _dtRunResult.Rows[i]["BOM版本"].ToString() + "','" + _dtRunResult.Rows[i]["欠料等级"].ToString() + "'," + (_dtRunResult.Rows[i]["是否欠料"].ToString() == "是" ? "1" : "0") + "," + iSEQ + ")";
+                    //SQL.ORAHelper.ExecuteNonQuery(strSQL);
 
                     //保存子项物料运算结果
                     SaveDetail(_dtRunResult.Rows[i]["FENTRYID"].ToString());
 
                     //反写运算次数、整单是否欠料和欠料等级
-                    SalOrder.UpdateOrderFields(int.Parse(_dtRunResult.Rows[i]["FENTRYID"].ToString()), _dtRunResult.Rows[i]["欠料等级"].ToString());
+                    DALCreator.SalOrder.UpdateOrderFields(int.Parse(_dtRunResult.Rows[i]["FENTRYID"].ToString()), _dtRunResult.Rows[i]["欠料等级"].ToString());
                 }
 
                 //进度条
@@ -861,7 +862,7 @@ namespace ERPSupport.SupForm.Bussiness
             //反写无需生产的销售订单
             for (int i = 0; i < _ListNotRunEntryId.Count; i++)
             {
-                SalOrder.UpdateOrderFields(_ListNotRunEntryId[i], "无需生产");
+                DALCreator.SalOrder.UpdateOrderFields(_ListNotRunEntryId[i], "无需生产");
             }
 
             MessageBox.Show("已经保存");
@@ -873,29 +874,24 @@ namespace ERPSupport.SupForm.Bussiness
         /// <summary>
         /// 保存子项物料运算结果
         /// </summary>
-        /// <param name="pFentryid"></param>
+        /// <param name="pFEntryId"></param>
         /// <param name="pPID"></param>
-        private void SaveDetail(string pFentryid)
+        private void SaveDetail(string pFEntryId)
         {
-            int iPID = SalOrder.GetMaxID("LOG_ORDERRUN", 1);
-            int iSEQ = 0;
-            string strSQL = "INSERT ALL ";
+            DALCreator.SalOrder.SaveOrderRunDetail(_dtDtlResult, pFEntryId);
+            //int iPID = SalOrder.GetMaxID("LOG_ORDERRUN", 1);
+            //int iSEQ = 0;
+            //string strSQL = "INSERT ALL ";
 
-            for (int i = 0; i < _dtDtlResult.Rows.Count; i++)
-            {
-                if (_dtDtlResult.Rows[i]["FENTRYID"].ToString() == pFentryid)
-                {
-                    iSEQ++;
-                    strSQL += " INTO DM_LOG_ORDERRUNSUB(PID,FID,FENTRYID,FPMTLNUMBER,FPMTLNAME,FMTLNUMBER,FMTLNAME,FNUIT,BOM,FQTY,FLOCKQTY,FSUBQTY,FSTOCKQTY,FSTOCKAVBQTY,FSTOCKDEMANDQTY,FNETDEMANDQTY,FPICQTY,FMINSTOCK,FMAXSTOCK,FSAFESTOCK,FSTOCKDAYS,FORDERQTY,FOCCUPYQTY,FOCCUPYSUMQTY,FLACKQTY,FLACKLEVEL,FSEQ) VALUES(" + iPID + "," + _dtDtlResult.Rows[i]["FID"].ToString() + "," + _dtDtlResult.Rows[i]["FENTRYID"].ToString() + ",'" + _dtDtlResult.Rows[i]["父项物料"].ToString() + "','" + _dtDtlResult.Rows[i]["父项名称"].ToString() + "','" + _dtDtlResult.Rows[i]["物料编码"].ToString() + "','" + _dtDtlResult.Rows[i]["物料名称"].ToString() + "','" + _dtDtlResult.Rows[i]["单位"].ToString() + "','" + _dtDtlResult.Rows[i]["BOM"].ToString() + "'," + _dtDtlResult.Rows[i]["订单数量"].ToString() + "," + _dtDtlResult.Rows[i]["锁库数量"].ToString() + "," + _dtDtlResult.Rows[i]["子项需求"].ToString() + "," + _dtDtlResult.Rows[i]["库存数量"].ToString() + "," + _dtDtlResult.Rows[i]["库存可用数量"].ToString() + "," + _dtDtlResult.Rows[i]["库存需求"].ToString() + "," + _dtDtlResult.Rows[i]["净需求"].ToString() + "," + _dtDtlResult.Rows[i]["领料数量"].ToString() + "," + _dtDtlResult.Rows[i]["最小库存"].ToString() + "," + _dtDtlResult.Rows[i]["最大库存"].ToString() + "," + _dtDtlResult.Rows[i]["安全库存"].ToString() + "," + _dtDtlResult.Rows[i]["库存可用天数"].ToString() + "," + _dtDtlResult.Rows[i]["下单点"].ToString() + "," + _dtDtlResult.Rows[i]["本次占用数量"].ToString() + "," + _dtDtlResult.Rows[i]["累计占用数量"].ToString() + "," + _dtDtlResult.Rows[i]["欠料数量"].ToString() + ",'" + _dtDtlResult.Rows[i]["欠料等级"].ToString() + "'," + iSEQ + ")";
-                }
-            }
-            SQL.ORAHelper.ExecuteNonQuery(strSQL + " SELECT * FROM DUAL;");
-
-            ////添加预留关系 --不修改库存可用量
-            //if (decimal.Parse(FOCCUPYQTY) > 0)
+            //for (int i = 0; i < _dtDtlResult.Rows.Count; i++)
             //{
-            //    AddReserveLink(dtDtlResult.Rows[i], decimal.Parse(FOCCUPYQTY));
+            //    if (_dtDtlResult.Rows[i]["FENTRYID"].ToString() == pFentryid)
+            //    {
+            //        iSEQ++;
+            //        strSQL += " INTO DM_LOG_ORDERRUNSUB(PID,FID,FENTRYID,FPMTLNUMBER,FPMTLNAME,FMTLNUMBER,FMTLNAME,FNUIT,BOM,FQTY,FLOCKQTY,FSUBQTY,FSTOCKQTY,FSTOCKAVBQTY,FSTOCKDEMANDQTY,FNETDEMANDQTY,FPICQTY,FMINSTOCK,FMAXSTOCK,FSAFESTOCK,FSTOCKDAYS,FORDERQTY,FOCCUPYQTY,FOCCUPYSUMQTY,FLACKQTY,FLACKLEVEL,FSEQ) VALUES(" + iPID + "," + _dtDtlResult.Rows[i]["FID"].ToString() + "," + _dtDtlResult.Rows[i]["FENTRYID"].ToString() + ",'" + _dtDtlResult.Rows[i]["父项物料"].ToString() + "','" + _dtDtlResult.Rows[i]["父项名称"].ToString() + "','" + _dtDtlResult.Rows[i]["物料编码"].ToString() + "','" + _dtDtlResult.Rows[i]["物料名称"].ToString() + "','" + _dtDtlResult.Rows[i]["单位"].ToString() + "','" + _dtDtlResult.Rows[i]["BOM"].ToString() + "'," + _dtDtlResult.Rows[i]["订单数量"].ToString() + "," + _dtDtlResult.Rows[i]["锁库数量"].ToString() + "," + _dtDtlResult.Rows[i]["子项需求"].ToString() + "," + _dtDtlResult.Rows[i]["库存数量"].ToString() + "," + _dtDtlResult.Rows[i]["库存可用数量"].ToString() + "," + _dtDtlResult.Rows[i]["库存需求"].ToString() + "," + _dtDtlResult.Rows[i]["净需求"].ToString() + "," + _dtDtlResult.Rows[i]["领料数量"].ToString() + "," + _dtDtlResult.Rows[i]["最小库存"].ToString() + "," + _dtDtlResult.Rows[i]["最大库存"].ToString() + "," + _dtDtlResult.Rows[i]["安全库存"].ToString() + "," + _dtDtlResult.Rows[i]["库存可用天数"].ToString() + "," + _dtDtlResult.Rows[i]["下单点"].ToString() + "," + _dtDtlResult.Rows[i]["本次占用数量"].ToString() + "," + _dtDtlResult.Rows[i]["累计占用数量"].ToString() + "," + _dtDtlResult.Rows[i]["欠料数量"].ToString() + ",'" + _dtDtlResult.Rows[i]["欠料等级"].ToString() + "'," + iSEQ + ")";
+            //    }
             //}
+            //SQL.ORAHelper.ExecuteNonQuery(strSQL + " SELECT * FROM DUAL;");
         }
         #endregion
 
@@ -966,7 +962,7 @@ namespace ERPSupport.SupForm.Bussiness
                 model.Add("FDate", DateTime.Today);
 
                 //--Detail
-                dt = SalOrder.GetInventoryInfByMaterialId(pDR["FMATERIALID"].ToString());
+                dt = DALCreator.SalOrder.GetInventoryInfByMaterialId(pDR["FMATERIALID"].ToString());
                 if (dt == null || dt.Rows.Count == 0)
                     return "查询即时库存失败";
 

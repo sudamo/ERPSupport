@@ -8,25 +8,22 @@ using Oracle.ManagedDataAccess.Client;
 namespace ERPSupport.SQL.K3Cloud
 {
     using Model.Globa;
+    using IDAL.K3Cloud;
 
     /// <summary>
     /// 生产领料
     /// </summary>
-    public static class PrdPick
+    public class PrdPick : IPrdPick
     {
-        #region STATIC
         private static string _SQL;
-        //private static object _obj;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        static PrdPick()
+        public PrdPick()
         {
             _SQL = string.Empty;
-            //_obj = new object();
         }
-        #endregion
 
         /// <summary>
         /// 生成倒冲领料单
@@ -37,7 +34,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pBillNO">入库单编号</param>
         /// <returns>领料单</returns>
-        public static string PickMtl(string pBillNO)
+        public string PickMtl(string pBillNO)
         {
             string strPMBillNO;
             DataTable dt = null;
@@ -389,7 +386,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pDateTime">日期</param>
         /// <returns>DataTable</returns>
-        public static DataTable GetInstockBillNo(DateTime pDateTime)
+        public DataTable GetInstockBillNo(DateTime pDateTime)
         {
             _SQL = string.Format("SELECT DISTINCT A.FBILLNO ");
             _SQL += string.Format(" FROM T_PRD_INSTOCK A ");

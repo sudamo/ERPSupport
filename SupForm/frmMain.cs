@@ -11,7 +11,6 @@ using System.Text.RegularExpressions;
 
 namespace ERPSupport.SupForm
 {
-    using SQL.K3Cloud;
     using Model.Enum;
     using Model.Basic;
     using Model.Globa;
@@ -20,6 +19,7 @@ namespace ERPSupport.SupForm
     using UserCrtl;
     using UserClass;
     using Bussiness;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 主窗体
@@ -195,7 +195,7 @@ namespace ERPSupport.SupForm
             _FilterName = string.Empty;
             _FormId = _FormId_Pre = FormID.PRD_INSTOCK;
             _DataSource = new DataTable();
-            _ListUC = CommFunction.GetNavigation();
+            _ListUC = DALCreator.CommFunction.GetNavigation();
             _ListOpenUC = new List<string>();
             _TimerPara = new TimerParameter(0, 20, 0, true, false, "NULL");
             //-----
@@ -254,9 +254,9 @@ namespace ERPSupport.SupForm
 
             //-----
             //配置本地信息
-            GlobalParameter.LocalInf = new LocalInfo(CommFunction.GetLocalIP(), CommFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);
+            GlobalParameter.LocalInf = new LocalInfo(DALCreator.CommFunction.GetLocalIP(), DALCreator.CommFunction.GetMac(), string.Empty, DateTime.Now, DateTime.Now);
             //登录日志
-            CommFunction.DM_Log_Local("登录系统", "主窗口", "登录系统");
+            DALCreator.CommFunction.DM_Log_Local("登录系统", "主窗口", "登录系统");
             //这是标题
             Text = "ERP辅助系统" + " - " + GlobalParameter.K3Inf.UserName;
         }
@@ -321,7 +321,7 @@ namespace ERPSupport.SupForm
         private void FillControlList()
         {
             string sRIDs, sMIDs, sFunctionIds;
-            DataTable dtControls = CommFunction.GetNavigation(out sRIDs, out sMIDs, out sFunctionIds);
+            DataTable dtControls = DALCreator.CommFunction.GetNavigation(out sRIDs, out sMIDs, out sFunctionIds);
             if (dtControls == null)
                 return;
 
@@ -422,7 +422,7 @@ namespace ERPSupport.SupForm
                 _CurrentRow = iRow;
 
                 //下级分类的个数
-                _ChildCount = CommFunction.ChildNumber(uc.Name.Substring(3, 1));
+                _ChildCount = DALCreator.CommFunction.ChildNumber(uc.Name.Substring(3, 1));
 
                 //改变控件大小和位置
                 ResetUCSize(_ListP, iRow, _ChildCount);
@@ -828,7 +828,7 @@ namespace ERPSupport.SupForm
                     MessageBox.Show("请设置筛选条件");
                     return;
                 }
-                _DataSource = SalOrder.GetDataSource(_FormId, strFilter);
+                _DataSource = DALCreator.SalOrder.GetDataSource(_FormId, strFilter);
 
                 if (_DataSource == null || _DataSource.Rows.Count == 0)
                 {
@@ -920,10 +920,10 @@ namespace ERPSupport.SupForm
         {
             dgv1.DataSource = null;
 
-            if (PrdAllocation.SetDefaultStock(_dateFrom.Value, _FormId))
+            if (DALCreator.PrdAllocation.SetDefaultStock(_dateFrom.Value, _FormId))
             {
                 //更新中间仓
-                PrdAllocation.UpdateMST_Tran();
+                DALCreator.PrdAllocation.UpdateMST_Tran();
                 bnTop_btnSearch.Enabled = true;
                 MessageBox.Show("所有物料已经设置默认仓库，可以做调拨单！");
                 return;
@@ -984,6 +984,9 @@ namespace ERPSupport.SupForm
                 return;
             }
 
+            if (dgv1.IsCurrentCellDirty)
+                dgv1.CommitEdit(DataGridViewDataErrorContexts.Commit);//-----------------提交编辑状态的行，否则获取编辑之前的值。
+
             DataTable dtResult;
             DataRow dr;
 
@@ -994,15 +997,15 @@ namespace ERPSupport.SupForm
             if (_FormId == FormID.PRD_INSTOCK)//根据勾选生成倒冲领料单
             {
                 //限制单一用户执行倒冲领料
-                DataTable dtLock = CommFunction.GetLockObjectInfo("PICKMTL");
+                DataTable dtLock = DALCreator.CommFunction.GetLockObjectInfo("PICKMTL");
 
                 if (dtLock == null || dtLock.Rows.Count == 0)//新增记录
                 {
-                    CommFunction.DM_LockObject_Add("PICKMTL", "FUNCTION", "限制只有一个用户操作倒冲领料", "PICKMTL");
+                    DALCreator.CommFunction.DM_LockObject_Add("PICKMTL", "FUNCTION", "限制只有一个用户操作倒冲领料", "PICKMTL");
                 }
                 else if (dtLock.Rows[0]["FSTATUS"].ToString() == "0")//没有占用锁库操作时，占用锁库操作
                 {
-                    CommFunction.UpdateLockStatus(1, "PICKMTL");
+                    DALCreator.CommFunction.UpdateLockStatus(1, "PICKMTL");
                 }
                 else//存在操作记录
                 {
@@ -1022,7 +1025,7 @@ namespace ERPSupport.SupForm
                         sList.Add(dgv1.Rows[i].Cells[3].Value.ToString());
 
                         dr = dtResult.NewRow();
-                        dr["单号"] = PrdPick.PickMtl(dgv1.Rows[i].Cells[3].Value.ToString());
+                        dr["单号"] = DALCreator.PrdPick.PickMtl(dgv1.Rows[i].Cells[3].Value.ToString());
                         dtResult.Rows.Add(dr);
                     }
                 }
@@ -1039,7 +1042,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //解除倒冲领料占用
-                CommFunction.UpdateLockStatus(0, "PICKMTL");
+                DALCreator.CommFunction.UpdateLockStatus(0, "PICKMTL");
 
                 //操作日志
                 string strBillNos = string.Empty;
@@ -1048,7 +1051,7 @@ namespace ERPSupport.SupForm
                     strBillNos += "[" + dtResult.Rows[i]["单号"].ToString() + "]";
                 }
 
-                CommFunction.DM_Log_Local("倒冲领料", "辅助功能\\倒冲领料", strBillNos);
+                DALCreator.CommFunction.DM_Log_Local("倒冲领料", "辅助功能\\倒冲领料", strBillNos);
             }
             #endregion
 
@@ -1056,15 +1059,15 @@ namespace ERPSupport.SupForm
             else if (_FormId == FormID.PRD_PPBOM || _FormId == FormID.PRD_PPBOM_DX)//生成直接调拨单
             {
                 //限制单一用户执行调拨
-                DataTable dtLock = CommFunction.GetLockObjectInfo("TRANS");
+                DataTable dtLock = DALCreator.CommFunction.GetLockObjectInfo("TRANS");
 
                 if (dtLock == null || dtLock.Rows.Count == 0)//新增记录
                 {
-                    CommFunction.DM_LockObject_Add("TRANS", "FUNCTION", "限制只有一个用户操作调拨", "TRANS");
+                    DALCreator.CommFunction.DM_LockObject_Add("TRANS", "FUNCTION", "限制只有一个用户操作调拨", "TRANS");
                 }
                 else if (dtLock.Rows[0]["FSTATUS"].ToString() == "0")//没有占用锁库操作时，占用锁库操作
                 {
-                    CommFunction.UpdateLockStatus(1, "TRANS");
+                    DALCreator.CommFunction.UpdateLockStatus(1, "TRANS");
                 }
                 else//存在操作记录
                 {
@@ -1085,7 +1088,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //解除调拨占用
-                CommFunction.UpdateLockStatus(0, "TRANS");
+                DALCreator.CommFunction.UpdateLockStatus(0, "TRANS");
             }
             #endregion
 
@@ -1125,7 +1128,7 @@ namespace ERPSupport.SupForm
                 _Progress.ShowDialog();
 
                 //修改批量锁库状态
-                SalOrder.UpdateBatchFlag(_ListOrder);
+                DALCreator.SalOrder.UpdateBatchFlag(_ListOrder);
 
                 DataSourceBinding(1);
 
@@ -1136,7 +1139,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //操作日志
-                CommFunction.DM_Log_Local("锁库", "辅助功能\\锁库", "请查看锁库日志");
+                DALCreator.CommFunction.DM_Log_Local("锁库", "辅助功能\\锁库", "请查看锁库日志");
             }
             #endregion
 
@@ -1189,14 +1192,14 @@ namespace ERPSupport.SupForm
                 }
 
                 //查询运算功能是否被其他用户占用,功能退出时间大于5分钟时表示系统解除了占用。
-                DataTable dtLock = CommFunction.DM_LockObjectInfo("ORDERRUN");
+                DataTable dtLock = DALCreator.CommFunction.DM_LockObjectInfo("ORDERRUN");
                 if (dtLock == null || dtLock.Rows.Count == 0)//新增记录
                 {
-                    CommFunction.DM_LockObject_Add("T_SAL_ORDER", "TABLE", "限制只有一个用户操作订单运算", "ORDERRUN");
+                    DALCreator.CommFunction.DM_LockObject_Add("T_SAL_ORDER", "TABLE", "限制只有一个用户操作订单运算", "ORDERRUN");
                 }
                 else if (dtLock.Rows[0]["FSTATUS"].ToString() == "0")//没有占用订单运算操作时，占用订单运算操作
                 {
-                    CommFunction.UpdateLockStatus(1, "ORDERRUN");
+                    DALCreator.CommFunction.UpdateLockStatus(1, "ORDERRUN");
                 }
                 else
                 {
@@ -1214,11 +1217,11 @@ namespace ERPSupport.SupForm
                 catch { }
                 finally
                 {
-                    CommFunction.UpdateLockStatus(0, "ORDERRUN");
+                    DALCreator.CommFunction.UpdateLockStatus(0, "ORDERRUN");
                 }
 
                 //操作日志
-                CommFunction.DM_Log_Local("运算", "辅助功能\\运算", "请查看运算日志");
+                DALCreator.CommFunction.DM_Log_Local("运算", "辅助功能\\运算", "请查看运算日志");
             }
             #endregion
         }
@@ -1296,8 +1299,8 @@ namespace ERPSupport.SupForm
         {
             string retrunValue = string.Empty;
             string sLeft, sField, sCompare, sValue, sRight, sLogic;
-            DataTable dtOrg = CommFunction.GetOrganization();
-            DataTable dtBillType = CommFunction.GetBillType("SAL_SALEORDER");
+            DataTable dtOrg = DALCreator.CommFunction.GetOrganization();
+            DataTable dtBillType = DALCreator.CommFunction.GetBillType("SAL_SALEORDER");
 
             for (int i = 0; i < _ListFilter.Count; i++)
             {
@@ -1640,10 +1643,10 @@ namespace ERPSupport.SupForm
                         List<string> lstOutStock;//调出仓编码List
                         List<string> lstType;//调拨类型
 
-                        List<string> lstDepSet = CommFunction.GetPickMtlDepartment();//获取已经设置的默认仓库
+                        List<string> lstDepSet = DALCreator.CommFunction.GetPickMtlDepartment();//获取已经设置的默认仓库
 
                         string strCondition = string.Empty, strConditionEx = string.Empty;//过滤条件，用于筛选或排除指定调出调入仓            
-                        DataTable dtDir_Stock = CommFunction.GetDM_Dir_Stock();//获取指定仓调拨
+                        DataTable dtDir_Stock = DALCreator.CommFunction.GetDM_Dir_Stock();//获取指定仓调拨
                         if (dtDir_Stock != null && dtDir_Stock.Rows.Count > 0)
                         {
                             for (int i = 0; i < dtDir_Stock.Rows.Count; i++)
@@ -1660,10 +1663,10 @@ namespace ERPSupport.SupForm
                             strConditionEx = "(" + strConditionEx + ")";
                         }
 
-                        DataTable dtPZ = PrdAllocation.GetTransPZ(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID);
-                        DataTable dtZD = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strCondition);
-                        DataTable dtCL = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, false);
-                        DataTable dtCL_Tran = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, true);
+                        DataTable dtPZ = DALCreator.PrdAllocation.GetTransPZ(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID);
+                        DataTable dtZD = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strCondition);
+                        DataTable dtCL = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, false);
+                        DataTable dtCL_Tran = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, true);
                         int iPZ = dtPZ == null ? 0 : dtPZ.Rows.Count;
                         int iZD = dtZD == null ? 0 : dtZD.Rows.Count;
                         int iCL = dtCL == null ? 0 : dtCL.Rows.Count;
@@ -1760,7 +1763,7 @@ namespace ERPSupport.SupForm
 
                                                             if (dtPZ_XD.Rows.Count == 1)
                                                             {
-                                                                tmp = PrdAllocation.TransferDir(dtPZ_XD, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_XD, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                                 iCurrent++;
                                                                 ReportProgreess(e, iCount, iCurrent);
@@ -1775,7 +1778,7 @@ namespace ERPSupport.SupForm
                                                                     if (j == dtPZ_XD.Rows.Count - 1)//最后一行数据,(盘子必然在最后一套之内)
                                                                     {
                                                                         dtPZ_2.ImportRow(dtPZ_XD.Rows[j]);
-                                                                        tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                        tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                                         iCurrent++;
                                                                         ReportProgreess(e, iCount, iCurrent);
@@ -1798,7 +1801,7 @@ namespace ERPSupport.SupForm
                                                                         }
                                                                         else
                                                                         {
-                                                                            tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                            tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                                             iCurrent++;
                                                                             ReportProgreess(e, iCount, iCurrent);
@@ -1818,7 +1821,7 @@ namespace ERPSupport.SupForm
                                                         }
 
                                                         //大单单独生成调拨单
-                                                        tmp = PrdAllocation.TransferDir(dtPZ_DD, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                        tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_DD, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                         iCurrent++;
                                                         ReportProgreess(e, iCount, iCurrent);
@@ -1838,7 +1841,7 @@ namespace ERPSupport.SupForm
 
                                                         if (dt_4.Rows.Count == 1)
                                                         {
-                                                            tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                            tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                             iCurrent++;
                                                             ReportProgreess(e, iCount, iCurrent);
@@ -1853,7 +1856,7 @@ namespace ERPSupport.SupForm
                                                                 if (j == dt_4.Rows.Count - 1)//最后一行数据,(盘子必然在最后一套之内)
                                                                 {
                                                                     dtPZ_2.ImportRow(dt_4.Rows[j]);
-                                                                    tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                    tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                                     iCurrent++;
                                                                     ReportProgreess(e, iCount, iCurrent);
@@ -1876,7 +1879,7 @@ namespace ERPSupport.SupForm
                                                                     }
                                                                     else
                                                                     {
-                                                                        tmp = PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                        tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                                         iCurrent++;
                                                                         ReportProgreess(e, iCount, iCurrent);
@@ -1938,7 +1941,7 @@ namespace ERPSupport.SupForm
 
                                                 if (dt_4.Rows.Count > 0)
                                                 {
-                                                    tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                    tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                     iCurrent++;
                                                     ReportProgreess(e, iCount, iCurrent);
@@ -1962,7 +1965,7 @@ namespace ERPSupport.SupForm
                         #region 处理指定仓调拨
                         if (dtZD != null && dtZD.Rows.Count > 0)
                         {
-                            tmp = PrdAllocation.TransferDirERP(dtZD, _dateFrom.Value);
+                            tmp = DALCreator.PrdAllocation.TransferDirERP(dtZD, _dateFrom.Value);
                             iCurrent++;
                             ReportProgreess(e, iCount, iCurrent);
 
@@ -2019,7 +2022,7 @@ namespace ERPSupport.SupForm
 
                                             if (dt_4.Rows.Count > 0)
                                             {
-                                                tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
 
                                                 iCurrent++;
                                                 ReportProgreess(e, iCount, iCurrent);
@@ -2085,10 +2088,10 @@ namespace ERPSupport.SupForm
                                             if (dt_4.Rows.Count > 0)
                                             {
                                                 //生成单据-WMS（调出仓库->中间仓）
-                                                tmp = PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"), true);
+                                                tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"), true);
 
                                                 //生成单据-ERP（中间仓->调入仓库）
-                                                tmp += " " + PrdAllocation.TransferDirERP(dt_4, _dateFrom.Value);
+                                                tmp += " " + DALCreator.PrdAllocation.TransferDirERP(dt_4, _dateFrom.Value);
 
                                                 iCurrent++;
                                                 ReportProgreess(e, iCount, iCurrent);
@@ -2107,7 +2110,7 @@ namespace ERPSupport.SupForm
                         SHOW:
                         if (strBillNos != "")
                         {
-                            PrdAllocation.UpdateDirFieldsCL(_dateFrom.Value.ToString("yyyy-MM-dd"));//更新【已经生成调拨单】状态
+                            DALCreator.PrdAllocation.UpdateDirFieldsCL(_dateFrom.Value.ToString("yyyy-MM-dd"));//更新【已经生成调拨单】状态
                             MessageBox.Show("直接调拨单：" + strBillNos);
                         }
                         else
@@ -2119,7 +2122,7 @@ namespace ERPSupport.SupForm
                     {
                         #region 德旭调拨
                         string strBillNos = string.Empty, tmp;
-                        DataTable dtCL = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), 0, 0, "", false, 492501088);
+                        DataTable dtCL = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), 0, 0, "", false, 492501088);
                         if (dtCL == null || dtCL.Rows.Count == 0)
                             goto SHOW2;
 
@@ -2127,7 +2130,7 @@ namespace ERPSupport.SupForm
 
                         List<string> lstDep;//领料部门List
                         List<string> lstOutStock;//调出仓编码List
-                        List<string> lstDepSet = CommFunction.GetPickMtlDepartment(492501088);
+                        List<string> lstDepSet = DALCreator.CommFunction.GetPickMtlDepartment(492501088);
 
                         //dtCL.Columns.Add("部门分组");
 
@@ -2170,7 +2173,7 @@ namespace ERPSupport.SupForm
                                     }
                                     if (dt_3.Rows.Count > 0)
                                     {
-                                        tmp = PrdAllocation.TransferDirERP(dt_3, _dateFrom.Value, _FormId);
+                                        tmp = DALCreator.PrdAllocation.TransferDirERP(dt_3, _dateFrom.Value, _FormId);
 
                                         iCurrent++;
                                         ReportProgreess(e, iCount, iCurrent);
@@ -2185,7 +2188,7 @@ namespace ERPSupport.SupForm
                         SHOW2:
                         if (strBillNos != "")
                         {
-                            PrdAllocation.UpdateDirFieldsCL(_dateFrom.Value.ToString("yyyy-MM-dd"), 492501088);//更新【已经生成调拨单】状态
+                            DALCreator.PrdAllocation.UpdateDirFieldsCL(_dateFrom.Value.ToString("yyyy-MM-dd"), 492501088);//更新【已经生成调拨单】状态
                             MessageBox.Show("直接调拨单：" + strBillNos);
                         }
                         else
@@ -2221,15 +2224,15 @@ namespace ERPSupport.SupForm
             if (_ListOrder.Count == 0) goto ShowResult;
 
             //占用锁库操作
-            DataTable dtLock = CommFunction.GetLockObjectInfo("LOCKSTOCK");
+            DataTable dtLock = DALCreator.CommFunction.GetLockObjectInfo("LOCKSTOCK");
 
             if (dtLock == null || dtLock.Rows.Count == 0)//新增记录
             {
-                CommFunction.DM_LockObject_Add("T_SAL_ORDER", "TABLE", "限制只有一个用户操作订单锁库", "LOCKSTOCK");
+                DALCreator.CommFunction.DM_LockObject_Add("T_SAL_ORDER", "TABLE", "限制只有一个用户操作订单锁库", "LOCKSTOCK");
             }
             else if (dtLock.Rows[0]["FSTATUS"].ToString() == "0")//没有占用锁库操作时，占用锁库操作
             {
-                CommFunction.UpdateLockStatus(1, "LOCKSTOCK");
+                DALCreator.CommFunction.UpdateLockStatus(1, "LOCKSTOCK");
             }
             else//存在锁表操作记录
             {
@@ -2240,7 +2243,7 @@ namespace ERPSupport.SupForm
             for (int i = 0; i < _ListOrder.Count; i++)
             {
                 dt = new DataTable();
-                dt = SalOrder.GetOrderLockByFEntryId(((OrderInfo)_ListOrder[i]).FEntryId);
+                dt = DALCreator.SalOrder.GetOrderLockByFEntryId(((OrderInfo)_ListOrder[i]).FEntryId);
 
                 if (dt == null || dt.Rows.Count == 0)//锁库失败信息
                 {
@@ -2253,7 +2256,7 @@ namespace ERPSupport.SupForm
                     ReturnDT.Rows.Add(dr);
 
                     //锁库失败记录日志
-                    SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "没有库存信息");
+                    DALCreator.SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "没有库存信息");
                 }
                 else
                 {
@@ -2268,7 +2271,7 @@ namespace ERPSupport.SupForm
                         ReturnDT.Rows.Add(dr);
 
                         //锁库失败记录日志
-                        SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "备货销售订单");
+                        DALCreator.SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "备货销售订单");
                         continue;
                     }
 
@@ -2285,7 +2288,7 @@ namespace ERPSupport.SupForm
                         ReturnDT.Rows.Add(dr);
 
                         //锁库失败记录日志
-                        SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "可锁数量小于等于零");
+                        DALCreator.SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "可锁数量小于等于零");
                         continue;
                     }
 
@@ -2307,7 +2310,7 @@ namespace ERPSupport.SupForm
                         ReturnDT.Rows.Add(dr);
 
                         //锁库失败记录日志
-                        SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "库存可用量为零");
+                        DALCreator.SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "库存可用量为零");
                         continue;
                     }
 
@@ -2318,16 +2321,16 @@ namespace ERPSupport.SupForm
                         if (dQTY >= dCanLockQty)//当库存可用量大于或等于可锁库数量时可参与锁库
                         {
                             //添加预留关系
-                            if (SalOrder.AddReserveLink(dt.Rows[j], dCanLockQty).IndexOf("FID") < 0)
+                            if (DALCreator.SalOrder.AddReserveLink(dt.Rows[j], dCanLockQty).IndexOf("FID") < 0)
                                 continue;
 
-                            SalOrder.UpdateOrderLock(dCanLockQty.ToString(), int.Parse(dt.Rows[0]["FID"].ToString()), int.Parse(dt.Rows[0]["FENTRYID"].ToString()));
+                            DALCreator.SalOrder.UpdateOrderLock(dCanLockQty.ToString(), int.Parse(dt.Rows[0]["FID"].ToString()), int.Parse(dt.Rows[0]["FENTRYID"].ToString()));
 
                             //库存锁库列表（销售订单->锁库查询）
 
                             //新增锁库日志
                             dt.Rows[j]["锁库数量"] = dCanLockQty.ToString();
-                            SalOrder.Log_OrderLock(dt.Rows[j], 1);
+                            DALCreator.SalOrder.Log_OrderLock(dt.Rows[j], 1);
 
                             dr = ReturnDT.NewRow();
                             dr["操作"] = "成功";
@@ -2343,17 +2346,17 @@ namespace ERPSupport.SupForm
                         else if (dQTY > 0)//当储存可用量小于可锁库数量时
                         {
                             //添加预留关系
-                            if (SalOrder.AddReserveLink(dt.Rows[j], dQTY).IndexOf("FID") < 0)
+                            if (DALCreator.SalOrder.AddReserveLink(dt.Rows[j], dQTY).IndexOf("FID") < 0)
                                 continue;
 
                             //修改销售订单锁库/预留数量(库存单位)、待锁库/待预留数量(库存单位)FLEFTQTY、批量锁库标识
-                            SalOrder.UpdateOrderLock(dQTY.ToString(), int.Parse(dt.Rows[0]["FENTRYID"].ToString()));
+                            DALCreator.SalOrder.UpdateOrderLock(dQTY.ToString(), int.Parse(dt.Rows[0]["FENTRYID"].ToString()));
 
                             //库存锁库列表（销售订单->锁库查询）
 
                             //新增锁库日志
                             dt.Rows[j]["锁库数量"] = dQTY.ToString();
-                            SalOrder.Log_OrderLock(dt.Rows[j], 1);
+                            DALCreator.SalOrder.Log_OrderLock(dt.Rows[j], 1);
 
                             dr = ReturnDT.NewRow();
                             dr["操作"] = "成功";
@@ -2388,7 +2391,7 @@ namespace ERPSupport.SupForm
             lsr.ShowDialog();
 
             //解除锁表标志
-            CommFunction.UpdateLockStatus(0, "LOCKSTOCK");
+            DALCreator.CommFunction.UpdateLockStatus(0, "LOCKSTOCK");
 
             return -1;
         }
@@ -2428,7 +2431,7 @@ namespace ERPSupport.SupForm
                 }
                 else
                 {
-                    SalOrder.UnLockSalOrder(dLockQTY.ToString(), ((OrderInfo)pList[i]).FEntryId);
+                    DALCreator.SalOrder.UnLockSalOrder(dLockQTY.ToString(), ((OrderInfo)pList[i]).FEntryId);
 
                     dr["操作"] = "解锁成功";
                     dr["销售订单"] = ((OrderInfo)pList[i]).FBillNo;
@@ -2438,7 +2441,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //解锁日志
-                SalOrder.Log_OrderLock(dr, 0);
+                DALCreator.SalOrder.Log_OrderLock(dr, 0);
             }
 
             return ReturnDT;
@@ -2604,7 +2607,7 @@ namespace ERPSupport.SupForm
         {
             if (MessageBox.Show("您确定要注销用户[" + GlobalParameter.K3Inf.UserName + "]吗？", "用户注销", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                CommFunction.DM_Log_Local("注销系统", "主窗口", "关闭主窗体并注销用户");//日志
+                DALCreator.CommFunction.DM_Log_Local("注销系统", "主窗口", "关闭主窗体并注销用户");//日志
 
                 Dispose();
                 DialogResult = DialogResult.None;
@@ -2659,7 +2662,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void smiTool_Occupy_PickMtl_Click(object sender, EventArgs e)
         {
-            object oUser = CommFunction.GetLockObjectInfo("PICKMTL", 1);
+            object oUser = DALCreator.CommFunction.GetLockObjectInfo("PICKMTL", 1);
 
             if (oUser == null)
             {
@@ -2669,9 +2672,9 @@ namespace ERPSupport.SupForm
             {
                 if (MessageBox.Show("倒冲领料操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    CommFunction.UpdateLockStatus(0, "PICKMTL");
+                    DALCreator.CommFunction.UpdateLockStatus(0, "PICKMTL");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除倒冲领料");
+                    DALCreator.CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除倒冲领料");
                 }
             }
         }
@@ -2683,7 +2686,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void smiTool_Occupy_Trans_Click(object sender, EventArgs e)
         {
-            object oUser = CommFunction.GetLockObjectInfo("TRANS", 1);
+            object oUser = DALCreator.CommFunction.GetLockObjectInfo("TRANS", 1);
 
             if (oUser == null)
             {
@@ -2693,9 +2696,9 @@ namespace ERPSupport.SupForm
             {
                 if (MessageBox.Show("调拨操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    CommFunction.UpdateLockStatus(0, "TRANS");
+                    DALCreator.CommFunction.UpdateLockStatus(0, "TRANS");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除调拨");
+                    DALCreator.CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除调拨");
                 }
             }
         }
@@ -2707,7 +2710,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiTool_Occupy_LockStock_Click(object sender, EventArgs e)
         {
-            object oUser = CommFunction.GetLockObjectInfo("LOCKSTOCK", 1);
+            object oUser = DALCreator.CommFunction.GetLockObjectInfo("LOCKSTOCK", 1);
 
             if (oUser == null)
             {
@@ -2717,9 +2720,9 @@ namespace ERPSupport.SupForm
             {
                 if (MessageBox.Show("锁库操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    CommFunction.UpdateLockStatus(0, "LOCKSTOCK");
+                    DALCreator.CommFunction.UpdateLockStatus(0, "LOCKSTOCK");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除锁库占用");
+                    DALCreator.CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除锁库占用");
                 }
             }
         }
@@ -2731,7 +2734,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiTool_Occupy_OrderRun_Click(object sender, EventArgs e)
         {
-            object oUser = CommFunction.GetLockObjectInfo("ORDERRUN", 1);
+            object oUser = DALCreator.CommFunction.GetLockObjectInfo("ORDERRUN", 1);
 
             if (oUser == null)
             {
@@ -2741,9 +2744,9 @@ namespace ERPSupport.SupForm
             {
                 if (MessageBox.Show("订单运算操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    CommFunction.UpdateLockStatus(0, "ORDERRUN");
+                    DALCreator.CommFunction.UpdateLockStatus(0, "ORDERRUN");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除订单运算占用");
+                    DALCreator.CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除订单运算占用");
                 }
             }
         }
@@ -2755,7 +2758,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiTool_Occupy_LockPickMtl_Click(object sender, EventArgs e)
         {
-            object oUser = CommFunction.GetLockObjectInfo("LOCKPICKMTL", 1);
+            object oUser = DALCreator.CommFunction.GetLockObjectInfo("LOCKPICKMTL", 1);
 
             if (oUser == null)
             {
@@ -2765,9 +2768,9 @@ namespace ERPSupport.SupForm
             {
                 if (MessageBox.Show("自动领料操作被[" + oUser.ToString() + "]占用\n确定要强行解除吗？", "占用解除", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
-                    CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
+                    DALCreator.CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
                     //操作日志
-                    CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除自动领料");
+                    DALCreator.CommFunction.DM_Log_Local("解除冲突", "菜单->工具->占用解除", "解除自动领料");
                 }
             }
         }
@@ -2809,7 +2812,7 @@ namespace ERPSupport.SupForm
                 }
 
                 //操作日志
-                CommFunction.DM_Log_Local("定时器", "菜单->工具", "操作定时器");
+                DALCreator.CommFunction.DM_Log_Local("定时器", "菜单->工具", "操作定时器");
             }
             //frmTime.Dispose();
         }
@@ -2981,11 +2984,11 @@ namespace ERPSupport.SupForm
             if (_Execute != null)
             {
                 _Execute.Close();
-                CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
+                DALCreator.CommFunction.UpdateLockStatus(0, "LOCKPICKMTL");
             }
 
             //日志
-            CommFunction.DM_Log_Local("退出系统", "主窗口", "关闭主窗体并退出系统");//日志
+            DALCreator.CommFunction.DM_Log_Local("退出系统", "主窗口", "关闭主窗体并退出系统");//日志
         }
 
         #region 定时器事件
@@ -3012,13 +3015,13 @@ namespace ERPSupport.SupForm
 
             try
             {
-                dt = PrdPick.GetInstockBillNo(DateTime.Now.AddDays(-2));
+                dt = DALCreator.PrdPick.GetInstockBillNo(DateTime.Now.AddDays(-1));
 
                 if (dt != null && dt.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        PrdPick.PickMtl(dt.Rows[i]["FBILLNO"].ToString());
+                        DALCreator.PrdPick.PickMtl(dt.Rows[i]["FBILLNO"].ToString());
                     }
                     _TimerPara.ExeTimes++;
                 }

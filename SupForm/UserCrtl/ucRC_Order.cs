@@ -10,8 +10,6 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// 销售订单日志
     /// </summary>
@@ -169,7 +167,7 @@ namespace ERPSupport.SupForm.UserCrtl
             }
 
             dgv1.DataSource = null;
-            dgv1.DataSource = CommFunction.Log_OrderLock(bnTop_cbxType.SelectedIndex, bnTop_txtBillNo.Text.Trim(), bnTop_txtYSD.Text.Trim(), _dateFrom.Value, _dateTo.Value, bnTop_cbxStatus.ComboBox.SelectedValue.ToString(), bnTop_txtMaterialNo.Text);
+            dgv1.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.Log_OrderLock(bnTop_cbxType.SelectedIndex, bnTop_txtBillNo.Text.Trim(), bnTop_txtYSD.Text.Trim(), _dateFrom.Value, _dateTo.Value, bnTop_cbxStatus.ComboBox.SelectedValue.ToString(), bnTop_txtMaterialNo.Text);
         }
         private void Export()
         {

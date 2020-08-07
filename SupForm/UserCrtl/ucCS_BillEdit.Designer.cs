@@ -61,7 +61,6 @@
             this.bnR3_btnEdit = new System.Windows.Forms.ToolStripButton();
             this.tpl1 = new System.Windows.Forms.TableLayoutPanel();
             this.dgv1 = new System.Windows.Forms.DataGridView();
-            this.bnTop_Price = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.bnR1)).BeginInit();
             this.bnR1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
@@ -130,8 +129,7 @@
             this.bnTop_ChangeDB,
             this.bnTop_PPBom,
             this.bnTop_Bom,
-            this.bnTop_Org,
-            this.bnTop_Price});
+            this.bnTop_Org});
             this.bnTop.Location = new System.Drawing.Point(0, 0);
             this.bnTop.MoveFirstItem = null;
             this.bnTop.MoveLastItem = null;
@@ -147,14 +145,14 @@
             // bnTop_lblType
             // 
             this.bnTop_lblType.Name = "bnTop_lblType";
-            this.bnTop_lblType.Size = new System.Drawing.Size(68, 24);
+            this.bnTop_lblType.Size = new System.Drawing.Size(68, 22);
             this.bnTop_lblType.Text = "单据类型：";
             // 
             // bnTop_cbxType
             // 
             this.bnTop_cbxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.bnTop_cbxType.Name = "bnTop_cbxType";
-            this.bnTop_cbxType.Size = new System.Drawing.Size(90, 27);
+            this.bnTop_cbxType.Size = new System.Drawing.Size(90, 25);
             this.bnTop_cbxType.SelectedIndexChanged += new System.EventHandler(this.cbxType_SelectedIndexChanged);
             // 
             // bnTop_lblBillNo
@@ -173,7 +171,7 @@
             // bnTop_tss
             // 
             this.bnTop_tss.Name = "bnTop_tss";
-            this.bnTop_tss.Size = new System.Drawing.Size(6, 27);
+            this.bnTop_tss.Size = new System.Drawing.Size(6, 25);
             // 
             // bnTop_lblDash
             // 
@@ -185,7 +183,7 @@
             // bnTop_tss2
             // 
             this.bnTop_tss2.Name = "bnTop_tss2";
-            this.bnTop_tss2.Size = new System.Drawing.Size(6, 27);
+            this.bnTop_tss2.Size = new System.Drawing.Size(6, 25);
             // 
             // bnTop_Search
             // 
@@ -418,16 +416,6 @@
             this.dgv1.TabIndex = 33;
             this.dgv1.Click += new System.EventHandler(this.dgv1_Click);
             // 
-            // bnTop_Price
-            // 
-            this.bnTop_Price.Image = global::ERPSupport.SupForm.Properties.Resources.update;
-            this.bnTop_Price.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_Price.Name = "bnTop_Price";
-            this.bnTop_Price.Size = new System.Drawing.Size(80, 24);
-            this.bnTop_Price.Tag = "7";
-            this.bnTop_Price.Text = "更新价格";
-            this.bnTop_Price.Visible = false;
-            // 
             // ucCS_BillEdit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -490,6 +478,5 @@
         private System.Windows.Forms.ToolStripButton bnTop_Bom;
         private System.Windows.Forms.ToolStripButton bnTop_ChangeDB;
         private System.Windows.Forms.ToolStripButton bnTop_Org;
-        private System.Windows.Forms.ToolStripButton bnTop_Price;
     }
 }

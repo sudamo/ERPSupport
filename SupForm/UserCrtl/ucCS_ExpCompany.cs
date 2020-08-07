@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 快递公司
@@ -35,7 +35,7 @@ namespace ERPSupport.SupForm.UserCrtl
         }
         private void SetDataSource()
         {
-            dgv1.DataSource = CommFunction.NumberMatch("COMPANYNAME");
+            dgv1.DataSource = DALCreator.CommFunction.NumberMatch("COMPANYNAME");
             dgv1.Columns[0].Visible = false;
         }
 
@@ -232,67 +232,67 @@ namespace ERPSupport.SupForm.UserCrtl
             if (!CheckData()) return;
             try
             {
-                if (CommFunction.NumberMatchExists("COMPANYNAME", bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), bnTop_txtECPY.Text.Trim()))
+                if (DALCreator.CommFunction.NumberMatchExists("COMPANYNAME", bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), bnTop_txtECPY.Text.Trim()))
                 {
                     MessageBox.Show("不能重复设定匹配规则或公司名称。");
                     return;
                 }
 
-                CommFunction.AddNumberMatch(bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), "COMPANYNAME", bnTop_txtMatchBillno.Text.Trim(), bnTop_txtECPY.Text.Trim(), "快递公司名称与编码前缀匹配", "0");
+                DALCreator.CommFunction.AddNumberMatch(bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), "COMPANYNAME", bnTop_txtMatchBillno.Text.Trim(), bnTop_txtECPY.Text.Trim(), "快递公司名称与编码前缀匹配", "0");
             }
             catch (Exception ex)
             {
                 MessageBox.Show("新增失败" + ex.Message);
                 //操作日志
-                CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "新增失败：" + ex.Message, "0");
+                DALCreator.CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "新增失败：" + ex.Message, "0");
                 return;
             }
             //操作日志
-            CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "新增：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text);
+            DALCreator.CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "新增：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text);
             MessageBox.Show("新增成功");
-            dgv1.DataSource = CommFunction.NumberMatch("COMPANYNAME");
+            dgv1.DataSource = DALCreator.CommFunction.NumberMatch("COMPANYNAME");
         }
         private void Edit()
         {
             if (!CheckData()) return;
             try
             {
-                if (CommFunction.NumberMatchExists("COMPANYNAME", _FID, bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), bnTop_txtECPY.Text.Trim()))
+                if (DALCreator.CommFunction.NumberMatchExists("COMPANYNAME", _FID, bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), bnTop_txtECPY.Text.Trim()))
                 {
                     MessageBox.Show("匹配规则或公司名称已经存在。");
                     return;
                 }
-                CommFunction.UpdateNumberMatch(_FID, bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), bnTop_txtECPY.Text.Trim());
+                DALCreator.CommFunction.UpdateNumberMatch(_FID, bnTop_txtMatchBillno.Text.Trim(), int.Parse(bnTop_txtNumber.Text), bnTop_txtECPY.Text.Trim());
             }
             catch (Exception ex)
             {
                 MessageBox.Show("修改失败" + ex.Message);
                 //操作日志
-                CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "修改失败：" + ex.Message, "0");
+                DALCreator.CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "修改失败：" + ex.Message, "0");
                 return;
             }
             //操作日志
-            CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "修改：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text, "1");
+            DALCreator.CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "修改：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text, "1");
             MessageBox.Show("修改成功");
-            dgv1.DataSource = CommFunction.NumberMatch("COMPANYNAME");
+            dgv1.DataSource = DALCreator.CommFunction.NumberMatch("COMPANYNAME");
         }
         private void Delete()
         {
             try
             {
-                CommFunction.DelNumberMatch(_FID);
+                DALCreator.CommFunction.DelNumberMatch(_FID);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("删除失败" + ex.Message);
                 //操作日志
-                CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "删除失败：" + ex.Message, "0");
+                DALCreator.CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "删除失败：" + ex.Message, "0");
                 return;
             }
             //操作日志
-            CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "删除：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text);
+            DALCreator.CommFunction.DM_Log_Local("快递公司配置", "配置\\快递公司配置", "删除：" + bnTop_txtMatchBillno.Text + "|" + bnTop_txtNumber.Text + "|" + bnTop_txtECPY.Text);
             MessageBox.Show("删除成功");
-            dgv1.DataSource = CommFunction.NumberMatch("COMPANYNAME");
+            dgv1.DataSource = DALCreator.CommFunction.NumberMatch("COMPANYNAME");
         }
         private void RefreshDate()
         {

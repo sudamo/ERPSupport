@@ -5,8 +5,6 @@ using System.Text.RegularExpressions;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// 销售出库携带辅料出库规则
     /// </summary>
@@ -78,7 +76,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         private void SetDataSource()
         {
-            dgv1.DataSource = CommFunction.NumberMatch("UTMTL");
+            dgv1.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.NumberMatch("UTMTL");
             dgv1.Columns[0].Visible = false;
         }
 

@@ -113,7 +113,7 @@ namespace ERPSupport.SupForm.Bussiness
                     entry.GeneralFactoryPrice = float.Parse(worksheet.Cells[i, 9].Text);
                     entry.BranchFactoryPrice = float.Parse(worksheet.Cells[i, 10].Text);
 
-                    DALCreater.CommFunction.MegerPrice(entry);
+                    DALCreator.CommFunction.MegerPrice(entry);
                 }
                 catch (Exception ex)
                 {
@@ -139,7 +139,7 @@ namespace ERPSupport.SupForm.Bussiness
             btnImport.Enabled = false;
 
             //日志............
-            SQL.K3Cloud.CommFunction.DM_Log_Local("价格导入", "项目->网上订单系统->导入新价格", pFilePath);
+            DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("价格导入", "项目->网上订单系统->导入新价格", pFilePath);
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace ERPSupport.SupForm.Bussiness
             if (txtCustomerName.Text.Trim().Equals(string.Empty))
                 return;
 
-            DataTable dt = SQL.K3Cloud.CommFunction.GetCustomerListByName(txtCustomerName.Text);
+            DataTable dt = DALFactory.K3Cloud.DALCreator.CommFunction.GetCustomerListByName(txtCustomerName.Text);
 
             if (dt == null || dt.Rows.Count == 0)
             {
@@ -206,7 +206,7 @@ namespace ERPSupport.SupForm.Bussiness
             {
                 string creatorOrg = cbxCreateOrg.SelectedValue.ToString();
                 string sellerId = cbxSeller.SelectedValue.ToString();
-                MessageBox.Show(DALCreater.CommFunction.AddCustomer(_dataRow, creatorOrg, sellerId));
+                MessageBox.Show(DALCreator.CommFunction.AddCustomer(_dataRow, creatorOrg, sellerId));
             }
             catch(Exception ex)
             {
@@ -215,7 +215,7 @@ namespace ERPSupport.SupForm.Bussiness
             }
 
             //日志
-            SQL.K3Cloud.CommFunction.DM_Log_Local("新增客户", "项目->网上订单系统->新增客户", "新增客户：" + _dataRow["FNAME"].ToString());
+            DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("新增客户", "项目->网上订单系统->新增客户", "新增客户：" + _dataRow["FNAME"].ToString());
         }
 
         /// <summary>
@@ -247,9 +247,9 @@ namespace ERPSupport.SupForm.Bussiness
                     sFirstChar = txtDistrict.Text.Substring(0, 1);
                 }
 
-                MessageBox.Show(DALCreater.CommFunction.AddADD(iParentId, iLevel, sFirstChar, txtDistrict.Text));
+                MessageBox.Show(DALCreator.CommFunction.AddADD(iParentId, iLevel, sFirstChar, txtDistrict.Text));
                 //日志
-                SQL.K3Cloud.CommFunction.DM_Log_Local("新增地区", "项目->网上订单系统->新增地区", "新增地区信息");
+                DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("新增地区", "项目->网上订单系统->新增地区", "新增地区信息");
             }
             catch(Exception ex)
             {
@@ -279,7 +279,7 @@ namespace ERPSupport.SupForm.Bussiness
                 return;
             }
 
-            DataTable dt = SQL.K3Cloud.CommFunction.GetSellerList(iOrgId);
+            DataTable dt = DALFactory.K3Cloud.DALCreator.CommFunction.GetSellerList(iOrgId, 1);
             FillComboBox(cbxSeller, dt, "FVALUE", "FNAME", 1);
         }
 
@@ -303,7 +303,7 @@ namespace ERPSupport.SupForm.Bussiness
                 return;
             }
 
-            DataTable dt = DALCreater.CommFunction.GetChinaAddByParentId(iParentId);
+            DataTable dt = DALCreator.CommFunction.GetChinaAddByParentId(iParentId);
             DataRow dr = dt.NewRow();
             dr["ID"] = 0;
             dr["Name"] = "-请选择-";
@@ -318,7 +318,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         private void FillComboBox()
         {
-            DataTable dt = DALCreater.CommFunction.GetChinaAddByParentId();
+            DataTable dt = DALCreator.CommFunction.GetChinaAddByParentId();
             if (dt == null || dt.Rows.Count == 0)
                 return;
             FillComboBox(cbxProvince, dt, "ID", "Name");
@@ -349,6 +349,17 @@ namespace ERPSupport.SupForm.Bussiness
                 pComboBox.SelectedIndex = pSelectedIndex;
             }
             catch { }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bnTop_Price_Click(object sender, EventArgs e)
+        {
+            frmOrderPriceSyn frmP = new frmOrderPriceSyn();
+            frmP.Show(this);
         }
     }
 }

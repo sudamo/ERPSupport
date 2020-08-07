@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.Menu
@@ -47,7 +41,7 @@ namespace ERPSupport.SupForm.Menu
             if (!chbAll.Checked && txtMTL.Text.Trim() == "")
                 return;
 
-            SQL.K3Cloud.CommFunction.SynMTLForWMS(chbAll.Checked, txtMTL.Text.Trim());
+            DALFactory.K3Cloud.DALCreator.CommFunction.SynMTLForWMS(chbAll.Checked, txtMTL.Text.Trim());
             lblTips.Text = "已执行！";
         }
 

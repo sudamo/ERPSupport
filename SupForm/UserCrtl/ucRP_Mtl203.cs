@@ -7,8 +7,6 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// 盆子物料报表
     /// </summary>
@@ -154,7 +152,7 @@ namespace ERPSupport.SupForm.UserCrtl
             bnTop_cbxLogic.ComboBox.ValueMember = "FValue";
 
             //Org
-            bnTop_cbxValue.ComboBox.DataSource = CommFunction.GetOrganization();
+            bnTop_cbxValue.ComboBox.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.GetOrganization();
             bnTop_cbxValue.ComboBox.DisplayMember = "FName";
             bnTop_cbxValue.ComboBox.ValueMember = "FValue";
         }
@@ -341,7 +339,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
         private void bnTop_btnSearch_Click(object sender, EventArgs e)
         {
-            dgv1.DataSource = CommFunction.MTL203(SetFilter());
+            dgv1.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.MTL203(SetFilter());
         }
 
         private void bnTop_btnReport_Click(object sender, EventArgs e)

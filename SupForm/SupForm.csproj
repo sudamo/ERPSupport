@@ -40,7 +40,7 @@
     <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>13</ApplicationRevision>
     <ApplicationVersion>1.0.7.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -234,6 +234,12 @@
     </Compile>
     <Compile Include="Menu\frmPro_Dir_Stock.Designer.cs">
       <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\frmPro_Dir_WMSSPSyn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\frmPro_Dir_WMSSPSyn.Designer.cs">
+      <DependentUpon>frmPro_Dir_WMSSPSyn.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu\frmPro_K3SynData.cs">
       <SubType>Form</SubType>
@@ -452,6 +458,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir_Stock.resx">
       <DependentUpon>frmPro_Dir_Stock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\frmPro_Dir_WMSSPSyn.resx">
+      <DependentUpon>frmPro_Dir_WMSSPSyn.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_K3SynData.resx">
       <DependentUpon>frmPro_K3SynData.cs</DependentUpon>
@@ -941,10 +950,6 @@
     <ProjectReference Include="..\Model\Model.csproj">
       <Project>{94fad769-72f9-44ce-8b93-204462fa3679}</Project>
       <Name>Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SQLFactory\SQL.csproj">
-      <Project>{062daca4-1a17-4ec9-b722-2f6ece41f060}</Project>
-      <Name>SQL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

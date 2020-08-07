@@ -2,31 +2,29 @@
 
 namespace ERPSupport.SQL.K3Cloud
 {
+    using IDAL.K3Cloud;
+
     /// <summary>
     /// 产品出库
     /// </summary>
-    public static class PrdOutstock
+    public class PrdOutstock : IPrdOutstock
     {
-        #region STATIC
         private static string _SQL;
-        //private static object _obj;
 
         /// <summary>
         /// 构造函数
         /// </summary>
-        static PrdOutstock()
+        public PrdOutstock()
         {
             _SQL = string.Empty;
-            //_obj = new object();
         }
-        #endregion
 
         /// <summary>
         /// 获取数据
         /// </summary>
         /// <param name="pBillNo">单据编号</param>
         /// <returns>DataTable</returns>
-        public static DataTable DataSource(string pBillNo)
+        public DataTable DataSource(string pBillNo)
         {
             //if (pBillNo.Equals(string.Empty))
             //    return null;
@@ -62,7 +60,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pBillNo">单据编号</param>
         /// <param name="pUseOrgId">使用组织</param>
-        public static void UpdateData(string pBillNo, int pUseOrgId)
+        public void UpdateData(string pBillNo, int pUseOrgId)
         {
             //if (pBillNo.Contains("XSCKD"))
             //    _SQL = "UPDATE T_SAL_OUTSTOCK SET FCUSTOMERID = " + pUseOrgId.ToString() + ", FSETTLEID = " + pUseOrgId.ToString() + ", FRECEIVERID = " + pUseOrgId.ToString() + ", FPAYERID = " + pUseOrgId.ToString() + " WHERE FBILLNO = '" + pBillNo + "'";
@@ -80,7 +78,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pOrgId">组织</param>
         /// <param name="pYear">年份</param>
         /// <param name="pMonth">月份</param>
-        public static void SynPrice(int pOrgId, int pYear, int pMonth)
+        public void SynPrice(int pOrgId, int pYear, int pMonth)
         {
             string strFrom = pYear.ToString() + "-" + (pMonth > 9 ? pMonth.ToString() : "0" + pMonth.ToString()) + "-01";
             string strTo = pYear.ToString() + "-" + (pMonth + 1 > 9 ? (pMonth + 1).ToString() : "0" + (pMonth + 1).ToString()) + "-01";

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// PDA日志
     /// </summary>

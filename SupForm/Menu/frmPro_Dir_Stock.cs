@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.Menu
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 设置调拨对应仓库
@@ -40,12 +40,12 @@ namespace ERPSupport.SupForm.Menu
         /// </summary>
         private void FillComboBox()
         {
-            DataTable dtOutStock = CommFunction.GetStock(2);
+            DataTable dtOutStock = DALCreator.CommFunction.GetStock(2);
             bnTop_cbxOutStock.ComboBox.DataSource = dtOutStock;
             bnTop_cbxOutStock.ComboBox.ValueMember = dtOutStock.Columns[0].ColumnName;
             bnTop_cbxOutStock.ComboBox.DisplayMember = dtOutStock.Columns[1].ColumnName;
 
-            DataTable dtInStock = CommFunction.GetStock(2);
+            DataTable dtInStock = DALCreator.CommFunction.GetStock(2);
             bnTop_cbxInStock.ComboBox.DataSource = dtInStock;
             bnTop_cbxInStock.ComboBox.ValueMember = dtInStock.Columns[0].ColumnName;
             bnTop_cbxInStock.ComboBox.DisplayMember = dtInStock.Columns[1].ColumnName;
@@ -58,7 +58,7 @@ namespace ERPSupport.SupForm.Menu
         {
             libStock.Text = string.Empty;
             libStock.Items.Clear();
-            _dtSource = CommFunction.GetDM_Dir_Stock();
+            _dtSource = DALCreator.CommFunction.GetDM_Dir_Stock();
             if (_dtSource == null || _dtSource.Rows.Count == 0)
                 return;
             for (int i = 0; i < _dtSource.Rows.Count; i++)
@@ -79,7 +79,7 @@ namespace ERPSupport.SupForm.Menu
             string strInStock = bnTop_cbxInStock.ComboBox.SelectedValue.ToString();
             int iInStockId = int.Parse(strInStock.Substring(strInStock.IndexOf("|") + 1));
 
-            MessageBox.Show(CommFunction.AddDM_Dir_Stock(iOutStockId, iInStockId));
+            MessageBox.Show(DALCreator.CommFunction.AddDM_Dir_Stock(iOutStockId, iInStockId));
             SetDataSource();
         }
 
@@ -104,7 +104,7 @@ namespace ERPSupport.SupForm.Menu
 
             int iPID = int.Parse(_dtSource.Rows[iCurrentIndex]["PID"].ToString());
 
-            MessageBox.Show(CommFunction.EditDM_Dir_Stock(iOutStockId, iInStockId, iPID));
+            MessageBox.Show(DALCreator.CommFunction.EditDM_Dir_Stock(iOutStockId, iInStockId, iPID));
             SetDataSource();
         }
 
@@ -122,7 +122,7 @@ namespace ERPSupport.SupForm.Menu
             if (MessageBox.Show("确定要删除该数据吗？", "删除对应仓库", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 int iPID = int.Parse(_dtSource.Rows[iCurrentIndex]["PID"].ToString());
-                CommFunction.DelDM_Dir_Stock(iPID);
+                DALCreator.CommFunction.DelDM_Dir_Stock(iPID);
                 MessageBox.Show("删除成功。");
                 SetDataSource();
             }

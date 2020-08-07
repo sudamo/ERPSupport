@@ -4,8 +4,6 @@ using System.Text.RegularExpressions;
 
 namespace ERPSupport.SupForm.Menu
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// 调拨单选项
     /// </summary>
@@ -30,13 +28,13 @@ namespace ERPSupport.SupForm.Menu
         /// <param name="e"></param>
         private void frmPro_Dir_Load(object sender, EventArgs e)
         {
-            cbxDepartment.DataSource = CommFunction.GetDepartment(3, 100508, "辅助生产部门");
+            cbxDepartment.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.GetDepartment(3, 100508, "辅助生产部门");
             cbxDepartment.DisplayMember = "FNAME";
             cbxDepartment.ValueMember = "FNAME";
             string strDepartment = Model.Globa.GlobalParameter.Dir_CPDB_Department;
             cbxDepartment.SelectedIndex = cbxDepartment.FindString(strDepartment) == -1 ? 0 : cbxDepartment.FindString(strDepartment);
 
-            cbxStock.DataSource = CommFunction.GetStock(3);
+            cbxStock.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.GetStock(3);
             cbxStock.DisplayMember = "FNAME";
             cbxStock.ValueMember = "FNAME";
             string strStock = Model.Globa.GlobalParameter.Dir_CPDB_Stock;
@@ -155,7 +153,7 @@ namespace ERPSupport.SupForm.Menu
                 return;
             }
 
-            MessageBox.Show(CommFunction.ConnectionCheck_SQL("Data Source=" + txtIP.Text + ";Initial Catalog=" + txtCatalog.Text + ";User ID=" + txtUser.Text + ";Password=" + txtPWD.Text + ";Max Pool Size=1024;"));
+            MessageBox.Show(DALFactory.K3Cloud.DALCreator.CommFunction.ConnectionCheck_SQL("Data Source=" + txtIP.Text + ";Initial Catalog=" + txtCatalog.Text + ";User ID=" + txtUser.Text + ";Password=" + txtPWD.Text + ";Max Pool Size=1024;"));
         }
 
         /// <summary>
@@ -166,6 +164,17 @@ namespace ERPSupport.SupForm.Menu
         private void bnBottom_btnStock_Click(object sender, EventArgs e)
         {
             frmPro_Dir_Stock frm = new frmPro_Dir_Stock();
+            frm.ShowDialog();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bnBottom_btnSynPosition_Click(object sender, EventArgs e)
+        {
+            frmPro_Dir_WMSSPSyn frm = new frmPro_Dir_WMSSPSyn();
             frm.ShowDialog();
         }
 

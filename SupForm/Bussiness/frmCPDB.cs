@@ -6,9 +6,9 @@ using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.Bussiness
 {
-    using SQL.K3Cloud;
     using Model.K3Cloud;
     using UserClass;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 成品调拨
@@ -104,7 +104,7 @@ namespace ERPSupport.SupForm.Bussiness
             DataTable dtComboBox;
             DataRow dr;
 
-            dtComboBox = CommFunction.GetDepartment(3, 100508, "辅助生产部门");
+            dtComboBox = DALCreator.CommFunction.GetDepartment(3, 100508, "辅助生产部门");
             if (dtComboBox != null && dtComboBox.Rows.Count != 0)
             {
                 bnTop_cbxDep.ComboBox.DataSource = dtComboBox;
@@ -117,7 +117,7 @@ namespace ERPSupport.SupForm.Bussiness
                     bnTop_cbxDep.SelectedIndex = bnTop_cbxDep.FindString(strDepartment) == -1 ? 0 : bnTop_cbxDep.FindString(strDepartment);
                 }
             }
-            dtComboBox = CommFunction.GetStock(3);
+            dtComboBox = DALCreator.CommFunction.GetStock(3);
             if (dtComboBox != null && dtComboBox.Rows.Count != 0)
             {
                 bnTop_cbxInStock.ComboBox.DataSource = dtComboBox;
@@ -193,7 +193,7 @@ namespace ERPSupport.SupForm.Bussiness
 
             if (pType == 1)//重新加载数据源
             {
-                _DataSource = PrdAllocation.GetTransForP(strFilter);
+                _DataSource = DALCreator.PrdAllocation.GetTransForP(strFilter);
 
                 if (_DataSource == null || _DataSource.Rows.Count == 0)
                 {
@@ -309,6 +309,7 @@ namespace ERPSupport.SupForm.Bussiness
             listParas.Add(bnTop_cbxInStock.Text);
 
             DataTable dtTemp = _DataTemp.Clone();
+            dgv1.CommitEdit(DataGridViewDataErrorContexts.Commit);
             for (int i = 0; i < dgv1.Rows.Count; i++)
             {
                 if (Convert.ToBoolean(dgv1.Rows[i].Cells[0].Value))
@@ -318,14 +319,14 @@ namespace ERPSupport.SupForm.Bussiness
             }
 
             //成品调拨
-            string strBillNos = PrdAllocation.TransferDir(dtTemp, listParas, false);
+            string strBillNos = DALCreator.PrdAllocation.TransferDir(dtTemp, listParas, false);
             ////更新反写销售订单锁库调拨数量
             //PrdAllocation.UpdateDirFields2(dtTemp);
 
             MessageBox.Show("直接调拨单：" + strBillNos);
 
             //日志
-            CommFunction.DM_Log_Local("成品调拨", "辅助功能//调拨//成品调拨", strBillNos);
+            DALCreator.CommFunction.DM_Log_Local("成品调拨", "辅助功能//调拨//成品调拨", strBillNos);
 
             Search();
         }
@@ -407,9 +408,9 @@ namespace ERPSupport.SupForm.Bussiness
         {
             string retrunValue = string.Empty;
             string sLeft, sField, sCompare, sValue, sRight, sLogic;
-            DataTable dtOrg = CommFunction.GetOrganization();
-            DataTable dtBillType = CommFunction.GetBillType("SAL_SALEORDER");
-            DataTable dtDWay = CommFunction.GetAssistantDataEntryByFID("801e1892b8824299936cb07c1fd1694d");
+            DataTable dtOrg = DALCreator.CommFunction.GetOrganization();
+            DataTable dtBillType = DALCreator.CommFunction.GetBillType("SAL_SALEORDER");
+            DataTable dtDWay = DALCreator.CommFunction.GetAssistantDataEntryByFID("801e1892b8824299936cb07c1fd1694d");
 
             for (int i = 0; i < _ListFilter.Count; i++)
             {

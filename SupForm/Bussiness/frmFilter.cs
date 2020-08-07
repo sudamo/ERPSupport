@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ERPSupport.SupForm.Bussiness
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
     using Model.Enum;
     using Model.K3Cloud;
 
@@ -362,7 +362,7 @@ namespace ERPSupport.SupForm.Bussiness
                 }
                 else if (ctl.Name.Contains("cbxValue"))
                 {
-                    dtValue = CommFunction.GetOrganization();
+                    dtValue = DALCreator.CommFunction.GetOrganization();
 
                     ((ComboBox)ctl).DataSource = dtValue;
                     ((ComboBox)ctl).DisplayMember = "FName";
@@ -439,7 +439,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// </summary>
         private void SetDataSource()
         {
-            dgv1.DataSource = CommFunction.GetSolution(_FormID);
+            dgv1.DataSource = DALCreator.CommFunction.GetSolution(_FormID);
         }
 
         /// <summary>
@@ -577,7 +577,7 @@ namespace ERPSupport.SupForm.Bussiness
             }
             if (sContent.Equals(string.Empty)) sContent = " ";
 
-            CommFunction.UpdateSolution(_FilterName, sContent, iRows);
+            DALCreator.CommFunction.UpdateSolution(_FilterName, sContent, iRows);
             MessageBox.Show("[" + _FilterName + "]修改成功！");
         }
 
@@ -616,14 +616,14 @@ namespace ERPSupport.SupForm.Bussiness
             if (MessageBox.Show("是否删除方案：" + _FilterName, "删除方案", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
                 //添加限制，不能删除他人的方案。
-                string strCreator = CommFunction.GetSolution(_FilterName).Rows[0]["Creator"].ToString();
+                string strCreator = DALCreator.CommFunction.GetSolution(_FilterName).Rows[0]["Creator"].ToString();
                 if (Model.Globa.GlobalParameter.K3Inf.UserName != "Administrator" && Model.Globa.GlobalParameter.K3Inf.UserName != strCreator)
                 {
                     MessageBox.Show("只能删除自己创建的方案。");
                     return;
                 }
 
-                CommFunction.DelSolution(_FilterName);
+                DALCreator.CommFunction.DelSolution(_FilterName);
                 SetDataSource();
                 _FilterName = string.Empty;
                 Text = "过滤条件";
@@ -679,7 +679,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 10:
                                 {
                                     //组织下拉框
-                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetOrganization();
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = DALCreator.CommFunction.GetOrganization();
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
                                     ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
@@ -706,7 +706,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 14:
                                 {
                                     //单据类型下拉框
-                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetBillType("SAL_SALEORDER");
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = DALCreator.CommFunction.GetBillType("SAL_SALEORDER");
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
                                     ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
@@ -766,7 +766,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 4:
                                 {
                                     //组织下拉框
-                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetOrganization();
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = DALCreator.CommFunction.GetOrganization();
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
                                     ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
@@ -779,7 +779,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 5:
                                 {
                                     //单据类型下拉框
-                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetBillType("SAL_SALEORDER");
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = DALCreator.CommFunction.GetBillType("SAL_SALEORDER");
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
                                     ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
@@ -792,7 +792,7 @@ namespace ERPSupport.SupForm.Bussiness
                             case 6:
                                 {
                                     //发货类别下拉框
-                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = CommFunction.GetAssistantDataEntryByFID("801e1892b8824299936cb07c1fd1694d");
+                                    ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).DataSource = DALCreator.CommFunction.GetAssistantDataEntryByFID("801e1892b8824299936cb07c1fd1694d");
                                     ((ComboBox)sc1.Panel2.Controls.Find("cbxValue" + iSeq, false)[0]).Visible = true;
 
                                     ((DateTimePicker)sc1.Panel2.Controls.Find("dtpValue" + iSeq, false)[0]).Visible = false;
@@ -912,7 +912,7 @@ namespace ERPSupport.SupForm.Bussiness
             DataTable dtContent = new DataTable();
             _FilterName = dgv1.CurrentRow.Cells[0].Value.ToString();//获取方案名
 
-            dtContent = CommFunction.GetSolution(_FilterName);
+            dtContent = DALCreator.CommFunction.GetSolution(_FilterName);
             int iRows = int.Parse(dtContent.Rows[0]["SROWS"].ToString());
             string sContent = dtContent.Rows[0]["SCONTENT"].ToString(), tmp;
 

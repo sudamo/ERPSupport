@@ -10,11 +10,12 @@ namespace ERPSupport.SQL.K3Cloud
     using Model.Enum;
     using Model.Globa;
     using Model.K3Cloud;
+    using IDAL.K3Cloud;
 
     /// <summary>
     /// 销售订单
     /// </summary>
-    public static class SalOrder
+    public class SalOrder : ISalOrder
     {
         #region STATIC
         private static string _SQL;
@@ -23,7 +24,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <summary>
         /// 构造函数
         /// </summary>
-        static SalOrder()
+        public SalOrder()
         {
             _SQL = string.Empty;
             _obj = new object();
@@ -36,7 +37,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pEntry">订单实体</param>
         /// <param name="pType">类型：1、锁库；其他、解锁</param>
         /// <param name="pRemark">失败信息</param>
-        public static void Log_OrderLock(OrderInfo pEntry, int pType, string pRemark)
+        public void Log_OrderLock(OrderInfo pEntry, int pType, string pRemark)
         {
             _SQL = string.Format("INSERT INTO DM_LOG_ORDERLOCK(FENTRYID,FBILLNO,FMTLNUMBER,FREMARK,FTYPE,FFLAG,FOPERATOR) ");
             _SQL += string.Format(" VALUES({0},'{1}','{2}','{3}','1','0','{4}')", pEntry.FEntryId, pEntry.FBillNo, pEntry.FMaterialNo, pRemark, GlobalParameter.K3Inf.UserName);
@@ -49,7 +50,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pDR">数据行</param>
         /// <param name="pType">类型：1、锁库；其他、解锁</param>
-        public static void Log_OrderLock(DataRow pDR, int pType)
+        public void Log_OrderLock(DataRow pDR, int pType)
         {
             if (pDR == null)
                 return;
@@ -74,7 +75,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFormId">FormId</param>
         /// <param name="pFilter">Filter</param>
         /// <returns></returns>
-        public static DataTable GetDataSource(FormID pFormId, string pFilter)
+        public DataTable GetDataSource(FormID pFormId, string pFilter)
         {
             if (pFormId == FormID.PRD_INSTOCK)//倒冲领料
             {
@@ -182,7 +183,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFEntryId">FEntryId</param>
         /// <returns></returns>
-        public static DataTable GetOrderLockByFEntryId(int pFEntryId)
+        public DataTable GetOrderLockByFEntryId(int pFEntryId)
         {
             _SQL = @"SELECT A.FID,AE.FENTRYID,XINV.FID FINID,A.FBILLNO 单据编号,MTL.FNUMBER 物料编码,E.FNUMBER 基本单位,D.FNUMBER 需求组织,C.FNUMBER || CL.FNAME 备注,AE.FQTY 销售数量,AE.FLOCKQTY 锁库数量,AE.FLEFTQTY 待锁库,AR.FBASECANOUTQTY - AR.FBASEPURJOINQTY - AE.FLOCKQTY 最大可锁数量--可出数量-关联采购/生产数量
                     ,XINV.FSEQ 序号,XINV.STOCK 仓库编码,XINV.FNAME 仓库,NVL(XINV.FQTY,0) 库存量,NVL(XINV.FAVBQTY,0) 可用量
@@ -225,7 +226,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pCanLockQty">可锁数量</param>
         /// <param name="pFID">销售订单ID</param>
         /// <param name="pFEntryId">销售订单分录ID</param>
-        public static void UpdateOrderLock(string pCanLockQty, int pFID, int pFEntryId)
+        public void UpdateOrderLock(string pCanLockQty, int pFID, int pFEntryId)
         {
             _SQL = @"DECLARE
                    iTemp NUMBER(10);
@@ -265,7 +266,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pLockQty">解锁数量</param>
         /// <param name="pFEntryId">销售订单分录ID</param>
-        public static void UnLockSalOrder(string pLockQty, int pFEntryId)
+        public void UnLockSalOrder(string pLockQty, int pFEntryId)
         {
             _SQL = @"BEGIN
             DELETE FROM T_PLN_RESERVELINKENTRY AE WHERE EXISTS(SELECT 1 FROM T_PLN_RESERVELINK A WHERE A.FID = AE.FID AND A.FSRCENTRYID = " + pFEntryId.ToString() + @");
@@ -297,7 +298,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pCanLockQty">可锁数量</param>
         /// <param name="pFEntryId">销售订单分录ID</param>
-        public static void UpdateOrderLock(string pCanLockQty, int pFEntryId)
+        public void UpdateOrderLock(string pCanLockQty, int pFEntryId)
         {
             _SQL = string.Format("UPDATE T_SAL_ORDERENTRY SET FLOCKQTY = FLOCKQTY + {0},FLEFTQTY = CASE WHEN FLEFTQTY = 0 THEN 0 ELSE FLEFTQTY - {0} END,FBATCHFLAG = '1' WHERE FENTRYID = {1}", pCanLockQty, pFEntryId);
 
@@ -308,7 +309,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// 修改执行过锁库订单的批量锁库标识
         /// </summary>
         /// <param name="pList">列表</param>
-        public static void UpdateBatchFlag(IList pList)
+        public void UpdateBatchFlag(IList pList)
         {
             string strFEntryIds = string.Empty;
 
@@ -349,7 +350,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDR">数据行</param>
         /// <param name="pQTY">数量</param>
         /// <returns></returns>
-        public static string AddReserveLink(DataRow pDR, double pQTY)
+        public string AddReserveLink(DataRow pDR, double pQTY)
         {
             string strRetrunValue = string.Empty;
             K3CloudApiClient client = new K3CloudApiClient(GlobalParameter.K3Inf.C_ERPADDRESS);
@@ -466,7 +467,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFMaterialId">物料ID</param>
         /// <returns></returns>
-        public static DataTable GetInventoryInfByMaterialId(string pFMaterialId)
+        public DataTable GetInventoryInfByMaterialId(string pFMaterialId)
         {
             _SQL = @"SELECT FID FINID,FNUMBER STOCK,SUM(FAVBQTY) FAVBQTY
             FROM
@@ -493,7 +494,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDtRun"></param>
         /// <param name="pJoinQty">关联采购生产数量是否参与运算</param>
         /// <returns></returns>
-        public static DataTable OrderRun(DataTable pDtRun, bool pJoinQty)
+        public DataTable OrderRun(DataTable pDtRun, bool pJoinQty)
         {
             string strFEntryIds = string.Empty;
 
@@ -584,7 +585,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pEndTime">结束时间</param>
         /// <param name="pJoinQty"></param>
         /// <returns></returns>
-        public static DataTable OrderRun(List<int> pRunEntryId, DateTime pStarTime, DateTime pEndTime, bool pJoinQty)
+        public DataTable OrderRun(List<int> pRunEntryId, DateTime pStarTime, DateTime pEndTime, bool pJoinQty)
         {
             string strFEntryIds = string.Empty;
 
@@ -740,12 +741,51 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public void SaveOrderRun(DataRow pDr, string pBillNo, int pSEQ)
+        {
+            _SQL = "INSERT INTO DM_LOG_ORDERRUN(YSBILLNO,FID,FENTRYID,FBILLNO,FBILLTYPE,FMTLNUMBER,FMTLNAME,FCUSTNAME,F_PAEZ_SUBMITUSERID,FUNIT,FQTY,FLOCKQTY,FDEMANDQTY,BOM,FLACKLEVEL,ISLACK,FSEQ) VALUES('" + pBillNo + "'," + pDr["FID"].ToString() + "," + pDr["FENTRYID"].ToString() + ",'" + pDr["单据编号"].ToString() + "','" + pDr["单据类型"].ToString() + "','" + pDr["物料编码"].ToString() + "','" + pDr["物料名称"].ToString() + "','" + pDr["客户名称"].ToString() + "','" + pDr["提交人"].ToString() + "','" + pDr["单位"].ToString() + "'," + pDr["订单数量"].ToString() + "," + pDr["锁库数量"].ToString() + "," + pDr["订单需求"].ToString() + ",'" + pDr["BOM版本"].ToString() + "','" + pDr["欠料等级"].ToString() + "'," + (pDr["是否欠料"].ToString() == "是" ? "1" : "0") + "," + pSEQ + ")";
+            ORAHelper.ExecuteNonQuery(_SQL);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pDt"></param>
+        /// <param name="pFEntryId"></param>
+        public void SaveOrderRunDetail(DataTable pDt, string pFEntryId)
+        {
+
+            int iPID = GetMaxID("LOG_ORDERRUN", 1);
+            int iSEQ = 0;
+            string strSQL = "INSERT ALL ";
+
+            for (int i = 0; i < pDt.Rows.Count; i++)
+            {
+                if (pDt.Rows[i]["FENTRYID"].ToString() == pFEntryId)
+                {
+                    iSEQ++;
+                    strSQL += " INTO DM_LOG_ORDERRUNSUB(PID,FID,FENTRYID,FPMTLNUMBER,FPMTLNAME,FMTLNUMBER,FMTLNAME,FNUIT,BOM,FQTY,FLOCKQTY,FSUBQTY,FSTOCKQTY,FSTOCKAVBQTY,FSTOCKDEMANDQTY,FNETDEMANDQTY,FPICQTY,FMINSTOCK,FMAXSTOCK,FSAFESTOCK,FSTOCKDAYS,FORDERQTY,FOCCUPYQTY,FOCCUPYSUMQTY,FLACKQTY,FLACKLEVEL,FSEQ) VALUES(" + iPID + "," + pDt.Rows[i]["FID"].ToString() + "," + pDt.Rows[i]["FENTRYID"].ToString() + ",'" + pDt.Rows[i]["父项物料"].ToString() + "','" + pDt.Rows[i]["父项名称"].ToString() + "','" + pDt.Rows[i]["物料编码"].ToString() + "','" + pDt.Rows[i]["物料名称"].ToString() + "','" + pDt.Rows[i]["单位"].ToString() + "','" + pDt.Rows[i]["BOM"].ToString() + "'," + pDt.Rows[i]["订单数量"].ToString() + "," + pDt.Rows[i]["锁库数量"].ToString() + "," + pDt.Rows[i]["子项需求"].ToString() + "," + pDt.Rows[i]["库存数量"].ToString() + "," + pDt.Rows[i]["库存可用数量"].ToString() + "," + pDt.Rows[i]["库存需求"].ToString() + "," + pDt.Rows[i]["净需求"].ToString() + "," + pDt.Rows[i]["领料数量"].ToString() + "," + pDt.Rows[i]["最小库存"].ToString() + "," + pDt.Rows[i]["最大库存"].ToString() + "," + pDt.Rows[i]["安全库存"].ToString() + "," + pDt.Rows[i]["库存可用天数"].ToString() + "," + pDt.Rows[i]["下单点"].ToString() + "," + pDt.Rows[i]["本次占用数量"].ToString() + "," + pDt.Rows[i]["累计占用数量"].ToString() + "," + pDt.Rows[i]["欠料数量"].ToString() + ",'" + pDt.Rows[i]["欠料等级"].ToString() + "'," + iSEQ + ")";
+                }
+            }
+
+            ORAHelper.ExecuteNonQuery(strSQL + " SELECT * FROM DUAL;");
+
+            ////添加预留关系 --不修改库存可用量
+            //if (decimal.Parse(FOCCUPYQTY) > 0)
+            //{
+            //    AddReserveLink(dtDtlResult.Rows[i], decimal.Parse(FOCCUPYQTY));
+            //}
+        }
+
+        /// <summary>
         /// 获取表内码最大值
         /// </summary>
         /// <param name="pFormID">表标识</param>
         /// <param name="pType">类型：0、系统表；1、其他</param>
         /// <returns></returns>
-        public static int GetMaxID(string pFormID, int pType)
+        private int GetMaxID(string pFormID, int pType)
         {
             string strTableName, strKey;
 
@@ -775,7 +815,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFEntryID">销售订单分录ID</param>
         /// <param name="pBillOwe">整单是否欠料：1 是；2 否</param>弃用参数
         /// <param name="pOweLevel">欠料等级</param>
-        public static void UpdateOrderFields(int pFEntryID, string pOweLevel)
+        public void UpdateOrderFields(int pFEntryID, string pOweLevel)
         {
             //首先更新销售订单分录的运算次数和欠料等级。
             _SQL = string.Format("UPDATE T_SAL_ORDERENTRY SET F_PAEZ_RUNTIME = F_PAEZ_RUNTIME + 1,F_PAEZ_OWELEVEL = '{0}' WHERE FENTRYID = {1}", pOweLevel, pFEntryID);
@@ -804,7 +844,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFrom"></param>
         /// <param name="pTo"></param>
         /// <returns></returns>
-        public static DataTable GetBillInfo(string pType, string pFBillNo)
+        public DataTable GetBillInfo(string pType, string pFBillNo)
         {
             switch (pType.ToUpper())
             {
@@ -836,7 +876,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFBillNo">销售订单编号</param>
         /// <param name="pSingle">整单发货标识</param>
         /// <returns></returns>
-        public static string UpdateSingle(string pFBillNo, bool pSingle)
+        public string UpdateSingle(string pFBillNo, bool pSingle)
         {
             if (!pFBillNo.Contains("XSDD") && !pFBillNo.Contains("SEORD") && !pFBillNo.Contains("W"))
                 return "[" + pFBillNo + "]并非销售订单";
@@ -867,7 +907,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFEntryId">销售订单分录内码</param>
         /// <param name="pCanOutQty">可出数量</param>
-        public static void UpdateOrderCanOutQty(string pFEntryId, decimal pCanOutQty)
+        public void UpdateOrderCanOutQty(string pFEntryId, decimal pCanOutQty)
         {
             _SQL = string.Format("UPDATE T_SAL_ORDERENTRY_R SET FCANOUTQTY = {0}, FBASECANOUTQTY = {0}, FSTOCKBASECANOUTQTY = {0} WHERE FENTRYID = {1}", pCanOutQty, pFEntryId);
             ORAHelper.ExecuteNonQuery(_SQL);
@@ -883,7 +923,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pReceivable">是否关联修改应收单</param>
         /// <param name="pReturnNotice">是否关联修改退货通知单</param>
         ///<param name="pReturnStock">是否关联修改销售退货单</param>
-        public static void UpdateCustomer(string pFBillNo, int pFEntryId, int pCustomerId, bool pOutStock, bool pReceivable, bool pReturnNotice, bool pReturnStock)
+        public void UpdateCustomer(string pFBillNo, int pFEntryId, int pCustomerId, bool pOutStock, bool pReceivable, bool pReturnNotice, bool pReturnStock)
         {
             _SQL = string.Format("DECLARE V_CUSTID NUMBER(10);  BEGIN  SELECT FCUSTID INTO V_CUSTID FROM T_SAL_ORDER WHERE FBILLNO = '{0}'; ", pFBillNo);
             _SQL += string.Format(" UPDATE T_SAL_ORDER SET FCUSTID = {0},FSETTLEID = {0} WHERE FBILLNO = '{1}';  ", pCustomerId, pFBillNo);
@@ -912,7 +952,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// UiCity对接单据调整
         /// </summary>
         /// <param name="pFBillNos"></param>
-        public static void UpdateUiCityOrders(int pFactoryOrgId, int pSaleOrgId, int pSaleDeptId, int pSalerId, List<string> pFBillNos)
+        public void UpdateUiCityOrders(int pFactoryOrgId, int pSaleOrgId, int pSaleDeptId, int pSalerId, List<string> pFBillNos)
         {
             string strFBillNos = string.Empty;
             if (pFBillNos == null || pFBillNos.Count == 0)
@@ -939,7 +979,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pSaleOrg"></param>
         /// <returns></returns>
-        public static DataTable NoPriceOrders(string pSaleOrgs)
+        public DataTable NoPriceOrders(string pSaleOrgs)
         {
             _SQL = string.Format("SELECT O.FBILLNO 单据编号,O.FDATE 日期,OE.FSEQ 序号,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,F.FPRICE 单价,OE.FENTRYID ");
             _SQL += string.Format(" FROM T_SAL_ORDER O ");
@@ -958,7 +998,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pOrders"></param>
         /// <returns></returns>
-        public static string UpdateOrderPirce(DataTable pOrders)
+        public string UpdateOrderPirce(DataTable pOrders)
         {
             if (pOrders == null || pOrders.Rows.Count == 0)
                 return "没有数据更新。";

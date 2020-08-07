@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 namespace ERPSupport.SupForm.Bussiness
 {
-    using SQL.K3Cloud;
     using Model.Enum;
     using Model.Globa;
     using Model.K3Cloud;
@@ -75,7 +74,7 @@ namespace ERPSupport.SupForm.Bussiness
                 lblTips.Text = "请输入方案名";
                 return;
             }
-            if (CommFunction.SolutionName(txtName.Text) != 0)
+            if (DALFactory.K3Cloud.DALCreator.CommFunction.SolutionName(txtName.Text) != 0)
             {
                 lblTips.Text = "此方案名已经存在";
                 return;
@@ -95,7 +94,7 @@ namespace ERPSupport.SupForm.Bussiness
             }
             if (sContent.Equals(string.Empty)) sContent = " ";
 
-            CommFunction.SaveSolution(txtName.Text, chbShare.Checked, sContent, iRows, _FormID);
+            DALFactory.K3Cloud.DALCreator.CommFunction.SaveSolution(txtName.Text, chbShare.Checked, sContent, iRows, _FormID);
             _FilterName = txtName.Text;
             DialogResult = DialogResult.OK;
             Close();

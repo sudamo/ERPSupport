@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Data;
 using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.Bussiness
 {
-    using SQL.K3Cloud;
-
     /// <summary>
     /// 根据入库单同步条码
     /// </summary>

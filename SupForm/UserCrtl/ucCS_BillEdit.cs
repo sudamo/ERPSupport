@@ -7,8 +7,8 @@ using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
     using Model.Globa;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 单据修改
@@ -88,7 +88,7 @@ namespace ERPSupport.SupForm.UserCrtl
             list.Add(bnTop.Items[10]);
             list.Add(bnTop.Items[11]);
             list.Add(bnTop.Items[12]);
-            list.Add(bnTop.Items[13]);
+            //list.Add(bnTop.Items[13]);
 
             bnTop.Items.Clear();
             foreach (ToolStripItem item in list)
@@ -203,10 +203,6 @@ namespace ERPSupport.SupForm.UserCrtl
                     Bussiness.frmU1CityOrderEdit frmU = new Bussiness.frmU1CityOrderEdit();
                     frmU.Show(this);
                     break;
-                case "7":
-                    Bussiness.frmOrderPriceSyn frmP = new Bussiness.frmOrderPriceSyn();
-                    frmP.Show(this);
-                    break;
             }
         }
 
@@ -221,7 +217,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 return;
             }
 
-            DataTable dtTemp = SalOrder.GetBillInfo(bnTop_cbxType.ComboBox.SelectedValue.ToString(), bnTop_txtBillNo.Text);
+            DataTable dtTemp = DALCreator.SalOrder.GetBillInfo(bnTop_cbxType.ComboBox.SelectedValue.ToString(), bnTop_txtBillNo.Text);
             if (dtTemp == null || dtTemp.Rows.Count == 0)
             {
                 MessageBox.Show("没有查询到数据。");
@@ -246,11 +242,11 @@ namespace ERPSupport.SupForm.UserCrtl
         }
         private void Synchro()
         {
-            if (MessageBox.Show("此时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd") + "\n 共有" + PrdAllocation.Asyn_PPBom_FNeedDate(_dateFrom.Value, _dateTo.Value).ToString() + "不同步，确定同步吗？", "同步确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            if (MessageBox.Show("此时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd") + "\n 共有" + DALCreator.PrdAllocation.Asyn_PPBom_FNeedDate(_dateFrom.Value, _dateTo.Value).ToString() + "不同步，确定同步吗？", "同步确认", MessageBoxButtons.YesNo) == DialogResult.Yes)
             {
-                PrdAllocation.Syn_PPBom_FNeedDate(_dateFrom.Value, _dateTo.Value);
+                DALCreator.PrdAllocation.Syn_PPBom_FNeedDate(_dateFrom.Value, _dateTo.Value);
                 //操作日志
-                CommFunction.DM_Log_Local("同步需求日期", "配置\\单据信息调整", "时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd"));
+                DALCreator.CommFunction.DM_Log_Local("同步需求日期", "配置\\单据信息调整", "时间段：" + _dateFrom.Value.ToString("yyyy-MM-dd") + "至" + _dateTo.Value.ToString("yyyy-MM-dd"));
             }
         }
 
@@ -265,7 +261,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 return;
             }
 
-            MessageBox.Show(SalOrder.UpdateSingle(strBillNo, bSingle));
+            MessageBox.Show(DALCreator.SalOrder.UpdateSingle(strBillNo, bSingle));
             SetDataSource();
         }
         private void bnR2_btnEdit_Click(object sender, EventArgs e)
@@ -277,7 +273,7 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 string strFEntryId = dgv1.CurrentRow.Cells[13].Value.ToString();
                 decimal deCanOutQty = decimal.Parse(bnR2_txtCanOutQty.Text.ToString());
-                SalOrder.UpdateOrderCanOutQty(strFEntryId, deCanOutQty);
+                DALCreator.SalOrder.UpdateOrderCanOutQty(strFEntryId, deCanOutQty);
 
                 MessageBox.Show("修改成功。");
                 SetDataSource();
@@ -293,7 +289,7 @@ namespace ERPSupport.SupForm.UserCrtl
             }
 
             int iUseOrgId = int.Parse(dgv1.Rows[0].Cells[14].Value.ToString());
-            int iCustomerId = CommFunction.GetCustomerId(bnR2_txtCustomer.Text.Trim(), iUseOrgId);
+            int iCustomerId = DALCreator.CommFunction.GetCustomerId(bnR2_txtCustomer.Text.Trim(), iUseOrgId);
 
             if (iCustomerId == 0)
             {
@@ -303,11 +299,10 @@ namespace ERPSupport.SupForm.UserCrtl
 
             string strBillNo = dgv1.Rows[0].Cells[0].Value.ToString();
             int iFEntryId = int.Parse(dgv1.Rows[0].Cells[13].Value.ToString());
-            SalOrder.UpdateCustomer(strBillNo, iFEntryId, iCustomerId, _chbSo.Checked, _chbAr.Checked, _chbSn.Checked, _chbSr.Checked);
+            DALCreator.SalOrder.UpdateCustomer(strBillNo, iFEntryId, iCustomerId, _chbSo.Checked, _chbAr.Checked, _chbSn.Checked, _chbSr.Checked);
             MessageBox.Show("修改成功。");
             SetDataSource();
         }
-
 
         /// <summary>
         /// cbxType_SelectedIndexChanged
@@ -331,7 +326,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
                 bnTop_PPBom.Visible = false;
                 bnTop_Bom.Visible = false;
-                bnTop_Price.Visible = false;
+                //bnTop_Price.Visible = false;
             }
             if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "SAL_SaleOrder" && (GlobalParameter.K3Inf.DepartmentName.Contains("信息部") || GlobalParameter.K3Inf.DepartmentName == "客服部"))
             {
@@ -343,7 +338,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_txtBillNo.Visible = true;
                 bnTop_Search.Visible = true;
                 bnTop_Org.Visible = true;
-                bnTop_Price.Visible = true;
+                //bnTop_Price.Visible = true;
 
                 bnTop_Syn.Visible = false;
                 bnTop_ChangeDB.Visible = false;
@@ -361,7 +356,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_txtBillNo.Visible = false;
                 bnTop_Search.Visible = false;
                 bnTop_Org.Visible = false;
-                bnTop_Price.Visible = false;
+                //bnTop_Price.Visible = false;
 
                 bnTop_Syn.Visible = true;
                 bnTop_ChangeDB.Visible = true;
@@ -379,7 +374,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_txtBillNo.Visible = false;
                 bnTop_Search.Visible = false;
                 bnTop_Org.Visible = false;
-                bnTop_Price.Visible = false;
+                //bnTop_Price.Visible = false;
 
                 bnTop_Syn.Visible = false;
                 bnTop_ChangeDB.Visible = false;

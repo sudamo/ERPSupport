@@ -42,6 +42,13 @@
   <ItemGroup>
     <Compile Include="Drawing\ICommon.cs" />
     <Compile Include="INOrder\IOrder.cs" />
+    <Compile Include="K3Cloud\ICommFunction.cs" />
+    <Compile Include="K3Cloud\IFileSetting.cs" />
+    <Compile Include="K3Cloud\IPrdAllocation.cs" />
+    <Compile Include="K3Cloud\IPrdInstock.cs" />
+    <Compile Include="K3Cloud\IPrdOutstock.cs" />
+    <Compile Include="K3Cloud\IPrdPick.cs" />
+    <Compile Include="K3Cloud\ISalOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

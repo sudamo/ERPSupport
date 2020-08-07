@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
     using System.Collections.Generic;
 
     /// <summary>
@@ -36,7 +36,7 @@ namespace ERPSupport.SupForm.UserCrtl
         {
             _FirstLoad = true;
             _Search = 0;
-            _Stocks = CommFunction.GetStock(4);
+            _Stocks = DALCreator.CommFunction.GetStock(4);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace ERPSupport.SupForm.UserCrtl
 
         private void Search()
         {
-            _DataSource = CommFunction.MStockSetting(bnTop_txtNumber.Text.Trim());
+            _DataSource = DALCreator.CommFunction.MStockSetting(bnTop_txtNumber.Text.Trim());
             dgv1.DataSource = _DataSource;
 
             if (dgv1 == null || dgv1.Rows.Count == 0)
@@ -125,14 +125,14 @@ namespace ERPSupport.SupForm.UserCrtl
                         if (FName == " 请选择")
                             FValue = " 请选择";
                         else
-                            FValue = CommFunction.GetStockNumber(100508, FName);
+                            FValue = DALCreator.CommFunction.GetStockNumber(100508, FName);
                     }
                     if (FValueTran == string.Empty && FNameTran != string.Empty)
                     {
                         if (FNameTran == " 请选择")
                             FValueTran = " 请选择";
                         else
-                            FValueTran = CommFunction.GetStockNumber(100508, FNameTran);
+                            FValueTran = DALCreator.CommFunction.GetStockNumber(100508, FNameTran);
                     }
 
                     if (FValue != string.Empty)
@@ -170,10 +170,10 @@ namespace ERPSupport.SupForm.UserCrtl
                 FNameTran = (dgv1.Rows[i].Cells[iColTran]).EditedFormattedValue.ToString();
 
                 //保存
-                CommFunction.UpdateMStockSetting(FID, FName, FNameTran);
+                DALCreator.CommFunction.UpdateMStockSetting(FID, FName, FNameTran);
 
                 //操作日志
-                CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", bnTop_txtNumber.Text + ":[" + FName + "|" + FNameTran + "]");
+                DALCreator.CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", bnTop_txtNumber.Text + ":[" + FName + "|" + FNameTran + "]");
             }
             MessageBox.Show("更新完成。");
             Search();
@@ -208,20 +208,20 @@ namespace ERPSupport.SupForm.UserCrtl
             }
 
             //删除
-            CommFunction.DeleteMStockSetting(list);
+            DALCreator.CommFunction.DeleteMStockSetting(list);
 
             //操作日志
-            CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "删除[" + bnTop_txtNumber.Text + "]");
+            DALCreator.CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "删除[" + bnTop_txtNumber.Text + "]");
 
             MessageBox.Show("删除完成。");
             Search();
         }
         private void ClearNullStock()
         {
-            CommFunction.DelMStockSetting();
+            DALCreator.CommFunction.DelMStockSetting();
 
             //操作日志
-            CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "清除空值仓库");
+            DALCreator.CommFunction.DM_Log_Local("设置默认仓库", "配置\\物料默认仓库", "清除空值仓库");
 
             MessageBox.Show("清除完成");
         }

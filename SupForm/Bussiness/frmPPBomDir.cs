@@ -66,7 +66,7 @@ namespace ERPSupport.SupForm.Bussiness
 
             strBillNos = "'" + strBillNos.Replace(",", "','").Replace(Convert.ToChar(10).ToString(), "").Replace(Convert.ToChar(13).ToString(), "").ToUpper() + "'";
 
-            SQL.K3Cloud.PrdAllocation.UpdatePPBom(strBillNos, _rbtDir.Checked);
+            DALFactory.K3Cloud.DALCreator.PrdAllocation.UpdatePPBom(strBillNos, _rbtDir.Checked);
 
             MessageBox.Show("修改成功。");
             Close();

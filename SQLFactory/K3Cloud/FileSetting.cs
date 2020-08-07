@@ -4,10 +4,12 @@ using System.Text;
 
 namespace ERPSupport.SQL.K3Cloud
 {
+    using IDAL.K3Cloud;
+
     /// <summary>
     /// 文件操作方法 - 已弃用
     /// </summary>
-    public static class FileSetting
+    public class FileSetting : IFileSetting
     {
         /// <summary>
         /// 构造函数
@@ -19,7 +21,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// </summary>
         /// <param name="pFilePath">文件路径</param>
         /// <param name="pText">内容</param>
-        public static void CreateLocalText(string pFilePath, string pText)
+        public void CreateLocalText(string pFilePath, string pText)
         {
             if (File.Exists(pFilePath))
                 File.Delete(pFilePath);

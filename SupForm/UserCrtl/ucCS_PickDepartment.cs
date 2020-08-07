@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.UserCrtl
 {
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 设置领料部门
@@ -36,7 +36,7 @@ namespace ERPSupport.SupForm.UserCrtl
         private void FillComboBox()
         {
             //cbxOrg
-            bnTop_cbxOrg.ComboBox.DataSource = CommFunction.GetOrganization(2, true);
+            bnTop_cbxOrg.ComboBox.DataSource = DALCreator.CommFunction.GetOrganization(2, true);
             bnTop_cbxOrg.ComboBox.DisplayMember = "FName";
             bnTop_cbxOrg.ComboBox.ValueMember = "FValue";
             bnTop_cbxOrg.SelectedIndex = 1;
@@ -61,14 +61,14 @@ namespace ERPSupport.SupForm.UserCrtl
             {
                 return;
             }
-            bnTop_cbxDepartment.ComboBox.DataSource = CommFunction.GetDepartment(3, iUseOrgID, "");
+            bnTop_cbxDepartment.ComboBox.DataSource = DALCreator.CommFunction.GetDepartment(3, iUseOrgID, "");
             bnTop_cbxDepartment.ComboBox.DisplayMember = "FName";
             bnTop_cbxDepartment.ComboBox.ValueMember = "FValue";
         }
 
         private void SetDataSource()
         {
-            dgv1.DataSource = CommFunction.PickMTLDepartment();
+            dgv1.DataSource = DALCreator.CommFunction.PickMTLDepartment();
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace ERPSupport.SupForm.UserCrtl
             strNumber = strNumber.Substring(0, strNumber.IndexOf("|"));//获取部门编码
 
             //唯一性检查
-            if (CommFunction.PickMTLDeptExists(strNumber))
+            if (DALCreator.CommFunction.PickMTLDeptExists(strNumber))
             {
                 MessageBox.Show("部门不能重复录入。");
                 return;
@@ -168,24 +168,24 @@ namespace ERPSupport.SupForm.UserCrtl
             if (result != DialogResult.OK) return;
 
             //新增记录
-            CommFunction.AddPickMTLDept(iDeptId.ToString(), strNumber, strName, strUseOrgId);
+            DALCreator.CommFunction.AddPickMTLDept(iDeptId.ToString(), strNumber, strName, strUseOrgId);
             //操作日志
-            CommFunction.DM_Log_Local("新增领料部门", "配置\\设置领料部门", bnTop_cbxOrg.Text + ":" + bnTop_cbxDepartment.Text);
+            DALCreator.CommFunction.DM_Log_Local("新增领料部门", "配置\\设置领料部门", bnTop_cbxOrg.Text + ":" + bnTop_cbxDepartment.Text);
             MessageBox.Show("添加成功");
             //重新获取数据
-            dgv1.DataSource = CommFunction.PickMTLDepartment();
+            dgv1.DataSource = DALCreator.CommFunction.PickMTLDepartment();
         }
         private void Delete()
         {
             if (dgv1.Rows.Count == 0) return;
 
             //根据序号删除数据
-            CommFunction.DelPickMTLDept(dgv1.CurrentRow.Cells[0].Value.ToString());
+            DALCreator.CommFunction.DelPickMTLDept(dgv1.CurrentRow.Cells[0].Value.ToString());
             //操作日志
-            CommFunction.DM_Log_Local("删除领料部门", "配置\\设置领料部门", dgv1.CurrentRow.Cells[0].Value.ToString());
+            DALCreator.CommFunction.DM_Log_Local("删除领料部门", "配置\\设置领料部门", dgv1.CurrentRow.Cells[0].Value.ToString());
             MessageBox.Show("删除成功");
             //重新获取数据
-            dgv1.DataSource = CommFunction.PickMTLDepartment();
+            dgv1.DataSource = DALCreator.CommFunction.PickMTLDepartment();
         }
         private void RefreshDate()
         {

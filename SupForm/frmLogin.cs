@@ -6,7 +6,6 @@ using Kingdee.BOS.WebApi.Client;
 
 namespace ERPSupport.SupForm
 {
-    using SQL.K3Cloud;
     using Model.Globa;
     using Model.Basic;
     using Model.K3Cloud;
@@ -104,7 +103,7 @@ namespace ERPSupport.SupForm
             }
 
             //数据库连接检验
-            string strDBStatus = CommFunction.ConnectionCheck_ORA(C_ORCLADDRESS);
+            string strDBStatus = DALFactory.K3Cloud.DALCreator.CommFunction.ConnectionCheck_ORA(C_ORCLADDRESS);
             if (strDBStatus != "连接成功")
             {
                 MessageBox.Show(strDBStatus);
@@ -113,7 +112,7 @@ namespace ERPSupport.SupForm
             #endregion
 
             #region 判断程序是否启用
-            int iFlag = CommFunction.ApplicationFlag(C_ORCLADDRESS, "ERPSupport.SupForm");
+            int iFlag = DALFactory.K3Cloud.DALCreator.CommFunction.ApplicationFlag(C_ORCLADDRESS, "ERPSupport.SupForm");
             switch (iFlag)
             {
                 case -1:
@@ -142,7 +141,7 @@ namespace ERPSupport.SupForm
             #endregion
 
             #region 设置信息
-            DataTable dtTempUser = CommFunction.GetUserInfoByName(C_ORCLADDRESS, userName);
+            DataTable dtTempUser = DALFactory.K3Cloud.DALCreator.CommFunction.GetUserInfoByName(C_ORCLADDRESS, userName);
 
             if (dtTempUser == null || dtTempUser.Rows.Count == 0)
             {

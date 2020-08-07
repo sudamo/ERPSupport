@@ -78,7 +78,7 @@ namespace ERPSupport.SupForm.Menu
             cbxMonth.ValueMember = "FValue";
             cbxMonth.SelectedIndex = _Month - 1;
 
-            cbxOrg.DataSource = SQL.K3Cloud.CommFunction.GetOrganization();
+            cbxOrg.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.GetOrganization();
             cbxOrg.DisplayMember = "FName";
             cbxOrg.ValueMember = "FValue";
             cbxOrg.SelectedValue = 100505;
@@ -91,7 +91,7 @@ namespace ERPSupport.SupForm.Menu
 
         private void btnSyn_Click(object sender, EventArgs e)
         {
-            SQL.K3Cloud.PrdOutstock.SynPrice(int.Parse(cbxOrg.SelectedValue.ToString()), int.Parse(txtYear.Text), int.Parse(cbxMonth.SelectedValue.ToString()));
+            DALFactory.K3Cloud.DALCreator.PrdOutstock.SynPrice(int.Parse(cbxOrg.SelectedValue.ToString()), int.Parse(txtYear.Text), int.Parse(cbxMonth.SelectedValue.ToString()));
             lblTips.Text = "已执行！";
         }
 

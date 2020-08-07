@@ -8,7 +8,7 @@ namespace ERPSupport.SupForm.Bussiness
 {
     using UserCrtl;
     using UserClass;
-    using SQL.K3Cloud;
+    using DALFactory.K3Cloud;
 
     /// <summary>
     /// 发货通知单推调拨单
@@ -104,7 +104,7 @@ namespace ERPSupport.SupForm.Bussiness
                 _Load = false;
             }
 
-            _dtDataSource = PrdAllocation.GetNotice(_Date.Value, bnBottom_txtBillNo.Text);
+            _dtDataSource = DALCreator.PrdAllocation.GetNotice(_Date.Value, bnBottom_txtBillNo.Text);
             dgv1.DataSource = _dtDataSource;
 
             //_Btn = dgv1.Columns[0] as DataGridViewButtonColumn;
@@ -160,20 +160,20 @@ namespace ERPSupport.SupForm.Bussiness
                     }
                 }
 
-                dtDate = PrdAllocation.GetTransForP(listFBillNos);
+                dtDate = DALCreator.PrdAllocation.GetTransForP(listFBillNos);
                 if (dtDate == null || dtDate.Rows.Count == 0)
                     continue;
 
-                strBillNos += PrdAllocation.TransferDir(dtDate, _List, true);
+                strBillNos += DALCreator.PrdAllocation.TransferDir(dtDate, _List, true);
             }
 
             //反写发货通知单关联调拨数量
-            PrdAllocation.UpdateNotice(listFBillNoAll);
+            DALCreator.PrdAllocation.UpdateNotice(listFBillNoAll);
 
             MessageBox.Show("直接调拨单：" + strBillNos);
 
             //日志
-            CommFunction.DM_Log_Local("成品调拨", "辅助功能//调拨//成品调拨-发货通知单", strBillNos);
+            DALCreator.CommFunction.DM_Log_Local("成品调拨", "辅助功能//调拨//成品调拨-发货通知单", strBillNos);
 
             bnTop_btnSearch_Click(null, null);
         }
