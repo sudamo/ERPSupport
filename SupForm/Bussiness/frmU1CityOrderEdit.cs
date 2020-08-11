@@ -165,9 +165,9 @@ namespace ERPSupport.SupForm.Bussiness
             }
             catch { goto A; }
 
-            DALFactory.K3Cloud.DALCreator.SalOrder.UpdateUiCityOrders(iFacOrg, iSaleOrg, iDep, iSaler, list);
+            DALCreator.SalOrder.UpdateUiCityOrders(iFacOrg, iSaleOrg, iDep, iSaler, list);
             //日志
-            string strMessage = string.Format("调整U1City销售订单:", FBillNos);
+            string strMessage = string.Format("调整U1City销售订单:{0}", FBillNos);
             DALCreator.CommFunction.DM_Log_Local("单据信息调整", "辅助功能//配置//单据信息调整", strMessage);
 
             A:

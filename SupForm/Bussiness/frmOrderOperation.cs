@@ -835,12 +835,13 @@ namespace ERPSupport.SupForm.Bussiness
                 {
                     iSEQ++;
 
-                    DALCreator.SalOrder.SaveOrderRun(_dtDtlResult.Rows[i], YSBILLNO, iSEQ);
+                    DALCreator.SalOrder.SaveOrderRun(_dtRunResult.Rows[i], YSBILLNO, iSEQ);
                     //strSQL = "INSERT INTO DM_LOG_ORDERRUN(YSBILLNO,FID,FENTRYID,FBILLNO,FBILLTYPE,FMTLNUMBER,FMTLNAME,FCUSTNAME,F_PAEZ_SUBMITUSERID,FUNIT,FQTY,FLOCKQTY,FDEMANDQTY,BOM,FLACKLEVEL,ISLACK,FSEQ) VALUES('" + YSBILLNO + "'," + _dtRunResult.Rows[i]["FID"].ToString() + "," + _dtRunResult.Rows[i]["FENTRYID"].ToString() + ",'" + _dtRunResult.Rows[i]["单据编号"].ToString() + "','" + _dtRunResult.Rows[i]["单据类型"].ToString() + "','" + _dtRunResult.Rows[i]["物料编码"].ToString() + "','" + _dtRunResult.Rows[i]["物料名称"].ToString() + "','" + _dtRunResult.Rows[i]["客户名称"].ToString() + "','" + _dtRunResult.Rows[i]["提交人"].ToString() + "','" + _dtRunResult.Rows[i]["单位"].ToString() + "'," + _dtRunResult.Rows[i]["订单数量"].ToString() + "," + _dtRunResult.Rows[i]["锁库数量"].ToString() + "," + _dtRunResult.Rows[i]["订单需求"].ToString() + ",'" + _dtRunResult.Rows[i]["BOM版本"].ToString() + "','" + _dtRunResult.Rows[i]["欠料等级"].ToString() + "'," + (_dtRunResult.Rows[i]["是否欠料"].ToString() == "是" ? "1" : "0") + "," + iSEQ + ")";
                     //SQL.ORAHelper.ExecuteNonQuery(strSQL);
 
                     //保存子项物料运算结果
-                    SaveDetail(_dtRunResult.Rows[i]["FENTRYID"].ToString());
+                    //SaveDetail(_dtRunResult.Rows[i]["FENTRYID"].ToString());
+                    DALCreator.SalOrder.SaveOrderRunDetail(_dtDtlResult, _dtRunResult.Rows[i]["FENTRYID"].ToString());
 
                     //反写运算次数、整单是否欠料和欠料等级
                     DALCreator.SalOrder.UpdateOrderFields(int.Parse(_dtRunResult.Rows[i]["FENTRYID"].ToString()), _dtRunResult.Rows[i]["欠料等级"].ToString());
@@ -878,7 +879,7 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="pPID"></param>
         private void SaveDetail(string pFEntryId)
         {
-            DALCreator.SalOrder.SaveOrderRunDetail(_dtDtlResult, pFEntryId);
+            //DALCreator.SalOrder.SaveOrderRunDetail(_dtDtlResult, pFEntryId);
             //int iPID = SalOrder.GetMaxID("LOG_ORDERRUN", 1);
             //int iSEQ = 0;
             //string strSQL = "INSERT ALL ";

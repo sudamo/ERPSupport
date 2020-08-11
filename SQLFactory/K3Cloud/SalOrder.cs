@@ -756,7 +756,6 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFEntryId"></param>
         public void SaveOrderRunDetail(DataTable pDt, string pFEntryId)
         {
-
             int iPID = GetMaxID("LOG_ORDERRUN", 1);
             int iSEQ = 0;
             string strSQL = "INSERT ALL ";
