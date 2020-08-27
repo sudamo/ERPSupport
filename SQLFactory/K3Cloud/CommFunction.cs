@@ -345,8 +345,8 @@ namespace ERPSupport.SQL.K3Cloud
                     SELECT SK.FNUMBER FValue,SKL.FNAME FName
                     FROM T_BD_STOCK SK
                     INNER JOIN T_BD_STOCK_L SKL ON SK.FSTOCKID = SKL.FSTOCKID AND SKL.FLOCALEID = 2052
-                    INNER JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
-                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2')
+                    LEFT JOIN T_BD_STOCKGROUP SKG ON SK.FGROUP = SKG.FID
+                    WHERE SK.FDOCUMENTSTATUS = 'C' AND SK.FFORBIDSTATUS = 'A' AND (SUBSTR(SKG.FNUMBER,1,2) IN('H1','H2') OR SK.FUSEORGID = 492501088)
                     ORDER BY FVALUE";
                     break;
                 case 5:
@@ -376,7 +376,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public string GetStockNumber(int pUseOrgId, string pFName)
         {
-            _SQL = string.Format("SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID = {0} AND AL.FNAME = '{1}'", pUseOrgId, pFName);
+            _SQL = string.Format("SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID in{0,492501088} AND AL.FNAME = '{1}'", pUseOrgId, pFName);
             _obj = ORAHelper.ExecuteScalar(_SQL);
 
             if (_obj != null)

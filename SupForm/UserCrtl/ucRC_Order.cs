@@ -160,11 +160,11 @@ namespace ERPSupport.SupForm.UserCrtl
                 MessageBox.Show("请选择类型");
                 return;
             }
-            if (bnTop_cbxType.SelectedIndex == 3 && bnTop_txtYSD.Text.Trim().Equals(string.Empty))
-            {
-                MessageBox.Show("请输入运算单号");
-                return;
-            }
+            //if (bnTop_cbxType.SelectedIndex == 3 && bnTop_txtYSD.Text.Trim().Equals(string.Empty))
+            //{
+            //    MessageBox.Show("请输入运算单号");
+            //    return;
+            //}
 
             dgv1.DataSource = null;
             dgv1.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.Log_OrderLock(bnTop_cbxType.SelectedIndex, bnTop_txtBillNo.Text.Trim(), bnTop_txtYSD.Text.Trim(), _dateFrom.Value, _dateTo.Value, bnTop_cbxStatus.ComboBox.SelectedValue.ToString(), bnTop_txtMaterialNo.Text);

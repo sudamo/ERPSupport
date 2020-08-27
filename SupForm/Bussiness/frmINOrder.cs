@@ -205,7 +205,7 @@ namespace ERPSupport.SupForm.Bussiness
             try
             {
                 string creatorOrg = cbxCreateOrg.SelectedValue.ToString();
-                string sellerId = cbxSeller.SelectedValue.ToString();
+                string sellerId = cbxSeller.Items.Count == 0 ? "0" : cbxSeller.SelectedValue.ToString();
                 MessageBox.Show(DALCreator.CommFunction.AddCustomer(_dataRow, creatorOrg, sellerId));
             }
             catch(Exception ex)

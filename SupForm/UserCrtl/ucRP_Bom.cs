@@ -168,7 +168,7 @@ namespace ERPSupport.SupForm.UserCrtl
         /// <returns></returns>
         private string SetFilter()
         {
-            return bnTop_cbxLogic.ComboBox.ValueMember + bnTop_cbxValue.ComboBox.ValueMember;
+            return bnTop_cbxLogic.ComboBox.SelectedValue.ToString() + bnTop_cbxValue.ComboBox.SelectedValue.ToString();
         }
 
         /// <summary>
