@@ -22,12 +22,12 @@ namespace ERPSupport.Model.Globa
         /// <param name="pOTime"></param>
         /// <param name="pONavi"></param>
         /// <param name="pOContent"></param>
-        public OperationInfo(string pOName,DateTime pOTime,string pONavi,string pOContent)
+        public OperationInfo(string pOName, DateTime pOTime, string pONavi, string pOContent)
         {
-            OName = pOName;
-            OTime = pOTime;
-            ONavi = pONavi;
-            OContent = pOContent;
+            _OName = pOName;
+            _OTime = pOTime;
+            _ONavi = pONavi;
+            _OContent = pOContent;
         }
 
         private string _OName;

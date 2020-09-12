@@ -376,7 +376,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public string GetStockNumber(int pUseOrgId, string pFName)
         {
-            _SQL = string.Format("SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID in{0,492501088} AND AL.FNAME = '{1}'", pUseOrgId, pFName);
+            _SQL = string.Format("SELECT A.FNUMBER FROM T_BD_STOCK A INNER JOIN T_BD_STOCK_L AL ON A.FSTOCKID = AL.FSTOCKID AND AL.FLOCALEID = 2052 WHERE A.FUSEORGID in({0},492501088) AND AL.FNAME = '{1}'", pUseOrgId, pFName);
             _obj = ORAHelper.ExecuteScalar(_SQL);
 
             if (_obj != null)
