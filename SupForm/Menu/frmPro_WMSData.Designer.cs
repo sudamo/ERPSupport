@@ -86,7 +86,7 @@
             // 
             this.txtMTL.Font = new System.Drawing.Font("宋体", 10F);
             this.txtMTL.Location = new System.Drawing.Point(72, 19);
-            this.txtMTL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.txtMTL.Margin = new System.Windows.Forms.Padding(2);
             this.txtMTL.Name = "txtMTL";
             this.txtMTL.Size = new System.Drawing.Size(136, 23);
             this.txtMTL.TabIndex = 7;
@@ -95,7 +95,7 @@
             // btnSyn
             // 
             this.btnSyn.Location = new System.Drawing.Point(358, 19);
-            this.btnSyn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSyn.Margin = new System.Windows.Forms.Padding(2);
             this.btnSyn.Name = "btnSyn";
             this.btnSyn.Size = new System.Drawing.Size(56, 20);
             this.btnSyn.TabIndex = 8;
@@ -107,7 +107,7 @@
             // 
             this.chbAll.AutoSize = true;
             this.chbAll.Location = new System.Drawing.Point(286, 22);
-            this.chbAll.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.chbAll.Margin = new System.Windows.Forms.Padding(2);
             this.chbAll.Name = "chbAll";
             this.chbAll.Size = new System.Drawing.Size(72, 16);
             this.chbAll.TabIndex = 9;
@@ -144,9 +144,9 @@
             this.gbxMTL.Controls.Add(this.btnSyn);
             this.gbxMTL.Controls.Add(this.chbAll);
             this.gbxMTL.Location = new System.Drawing.Point(9, 10);
-            this.gbxMTL.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbxMTL.Margin = new System.Windows.Forms.Padding(2);
             this.gbxMTL.Name = "gbxMTL";
-            this.gbxMTL.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gbxMTL.Padding = new System.Windows.Forms.Padding(2);
             this.gbxMTL.Size = new System.Drawing.Size(418, 72);
             this.gbxMTL.TabIndex = 11;
             this.gbxMTL.TabStop = false;
@@ -161,11 +161,11 @@
             this.Controls.Add(this.gbxMTL);
             this.Controls.Add(this.bnBottom);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximumSize = new System.Drawing.Size(454, 392);
             this.MinimumSize = new System.Drawing.Size(454, 392);
             this.Name = "frmPro_WMSData";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "同步数据-WMS";
             this.Load += new System.EventHandler(this.frmPro_WMSData_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bnBottom)).EndInit();

@@ -73,6 +73,23 @@ namespace ERPSupport.SQL
                 conn.Close();
             }
         }
+        public static int ExecuteNonQuery(string pCommandText, CommandType pCommandType, OracleParameter[] pPars)
+        {
+            OracleConnection conn = new OracleConnection(GlobalParameter.K3Inf.C_ORCLADDRESS);
+            try
+            {
+                OracleCommand cmd = new OracleCommand();
+                CommandSetting(conn, cmd, pCommandType, pCommandText, null, pPars);
+                cmd.ExecuteNonQuery();
+            }
+            catch { return -1; }
+            finally
+            {
+                if (conn.State != ConnectionState.Open)
+                    conn.Close();
+            }
+            return 1;
+        }
 
         //Scalar
         public static object ExecuteScalar(string pConnectionString, string pCommandText)
@@ -193,6 +210,31 @@ namespace ERPSupport.SQL
             }
 
             return ds;
+        }
+
+        //DBPrepare
+        private static void CommandSetting(OracleConnection pConnection, OracleCommand pCommand, CommandType pCommandType, string pCommandText, OracleTransaction pTransation = null, OracleParameter[] pParameters = null)
+        {
+            if (pConnection.State != ConnectionState.Open)
+                pConnection.Open();
+
+            pCommand.Connection = pConnection;
+            pCommand.CommandType = pCommandType;
+            pCommand.CommandText = pCommandText;
+
+            if (pCommandType == CommandType.StoredProcedure)
+                pCommand.CommandTimeout = 10000;
+            else
+                pCommand.CommandTimeout = 500;
+
+            if (pTransation != null)
+                pCommand.Transaction = pTransation;
+
+            if (pParameters != null)
+            {
+                foreach (OracleParameter parm in pParameters)
+                    pCommand.Parameters.Add(parm);
+            }
         }
     }
 }

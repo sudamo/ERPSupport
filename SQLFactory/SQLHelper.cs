@@ -138,7 +138,7 @@ namespace ERPSupport.SQL
                 cmd.ExecuteNonQuery();
                 cmd.Parameters.Clear();
             }
-            catch(Exception ex) { return; }
+            catch (Exception ex) { return; }
             finally
             {
                 if (conn.State == ConnectionState.Open)
@@ -170,7 +170,7 @@ namespace ERPSupport.SQL
             SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
             SqlCommand cmd = conn.CreateCommand();
 
-            CommandSetting(pConnection, cmd, null, pCommandType, pCommandText, pParameters);
+            CommandSetting(pConnection, cmd, pCommandType, pCommandText, null, pParameters);
             iReturnVal = cmd.ExecuteNonQuery();
             cmd.Parameters.Clear();
 
@@ -181,7 +181,7 @@ namespace ERPSupport.SQL
             int val;
             SqlCommand cmd = new SqlCommand();
 
-            CommandSetting(pConnection, cmd, pTransation, pCommandType, pCommandText, pParameters);
+            CommandSetting(pConnection, cmd, pCommandType, pCommandText, pTransation, pParameters);
             val = cmd.ExecuteNonQuery();
             cmd.Parameters.Clear();
             return val;
@@ -433,7 +433,7 @@ namespace ERPSupport.SQL
         }
 
         //Private Custom Methods
-        private static void CommandSetting(SqlConnection pConnection, SqlCommand pCommand, SqlTransaction pTransation, CommandType pCommandType, string pCommandText, SqlParameter[] pParameters)
+        private static void CommandSetting(SqlConnection pConnection, SqlCommand pCommand, CommandType pCommandType, string pCommandText, SqlTransaction pTransation = null, SqlParameter[] pParameters = null)
         {
             if (pConnection.State != ConnectionState.Open)
                 pConnection.Open();

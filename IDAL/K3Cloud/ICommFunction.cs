@@ -92,6 +92,8 @@ namespace ERPSupport.IDAL.K3Cloud
         void SynMTLForWMS(bool pIsAll, string pFNumber);
         int GetMTLIDByNumber(int pFUseOrgId, string pFNumber);
         string GetMTLByMTLNumber(string pFNumber, int pUseOrgId = 100508);
+        string MTLFNameCheck(string pFNumber);
+        string MTLFNameSyn(string pFNumber);
         void UpdateMTLPara(MaterialParameter pMTLPara, int pMaterialId);
         DataTable MStockSetting(string pMTLFNumber);
         void AddMStockSetting(string pMaterialID, string pMaterialNumber, string pDeptID, string pDeptNumber, string pStockID, string pStockNumber);

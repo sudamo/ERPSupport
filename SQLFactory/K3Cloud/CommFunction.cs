@@ -1721,6 +1721,57 @@ namespace ERPSupport.SQL.K3Cloud
         }
 
         /// <summary>
+        /// 检查物料是否需要同步物料名称
+        /// </summary>
+        /// <param name="pFNumber"></param>
+        /// <returns></returns>
+        public string MTLFNameCheck(string pFNumber)
+        {
+            OracleParameter[] parms = new OracleParameter[]
+            {
+                new OracleParameter("FNumber",OracleDbType.NVarchar2,80),
+                new OracleParameter("returnVal",OracleDbType.NVarchar2,80)
+            };
+            parms[0].Value = pFNumber;
+            parms[0].Direction = ParameterDirection.Input;
+            parms[1].Direction = ParameterDirection.Output;
+
+            try
+            {
+                ORAHelper.ExecuteNonQuery("DM_CHECKMTLNAME", CommandType.StoredProcedure, parms);
+                return parms[1].Value.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        public string MTLFNameSyn(string pFNumber)
+        {
+            OracleParameter[] parms = new OracleParameter[]
+            {
+                new OracleParameter("FNumber",OracleDbType.NVarchar2,80),
+                new OracleParameter("returnVal",OracleDbType.NVarchar2,80)
+            };
+            parms[0].Value = pFNumber;
+            parms[0].Direction = ParameterDirection.Input;
+            parms[1].Direction = ParameterDirection.Output;
+
+            try
+            {
+                ORAHelper.ExecuteNonQuery("DM_SYNMTL", CommandType.StoredProcedure, parms);
+                return parms[1].Value.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        /// <summary>
         /// 更新物料参数
         /// </summary>
         /// <param name="pMTLPara">物料参数</param>
