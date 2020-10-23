@@ -163,7 +163,7 @@ namespace ERPSupport.SQL
                 adp.SelectCommand.CommandTimeout = 10000;
                 adp.Fill(dt);
             }
-            catch { return null; }
+            catch(Exception ex) { return null; }
             finally
             {
                 conn.Close();

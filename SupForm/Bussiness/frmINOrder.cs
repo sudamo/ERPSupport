@@ -89,11 +89,11 @@ namespace ERPSupport.SupForm.Bussiness
             myApp.Visible = false;
             string FNumber = string.Empty;
 
-            if(worksheet.Cells[1, 1].Text!="小类"|| worksheet.Cells[1, 2].Text!="品牌" || worksheet.Cells[1, 3].Text != "系列" || worksheet.Cells[1, 4].Text != "商品名" || worksheet.Cells[1, 5].Text != "定价要素" || worksheet.Cells[1, 6].Text != "生效日期" || worksheet.Cells[1, 7].Text != "失效日期" || worksheet.Cells[1, 8].Text != "是否禁用" || worksheet.Cells[1, 9].Text != "省代价" || worksheet.Cells[1, 10].Text != "市代价")
-            {
-                MessageBox.Show("请使用标准模板导入价格！并按以下顺序导入数据[小类-品牌-系列-商品名-定价要素-生效日期-失效日期-是否禁用-省代价-市代价]");
-                goto Show;
-            }
+            //if(worksheet.Cells[1, 1].Text!="小类"|| worksheet.Cells[1, 2].Text!="品牌" || worksheet.Cells[1, 3].Text != "系列" || worksheet.Cells[1, 4].Text != "商品名" || worksheet.Cells[1, 5].Text != "定价要素" || worksheet.Cells[1, 6].Text != "生效日期" || worksheet.Cells[1, 7].Text != "失效日期" || worksheet.Cells[1, 8].Text != "是否禁用" || worksheet.Cells[1, 9].Text != "省代价" || worksheet.Cells[1, 10].Text != "市代价")
+            //{
+            //    MessageBox.Show("请使用标准模板导入价格！并按以下顺序导入数据[小类-品牌-系列-商品名-定价要素-生效日期-失效日期-是否禁用-省代价-市代价]");
+            //    goto Show;
+            //}
 
             OrderImportInfo entry;
             
@@ -107,11 +107,18 @@ namespace ERPSupport.SupForm.Bussiness
                     entry.SeriesID = worksheet.Cells[i, 3].Text;
                     entry.CommodityID = worksheet.Cells[i, 4].Text;
                     entry.PricingFactorID = worksheet.Cells[i, 5].Text;
-                    entry.TimeBegin = DateTime.Parse(worksheet.Cells[i, 6].Text);
-                    entry.TimeEnd = DateTime.Parse(worksheet.Cells[i, 7].Text);
+                    entry.TimeBegin = DateTime.Now;
+                    entry.TimeEnd = DateTime.Parse("2039-01-01");
                     entry.IsEnable = true;
                     entry.GeneralFactoryPrice = float.Parse(worksheet.Cells[i, 9].Text);
-                    entry.BranchFactoryPrice = float.Parse(worksheet.Cells[i, 10].Text);
+                    try
+                    {
+                        entry.BranchFactoryPrice = float.Parse(worksheet.Cells[i, 10].Text);
+                    }
+                    catch
+                    {
+                        entry.BranchFactoryPrice = 0;
+                    }
 
                     DALCreator.CommFunction.MegerPrice(entry);
                 }

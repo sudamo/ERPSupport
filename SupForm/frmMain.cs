@@ -948,7 +948,11 @@ namespace ERPSupport.SupForm
                 if (_FormId == FormID.SAL_SaleOrder)
                     dgv1.Columns[18].Visible = false;
                 else if (_FormId == FormID.SAL_SaleOrderRun)
-                    dgv1.Columns[19].Visible = false;
+                {
+
+                    dgv1.Columns[20].Visible = false;
+                    dgv1.Columns[21].Visible = false;
+                }
 
                 //不允许重新排列
                 for (int i = 0; i < dgv1.Columns.Count; i++)
@@ -1155,7 +1159,7 @@ namespace ERPSupport.SupForm
                         //排除完全锁库订单或已锁库分录(在运算时排除)
 
                         //dtTran.ImportRow(dtSearch.Rows[i]);
-                        dtTran.ImportRow((_DataSource.Select("订单内码=" + dgv1.Rows[i].Cells[20].Value.ToString()))[0]);
+                        dtTran.ImportRow((_DataSource.Select("订单内码=" + dgv1.Rows[i].Cells[21].Value.ToString()))[0]);
                     }
                 }
 

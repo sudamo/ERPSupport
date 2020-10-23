@@ -132,8 +132,8 @@ namespace ERPSupport.SupForm.Bussiness
 
             //获取数据源
             dgv1.DataSource = _dtRun;
-            dgv1.Columns[18].Visible = false;
             dgv1.Columns[19].Visible = false;
+            dgv1.Columns[20].Visible = false;
 
             //不允许重新排列
             DGVSort(dgv1, false);
