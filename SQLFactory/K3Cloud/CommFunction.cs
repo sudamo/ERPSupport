@@ -273,13 +273,13 @@ namespace ERPSupport.SQL.K3Cloud
         public DataTable GetSellerList(int pUseOrgId, int pType = 0)
         {
             if (pType == 0)
-                _SQL = string.Format("SELECT B.FENTRYID FVALUE,EMPL.FNAME ");
+                _SQL = string.Format("SELECT B.FENTRYID FVALUE,SL.FNAME ");
             else
-                _SQL = string.Format("SELECT B.FSTAFFID FVALUE,EMPL.FNAME ");
+                _SQL = string.Format("SELECT B.FSTAFFID FVALUE,SL.FNAME ");
 
             _SQL += string.Format(" FROM T_BD_OPERATORENTRY B ");
-            _SQL += string.Format(" INNER JOIN T_HR_EMPINFO EMP ON B.FSTAFFID = EMP.FSTAFFID AND EMP.FFORBIDSTATUS = 'A' ");
-            _SQL += string.Format(" INNER JOIN T_HR_EMPINFO_L EMPL ON EMP.FID = EMPL.FID ");
+            _SQL += string.Format(" INNER JOIN T_BD_STAFF S ON B.FSTAFFID = S.FSTAFFID AND S.FFORBIDSTATUS = 'A' AND S.FDOCUMENTSTATUS = 'C' ");
+            _SQL += string.Format(" INNER JOIN T_BD_STAFF_L SL ON S.FSTAFFID = SL.FSTAFFID ");
             _SQL += string.Format(" WHERE B.FOPERATORTYPE = 'XSY' AND B.FBIZORGID = {0}", pUseOrgId);
 
             //_SQL = @"SELECT B.FENTRYID FVALUE,EMPL.FNAME

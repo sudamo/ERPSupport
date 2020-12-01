@@ -2118,7 +2118,7 @@ namespace ERPSupport.SupForm
                             MessageBox.Show("直接调拨单：" + strBillNos);
                         }
                         else
-                            MessageBox.Show("没有数据或者源单据未审核！");
+                            MessageBox.Show("没有数据或者未设置领料部门！");
                         #endregion
                     }
                     break;
@@ -2196,7 +2196,7 @@ namespace ERPSupport.SupForm
                             MessageBox.Show("直接调拨单：" + strBillNos);
                         }
                         else
-                            MessageBox.Show("没有数据或者源单据未审核！");
+                            MessageBox.Show("没有数据或者未设置领料部门！");
                         #endregion
                     }
                     break;
