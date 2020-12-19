@@ -603,6 +603,7 @@
             // 
             // bnBottom_btnSynPosition
             // 
+            this.bnBottom_btnSynPosition.Enabled = false;
             this.bnBottom_btnSynPosition.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
             this.bnBottom_btnSynPosition.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.bnBottom_btnSynPosition.Name = "bnBottom_btnSynPosition";
