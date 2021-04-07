@@ -219,7 +219,7 @@ namespace ERPSupport.SQL
                 cmd.CommandText = pCommandText;
                 o = cmd.ExecuteScalar();
             }
-            catch { return null; }
+            catch (Exception ex) { return "ERROR:" + ex.Message; }
             finally
             {
                 if (conn.State == ConnectionState.Open)
@@ -250,6 +250,28 @@ namespace ERPSupport.SQL
                     conn.Close();
             }
             return o;
+        }
+        public static object ExecuteScalar(CommandType pCommandType, string pCommandText, SqlParameter[] pParameters)
+        {
+            object ReturnVal;
+            SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
+            SqlCommand cmd = conn.CreateCommand();
+
+            CommandSetting(conn, cmd, pCommandType, pCommandText, null, pParameters);
+            try
+            {
+                ReturnVal = cmd.ExecuteScalar();
+            }
+            catch (Exception ex)
+            {
+                return "ERROR:" + ex.Message;
+            }
+            finally
+            {
+                cmd.Parameters.Clear();
+            }
+
+            return ReturnVal;
         }
 
         //DataTable

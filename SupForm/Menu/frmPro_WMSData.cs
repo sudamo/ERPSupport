@@ -41,8 +41,7 @@ namespace ERPSupport.SupForm.Menu
             if (!chbAll.Checked && txtMTL.Text.Trim() == "")
                 return;
 
-            DALFactory.K3Cloud.DALCreator.CommFunction.SynMTLForWMS(chbAll.Checked, txtMTL.Text.Trim());
-            lblTips.Text = "已执行！";
+            lblTips.Text = DALFactory.K3Cloud.DALCreator.CommFunction.SynMTLForWMS(chbAll.Checked, txtMTL.Text.Trim());
         }
 
         /// <summary>

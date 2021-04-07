@@ -89,7 +89,7 @@ namespace ERPSupport.IDAL.K3Cloud
         void DelDM_Dir_Stock(int pPID);
         void SynBarcodr(string pType, string pFBillNo, string pBarcodes);
         DataTable ERPLog(string pUser, DateTime pDate);
-        void SynMTLForWMS(bool pIsAll, string pFNumber);
+        string SynMTLForWMS(bool pIsAll, string pFNumber);
         int GetMTLIDByNumber(int pFUseOrgId, string pFNumber);
         string GetMTLByMTLNumber(string pFNumber, int pUseOrgId = 100508);
         string MTLFNameCheck(string pFNumber);

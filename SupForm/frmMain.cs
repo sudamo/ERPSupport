@@ -231,6 +231,7 @@ namespace ERPSupport.SupForm
             //-----
             _dateFrom = new ToolStripDateTimePicker();
             _dateFrom.Size = new Size(120, 21);
+            //_dateFrom.ValueChangedChanged += new EventHandler(dtpDate_ValueChanged);
             _dateTo = new ToolStripDateTimePicker();
             _dateTo.Size = new Size(120, 21);
 

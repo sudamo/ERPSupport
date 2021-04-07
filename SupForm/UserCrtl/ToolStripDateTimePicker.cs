@@ -65,8 +65,17 @@ namespace ERPSupport.SupForm.UserCrtl
         /// </summary>
         public ToolStripDateTimePicker() : base(new DateTimePicker())
         {
-
+            //((DateTimePicker)Control).ValueChanged += ValueChangedChanged;
         }
+
+        //public event EventHandler ValueChangedChanged;
+
+        public void ValueChangedChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+
     }
 
     /// <summary>
