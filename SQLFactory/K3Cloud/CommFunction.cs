@@ -259,8 +259,7 @@ namespace ERPSupport.SQL.K3Cloud
             _SQL += " FROM T_BD_CUSTOMER A ";
             _SQL += " INNER JOIN T_BD_CUSTOMER_L AL ON A.FCUSTID = AL.FCUSTID AND AL.FLOCALEID = 2052 ";
             _SQL += " INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FCREATEORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052 ";
-            _SQL += string.Format(" WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND AL.FNAME = '{0}' ", pCostomerName);
-            _SQL += " ORDER BY A.FSELLER DESC";
+            _SQL += string.Format(" WHERE A.FDOCUMENTSTATUS = 'C' AND A.FFORBIDSTATUS = 'A' AND A.FUSEORGID = A.FCREATEORGID AND AL.FNAME = '{0}' ", pCostomerName);
 
             return ORAHelper.ExecuteTable(_SQL);
         }

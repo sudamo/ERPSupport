@@ -2323,6 +2323,7 @@ namespace ERPSupport.SupForm
                     {
                         double dQTY = double.Parse(dt.Rows[j]["可用量"].ToString()) <= 0 ? 0 : double.Parse(dt.Rows[j]["可用量"].ToString());//第i行 库存可用数量
 
+                        if (dQTY <= 0) continue;
                         if (dQTY >= dCanLockQty)//当库存可用量大于或等于可锁库数量时可参与锁库
                         {
                             //添加预留关系
