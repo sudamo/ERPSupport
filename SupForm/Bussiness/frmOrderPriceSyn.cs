@@ -412,7 +412,7 @@ namespace ERPSupport.SupForm.Bussiness
 
             //日志
             string strMessage = string.Format("更新销售订单单价[{0}],", strBillNos) + strReturn;
-            DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("单据信息调整", "辅助功能//配置//单据信息调整", strMessage);
+            DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("更新销售订单单价", "项目->网上订单系统->更新价格", strMessage);
 
             Search();
         }

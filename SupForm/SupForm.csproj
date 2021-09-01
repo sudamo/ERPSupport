@@ -36,12 +36,12 @@
     <InstallUrl>http://183.62.46.36:8009/</InstallUrl>
     <ProductName>ERP辅助系统</ProductName>
     <PublisherName>广州车邦</PublisherName>
-    <SuiteName>Supp</SuiteName>
-    <MinimumRequiredVersion>1.0.6.9</MinimumRequiredVersion>
+    <SuiteName>Sup</SuiteName>
+    <MinimumRequiredVersion>1.0.8.0</MinimumRequiredVersion>
     <CreateWebPageOnPublish>true</CreateWebPageOnPublish>
     <WebPage>publish.htm</WebPage>
-    <ApplicationRevision>6</ApplicationRevision>
-    <ApplicationVersion>1.0.8.%2a</ApplicationVersion>
+    <ApplicationRevision>4</ApplicationRevision>
+    <ApplicationVersion>1.0.9.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
@@ -71,16 +71,27 @@
     <ApplicationIcon>ICON\gzcb48.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>DB300C0A275B3CDA77B9809488AA0E4FEB81965F</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>D064297B91D9B3CB93F8B896BC7FC31E7C423847</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>ExpressOutStock_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>SupForm_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
     <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="DMData.Code">
@@ -222,6 +233,12 @@
     </Compile>
     <Compile Include="Comm\frmCategory.Designer.cs">
       <DependentUpon>frmCategory.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Menu\frmPro_Business_Report.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\frmPro_Business_Report.Designer.cs">
+      <DependentUpon>frmPro_Business_Report.cs</DependentUpon>
     </Compile>
     <Compile Include="Menu\frmPro_Dir.cs">
       <SubType>Form</SubType>
@@ -459,6 +476,9 @@
     <EmbeddedResource Include="Comm\frmCategory.resx">
       <DependentUpon>frmCategory.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Menu\frmPro_Business_Report.resx">
+      <DependentUpon>frmPro_Business_Report.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir.resx">
       <DependentUpon>frmPro_Dir.cs</DependentUpon>
     </EmbeddedResource>
@@ -553,6 +573,7 @@
     <EmbeddedResource Include="UserCrtl\usCom_lblcbx.resx">
       <DependentUpon>usCom_lblcbx.cs</DependentUpon>
     </EmbeddedResource>
+    <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -562,6 +583,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="SupForm_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

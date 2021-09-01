@@ -294,14 +294,16 @@ namespace ERPSupport.SupForm.UserCrtl
             if (chbTimerPick.Checked)
                 listF.Add("tsmiTool_Timer");
             //--
-            if (chbDir.Checked)
-                listF.Add("tsmiPro_Dir");
-            if (chbWMSData.Checked)
-                listF.Add("tsmiPro_WMSData");
-            if (chbK3Data.Checked)
-                listF.Add("tsmiPro_K3Data");
+            if (chbBusiness.Checked)
+                listF.Add("tsmiPro_Business");
             if (chbINOrder.Checked)
                 listF.Add("tsmiPro_INOrder");
+            if (chbDir.Checked)
+                listF.Add("tsmiPro_Dir");
+            if (chbK3Data.Checked)
+                listF.Add("tsmiPro_K3Data");
+            if (chbWMSData.Checked)
+                listF.Add("tsmiPro_WMSData");
             //--
             if (chbImport.Checked)
                 listF.Add("Import");
@@ -382,40 +384,32 @@ namespace ERPSupport.SupForm.UserCrtl
 
                 if (sFunctionIds != null && sFunctionIds.Trim() != string.Empty)
                 {
-                    if (sFunctionIds.Contains("tsmiTool_Occupy"))
-                        chbOccupy.Checked = true;
-                    else
-                        chbOccupy.Checked = false;
-                    if (sFunctionIds.Contains("tsmiTool_Timer"))
-                        chbTimerPick.Checked = true;
-                    else
-                        chbTimerPick.Checked = false;
+                    if (sFunctionIds.Contains("tsmiTool_Occupy")) chbOccupy.Checked = true;
+                    else chbOccupy.Checked = false;
+
+                    if (sFunctionIds.Contains("tsmiTool_Timer")) chbTimerPick.Checked = true;
+                    else chbTimerPick.Checked = false;
                     //--
-                    if (sFunctionIds.Contains("tsmiPro_Dir"))
-                        chbDir.Checked = true;
-                    else
-                        chbDir.Checked = false;
-                    if (sFunctionIds.Contains("tsmiPro_WMSData"))
-                        chbWMSData.Checked = true;
-                    else
-                        chbWMSData.Checked = false;
-                    if (sFunctionIds.Contains("tsmiPro_K3Data"))
-                        chbK3Data.Checked = true;
-                    else
-                        chbK3Data.Checked = false;
-                    if (sFunctionIds.Contains("tsmiPro_INOrder"))
-                        chbINOrder.Checked = true;
-                    else
-                        chbINOrder.Checked = false;
+                    if (sFunctionIds.Contains("tsmiPro_Business")) chbBusiness.Checked = true;
+                    else chbBusiness.Checked = false;
+
+                    if (sFunctionIds.Contains("tsmiPro_INOrder")) chbINOrder.Checked = true;
+                    else chbINOrder.Checked = false;
+
+                    if (sFunctionIds.Contains("tsmiPro_Dir")) chbDir.Checked = true;
+                    else chbDir.Checked = false;
+
+                    if (sFunctionIds.Contains("tsmiPro_K3Data")) chbK3Data.Checked = true;
+                    else chbK3Data.Checked = false;
+
+                    if (sFunctionIds.Contains("tsmiPro_WMSData")) chbWMSData.Checked = true;
+                    else chbWMSData.Checked = false;
                     //--
-                    if (sFunctionIds.Contains("Import"))
-                        chbTimerPick.Checked = true;
-                    else
-                        chbTimerPick.Checked = false;
-                    if (sFunctionIds.Contains("Export"))
-                        chbTimerPick.Checked = true;
-                    else
-                        chbTimerPick.Checked = false;
+                    if (sFunctionIds.Contains("Import")) chbTimerPick.Checked = true;
+                    else chbTimerPick.Checked = false;
+
+                    if (sFunctionIds.Contains("Export")) chbTimerPick.Checked = true;
+                    else chbTimerPick.Checked = false;
                 }
                 else
                 {
@@ -484,14 +478,16 @@ namespace ERPSupport.SupForm.UserCrtl
             if (chbTimerPick.Checked)
                 listF.Add("tsmiTool_Timer");
             //--
-            if (chbDir.Checked)
-                listF.Add("tsmiPro_Dir");
-            if (chbWMSData.Checked)
-                listF.Add("tsmiPro_WMSData");
-            if (chbK3Data.Checked)
-                listF.Add("tsmiPro_K3Data");
+            if (chbBusiness.Checked)
+                listF.Add("tsmiPro_Business");
             if (chbINOrder.Checked)
                 listF.Add("tsmiPro_INOrder");
+            if (chbDir.Checked)
+                listF.Add("tsmiPro_Dir");
+            if (chbK3Data.Checked)
+                listF.Add("tsmiPro_K3Data");
+            if (chbWMSData.Checked)
+                listF.Add("tsmiPro_WMSData");
             //--
             if (chbImport.Checked)
                 listF.Add("Import");

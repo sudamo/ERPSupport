@@ -53,6 +53,24 @@ namespace ERPSupport.SupForm.Bussiness
             }
         }
 
+        private OrderInfo _OrderInf;
+        /// <summary>
+        /// 
+        /// </summary>
+        public OrderInfo OrderInf
+        {
+            get
+            {
+                return _OrderInf;
+            }
+
+            set
+            {
+                _OrderInf = value;
+            }
+        }
+
+
         /// <summary>
         /// 业务标识
         /// </summary>
@@ -64,12 +82,13 @@ namespace ERPSupport.SupForm.Bussiness
         /// <param name="pListFilter">筛选条件</param>
         /// <param name="pFilterName">方案名称</param>
         /// <param name="pFormID">单据标识</param>
-        public frmFilter(List<Filter> pListFilter, string pFilterName, FormID pFormID)
+        public frmFilter(List<Filter> pListFilter, string pFilterName, FormID pFormID, OrderInfo pOrderInf)
         {
             InitializeComponent();
             _FilterName = pFilterName;
             _ListFilter = pListFilter;
             _FormID = pFormID;
+            _OrderInf = pOrderInf;
 
             _Check = true;
         }
@@ -226,6 +245,8 @@ namespace ERPSupport.SupForm.Bussiness
                                 ((ComboBox)ctl).DataSource = dtField;
                                 ((ComboBox)ctl).DisplayMember = "FName";
                                 ((ComboBox)ctl).ValueMember = "FValue";
+
+                                SetBillStatus();
                             }
                             break;
                         case FormID.STK_TransferDirect://调拨单
@@ -474,6 +495,18 @@ namespace ERPSupport.SupForm.Bussiness
             ListFilter = CheckLogic(true);
             if (!_Check)
                 return;
+
+            if (_FormID == FormID.SAL_SaleOrder || _FormID == FormID.SAL_SaleOrderRun)
+            {
+                OrderInf = new OrderInfo();
+                OrderInf.FDocumentStatus = cbxDocumentStatus.SelectedValue.ToString();
+                OrderInf.FCloseStatus = cbxCloseStatus.SelectedValue.ToString();
+                OrderInf.FCancleStatus = cbxCancleStatus.SelectedValue.ToString();
+                OrderInf.F_PAEZ_FACTORGID = int.Parse(cbxFactory.SelectedValue.ToString());
+                OrderInf.FMRPCloseStatus = chbMRPCloseStatus.Checked ? "B" : "A";
+                OrderInf.FMRPTerminateStatus = chbMRPTerminateStatus.Checked ? "B" : "A";
+            }
+
             DialogResult = DialogResult.OK;
         }
 
@@ -898,6 +931,132 @@ namespace ERPSupport.SupForm.Bussiness
             _FilterName = string.Empty;
         }
         #endregion
+
+        private void SetBillStatus()
+        {
+            lblDocumentStatus.Visible = true;
+            cbxDocumentStatus.Visible = true;
+            lblCloseStatus.Visible = true;
+            cbxCloseStatus.Visible = true;
+            lblCancleStatus.Visible = true;
+            cbxCancleStatus.Visible = true;
+            lblFactory.Visible = true;
+            cbxFactory.Visible = true;
+            chbMRPCloseStatus.Visible = true;
+            chbMRPTerminateStatus.Visible = true;
+
+            DataTable dtDoc = new DataTable();
+            dtDoc.Columns.Add("FName");
+            dtDoc.Columns.Add("FValue");
+
+            DataRow dr = dtDoc.NewRow();
+            dr["FName"] = "全部";
+            dr["FValue"] = "0";
+            dtDoc.Rows.Add(dr);
+            dr = dtDoc.NewRow();
+            dr["FName"] = "创建";
+            dr["FValue"] = "A";
+            dtDoc.Rows.Add(dr);
+            dr = dtDoc.NewRow();
+            dr["FName"] = "审核中";
+            dr["FValue"] = "B";
+            dtDoc.Rows.Add(dr);
+            dr = dtDoc.NewRow();
+            dr["FName"] = "已审核";
+            dr["FValue"] = "C";
+            dtDoc.Rows.Add(dr);
+            dr = dtDoc.NewRow();
+            dr["FName"] = "重新审核";
+            dr["FValue"] = "D";
+            dtDoc.Rows.Add(dr);
+            dr = dtDoc.NewRow();
+            dr["FName"] = "暂存";
+            dr["FValue"] = "Z";
+            dtDoc.Rows.Add(dr);
+
+            cbxDocumentStatus.DataSource = dtDoc;
+            cbxDocumentStatus.DisplayMember = "FName";
+            cbxDocumentStatus.ValueMember = "FValue";
+            //cbxDocumentStatus.SelectedIndex = 3;
+
+            DataTable dtClo = new DataTable();
+            dtClo.Columns.Add("FName");
+            dtClo.Columns.Add("FValue");
+            DataRow drClo = dtClo.NewRow();
+            drClo["FName"] = "全部";
+            drClo["FValue"] = "0";
+            dtClo.Rows.Add(drClo);
+            drClo = dtClo.NewRow();
+            drClo["FName"] = "正常";
+            drClo["FValue"] = "A";
+            dtClo.Rows.Add(drClo);
+            drClo = dtClo.NewRow();
+            drClo["FName"] = "已关闭";
+            drClo["FValue"] = "B";
+            dtClo.Rows.Add(drClo);
+
+            cbxCloseStatus.DataSource = dtClo;
+            cbxCloseStatus.DisplayMember = "FName";
+            cbxCloseStatus.ValueMember = "FValue";
+            //cbxCloseStatus.SelectedIndex = 0;
+            
+            DataTable dtCan = new DataTable();
+            dtCan.Columns.Add("FName");
+            dtCan.Columns.Add("FValue");
+            DataRow drCan = dtCan.NewRow();
+            drCan["FName"] = "全部";
+            drCan["FValue"] = "0";
+            dtCan.Rows.Add(drCan);
+            drCan = dtCan.NewRow();
+            drCan["FName"] = "未作废";
+            drCan["FValue"] = "A";
+            dtCan.Rows.Add(drCan);
+            drCan = dtCan.NewRow();
+            drCan["FName"] = "已作废";
+            drCan["FValue"] = "B";
+            dtCan.Rows.Add(drCan);
+
+            cbxCancleStatus.DataSource = dtCan;
+            cbxCancleStatus.DisplayMember = "FName";
+            cbxCancleStatus.ValueMember = "FValue";
+            //cbxCancleStatus.SelectedIndex = 0;
+
+
+            DataTable dtFac = new DataTable();
+            dtFac.Columns.Add("FName");
+            dtFac.Columns.Add("FValue");
+            DataRow drFac = dtFac.NewRow();
+            drFac["FName"] = "河南工厂";
+            drFac["FValue"] = "100508";
+            dtFac.Rows.Add(drFac);
+
+            cbxFactory.DataSource = dtFac;
+            cbxFactory.DisplayMember = "FName";
+            cbxFactory.ValueMember = "FValue";
+            //cbxFactory.SelectedIndex = 0;
+
+            if(OrderInf != null)
+            {
+                cbxDocumentStatus.SelectedValue = OrderInf.FDocumentStatus;
+                cbxCloseStatus.SelectedValue = OrderInf.FCloseStatus;
+                cbxCancleStatus.SelectedValue = OrderInf.FCancleStatus;
+                cbxFactory.SelectedValue = OrderInf.F_PAEZ_FACTORGID;
+                chbMRPCloseStatus.Checked = OrderInf.FMRPCloseStatus == "A" ? false : true;
+                chbMRPTerminateStatus.Checked = OrderInf.FMRPTerminateStatus == "A" ? false : true;
+            }
+
+            if(_FormID == FormID.SAL_SaleOrderRun)
+            {
+                cbxDocumentStatus.SelectedValue = "C";
+                cbxDocumentStatus.Enabled = false;
+
+                cbxCloseStatus.SelectedValue = "A";
+                cbxCloseStatus.Enabled = false;
+
+                cbxCancleStatus.SelectedValue = "A";
+                cbxCancleStatus.Enabled = false;
+            }
+        }
 
         /// <summary>
         /// 单击方案填充过滤条件

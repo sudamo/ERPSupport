@@ -137,7 +137,7 @@
             this.bnTop.MovePreviousItem = null;
             this.bnTop.Name = "bnTop";
             this.bnTop.PositionItem = null;
-            this.bnTop.Size = new System.Drawing.Size(1024, 27);
+            this.bnTop.Size = new System.Drawing.Size(1024, 25);
             this.bnTop.TabIndex = 28;
             this.bnTop.Text = "bindingNavigator1";
             this.bnTop.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.bnTop_ItemClicked);

@@ -33,8 +33,15 @@
             this.lblTitle = new System.Windows.Forms.Label();
             this.pl1 = new System.Windows.Forms.Panel();
             this.pl3 = new System.Windows.Forms.Panel();
+            this.lblOther = new System.Windows.Forms.Label();
+            this.lblPro = new System.Windows.Forms.Label();
+            this.lblTool = new System.Windows.Forms.Label();
+            this.chbDir = new System.Windows.Forms.CheckBox();
             this.chbOccupy = new System.Windows.Forms.CheckBox();
             this.chbExport = new System.Windows.Forms.CheckBox();
+            this.chbINOrder = new System.Windows.Forms.CheckBox();
+            this.chbK3Data = new System.Windows.Forms.CheckBox();
+            this.chbWMSData = new System.Windows.Forms.CheckBox();
             this.chbImport = new System.Windows.Forms.CheckBox();
             this.chbTimerPick = new System.Windows.Forms.CheckBox();
             this.lblPrompt = new System.Windows.Forms.Label();
@@ -46,13 +53,7 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.lblUserList = new System.Windows.Forms.Label();
-            this.chbWMSData = new System.Windows.Forms.CheckBox();
-            this.chbDir = new System.Windows.Forms.CheckBox();
-            this.chbK3Data = new System.Windows.Forms.CheckBox();
-            this.chbINOrder = new System.Windows.Forms.CheckBox();
-            this.lblTool = new System.Windows.Forms.Label();
-            this.lblPro = new System.Windows.Forms.Label();
-            this.lblOther = new System.Windows.Forms.Label();
+            this.chbBusiness = new System.Windows.Forms.CheckBox();
             this.pl1.SuspendLayout();
             this.pl3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
@@ -97,6 +98,7 @@
             this.pl3.Controls.Add(this.chbDir);
             this.pl3.Controls.Add(this.chbOccupy);
             this.pl3.Controls.Add(this.chbExport);
+            this.pl3.Controls.Add(this.chbBusiness);
             this.pl3.Controls.Add(this.chbINOrder);
             this.pl3.Controls.Add(this.chbK3Data);
             this.pl3.Controls.Add(this.chbWMSData);
@@ -106,6 +108,43 @@
             this.pl3.Name = "pl3";
             this.pl3.Size = new System.Drawing.Size(107, 460);
             this.pl3.TabIndex = 5;
+            // 
+            // lblOther
+            // 
+            this.lblOther.AutoSize = true;
+            this.lblOther.Location = new System.Drawing.Point(3, 394);
+            this.lblOther.Name = "lblOther";
+            this.lblOther.Size = new System.Drawing.Size(29, 12);
+            this.lblOther.TabIndex = 4;
+            this.lblOther.Text = "其他";
+            // 
+            // lblPro
+            // 
+            this.lblPro.AutoSize = true;
+            this.lblPro.Location = new System.Drawing.Point(3, 84);
+            this.lblPro.Name = "lblPro";
+            this.lblPro.Size = new System.Drawing.Size(29, 12);
+            this.lblPro.TabIndex = 4;
+            this.lblPro.Text = "项目";
+            // 
+            // lblTool
+            // 
+            this.lblTool.AutoSize = true;
+            this.lblTool.Location = new System.Drawing.Point(3, 12);
+            this.lblTool.Name = "lblTool";
+            this.lblTool.Size = new System.Drawing.Size(29, 12);
+            this.lblTool.TabIndex = 4;
+            this.lblTool.Text = "工具";
+            // 
+            // chbDir
+            // 
+            this.chbDir.AutoSize = true;
+            this.chbDir.Location = new System.Drawing.Point(5, 143);
+            this.chbDir.Name = "chbDir";
+            this.chbDir.Size = new System.Drawing.Size(84, 16);
+            this.chbDir.TabIndex = 0;
+            this.chbDir.Text = "调拨单设置";
+            this.chbDir.UseVisualStyleBackColor = true;
             // 
             // chbOccupy
             // 
@@ -127,6 +166,36 @@
             this.chbExport.TabIndex = 3;
             this.chbExport.Text = "导出报表";
             this.chbExport.UseVisualStyleBackColor = true;
+            // 
+            // chbINOrder
+            // 
+            this.chbINOrder.AutoSize = true;
+            this.chbINOrder.Location = new System.Drawing.Point(5, 121);
+            this.chbINOrder.Name = "chbINOrder";
+            this.chbINOrder.Size = new System.Drawing.Size(96, 16);
+            this.chbINOrder.TabIndex = 1;
+            this.chbINOrder.Text = "网上订单系统";
+            this.chbINOrder.UseVisualStyleBackColor = true;
+            // 
+            // chbK3Data
+            // 
+            this.chbK3Data.AutoSize = true;
+            this.chbK3Data.Location = new System.Drawing.Point(5, 165);
+            this.chbK3Data.Name = "chbK3Data";
+            this.chbK3Data.Size = new System.Drawing.Size(84, 16);
+            this.chbK3Data.TabIndex = 1;
+            this.chbK3Data.Text = "K3数据同步";
+            this.chbK3Data.UseVisualStyleBackColor = true;
+            // 
+            // chbWMSData
+            // 
+            this.chbWMSData.AutoSize = true;
+            this.chbWMSData.Location = new System.Drawing.Point(5, 187);
+            this.chbWMSData.Name = "chbWMSData";
+            this.chbWMSData.Size = new System.Drawing.Size(90, 16);
+            this.chbWMSData.TabIndex = 1;
+            this.chbWMSData.Text = "WMS数据同步";
+            this.chbWMSData.UseVisualStyleBackColor = true;
             // 
             // chbImport
             // 
@@ -422,72 +491,15 @@
             this.lblUserList.TabIndex = 2;
             this.lblUserList.Text = "分配用户：";
             // 
-            // chbWMSData
+            // chbBusiness
             // 
-            this.chbWMSData.AutoSize = true;
-            this.chbWMSData.Location = new System.Drawing.Point(5, 121);
-            this.chbWMSData.Name = "chbWMSData";
-            this.chbWMSData.Size = new System.Drawing.Size(90, 16);
-            this.chbWMSData.TabIndex = 1;
-            this.chbWMSData.Text = "WMS数据同步";
-            this.chbWMSData.UseVisualStyleBackColor = true;
-            // 
-            // chbDir
-            // 
-            this.chbDir.AutoSize = true;
-            this.chbDir.Location = new System.Drawing.Point(5, 99);
-            this.chbDir.Name = "chbDir";
-            this.chbDir.Size = new System.Drawing.Size(84, 16);
-            this.chbDir.TabIndex = 0;
-            this.chbDir.Text = "调拨单设置";
-            this.chbDir.UseVisualStyleBackColor = true;
-            // 
-            // chbK3Data
-            // 
-            this.chbK3Data.AutoSize = true;
-            this.chbK3Data.Location = new System.Drawing.Point(5, 143);
-            this.chbK3Data.Name = "chbK3Data";
-            this.chbK3Data.Size = new System.Drawing.Size(84, 16);
-            this.chbK3Data.TabIndex = 1;
-            this.chbK3Data.Text = "K3数据同步";
-            this.chbK3Data.UseVisualStyleBackColor = true;
-            // 
-            // chbINOrder
-            // 
-            this.chbINOrder.AutoSize = true;
-            this.chbINOrder.Location = new System.Drawing.Point(5, 165);
-            this.chbINOrder.Name = "chbINOrder";
-            this.chbINOrder.Size = new System.Drawing.Size(96, 16);
-            this.chbINOrder.TabIndex = 1;
-            this.chbINOrder.Text = "网上订单系统";
-            this.chbINOrder.UseVisualStyleBackColor = true;
-            // 
-            // lblTool
-            // 
-            this.lblTool.AutoSize = true;
-            this.lblTool.Location = new System.Drawing.Point(3, 12);
-            this.lblTool.Name = "lblTool";
-            this.lblTool.Size = new System.Drawing.Size(29, 12);
-            this.lblTool.TabIndex = 4;
-            this.lblTool.Text = "工具";
-            // 
-            // lblPro
-            // 
-            this.lblPro.AutoSize = true;
-            this.lblPro.Location = new System.Drawing.Point(3, 84);
-            this.lblPro.Name = "lblPro";
-            this.lblPro.Size = new System.Drawing.Size(29, 12);
-            this.lblPro.TabIndex = 4;
-            this.lblPro.Text = "项目";
-            // 
-            // lblOther
-            // 
-            this.lblOther.AutoSize = true;
-            this.lblOther.Location = new System.Drawing.Point(3, 394);
-            this.lblOther.Name = "lblOther";
-            this.lblOther.Size = new System.Drawing.Size(29, 12);
-            this.lblOther.TabIndex = 4;
-            this.lblOther.Text = "其他";
+            this.chbBusiness.AutoSize = true;
+            this.chbBusiness.Location = new System.Drawing.Point(5, 99);
+            this.chbBusiness.Name = "chbBusiness";
+            this.chbBusiness.Size = new System.Drawing.Size(48, 16);
+            this.chbBusiness.TabIndex = 1;
+            this.chbBusiness.Text = "电商";
+            this.chbBusiness.UseVisualStyleBackColor = true;
             // 
             // ucSM_UserAcc
             // 
@@ -534,5 +546,6 @@
         private System.Windows.Forms.Label lblTool;
         private System.Windows.Forms.Label lblOther;
         private System.Windows.Forms.Label lblPro;
+        private System.Windows.Forms.CheckBox chbBusiness;
     }
 }

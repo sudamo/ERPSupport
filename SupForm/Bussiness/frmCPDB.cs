@@ -326,7 +326,7 @@ namespace ERPSupport.SupForm.Bussiness
             MessageBox.Show("直接调拨单：" + strBillNos);
 
             //日志
-            DALCreator.CommFunction.DM_Log_Local("成品调拨", "辅助功能//调拨//成品调拨", strBillNos);
+            DALCreator.CommFunction.DM_Log_Local("成品调拨", "辅助功能\\调拨\\成品调拨", strBillNos);
 
             Search();
         }
@@ -344,7 +344,7 @@ namespace ERPSupport.SupForm.Bussiness
             switch (e.ClickedItem.Tag.ToString())
             {
                 case "1"://筛选
-                    frmFilter frm = new frmFilter(_ListFilter, _FilterName, Model.Enum.FormID.STK_TransferDirect);
+                    frmFilter frm = new frmFilter(_ListFilter, _FilterName, Model.Enum.FormID.STK_TransferDirect, null);
                     frm.ShowDialog();
 
                     if (frm.DialogResult == DialogResult.OK)

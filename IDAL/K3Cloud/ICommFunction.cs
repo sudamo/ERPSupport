@@ -20,7 +20,10 @@ namespace ERPSupport.IDAL.K3Cloud
         DataTable GetDepartment(int pType, int pUseOrgId, string pProperty);
         List<string> GetPickMtlDepartment(int pUseOrgId = 100508);
         int GetCustomerId(string pCustomerName, int pUseOrgId);
+        string GetCustomerCode(string pCustomerName, int pUseOrgId);
         DataTable GetCustomerListByName(string pCostomerName);
+        string GetAssistantDataCode(string pFName, string pFID);
+        string GetUnitCodeByMTLCode(string pMaterial);
         DataTable GetSellerList(int pUseOrgId, int pType = 0);
         int GetStockIdByNumber(int pFUseOrgId, string pFNumber);
         DataTable GetStock(int pType = -1, int pUserOrgId = 100508);
@@ -87,7 +90,7 @@ namespace ERPSupport.IDAL.K3Cloud
         string AddDM_Dir_Stock(int pOutStockId, int pInStockId);
         string EditDM_Dir_Stock(int pOutStockId, int pInStockId, int pPID);
         void DelDM_Dir_Stock(int pPID);
-        void SynBarcodr(string pType, string pFBillNo, string pBarcodes);
+        //void SynBarcodr(string pType, string pFBillNo, string pBarcodes);
         DataTable ERPLog(string pUser, DateTime pDate);
         string SynMTLForWMS(bool pIsAll, string pFNumber);
         int GetMTLIDByNumber(int pFUseOrgId, string pFNumber);

@@ -39,8 +39,8 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pRemark">失败信息</param>
         public void Log_OrderLock(OrderInfo pEntry, int pType, string pRemark)
         {
-            _SQL = string.Format("INSERT INTO DM_LOG_ORDERLOCK(FENTRYID,FBILLNO,FMTLNUMBER,FREMARK,FTYPE,FFLAG,FOPERATOR) ");
-            _SQL += string.Format(" VALUES({0},'{1}','{2}','{3}','1','0','{4}')", pEntry.FEntryId, pEntry.FBillNo, pEntry.FMaterialNo, pRemark, GlobalParameter.K3Inf.UserName);
+            _SQL = "INSERT INTO DM_LOG_ORDERLOCK(FENTRYID,FBILLNO,FMTLNUMBER,FREMARK,FTYPE,FFLAG,FOPERATOR) ";
+            _SQL += string.Format(" VALUES({0},'{1}','{2}','{3}','1','0','{4}')", pEntry.FEntryId, pEntry.FBillNo, pEntry.FMaterialCode, pRemark, GlobalParameter.K3Inf.UserName);
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }
@@ -75,22 +75,22 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pFormId">FormId</param>
         /// <param name="pFilter">Filter</param>
         /// <returns></returns>
-        public DataTable GetDataSource(FormID pFormId, string pFilter)
+        public DataTable GetDataSource(FormID pFormId, string pFilter, OrderInfo pOrderInf)
         {
             if (pFormId == FormID.PRD_INSTOCK)//倒冲领料
             {
-                _SQL = string.Format(@"SELECT A.FDATE 日期, BILL.FNAME 单据类型, A.FBILLNO 单据编号, '已审核' 单据状态, ORGL.FNAME 入库组织, ORGL2.FNAME 生产组织,MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, UNTL.FNAME 单位, AE.FMUSTQTY 应收数量, AE.FREALQTY 实收数量,STKL.FNAME 仓库 ");
-                _SQL += string.Format(" FROM T_PRD_INSTOCK A ");
-                _SQL += string.Format(" INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID ");
-                _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID ");
-                _SQL += string.Format(" INNER JOIN T_BD_MATERIAL_L MTLL ON AE.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_BAS_BILLTYPE_L BILL ON A.FBILLTYPE = BILL.FBILLTYPEID AND BILL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FSTOCKORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON A.FPRDORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_BD_UNIT_L UNTL ON AE.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_BD_STOCK_L STKL ON AE.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT_L DEPL ON AE.FWORKSHOPID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON AE.FENTRYID = PICA.FSRCBIZENTRYID ");
+                _SQL = "SELECT A.FDATE 日期, BILL.FNAME 单据类型, A.FBILLNO 单据编号, '已审核' 单据状态, ORGL.FNAME 入库组织, ORGL2.FNAME 生产组织,MTL.FNUMBER 物料编码, MTLL.FNAME 物料名称, UNTL.FNAME 单位, AE.FMUSTQTY 应收数量, AE.FREALQTY 实收数量,STKL.FNAME 仓库";
+                _SQL += " FROM T_PRD_INSTOCK A";
+                _SQL += " INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID";
+                _SQL += " INNER JOIN T_BD_MATERIAL MTL ON AE.FMATERIALID = MTL.FMATERIALID";
+                _SQL += " INNER JOIN T_BD_MATERIAL_L MTLL ON AE.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_BAS_BILLTYPE_L BILL ON A.FBILLTYPE = BILL.FBILLTYPEID AND BILL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_ORG_ORGANIZATIONS_L ORGL ON A.FSTOCKORGID = ORGL.FORGID AND ORGL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_ORG_ORGANIZATIONS_L ORGL2 ON A.FPRDORGID = ORGL2.FORGID AND ORGL2.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_BD_UNIT_L UNTL ON AE.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_BD_STOCK_L STKL ON AE.FSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_BD_DEPARTMENT_L DEPL ON AE.FWORKSHOPID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052";
+                _SQL += " LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON AE.FENTRYID = PICA.FSRCBIZENTRYID";
                 _SQL += string.Format(" WHERE {0} A.FDOCUMENTSTATUS = 'C' AND PICA.FSRCBIZBILLNO IS NULL ORDER BY A.FID DESC", pFilter);
             }
             else if (pFormId == FormID.PRD_PPBOM || pFormId == FormID.PRD_PPBOM_DX)
@@ -109,32 +109,33 @@ namespace ERPSupport.SQL.K3Cloud
                         break;
                 }
 
-                _SQL = string.Format("SELECT MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,UNTL.FNAME 单位,SUM(A.FMUSTQTY) 实发数量,DEPL.FNAME 领料部门,STKL2.FNAME 调出仓库,NVL(INV2.FAVBQTY, 0) 调出仓库存,NVL(STKL3.FNAME,' ') 中间仓库,STKL.FNAME 调入仓库,NVL(INV.FAVBQTY, 0) 调入仓库存 ");
-                _SQL += string.Format(" FROM T_PRD_PPBOMENTRY A ");
-                _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY BE ON A.FMOENTRYID = BE.FENTRYID AND TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd') ");
-                _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A BA ON BE.FENTRYID = BA.FENTRYID AND BA.FSTATUS IN({0}) ", strOrg == "100508" ? "3,4" : "4");
-                _SQL += string.Format(" INNER JOIN T_PRD_MO B ON BE.FID = B.FID AND B.FDOCUMENTSTATUS = 'C' AND B.FPRDORGID = {0} ", strOrg);
-                _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTL ON A.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = {0} ", strOrg);
-                _SQL += string.Format(" INNER JOIN T_BD_MATERIAL_L MTLL ON A.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_BD_UNIT_L UNTL ON A.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT DEP ON BE.FWORKSHOPID = DEP.FDEPTID ");
-                _SQL += string.Format(" INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_BD_STOCK_L STKL ON DEP.FINSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 ");
-                _SQL += string.Format(" INNER JOIN T_AUTO_MSTOCKSETTING MSG ON A.FMATERIALID = MSG.FMATERIALID AND DEPL.FDEPTID = MSG.FDEPTID ");
-                _SQL += string.Format(" INNER JOIN T_BD_STOCK_L STKL2 ON MSG.FSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052 ");
-                _SQL += string.Format(" LEFT JOIN T_BD_STOCK_L STKL3 ON MSG.FTRANSTOCKID = STKL3.FSTOCKID AND STKL3.FLOCALEID = 2052 ");
-                _SQL += string.Format(" LEFT JOIN T_STK_INVENTORY INV ON A.FMATERIALID = INV.FMATERIALID AND DEP.FINSTOCKID = INV.FSTOCKID AND INV.FSTOCKSTATUSID = 10000 AND INV.FSTOCKORGID = {0} AND INV.FOWNERID = {0} AND INV.FISEFFECTIVED = 1 ", strOrg);
-                _SQL += string.Format(" LEFT JOIN T_STK_INVENTORY INV2 ON A.FMATERIALID = INV2.FMATERIALID AND MSG.FSTOCKID = INV2.FSTOCKID AND INV2.FSTOCKSTATUSID = 10000 AND INV2.FSTOCKORGID = {0} AND INV2.FOWNERID = {0} AND INV2.FISEFFECTIVED = 1 ", strOrg);
+                _SQL = "SELECT MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,UNTL.FNAME 单位,SUM(A.FMUSTQTY) 实发数量,DEPL.FNAME 领料部门,STKL2.FNAME 调出仓库,NVL(INV2.FAVBQTY, 0) 调出仓库存,NVL(STKL3.FNAME,' ') 中间仓库,STKL.FNAME 调入仓库,NVL(INV.FAVBQTY, 0) 调入仓库存";
+                _SQL += " FROM T_PRD_PPBOMENTRY A";
+                _SQL += " INNER JOIN T_PRD_MOENTRY BE ON A.FMOENTRYID = BE.FENTRYID AND TO_CHAR(BE.FPLANSTARTDATE,'yyyy-mm-dd') = TO_CHAR(A.FNEEDDATE,'yyyy-mm-dd')";
+                _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY_A BA ON BE.FENTRYID = BA.FENTRYID AND BA.FSTATUS IN({0})", strOrg == "100508" ? "3,4" : "4");
+                _SQL += string.Format(" INNER JOIN T_PRD_MO B ON BE.FID = B.FID AND B.FDOCUMENTSTATUS = 'C' AND B.FPRDORGID = {0}", strOrg);
+                _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTL ON A.FMATERIALID = MTL.FMATERIALID AND MTL.FUSEORGID = {0}", strOrg);
+                _SQL += " INNER JOIN T_BD_MATERIAL_L MTLL ON A.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_BD_UNIT_L UNTL ON A.FUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_BD_DEPARTMENT DEP ON BE.FWORKSHOPID = DEP.FDEPTID";
+                _SQL += " INNER JOIN T_BD_DEPARTMENT_L DEPL ON DEP.FDEPTID = DEPL.FDEPTID AND DEPL.FLOCALEID = 2052";
+                _SQL += " INNER JOIN T_BD_STOCK_L STKL ON DEP.FINSTOCKID = STKL.FSTOCKID AND STKL.FLOCALEID = 2052 ";
+                _SQL += " INNER JOIN T_AUTO_MSTOCKSETTING MSG ON A.FMATERIALID = MSG.FMATERIALID AND DEPL.FDEPTID = MSG.FDEPTID";
+                _SQL += " INNER JOIN T_BD_STOCK_L STKL2 ON MSG.FSTOCKID = STKL2.FSTOCKID AND STKL2.FLOCALEID = 2052";
+                _SQL += " LEFT JOIN T_BD_STOCK_L STKL3 ON MSG.FTRANSTOCKID = STKL3.FSTOCKID AND STKL3.FLOCALEID = 2052";
+                _SQL += string.Format(" LEFT JOIN T_STK_INVENTORY INV ON A.FMATERIALID = INV.FMATERIALID AND DEP.FINSTOCKID = INV.FSTOCKID AND INV.FSTOCKSTATUSID = 10000 AND INV.FSTOCKORGID = {0} AND INV.FOWNERID = {0} AND INV.FISEFFECTIVED = 1", strOrg);
+                _SQL += string.Format(" LEFT JOIN T_STK_INVENTORY INV2 ON A.FMATERIALID = INV2.FMATERIALID AND MSG.FSTOCKID = INV2.FSTOCKID AND INV2.FSTOCKSTATUSID = 10000 AND INV2.FSTOCKORGID = {0} AND INV2.FOWNERID = {0} AND INV2.FISEFFECTIVED = 1", strOrg);
                 _SQL += string.Format(" WHERE {0} A.FPAEZHAVEDIRECT = 0 AND A.F_PAEZ_PICKTOWMS = 0 AND STKL.FNAME <> STKL2.FNAME GROUP BY MTL.FNUMBER,MTLL.FNAME,UNTL.FNAME,STKL.FNAME,INV.FAVBQTY,STKL2.FNAME,STKL3.FNAME,INV2.FAVBQTY,DEPL.FNAME ORDER BY MTL.FNUMBER", pFilter);
             }
             else if (pFormId == FormID.SAL_SaleOrder)//锁库
             {
-                _SQL = @"SELECT A.FBILLNO 单据编号,BILL.FNAME 单据类型,A.FAPPROVEDATE 审核日期,ORGL3.FNAME 销售组织,ORGL.FNAME 库存组织
+                _SQL = string.Format(@"SELECT A.FBILLNO 单据编号,BILL.FNAME 单据类型,A.FAPPROVEDATE 审核日期,ORGL3.FNAME 销售组织,ORGL.FNAME 库存组织
                     ,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,UNTL.FNAME 单位,AE.FQTY 销售数量,AE.FLOCKQTY 锁库数量
                     ,AE.FLEFTQTY 待锁库
                     ,CASE WHEN AR.FBASECANOUTQTY >= AR.FBASEPURJOINQTY THEN AR.FBASECANOUTQTY - AR.FBASEPURJOINQTY ELSE 0 END 最大可锁数量
                     ,ORGL2.FNAME 货主,CASE WHEN A.FFULLLOCK = '0' THEN '否' ELSE '是' END 完全锁库,ASSDL.FDATAVALUE 发货类别
-                    ,CURL.FNAME 客户,CASE WHEN AE.FBATCHFLAG = '0' THEN '否' ELSE '是' END 批量锁库,AE.FENTRYID 订单内码
+                    ,CURL.FNAME 客户,CASE WHEN AE.FBATCHFLAG = '0' THEN '否' ELSE '是' END 批量锁库
+                    ,CASE A.FDOCUMENTSTATUS WHEN 'A' THEN '创建' WHEN 'B' THEN '审核中' WHEN 'C' THEN '已审核' WHEN 'D' THEN '重新审核' ELSE '暂存' END 单据状态,CASE A.FCLOSESTATUS WHEN 'A' THEN '正常' ELSE '已关闭' END 关闭状态,AE.FENTRYID 订单内码
                 FROM T_SAL_ORDER A
                 INNER JOIN T_SAL_ORDERENTRY AE ON A.FID = AE.FID
                 INNER JOIN T_SAL_ORDERENTRY_R AR ON AE.FENTRYID = AR.FENTRYID
@@ -148,12 +149,12 @@ namespace ERPSupport.SQL.K3Cloud
                 INNER JOIN T_BD_UNIT_L UNTL ON MTLB.FBASEUNITID = UNTL.FUNITID AND UNTL.FLOCALEID = 2052
                 INNER JOIN T_BAS_ASSISTANTDATAENTRY_L ASSDL ON A.FHEADDELIVERYWAY = ASSDL.FENTRYID AND ASSDL.FLOCALEID = 2052
                 INNER JOIN T_BD_CUSTOMER_L CURL ON A.FCUSTID = CURL.FCUSTID AND CURL.FLOCALEID = 2052
-                WHERE " + pFilter + @" A.FDOCUMENTSTATUS = 'C' AND A.FCLOSESTATUS = 'A' AND AE.FMRPCLOSESTATUS = 'A' AND AE.FMRPTERMINATESTATUS = 'A' AND A.F_PAEZ_FACTORGID = 100508
-                ORDER BY TO_CHAR(A.FAPPROVEDATE, 'YYYY'),TO_CHAR(A.FAPPROVEDATE, 'MM'),TO_CHAR(A.FAPPROVEDATE, 'DD'), ASSDL.FDATAVALUE,AE.FQTY,A.FID";
+                WHERE {0} A.FDOCUMENTSTATUS = '{1}' AND A.FCLOSESTATUS = '{2}' AND AE.FMRPCLOSESTATUS = 'A' AND AE.FMRPTERMINATESTATUS = 'A' AND A.F_PAEZ_FACTORGID = 100508
+                ORDER BY TO_CHAR(A.FAPPROVEDATE, 'YYYY'),TO_CHAR(A.FAPPROVEDATE, 'MM'),TO_CHAR(A.FAPPROVEDATE, 'DD'), ASSDL.FDATAVALUE,AE.FQTY,A.FID", pFilter, pOrderInf.FDocumentStatus, pOrderInf.FCloseStatus);
             }
             else if (pFormId == FormID.SAL_SaleOrderRun)//订单运算
             {
-                _SQL = @"SELECT A.FBILLNO 单据编号,BILL.FNAME 单据类型,A.FAPPROVEDATE 审核日期,ORGL3.FNAME 销售组织,ORGL.FNAME 库存组织
+                _SQL = string.Format(@"SELECT A.FBILLNO 单据编号,BILL.FNAME 单据类型,A.FAPPROVEDATE 审核日期,ORGL3.FNAME 销售组织,ORGL.FNAME 库存组织
                     ,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,UNTL.FNAME 单位,AE.FQTY 销售数量,AE.FLOCKQTY 锁库数量
                     ,AE.FLEFTQTY 待锁库,ORGL2.FNAME 货主,CASE WHEN AE.FLOCKFLAG = '0'  THEN '否' ELSE '是' END 锁库,CASE WHEN A.FFULLLOCK = '0' THEN '否' ELSE '是' END 完全锁库,CASE WHEN AE.FBATCHFLAG = '0' THEN '否' ELSE '是' END 批量锁库
                     ,ASSDL.FDATAVALUE 发货类别,CURL.FNAME 客户,BOM.FNUMBER BOM,AE.FNOTE 备注,CASE WHEN MTL.F_PAEZ_CUSTOMIZATION + MTL.F_PAEZ_SPECIALUSE + MTL.F_PAEZ_ARTS > 0 THEN 1 ELSE 0 END 特殊,AE.FENTRYID 订单内码
@@ -171,8 +172,8 @@ namespace ERPSupport.SQL.K3Cloud
                 INNER JOIN T_BAS_ASSISTANTDATAENTRY_L ASSDL ON A.FHEADDELIVERYWAY = ASSDL.FENTRYID AND ASSDL.FLOCALEID = 2052
                 INNER JOIN T_BD_CUSTOMER_L CURL ON A.FCUSTID = CURL.FCUSTID AND CURL.FLOCALEID = 2052
                 INNER JOIN T_ENG_BOM BOM ON AE.FBOMID = BOM.FID
-                WHERE " + pFilter + @" A.FDOCUMENTSTATUS = 'C' AND A.FCLOSESTATUS = 'A' AND AE.FMRPCLOSESTATUS = 'A' AND A.F_PAEZ_FACTORGID = 100508
-                ORDER BY CASE WHEN BILL.FNAME = '备货销售订单' THEN 1 ELSE 0 END,TO_CHAR(A.FAPPROVEDATE, 'YYYY') ASC,TO_CHAR(A.FAPPROVEDATE, 'MM'),TO_CHAR(A.FAPPROVEDATE, 'DD'), ASSDL.FDATAVALUE,A.FID,AE.FQTY,AE.FENTRYID";
+                WHERE {0} A.FDOCUMENTSTATUS = 'C' AND A.FCLOSESTATUS = 'A' AND AE.FMRPCLOSESTATUS = 'A' AND A.F_PAEZ_FACTORGID = 100508
+                ORDER BY CASE WHEN BILL.FNAME = '备货销售订单' THEN 1 ELSE 0 END,TO_CHAR(A.FAPPROVEDATE, 'YYYY') ASC,TO_CHAR(A.FAPPROVEDATE, 'MM'),TO_CHAR(A.FAPPROVEDATE, 'DD'), ASSDL.FDATAVALUE,A.FID,AE.FQTY,AE.FENTRYID", pFilter);
             }
 
             return ORAHelper.ExecuteTable(_SQL);
@@ -469,20 +470,19 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns></returns>
         public DataTable GetInventoryInfByMaterialId(string pFMaterialId)
         {
-            _SQL = @"SELECT FID FINID,FNUMBER STOCK,SUM(FAVBQTY) FAVBQTY
-            FROM
-            (
-            SELECT INV.FID,INV.FMATERIALID,CST.FNUMBER,CST.FSEQ,INV.FBASEQTY - SUM(NVL(RES.FBASEQTY,0)) FAVBQTY
-            FROM T_STK_INVENTORY INV
-            INNER JOIN DM_CALCULATESTOCK CST ON INV.FSTOCKID = CST.FSTOCKID AND CST.FTYPE = 'RUNSTOCK' AND ISDELETE = '0'
-            LEFT JOIN T_PLN_RESERVELINKENTRY RES ON INV.FMATERIALID = RES.FMATERIALID AND INV.FSTOCKID = RES.FSTOCKID AND RES.FBASEQTY > 0 AND RES.FSUPPLYFORMID = 'STK_INVENTORY'
-            WHERE INV.FISEFFECTIVED = 1 AND INV.FSTOCKSTATUSID = 10000
-            GROUP BY INV.FID,INV.FMATERIALID,CST.FNUMBER,CST.FSEQ,INV.FBASEQTY
-            HAVING INV.FBASEQTY - SUM(NVL(RES.FBASEQTY,0)) > 0
-            )XINV
-            WHERE FMATERIALID = " + pFMaterialId + @"
-            GROUP BY FID,FMATERIALID,FNUMBER,FSEQ
-            ORDER BY FSEQ";
+            _SQL = "SELECT FID FINID,FNUMBER STOCK,SUM(FAVBQTY) FAVBQTY";
+            _SQL += " FROM ";
+            _SQL += " (SELECT INV.FID,INV.FMATERIALID,CST.FNUMBER,CST.FSEQ,INV.FBASEQTY - SUM(NVL(RES.FBASEQTY,0)) FAVBQTY ";
+            _SQL += " FROM T_STK_INVENTORY INV ";
+            _SQL += " INNER JOIN DM_CALCULATESTOCK CST ON INV.FSTOCKID = CST.FSTOCKID AND CST.FTYPE = 'RUNSTOCK' AND ISDELETE = '0' ";
+            _SQL += " LEFT JOIN T_PLN_RESERVELINKENTRY RES ON INV.FMATERIALID = RES.FMATERIALID AND INV.FSTOCKID = RES.FSTOCKID AND RES.FBASEQTY > 0 AND RES.FSUPPLYFORMID = 'STK_INVENTORY' ";
+            _SQL += " WHERE INV.FISEFFECTIVED = 1 AND INV.FSTOCKSTATUSID = 10000 ";
+            _SQL += " GROUP BY INV.FID,INV.FMATERIALID,CST.FNUMBER,CST.FSEQ,INV.FBASEQTY ";
+            _SQL += " HAVING INV.FBASEQTY - SUM(NVL(RES.FBASEQTY,0)) > 0 ";
+            _SQL += " )XINV ";
+            _SQL += string.Format(" WHERE FMATERIALID = {0}", pFMaterialId);
+            _SQL += " GROUP BY FID,FMATERIALID,FNUMBER,FSEQ ";
+            _SQL += " ORDER BY FSEQ";
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -967,14 +967,14 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
         /// <returns></returns>
         public DataTable NoPriceOrders(string pSaleOrgs)
         {
-            _SQL = string.Format("SELECT O.FBILLNO 单据编号,O.FDATE 日期,OE.FSEQ 序号,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,F.FPRICE 单价,OE.FENTRYID ");
-            _SQL += string.Format(" FROM T_SAL_ORDER O ");
-            _SQL += string.Format(" INNER JOIN T_SAL_ORDERENTRY OE ON O.FID = OE.FID ");
-            _SQL += string.Format(" INNER JOIN T_SAL_ORDERENTRY_F F ON OE.FENTRYID = F.FENTRYID ");
-            _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTL ON OE.FMATERIALID = MTL.FMATERIALID ");
-            _SQL += string.Format(" INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ");
+            _SQL = "SELECT O.FBILLNO 单据编号,O.FDATE 日期,OE.FSEQ 序号,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,F.FPRICE 单价,OE.FENTRYID ";
+            _SQL += " FROM T_SAL_ORDER O ";
+            _SQL += " INNER JOIN T_SAL_ORDERENTRY OE ON O.FID = OE.FID ";
+            _SQL += " INNER JOIN T_SAL_ORDERENTRY_F F ON OE.FENTRYID = F.FENTRYID ";
+            _SQL += " INNER JOIN T_BD_MATERIAL MTL ON OE.FMATERIALID = MTL.FMATERIALID ";
+            _SQL += " INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ";
             _SQL += string.Format(" WHERE O.FDOCUMENTSTATUS = 'A' AND F.FPRICE = 0 AND O.FSALEORGID IN({0}) ", pSaleOrgs);
-            _SQL += string.Format(" ORDER BY O.FBILLNO,OE.FSEQ ");
+            _SQL += " ORDER BY O.FBILLNO,OE.FSEQ ";
 
             return ORAHelper.ExecuteTable(_SQL);
         }
@@ -997,10 +997,10 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
 
             for (int i = 0; i < pOrders.Rows.Count; i++)
             {
-                _SQL = string.Format("SELECT TOP 1 AL.Price ");
-                _SQL += string.Format(" FROM PO_PurchaseOrder A ");
-                _SQL += string.Format(" INNER JOIN PO_ProductList AL ON A.ID = AL.PurchaseOrderID ");
-                _SQL += string.Format(" INNER JOIN PO_Materiel M ON AL.MaterielID = M.ERPFItemID ");
+                _SQL = "SELECT TOP 1 AL.Price ";
+                _SQL += " FROM PO_PurchaseOrder A ";
+                _SQL += " INNER JOIN PO_ProductList AL ON A.ID = AL.PurchaseOrderID ";
+                _SQL += " INNER JOIN PO_Materiel M ON AL.MaterielID = M.ERPFItemID ";
                 _SQL += string.Format(" WHERE A.K3PurchaseOrder = '{0}' AND M.FNumber = '{1}' ", pOrders.Rows[i]["FBillNo"].ToString(), pOrders.Rows[i]["FNumber"].ToString());
 
                 oPrice = SQLHelper.ExecuteScalar(oConnectionString.ToString(), _SQL);

@@ -9,7 +9,7 @@ namespace ERPSupport.IDAL.K3Cloud
     {
         void Log_OrderLock(Model.K3Cloud.OrderInfo pEntry, int pType, string pRemark);
         void Log_OrderLock(DataRow pDR, int pType);
-        DataTable GetDataSource(Model.Enum.FormID pFormId, string pFilter);
+        DataTable GetDataSource(Model.Enum.FormID pFormId, string pFilter, Model.K3Cloud.OrderInfo pOrderInf);
         DataTable GetOrderLockByFEntryId(int pFEntryId);
         void UpdateOrderLock(string pCanLockQty, int pFID, int pFEntryId);
         void UnLockSalOrder(string pLockQty, int pFEntryId);

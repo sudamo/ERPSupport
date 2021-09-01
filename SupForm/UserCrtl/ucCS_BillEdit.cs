@@ -328,7 +328,7 @@ namespace ERPSupport.SupForm.UserCrtl
                 bnTop_Bom.Visible = false;
                 //bnTop_Price.Visible = false;
             }
-            if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "SAL_SaleOrder" && (GlobalParameter.K3Inf.DepartmentName.Contains("信息部") || GlobalParameter.K3Inf.DepartmentName == "客服部"))
+            if (bnTop_cbxType.ComboBox.SelectedValue.ToString() == "SAL_SaleOrder")
             {
                 if (dgv1 != null)
                     tpl1.Visible = true;

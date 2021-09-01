@@ -159,6 +159,10 @@ namespace ERPSupport.SupForm
         /// ToolStrip日期到
         /// </summary>
         private ToolStripDateTimePicker _dateTo;
+        /// <summary>
+        /// 销售订单实体
+        /// </summary>
+        private OrderInfo _OrderInf;
 
         /// <summary>
         /// 构造函数
@@ -198,6 +202,16 @@ namespace ERPSupport.SupForm
             _ListUC = DALCreator.CommFunction.GetNavigation();
             _ListOpenUC = new List<string>();
             _TimerPara = new TimerParameter(0, 20, 0, true, false, "NULL");
+
+            _OrderInf = new OrderInfo()
+            {
+                FDocumentStatus = "C",
+                FCloseStatus = "A",
+                FCancleStatus = "A",
+                F_PAEZ_FACTORGID = 100508,
+                FMRPCloseStatus = "A",
+                FMRPTerminateStatus = "A"
+            };
             //-----
             CheckForIllegalCrossThreadCalls = false;//解决多线程调用控件问题
             //-----
@@ -209,7 +223,7 @@ namespace ERPSupport.SupForm
             _Worker.ProgressChanged += new ProgressChangedEventHandler(ProgessChanged);
             _Worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(CompleteWork);
             //-----
-            if (System.Configuration.ConfigurationManager.AppSettings["LS_AutoExit"] == "1")
+            if (System.Configuration.ConfigurationManager.AppSettings["LS_AutoExit"] == "1" && GlobalParameter.K3Inf.UserName != "damo")
             {
                 _msg = new WinMessager();
                 Application.AddMessageFilter(_msg);
@@ -372,22 +386,59 @@ namespace ERPSupport.SupForm
                 //--Tool
                 foreach (ToolStripItem ct in ((ToolStripMenuItem)((MenuStrip)Controls[1]).Items[1]).DropDownItems)
                 {
-                    if (ct.Name == "tsmiTool_Occupy" && !GlobalRights.FunctionIds.Contains("tsmiTool_Occupy"))
-                        ct.Enabled = false;
-                    if (ct.Name == "tsmiTool_Timer" && !GlobalRights.FunctionIds.Contains("tsmiTool_Timer"))
-                        ct.Enabled = false;
+                    //if (ct.Name == "tsmiTool_Occupy" && !GlobalRights.FunctionIds.Contains("tsmiTool_Occupy"))
+                    //    ct.Enabled = false;
+                    //if (ct.Name == "tsmiTool_Timer" && !GlobalRights.FunctionIds.Contains("tsmiTool_Timer"))
+                    //    ct.Enabled = false;
+                    switch (ct.Name)
+                    {
+                        case "tsmiTool_Occupy":
+                            if (GlobalRights.FunctionIds.Contains(ct.Name)) ct.Enabled = true;
+                            else ct.Enabled = false;
+                            break;
+                        case "tsmiTool_Timer":
+                            if (GlobalRights.FunctionIds.Contains(ct.Name)) ct.Enabled = true;
+                            else ct.Enabled = false;
+                            break;
+                    }
                 }
                 //--Pro
                 foreach (ToolStripItem ct in ((ToolStripMenuItem)((MenuStrip)Controls[1]).Items[2]).DropDownItems)
                 {
-                    if (ct.Name == "tsmiPro_Dir" && !GlobalRights.FunctionIds.Contains("tsmiPro_Dir"))
-                        ct.Enabled = false;
-                    if (ct.Name == "tsmiPro_WMSData" && !GlobalRights.FunctionIds.Contains("tsmiPro_WMSData"))
-                        ct.Enabled = false;
-                    if (ct.Name == "tsmiPro_K3Data" && !GlobalRights.FunctionIds.Contains("tsmiPro_K3Data"))
-                        ct.Enabled = false;
-                    if (ct.Name == "tsmiPro_INOrder" && !GlobalRights.FunctionIds.Contains("tsmiPro_INOrder"))
-                        ct.Enabled = false;
+                    //if (ct.Name == "tsmiPro_Business" && !GlobalRights.FunctionIds.Contains("tsmiPro_Business"))
+                    //    ct.Enabled = false;
+                    //if (ct.Name == "tsmiPro_INOrder" && !GlobalRights.FunctionIds.Contains("tsmiPro_INOrder"))
+                    //    ct.Enabled = false;
+                    //if (ct.Name == "tsmiPro_Dir" && !GlobalRights.FunctionIds.Contains("tsmiPro_Dir"))
+                    //    ct.Enabled = false;
+                    //if (ct.Name == "tsmiPro_K3Data" && !GlobalRights.FunctionIds.Contains("tsmiPro_K3Data"))
+                    //    ct.Enabled = false;
+                    //if (ct.Name == "tsmiPro_WMSData" && !GlobalRights.FunctionIds.Contains("tsmiPro_WMSData"))
+                    //    ct.Enabled = false;
+
+                    switch (ct.Name)
+                    {
+                        case "tsmiPro_Business":
+                            if (GlobalRights.FunctionIds.Contains(ct.Name)) ct.Enabled = true;
+                            else ct.Enabled = false;
+                            break;
+                        case "tsmiPro_INOrder":
+                            if (GlobalRights.FunctionIds.Contains(ct.Name)) ct.Enabled = true;
+                            else ct.Enabled = false;
+                            break;
+                        case "tsmiPro_Dir":
+                            if (GlobalRights.FunctionIds.Contains(ct.Name)) ct.Enabled = true;
+                            else ct.Enabled = false;
+                            break;
+                        case "tsmiPro_K3Data":
+                            if (GlobalRights.FunctionIds.Contains(ct.Name)) ct.Enabled = true;
+                            else ct.Enabled = false;
+                            break;
+                        case "tsmiPro_WMSData":
+                            if (GlobalRights.FunctionIds.Contains(ct.Name)) ct.Enabled = true;
+                            else ct.Enabled = false;
+                            break;
+                    }
                 }
             }
         }
@@ -829,7 +880,7 @@ namespace ERPSupport.SupForm
                     MessageBox.Show("请设置筛选条件");
                     return;
                 }
-                _DataSource = DALCreator.SalOrder.GetDataSource(_FormId, strFilter);
+                _DataSource = DALCreator.SalOrder.GetDataSource(_FormId, strFilter, _OrderInf);
 
                 if (_DataSource == null || _DataSource.Rows.Count == 0)
                 {
@@ -905,13 +956,15 @@ namespace ERPSupport.SupForm
         /// </summary>
         private void Filter()
         {
-            frmFilter frm = new frmFilter(_ListFilter, _FilterName, _FormId);
+            frmFilter frm = new frmFilter(_ListFilter, _FilterName, _FormId, _OrderInf);
             frm.ShowDialog();
 
             if (frm.DialogResult == DialogResult.OK)
             {
                 _ListFilter = frm.ListFilter;
                 _FilterName = frm.FilterName;
+
+                _OrderInf = frm.OrderInf;
             }
         }
         /// <summary>
@@ -947,7 +1000,7 @@ namespace ERPSupport.SupForm
             if (dgv1.Rows.Count > 0)
             {
                 if (_FormId == FormID.SAL_SaleOrder)
-                    dgv1.Columns[18].Visible = false;
+                    dgv1.Columns[20].Visible = false;
                 else if (_FormId == FormID.SAL_SaleOrderRun)
                 {
 
@@ -1117,9 +1170,11 @@ namespace ERPSupport.SupForm
 
                     entry = new OrderInfo();
                     entry.FBillNo = dgv1.Rows[i].Cells[1].Value.ToString();//销售订单编号
-                    entry.FBILLTYPEID = dgv1.Rows[i].Cells[2].Value.ToString();//单据类型
-                    entry.FMaterialNo = dgv1.Rows[i].Cells[6].Value.ToString();//物料编码
-                    entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[18].Value.ToString());//销售订单分录内码
+                    entry.FBillTypeId = dgv1.Rows[i].Cells[2].Value.ToString();//单据类型
+                    entry.FMaterialCode = dgv1.Rows[i].Cells[6].Value.ToString();//物料编码
+                    entry.FDocumentStatus = dgv1.Rows[i].Cells[18].Value.ToString();//
+                    entry.FCloseStatus = dgv1.Rows[i].Cells[19].Value.ToString();//
+                    entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[20].Value.ToString());//销售订单分录内码
                     _ListOrder.Add(entry);//封装参与锁库的订单实体                        
 
                 }
@@ -1265,10 +1320,10 @@ namespace ERPSupport.SupForm
                     {
                         entry = new OrderInfo();
                         entry.FBillNo = dgv1.Rows[i].Cells[1].Value.ToString();
-                        entry.FMaterialNo = dgv1.Rows[i].Cells[6].Value.ToString();
+                        entry.FMaterialCode = dgv1.Rows[i].Cells[6].Value.ToString();
                         entry.FLockQTY = double.Parse(dgv1.Rows[i].Cells[10].Value.ToString());
                         entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[18].Value.ToString());
-                        entry.FStockOrgNumber = dgv1.Rows[i].Cells[5].Value.ToString();
+                        entry.FSTOCKORGCode = dgv1.Rows[i].Cells[5].Value.ToString();
                         entry.FUnitNumber = dgv1.Rows[i].Cells[8].Value.ToString();
                         olist.Add(entry);//封装实体
                     }
@@ -2255,7 +2310,7 @@ namespace ERPSupport.SupForm
                     dr = ReturnDT.NewRow();
                     dr["操作"] = "失败";
                     dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
-                    dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
+                    dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialCode;
                     dr["仓库"] = "";
                     dr["信息"] = "没有库存信息";
                     ReturnDT.Rows.Add(dr);
@@ -2265,12 +2320,41 @@ namespace ERPSupport.SupForm
                 }
                 else
                 {
-                    if (((OrderInfo)_ListOrder[i]).FBILLTYPEID == "备货销售订单")//备货销售订单不需要锁库
+                    if (((OrderInfo)_ListOrder[i]).FDocumentStatus != "已审核")//备货销售订单不需要锁库
                     {
                         dr = ReturnDT.NewRow();
                         dr["操作"] = "失败";
                         dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
-                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialCode;
+                        dr["仓库"] = "";
+                        dr["信息"] = "单据未审核。";
+                        ReturnDT.Rows.Add(dr);
+
+                        //锁库失败记录日志
+                        DALCreator.SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "单据状态不为[已审核]");
+                        continue;
+                    }
+                    if (((OrderInfo)_ListOrder[i]).FCloseStatus != "正常")//备货销售订单不需要锁库
+                    {
+                        dr = ReturnDT.NewRow();
+                        dr["操作"] = "失败";
+                        dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialCode;
+                        dr["仓库"] = "";
+                        dr["信息"] = "单据已经关闭。";
+                        ReturnDT.Rows.Add(dr);
+
+                        //锁库失败记录日志
+                        DALCreator.SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "单据已经关闭");
+                        continue;
+                    }
+
+                    if (((OrderInfo)_ListOrder[i]).FBillTypeId == "备货销售订单")//备货销售订单不需要锁库
+                    {
+                        dr = ReturnDT.NewRow();
+                        dr["操作"] = "失败";
+                        dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialCode;
                         dr["仓库"] = "";
                         dr["信息"] = "备货销售订单。";
                         ReturnDT.Rows.Add(dr);
@@ -2287,7 +2371,7 @@ namespace ERPSupport.SupForm
                         dr = ReturnDT.NewRow();
                         dr["操作"] = "失败";
                         dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
-                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialCode;
                         dr["仓库"] = "";
                         dr["信息"] = "可锁数量小于等于零";
                         ReturnDT.Rows.Add(dr);
@@ -2309,7 +2393,7 @@ namespace ERPSupport.SupForm
                         dr = ReturnDT.NewRow();
                         dr["操作"] = "失败";
                         dr["销售订单"] = ((OrderInfo)_ListOrder[i]).FBillNo;
-                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialNo;
+                        dr["物料编码"] = ((OrderInfo)_ListOrder[i]).FMaterialCode;
                         dr["仓库"] = "";
                         dr["信息"] = "库存可用量为零";
                         ReturnDT.Rows.Add(dr);
@@ -2430,7 +2514,7 @@ namespace ERPSupport.SupForm
                 {
                     dr["操作"] = "解锁失败";
                     dr["销售订单"] = ((OrderInfo)pList[i]).FBillNo;
-                    dr["物料编码"] = ((OrderInfo)pList[i]).FMaterialNo;
+                    dr["物料编码"] = ((OrderInfo)pList[i]).FMaterialCode;
                     dr["信息"] = "解锁数量:0";
                     ReturnDT.Rows.Add(dr);
                     //continue;
@@ -2441,7 +2525,7 @@ namespace ERPSupport.SupForm
 
                     dr["操作"] = "解锁成功";
                     dr["销售订单"] = ((OrderInfo)pList[i]).FBillNo;
-                    dr["物料编码"] = ((OrderInfo)pList[i]).FMaterialNo;
+                    dr["物料编码"] = ((OrderInfo)pList[i]).FMaterialCode;
                     dr["信息"] = "解锁数量:" + dLockQTY.ToString();
                     ReturnDT.Rows.Add(dr);
                 }
@@ -2814,13 +2898,35 @@ namespace ERPSupport.SupForm
                     _Execute.Enabled = true;
                     _Execute.Interval = 1000 * 60 * _TimerPara.PickMinute;//每pMinute分钟执行一次
                     _Execute.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-                    _Execute.Start();
+                    //_Execute.Start();
                 }
 
                 //操作日志
                 DALCreator.CommFunction.DM_Log_Local("定时器", "菜单->工具", "操作定时器");
             }
             //frmTime.Dispose();
+        }
+
+        /// <summary>
+        /// 电商
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsmiPro_Business_Report_Click(object sender, EventArgs e)
+        {
+            frmPro_Business_Report frm = new SupForm.Menu.frmPro_Business_Report();
+            frm.Show(this);
+        }
+
+        /// <summary>
+        /// 网上订单系统
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsmiPro_INOrder_Click(object sender, EventArgs e)
+        {
+            frmINOrder frm = new frmINOrder();
+            frm.Show(this);
         }
 
         /// <summary>
@@ -2835,17 +2941,6 @@ namespace ERPSupport.SupForm
         }
 
         /// <summary>
-        /// 同步K3数据到WMS系统
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tsmiPro_WMSData_Click(object sender, EventArgs e)
-        {
-            frmPro_WMSData frm = new frmPro_WMSData();
-            frm.Show(this);
-        }
-
-        /// <summary>
         /// 同步K3关联单据数据
         /// </summary>
         /// <param name="sender"></param>
@@ -2856,9 +2951,14 @@ namespace ERPSupport.SupForm
             frm.Show(this);
         }
 
-        private void tsmiPro_INOrder_Click(object sender, EventArgs e)
+        /// <summary>
+        /// 同步K3数据到WMS系统
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void tsmiPro_WMSData_Click(object sender, EventArgs e)
         {
-            frmINOrder frm = new frmINOrder();
+            frmPro_WMSData frm = new frmPro_WMSData();
             frm.Show(this);
         }
 
@@ -3047,7 +3147,7 @@ namespace ERPSupport.SupForm
             WinMessager.iOperCount++;
             if (WinMessager.iOperCount > 1)
             {
-                Application.Exit();
+                //Application.Exit();
             }
         }
         #endregion

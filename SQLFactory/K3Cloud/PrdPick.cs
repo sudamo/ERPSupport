@@ -44,31 +44,31 @@ namespace ERPSupport.SQL.K3Cloud
             if (pBillNO.Trim().Length == 0)
                 return "";
 
-            _SQL = string.Format("SELECT DISTINCT NVL(ORG.FNUMBER,'HN02') FPRDORGID,NVL(ORG2.FNUMBER,ORG.FNUMBER) FSUPPLYORG,NVL(DEP.FNUMBER, ' ') FWORKSHOPID,NVL(STK.FNUMBER,' ') FINSTOCKID,NVL(STS.FNUMBER,'KCZT01_SYS') FSTOCKSTATUSID ");
-            _SQL += string.Format(" ,MTLH.FNUMBER FMATERIALID, ROUND((PBE.FNEEDQTY-PBQ.FSELPICKEDQTY),4) FNEEDQTY,ROUND((PBE.FMUSTQTY*AE.FREALQTY/MO.FQTY),4) FMUSTQTY,NVL(UNT.FNUMBER,' ') FUNITID,NVL(ORG3.FNUMBER,ORG.FNUMBER) FOWNERID ");
-            _SQL += string.Format(" ,A.FBILLNO INSTOCKBILLNO,A.FID INSTOCKFID,AE.FENTRYID INSTOCKFENTRYID,AE.FSEQ INSTOCKSEQ ");
-            _SQL += string.Format(" , AE.FMOBILLNO MOBILLNO,MO.FID MOFID,MO.FENTRYID MOFENTRYID,MO.FSEQ MOSEQ ");
-            _SQL += string.Format(" , PB.FBILLNO PPBILLNO,PBE.FID PPFID,PBE.FENTRYID PPFENTRYID,PBE.FSEQ PPFSEQ ");
-            _SQL += string.Format(" , A.FFORMID,PBE.FOPERID,A.FDATE,NVL(ORG4.FNUMBER,ORG.FNUMBER) FPARENTOWNERID,MTLC.FNUMBER FPARENTMATERIALID ");
-            _SQL += string.Format(" FROM T_PRD_INSTOCK A ");
-            _SQL += string.Format(" INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID ");
-            _SQL += string.Format(" INNER JOIN T_PRD_MOENTRY MO ON AE.FMOENTRYID = MO.FENTRYID ");
-            _SQL += string.Format(" INNER JOIN T_PRD_PPBOM PB ON AE.FMOENTRYID = PB.FMOENTRYID ");
-            _SQL += string.Format(" INNER JOIN T_PRD_PPBOMENTRY PBE ON PB.FID = PBE.FID ");
-            _SQL += string.Format(" INNER JOIN T_PRD_PPBOMENTRY_C PBC ON PBE.FENTRYID = PBC.FENTRYID ");
-            _SQL += string.Format(" INNER JOIN T_PRD_PPBOMENTRY_Q PBQ ON PBE.FENTRYID = PBQ.FENTRYID ");
-            _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTLH ON PBE.FMATERIALID = MTLH.FMATERIALID ");
-            _SQL += string.Format(" INNER JOIN T_BD_MATERIAL MTLC ON PB.FMATERIALID = MTLC.FMATERIALID ");
-            _SQL += string.Format(" LEFT JOIN T_ORG_ORGANIZATIONS ORG ON PB.FPRDORGID = ORG.FORGID ");
-            _SQL += string.Format(" LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON PBC.FSUPPLYORG = ORG2.FORGID ");
-            _SQL += string.Format(" LEFT JOIN T_ORG_ORGANIZATIONS ORG3 ON PBC.FOWNERID = ORG3.FORGID ");
-            _SQL += string.Format(" LEFT JOIN T_ORG_ORGANIZATIONS ORG4 ON PBC.FENTRUSTPICKORGID = ORG4.FORGID ");
-            _SQL += string.Format(" LEFT JOIN T_BD_DEPARTMENT DEP ON PB.FWORKSHOPID = DEP.FDEPTID ");
-            _SQL += string.Format(" LEFT JOIN T_BD_STOCK STK ON DEP.FINSTOCKID = STK.FSTOCKID ");
-            _SQL += string.Format(" LEFT JOIN T_BD_UNIT UNT ON PBE.FUNITID = UNT.FUNITID ");
-            _SQL += string.Format(" LEFT JOIN T_BD_STOCKSTATUS STS ON PBC.FSTOCKSTATUSID = STS.FSTOCKSTATUSID ");
-            _SQL += string.Format(" LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON AE.FENTRYID = PICA.FSRCBIZENTRYID ");
-            _SQL += string.Format(" WHERE A.FBILLNO = '{0}' AND PICA.FSRCBIZBILLNO IS NULL AND PBC.FISSUETYPE = 2 ", pBillNO);//用料清单的发料方式为直接倒冲。1、直接领料；2、直接倒冲；3、调拨领料；4、调拨倒冲；7、不发料。
+            _SQL = "SELECT DISTINCT NVL(ORG.FNUMBER,'HN02') FPRDORGID,NVL(ORG2.FNUMBER,ORG.FNUMBER) FSUPPLYORG,NVL(DEP.FNUMBER, ' ') FWORKSHOPID,NVL(STK.FNUMBER,' ') FINSTOCKID,NVL(STS.FNUMBER,'KCZT01_SYS') FSTOCKSTATUSID";
+            _SQL += " ,MTLH.FNUMBER FMATERIALID, ROUND((PBE.FNEEDQTY-PBQ.FSELPICKEDQTY),4) FNEEDQTY,ROUND((PBE.FMUSTQTY*AE.FREALQTY/MO.FQTY),4) FMUSTQTY,NVL(UNT.FNUMBER,' ') FUNITID,NVL(ORG3.FNUMBER,ORG.FNUMBER) FOWNERID";
+            _SQL += " ,A.FBILLNO INSTOCKBILLNO,A.FID INSTOCKFID,AE.FENTRYID INSTOCKFENTRYID,AE.FSEQ INSTOCKSEQ";
+            _SQL += " ,AE.FMOBILLNO MOBILLNO,MO.FID MOFID,MO.FENTRYID MOFENTRYID,MO.FSEQ MOSEQ";
+            _SQL += " ,PB.FBILLNO PPBILLNO,PBE.FID PPFID,PBE.FENTRYID PPFENTRYID,PBE.FSEQ PPFSEQ";
+            _SQL += " ,A.FFORMID,PBE.FOPERID,A.FDATE,NVL(ORG4.FNUMBER,ORG.FNUMBER) FPARENTOWNERID,MTLC.FNUMBER FPARENTMATERIALID";
+            _SQL += " FROM T_PRD_INSTOCK A";
+            _SQL += " INNER JOIN T_PRD_INSTOCKENTRY AE ON A.FID = AE.FID";
+            _SQL += " INNER JOIN T_PRD_MOENTRY MO ON AE.FMOENTRYID = MO.FENTRYID";
+            _SQL += " INNER JOIN T_PRD_PPBOM PB ON AE.FMOENTRYID = PB.FMOENTRYID";
+            _SQL += " INNER JOIN T_PRD_PPBOMENTRY PBE ON PB.FID = PBE.FID";
+            _SQL += " INNER JOIN T_PRD_PPBOMENTRY_C PBC ON PBE.FENTRYID = PBC.FENTRYID";
+            _SQL += " INNER JOIN T_PRD_PPBOMENTRY_Q PBQ ON PBE.FENTRYID = PBQ.FENTRYID";
+            _SQL += " INNER JOIN T_BD_MATERIAL MTLH ON PBE.FMATERIALID = MTLH.FMATERIALID";
+            _SQL += " INNER JOIN T_BD_MATERIAL MTLC ON PB.FMATERIALID = MTLC.FMATERIALID";
+            _SQL += " LEFT JOIN T_ORG_ORGANIZATIONS ORG ON PB.FPRDORGID = ORG.FORGID";
+            _SQL += " LEFT JOIN T_ORG_ORGANIZATIONS ORG2 ON PBC.FSUPPLYORG = ORG2.FORGID";
+            _SQL += " LEFT JOIN T_ORG_ORGANIZATIONS ORG3 ON PBC.FOWNERID = ORG3.FORGID";
+            _SQL += " LEFT JOIN T_ORG_ORGANIZATIONS ORG4 ON PBC.FENTRUSTPICKORGID = ORG4.FORGID";
+            _SQL += " LEFT JOIN T_BD_DEPARTMENT DEP ON PB.FWORKSHOPID = DEP.FDEPTID";
+            _SQL += " LEFT JOIN T_BD_STOCK STK ON DEP.FINSTOCKID = STK.FSTOCKID";
+            _SQL += " LEFT JOIN T_BD_UNIT UNT ON PBE.FUNITID = UNT.FUNITID";
+            _SQL += " LEFT JOIN T_BD_STOCKSTATUS STS ON PBC.FSTOCKSTATUSID = STS.FSTOCKSTATUSID";
+            _SQL += " LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON AE.FENTRYID = PICA.FSRCBIZENTRYID";
+            _SQL += string.Format(" WHERE A.FBILLNO = '{0}' AND PICA.FSRCBIZBILLNO IS NULL AND PBC.FISSUETYPE = 2", pBillNO);//用料清单的发料方式为直接倒冲。1、直接领料；2、直接倒冲；3、调拨领料；4、调拨倒冲；7、不发料。
 
             dt = new DataTable();
             dt.Columns.Add("FPRDORGID");
@@ -350,7 +350,8 @@ namespace ERPSupport.SQL.K3Cloud
                     strPMBillNO = "[" + pBillNO + "]生成失败,错误:";
                     for (int i = 0; i < ((IList)jo["Result"]["ResponseStatus"]["Errors"]).Count; i++)
                     {
-                        strMessTmep = jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>();
+                        //strMessTmep = jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>();
+                        strMessTmep = jo["Result"]["ResponseStatus"]["Errors"][i].ToString();
                         iStar = jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>().IndexOf("第");
                         iEnd = jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>().IndexOf("行字段");
 
@@ -361,19 +362,19 @@ namespace ERPSupport.SQL.K3Cloud
                                 iIndex = int.Parse(strMessTmep.Substring(iStar + 1, iEnd - iStar - 1)) - 1;
                                 strMtlNumber = dt.Rows[iIndex]["FMATERIALID"].ToString();
                             }
-                            catch { strMtlNumber = string.Empty; }
+                            catch
+                            {
+                                strMtlNumber = string.Empty;
+                            }
                         }
                         else
                             strMtlNumber = string.Empty;
 
                         strPMBillNO += strMessTmep + (strMtlNumber.Equals(string.Empty) ? "" : "[" + strMtlNumber + "]") + "\r\n";//保存不成功返错误信息
                     }
-                        //strPMBillNO += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
                 }
                 else
-                {
                     strPMBillNO = jo["Result"]["Number"].Value<string>();//保存成功返回单据编号FBILLNO
-                }
             }
             else
                 strPMBillNO = "ERP登录失败";
@@ -388,9 +389,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <returns>DataTable</returns>
         public DataTable GetInstockBillNo(DateTime pDateTime)
         {
-            _SQL = string.Format("SELECT DISTINCT A.FBILLNO ");
-            _SQL += string.Format(" FROM T_PRD_INSTOCK A ");
-            _SQL += string.Format(" LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON A.FID = PICA.FSRCBIZINTERID ");
+            _SQL = "SELECT DISTINCT A.FBILLNO FROM T_PRD_INSTOCK A LEFT JOIN T_PRD_PICKMTRLDATA_A PICA ON A.FID = PICA.FSRCBIZINTERID";
             _SQL += string.Format(" WHERE TO_CHAR(A.FDATE, 'yyyy-MM-dd') >= '{0}' AND  A.FDOCUMENTSTATUS = 'C' AND PICA.FSRCBIZBILLNO IS NULL", pDateTime.ToString("yyyy-MM-dd"));
 
             return ORAHelper.ExecuteTable(_SQL);
