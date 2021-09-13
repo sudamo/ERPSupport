@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
@@ -50,7 +51,68 @@ namespace ERPSupport.SupForm.Menu
             dgv1.Columns[1].ReadOnly = true;
             dgv1.Columns[2].ReadOnly = true;
 
-            
+            FillComboBox();
+        }
+
+        private void FillComboBox()
+        {
+            //ComboBoxType
+            DataTable dtType = new DataTable();
+            dtType.Columns.Add("FName");
+            dtType.Columns.Add("FValue");
+
+            DataRow drType = dtType.NewRow();
+            drType["FName"] = "指定物料编码";
+            drType["FValue"] = "0";
+            dtType.Rows.Add(drType);
+
+            drType = dtType.NewRow();
+            drType["FName"] = "指定修改日期";
+            drType["FValue"] = "1";
+            dtType.Rows.Add(drType);
+
+            bnTop_cbxType.ComboBox.DataSource = dtType;
+            bnTop_cbxType.ComboBox.DisplayMember = "FName";
+            bnTop_cbxType.ComboBox.ValueMember = "FValue";
+
+            //ComboBoxYear
+            DataTable dtYear = new DataTable();
+            dtYear.Columns.Add("FName");
+            dtYear.Columns.Add("FValue");
+
+            DataRow drYear;
+            int iYear = DateTime.Now.Year;
+
+            for (int i = 0; i < 5; i++)
+            {
+                drYear = dtYear.NewRow();
+                drYear["FName"] = iYear - i;
+                drYear["FValue"] = iYear - i;
+                dtYear.Rows.Add(drYear);
+            }
+
+            bnTop_cbxYear.ComboBox.DataSource = dtYear;
+            bnTop_cbxYear.ComboBox.DisplayMember = "FName";
+            bnTop_cbxYear.ComboBox.ValueMember = "FValue";
+
+            //ComboBoxMonth
+            DataTable dtMonth = new DataTable();
+            dtMonth.Columns.Add("FName");
+            dtMonth.Columns.Add("FValue");
+
+            DataRow drMonth;
+
+            for (int i = 1; i < 13; i++)
+            {
+                drMonth = dtMonth.NewRow();
+                drMonth["FName"] = i;
+                drMonth["FValue"] = i;
+                dtMonth.Rows.Add(drMonth);
+            }
+
+            bnTop_cbxMonth.ComboBox.DataSource = dtMonth;
+            bnTop_cbxMonth.ComboBox.DisplayMember = "FName";
+            bnTop_cbxMonth.ComboBox.ValueMember = "FValue";
         }
 
         /// <summary>
@@ -60,18 +122,21 @@ namespace ERPSupport.SupForm.Menu
         /// <param name="e"></param>
         private void bnTop_btnDel_Click(object sender, EventArgs e)
         {
-            if (_bClickDel)
-            {
-                bnTop_btnDel.Text = "删除行";
-                bnTop_btnDel.ForeColor = Color.Black;
-                _bClickDel = !_bClickDel;
-            }
-            else
-            {
-                bnTop_btnDel.Text = "选择需要删除的行(可多选)，然后按[Delete]键";
-                bnTop_btnDel.ForeColor = Color.Red;
-                _bClickDel = !_bClickDel;
-            }
+            //if (_bClickDel)
+            //{
+            //    bnTop_btnDel.Text = "删除行";
+            //    bnTop_btnDel.ForeColor = Color.Black;
+            //    _bClickDel = !_bClickDel;
+            //}
+            //else
+            //{
+            //    bnTop_btnDel.Text = "选择行,然后按[Del]键(可多选)";
+            //    bnTop_btnDel.ForeColor = Color.Red;
+            //    _bClickDel = !_bClickDel;
+            //}
+            dgv1.Focus();
+            dgv1.EndEdit();
+            SendKeys.Send("{DEL}");
         }
 
         /// <summary>
@@ -101,27 +166,47 @@ namespace ERPSupport.SupForm.Menu
         /// <param name="e"></param>
         private void bnTop_btnSyn_Click(object sender, EventArgs e)
         {
-            if (dgv1 == null || dgv1.Rows.Count == 0)
-                return;
-            dgv1.EndEdit();
-            _lstNumberSyn = new List<string>();
-
-            for (int i = 0; i < dgv1.Rows.Count; i++)
+            if (bnTop_cbxType.SelectedIndex == 0)
             {
-                if (dgv1.Rows[i].Cells[0].Value == null || dgv1.Rows[i].Cells[0].Value.ToString() == string.Empty || (dgv1.Rows[i].Cells[1].Value != null && dgv1.Rows[i].Cells[1].Value.ToString() != "物料待同步"))
-                    continue;
+                if (dgv1 == null || dgv1.Rows.Count == 0)
+                    return;
+                dgv1.EndEdit();
+                _lstNumberSyn = new List<string>();
 
-                dgv1.Rows[i].Cells[2].Value = DALCreator.CommFunction.MTLFNameSyn(dgv1.Rows[i].Cells[0].Value.ToString());
-                _lstNumberSyn.Add(dgv1.Rows[i].Cells[0].Value.ToString());
+                for (int i = 0; i < dgv1.Rows.Count; i++)
+                {
+                    if (dgv1.Rows[i].Cells[0].Value == null || dgv1.Rows[i].Cells[0].Value.ToString() == string.Empty || (dgv1.Rows[i].Cells[1].Value != null && dgv1.Rows[i].Cells[1].Value.ToString() != "物料待同步"))
+                        continue;
+
+                    dgv1.Rows[i].Cells[2].Value = DALCreator.CommFunction.MTLFNameSyn(dgv1.Rows[i].Cells[0].Value.ToString());
+                    _lstNumberSyn.Add(dgv1.Rows[i].Cells[0].Value.ToString());
+                }
+                string strNumbers = string.Empty;
+                for (int i = 0; i < _lstNumberSyn.Count; i++)
+                    strNumbers += _lstNumberSyn[i];
+
+                //操作日志
+                DALCreator.CommFunction.DM_Log_Local("物料名称同步", "项目->k3数据同步->物料", strNumbers);
             }
-            string strNumbers = string.Empty;
-            for (int i = 0; i < _lstNumberSyn.Count; i++)
-                strNumbers += _lstNumberSyn[i];
-            //操作日志
-            DALCreator.CommFunction.DM_Log_Local("物料名称同步", "项目->k3数据同步->基础资料->物料修改", strNumbers);
+            else
+            {
+                string strYM = bnTop_cbxYear.ComboBox.SelectedValue.ToString().Substring(2) + (bnTop_cbxMonth.ComboBox.SelectedValue.ToString().Length == 1 ? "0" + bnTop_cbxMonth.ComboBox.SelectedValue.ToString() : bnTop_cbxMonth.ComboBox.SelectedValue.ToString());
+
+                Cursor = Cursors.WaitCursor;
+                string strMessage = DALCreator.CommFunction.MTLFNameSynByYM(strYM);
+                MessageBox.Show(strMessage);
+                Cursor = Cursors.Default;
+
+                //操作日志
+                DALCreator.CommFunction.DM_Log_Local("物料名称同步", "项目->k3数据同步->物料", bnTop_cbxYear.ComboBox.SelectedValue.ToString() + "年" + bnTop_cbxMonth.ComboBox.SelectedValue.ToString() + "月");
+            }
         }
 
-
+        /// <summary>
+        /// dgv1_CellMouseClick
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void dgv1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
             if (dgv1 == null || dgv1.Rows.Count == 0)
@@ -133,11 +218,6 @@ namespace ERPSupport.SupForm.Menu
                 Point _Point = dgv1.PointToClient(Cursor.Position);
                 cmsPaste.Show(dgv1, _Point);
             }
-        }
-
-        private void dgv1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
-        {
-            e.Row.HeaderCell.Value = string.Format("{0}", e.Row.Index + 1);
         }
 
         /// <summary>
@@ -185,6 +265,59 @@ namespace ERPSupport.SupForm.Menu
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// bnTop_cbxType_SelectedIndexChanged
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bnTop_cbxType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (bnTop_cbxType.ComboBox.SelectedValue != null && bnTop_cbxType.ComboBox.SelectedValue.ToString() == "1")
+            {
+                bnTop_cbxYear.Visible = true;
+                bnTop_cbxMonth.Visible = true;
+                bnTop_lblYear.Visible = true;
+                bnTop_lblMonth.Visible = true;
+                bnTop_cbxMonth.ComboBox.SelectedValue = DateTime.Now.Month;
+
+                bnTop_btnDel.Visible = false;
+                bnTop_btnCheck.Visible = false;
+                dgv1.Visible = false;
+                MinimumSize = new Size(500, 100);
+                MaximumSize = new Size(500, 100);
+                Size = new Size(500, 100);
+            }
+            else
+            {
+                bnTop_cbxYear.Visible = false;
+                bnTop_cbxMonth.Visible = false;
+                bnTop_lblYear.Visible = false;
+                bnTop_lblMonth.Visible = false;
+
+                bnTop_btnDel.Visible = true;
+                bnTop_btnCheck.Visible = true;
+                dgv1.Visible = true;
+                MinimumSize = new Size(500, 600);
+                MaximumSize = new Size(0, 0);
+                Size = new Size(500, 600);
+            }
+        }
+
+        /// <summary>
+        /// dgv1_RowStateChanged
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void dgv1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
+        {
+            e.Row.HeaderCell.Value = string.Format("{0}", e.Row.Index + 1);
+        }
+
+        private void dgv1_UserDeletedRow(object sender, DataGridViewRowEventArgs e)
+        {
+            //e.Row.HeaderCell.Value = string.Format("{0}", e.Row.Index + 1);
         }
     }
 }

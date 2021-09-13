@@ -2940,15 +2940,21 @@ namespace ERPSupport.SupForm
             frm.ShowDialog();
         }
 
-        /// <summary>
-        /// 同步K3关联单据数据
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void tsmiPro_K3Data_Click(object sender, EventArgs e)
+        private void tsmiPro_K3Data_Bill_Click(object sender, EventArgs e)
         {
             frmPro_K3SynData frm = new frmPro_K3SynData();
             frm.Show(this);
+        }
+
+        private void tsmiPro_K3Data_Mtl_Click(object sender, EventArgs e)
+        {
+            frmPro_K3Data_Bas_Mtl frm = new frmPro_K3Data_Bas_Mtl();
+            frm.Show(this);
+        }
+
+        private void tsmiPro_K3Data_Brand_Click(object sender, EventArgs e)
+        {
+
         }
 
         /// <summary>

@@ -1746,6 +1746,11 @@ namespace ERPSupport.SQL.K3Cloud
             }
         }
 
+        /// <summary>
+        /// 根据物料编码同步物料名称
+        /// </summary>
+        /// <param name="pFNumber">物料编码</param>
+        /// <returns></returns>
         public string MTLFNameSyn(string pFNumber)
         {
             OracleParameter[] parms = new OracleParameter[]
@@ -1761,6 +1766,32 @@ namespace ERPSupport.SQL.K3Cloud
             {
                 ORAHelper.ExecuteNonQuery("DM_SYNMTL", CommandType.StoredProcedure, parms);
                 return parms[1].Value.ToString();
+
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+
+        /// <summary>
+        /// 根据修改日期同步物料名称
+        /// </summary>
+        /// <param name="pYM">年月</param>
+        /// <returns></returns>
+        public string MTLFNameSynByYM(string pYM)
+        {
+            OracleParameter[] parms = new OracleParameter[]
+            {
+                new OracleParameter("YM",OracleDbType.NVarchar2,80)
+            };
+            parms[0].Value = pYM;
+            parms[0].Direction = ParameterDirection.Input;;
+
+            try
+            {
+                ORAHelper.ExecuteNonQuery("DM_SYNMTL_YM", CommandType.StoredProcedure, parms);
+                return "操作成功";
 
             }
             catch (Exception ex)
@@ -1985,7 +2016,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pType">类型：0、Non；1、Scalar；2、Reader；3、DataTable；4、DataSet</param>
         /// <param name="pStrSQL">SQL语句</param>
         /// <returns></returns>
-        private object SqlOperation(int pType, string pStrSQL)
+        public object SqlOperation(int pType, string pStrSQL)
         {
             object obj;
             OracleDataAdapter adp;

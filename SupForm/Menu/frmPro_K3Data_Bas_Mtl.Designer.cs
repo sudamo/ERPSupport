@@ -31,19 +31,25 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPro_K3Data_Bas_Mtl));
             this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
+            this.bnTop_cbxType = new System.Windows.Forms.ToolStripComboBox();
+            this.bnTop_cbxYear = new System.Windows.Forms.ToolStripComboBox();
+            this.bnTop_lblYear = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_cbxMonth = new System.Windows.Forms.ToolStripComboBox();
+            this.bnTop_lblMonth = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_btnDel = new System.Windows.Forms.ToolStripButton();
             this.bnTop_btnSyn = new System.Windows.Forms.ToolStripButton();
             this.bnTop_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.bnTop_btnCheck = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnDel = new System.Windows.Forms.ToolStripButton();
             this.dgv1 = new System.Windows.Forms.DataGridView();
-            this.FNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cmsPaste = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.cmsPaste_Area = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.t1 = new System.Windows.Forms.ToolTip(this.components);
+            this.FNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
             this.bnTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
@@ -58,10 +64,15 @@
             this.bnTop.DeleteItem = null;
             this.bnTop.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.bnTop.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bnTop_cbxType,
+            this.bnTop_cbxYear,
+            this.bnTop_lblYear,
+            this.bnTop_cbxMonth,
+            this.bnTop_lblMonth,
+            this.bnTop_btnDel,
             this.bnTop_btnSyn,
             this.bnTop_tss1,
-            this.bnTop_btnCheck,
-            this.bnTop_btnDel});
+            this.bnTop_btnCheck});
             this.bnTop.Location = new System.Drawing.Point(0, 0);
             this.bnTop.MoveFirstItem = null;
             this.bnTop.MoveLastItem = null;
@@ -72,6 +83,51 @@
             this.bnTop.Size = new System.Drawing.Size(484, 27);
             this.bnTop.TabIndex = 1;
             this.bnTop.Text = "bindingNavigator1";
+            // 
+            // bnTop_cbxType
+            // 
+            this.bnTop_cbxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.bnTop_cbxType.Name = "bnTop_cbxType";
+            this.bnTop_cbxType.Size = new System.Drawing.Size(100, 27);
+            this.bnTop_cbxType.SelectedIndexChanged += new System.EventHandler(this.bnTop_cbxType_SelectedIndexChanged);
+            // 
+            // bnTop_cbxYear
+            // 
+            this.bnTop_cbxYear.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.bnTop_cbxYear.Name = "bnTop_cbxYear";
+            this.bnTop_cbxYear.Size = new System.Drawing.Size(75, 27);
+            this.bnTop_cbxYear.Visible = false;
+            // 
+            // bnTop_lblYear
+            // 
+            this.bnTop_lblYear.Name = "bnTop_lblYear";
+            this.bnTop_lblYear.Size = new System.Drawing.Size(20, 24);
+            this.bnTop_lblYear.Text = "年";
+            this.bnTop_lblYear.Visible = false;
+            // 
+            // bnTop_cbxMonth
+            // 
+            this.bnTop_cbxMonth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.bnTop_cbxMonth.Name = "bnTop_cbxMonth";
+            this.bnTop_cbxMonth.Size = new System.Drawing.Size(75, 27);
+            this.bnTop_cbxMonth.Visible = false;
+            // 
+            // bnTop_lblMonth
+            // 
+            this.bnTop_lblMonth.Name = "bnTop_lblMonth";
+            this.bnTop_lblMonth.Size = new System.Drawing.Size(20, 24);
+            this.bnTop_lblMonth.Text = "月";
+            this.bnTop_lblMonth.Visible = false;
+            // 
+            // bnTop_btnDel
+            // 
+            this.bnTop_btnDel.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
+            this.bnTop_btnDel.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnDel.Name = "bnTop_btnDel";
+            this.bnTop_btnDel.Size = new System.Drawing.Size(68, 24);
+            this.bnTop_btnDel.Text = "行删除";
+            this.bnTop_btnDel.ToolTipText = "选择数据行(可多行)删除";
+            this.bnTop_btnDel.Click += new System.EventHandler(this.bnTop_btnDel_Click);
             // 
             // bnTop_btnSyn
             // 
@@ -101,15 +157,6 @@
             this.bnTop_btnCheck.Text = "检查";
             this.bnTop_btnCheck.Click += new System.EventHandler(this.bnTop_btnCheck_Click);
             // 
-            // bnTop_btnDel
-            // 
-            this.bnTop_btnDel.Image = global::ERPSupport.SupForm.Properties.Resources.delete;
-            this.bnTop_btnDel.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnDel.Name = "bnTop_btnDel";
-            this.bnTop_btnDel.Size = new System.Drawing.Size(68, 24);
-            this.bnTop_btnDel.Text = "行删除";
-            this.bnTop_btnDel.Click += new System.EventHandler(this.bnTop_btnDel_Click);
-            // 
             // dgv1
             // 
             this.dgv1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -126,32 +173,7 @@
             this.dgv1.TabIndex = 2;
             this.dgv1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv1_CellMouseClick);
             this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
-            // 
-            // FNumber
-            // 
-            this.FNumber.FillWeight = 50F;
-            this.FNumber.Frozen = true;
-            this.FNumber.HeaderText = "物料编码";
-            this.FNumber.Name = "FNumber";
-            this.FNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.FNumber.ToolTipText = "输入需要同步的物料编码";
-            this.FNumber.Width = 110;
-            // 
-            // FCheck
-            // 
-            this.FCheck.HeaderText = "检查结果";
-            this.FCheck.Name = "FCheck";
-            this.FCheck.ToolTipText = "检查结果";
-            this.FCheck.Width = 130;
-            // 
-            // FResult
-            // 
-            this.FResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.FResult.FillWeight = 50F;
-            this.FResult.HeaderText = "同步结果";
-            this.FResult.Name = "FResult";
-            this.FResult.ToolTipText = "同步执行结果";
-            this.FResult.Width = 200;
+            this.dgv1.UserDeletedRow += new System.Windows.Forms.DataGridViewRowEventHandler(this.dgv1_UserDeletedRow);
             // 
             // cmsPaste
             // 
@@ -193,6 +215,30 @@
             this.dataGridViewTextBoxColumn3.ToolTipText = "同步执行结果";
             this.dataGridViewTextBoxColumn3.Width = 200;
             // 
+            // FNumber
+            // 
+            this.FNumber.Frozen = true;
+            this.FNumber.HeaderText = "物料编码";
+            this.FNumber.Name = "FNumber";
+            this.FNumber.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.FNumber.ToolTipText = "输入需要同步的物料编码";
+            this.FNumber.Width = 130;
+            // 
+            // FCheck
+            // 
+            this.FCheck.HeaderText = "检查结果";
+            this.FCheck.Name = "FCheck";
+            this.FCheck.ToolTipText = "检查结果";
+            // 
+            // FResult
+            // 
+            this.FResult.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.FResult.FillWeight = 50F;
+            this.FResult.HeaderText = "同步结果";
+            this.FResult.Name = "FResult";
+            this.FResult.ToolTipText = "同步执行结果";
+            this.FResult.Width = 185;
+            // 
             // frmPro_K3Data_Bas_Mtl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -204,7 +250,7 @@
             this.MinimumSize = new System.Drawing.Size(500, 600);
             this.Name = "frmPro_K3Data_Bas_Mtl";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "物料修改";
+            this.Text = "同步物料名称";
             this.Load += new System.EventHandler(this.frmPro_K3Data_Bas_Mtl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).EndInit();
             this.bnTop.ResumeLayout(false);
@@ -229,6 +275,12 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
+        private System.Windows.Forms.ToolStripComboBox bnTop_cbxType;
+        private System.Windows.Forms.ToolStripComboBox bnTop_cbxYear;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblYear;
+        private System.Windows.Forms.ToolStripComboBox bnTop_cbxMonth;
+        private System.Windows.Forms.ToolStripLabel bnTop_lblMonth;
+        private System.Windows.Forms.ToolTip t1;
         private System.Windows.Forms.DataGridViewTextBoxColumn FNumber;
         private System.Windows.Forms.DataGridViewTextBoxColumn FCheck;
         private System.Windows.Forms.DataGridViewTextBoxColumn FResult;

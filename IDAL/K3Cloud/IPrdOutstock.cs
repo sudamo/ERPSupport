@@ -9,6 +9,6 @@ namespace ERPSupport.IDAL.K3Cloud
 
         void UpdateData(string pBillNo, int pUseOrgId);
 
-        void SynPrice(int pOrgId, int pYear, int pMonth);
+        void SynPrice(string pYearMonth);
     }
 }

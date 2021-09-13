@@ -38,80 +38,65 @@ namespace ERPSupport.SupForm.Menu
         /// <param name="e"></param>
         private void frmPro_K3SynData_Load(object sender, EventArgs e)
         {
-            FormSetting();
-        }
-
-        private void FormSetting()
-        {
-            _Year = DateTime.Now.Year;
-            _Month = DateTime.Now.Month;
-
-            FillTextBox();
             FillComboBox();
-        }
-
-
-        private void FillTextBox()
-        {
-            txtYear.Text = _Year.ToString();
         }
 
         private void FillComboBox()
         {
-            DataTable dt;
-            DataRow dr;
+            //ComboBoxYear
+            DataTable dtYear = new DataTable();
+            dtYear.Columns.Add("FName");
+            dtYear.Columns.Add("FValue");
 
-            dt = new DataTable();
-            dt.Columns.Add("FName");
-            dt.Columns.Add("FValue");
+            DataRow drYear;
+            int iYear = DateTime.Now.Year;
 
-            for (int i = 0; i < 12; i++)
+            for (int i = 0; i < 3; i++)
             {
-                dr = dt.NewRow();
-                dr["FName"] = (i + 1).ToString();
-                dr["FValue"] = i + 1;
-                dt.Rows.Add(dr);
+                drYear = dtYear.NewRow();
+                drYear["FName"] = iYear - i;
+                drYear["FValue"] = iYear - i;
+                dtYear.Rows.Add(drYear);
             }
 
-            cbxMonth.DataSource = dt;
+            cbxYear.DataSource = dtYear;
+            cbxYear.DisplayMember = "FName";
+            cbxYear.ValueMember = "FValue";
+
+            //ComboBoxMonth
+            DataTable dtMonth = new DataTable();
+            dtMonth.Columns.Add("FName");
+            dtMonth.Columns.Add("FValue");
+
+            DataRow drMonth;
+
+            for (int i = 1; i < 13; i++)
+            {
+                drMonth = dtMonth.NewRow();
+                drMonth["FName"] = i;
+                drMonth["FValue"] = i;
+                dtMonth.Rows.Add(drMonth);
+            }
+
+            cbxMonth.DataSource = dtMonth;
             cbxMonth.DisplayMember = "FName";
             cbxMonth.ValueMember = "FValue";
-            cbxMonth.SelectedIndex = _Month - 1;
+            cbxMonth.SelectedValue = DateTime.Now.Month - 1;
+        }
 
-            cbxOrg.DataSource = DALFactory.K3Cloud.DALCreator.CommFunction.GetOrganization();
-            cbxOrg.DisplayMember = "FName";
-            cbxOrg.ValueMember = "FValue";
-            cbxOrg.SelectedValue = 100505;
+        private void btnSyn_Click(object sender, EventArgs e)
+        {
+            string strYM = cbxYear.SelectedValue.ToString().Substring(2) + (cbxMonth.SelectedValue.ToString().Length == 1 ? "0" + cbxMonth.SelectedValue.ToString() : cbxMonth.SelectedValue.ToString());
+            Cursor = Cursors.WaitCursor;
+            //DALFactory.K3Cloud.DALCreator.PrdOutstock.SynPrice(strYM);
+            MessageBox.Show("开发中...");
+            //lblTips.Text = "已执行！";
+            Cursor = Cursors.Default;
         }
 
         private void bnBottom_btnCancel_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void btnSyn_Click(object sender, EventArgs e)
-        {
-            DALFactory.K3Cloud.DALCreator.PrdOutstock.SynPrice(int.Parse(cbxOrg.SelectedValue.ToString()), int.Parse(txtYear.Text), int.Parse(cbxMonth.SelectedValue.ToString()));
-            lblTips.Text = "已执行！";
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void TextBox_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (e.KeyChar == '\b')
-                return;//退格键
-
-            _reg = new Regex(@"^[1-9]\d*|0$");
-
-            if (!_reg.IsMatch(e.KeyChar.ToString()))
-            {
-                e.Handled = true;
-                return;
-            }
         }
     }
 }

@@ -36,7 +36,10 @@
             this.bnBottom = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnB_cbxPageSize = new System.Windows.Forms.ToolStripComboBox();
             this.bnB_lblPageSize = new System.Windows.Forms.ToolStripLabel();
+            this.bnB_btnFirst = new System.Windows.Forms.ToolStripButton();
+            this.bnB_btnPrevious = new System.Windows.Forms.ToolStripButton();
             this.bnB_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnB_btnGoto = new System.Windows.Forms.ToolStripButton();
             this.bnB_lblThe = new System.Windows.Forms.ToolStripLabel();
             this.bnB_txtCurrentPage = new System.Windows.Forms.ToolStripTextBox();
             this.bnB_lblSeparate = new System.Windows.Forms.ToolStripLabel();
@@ -44,11 +47,19 @@
             this.bnB_tss2 = new System.Windows.Forms.ToolStripSeparator();
             this.bnB_lblRecordCount = new System.Windows.Forms.ToolStripLabel();
             this.bnB_tss3 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnB_btnNext = new System.Windows.Forms.ToolStripButton();
+            this.bnB_btnLast = new System.Windows.Forms.ToolStripButton();
             this.bnB_tss4 = new System.Windows.Forms.ToolStripSeparator();
             this.bnTop = new System.Windows.Forms.BindingNavigator(this.components);
             this.bnTop_lblDate = new System.Windows.Forms.ToolStripLabel();
             this.bnTop_lblTo = new System.Windows.Forms.ToolStripLabel();
+            this.bnTop_btnFilter = new System.Windows.Forms.ToolStripButton();
             this.bnTop_tss1 = new System.Windows.Forms.ToolStripSeparator();
+            this.bnTop_btnCheck = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnSearch = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnShowAll = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnCommit = new System.Windows.Forms.ToolStripButton();
+            this.bnTop_btnUnLock = new System.Windows.Forms.ToolStripButton();
             this.dgv1 = new System.Windows.Forms.DataGridView();
             this.msMain = new System.Windows.Forms.MenuStrip();
             this.tsmiFile = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,6 +83,15 @@
             this.tsmiTool_Timer = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro_Business = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_Report = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_DLOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_SynOrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_DLROrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_SynROrder = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_ImportDelivery = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_CancleAudit = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_CancleDealt = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_Business_LockSynOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro_tss0 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiPro_INOrder = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro_tss1 = new System.Windows.Forms.ToolStripSeparator();
@@ -87,27 +107,10 @@
             this.tsmiHelp_About = new System.Windows.Forms.ToolStripMenuItem();
             this.tSumSecond = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
-            this.bnB_btnFirst = new System.Windows.Forms.ToolStripButton();
-            this.bnB_btnPrevious = new System.Windows.Forms.ToolStripButton();
-            this.bnB_btnGoto = new System.Windows.Forms.ToolStripButton();
-            this.bnB_btnNext = new System.Windows.Forms.ToolStripButton();
-            this.bnB_btnLast = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnFilter = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnCheck = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnSearch = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnShowAll = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnCommit = new System.Windows.Forms.ToolStripButton();
-            this.bnTop_btnUnLock = new System.Windows.Forms.ToolStripButton();
             this.bs1 = new System.Windows.Forms.BindingSource(this.components);
-            this.tsmiPro_Business_DLOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_SynOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_DLROrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_SynROrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_ImportDelivery = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_CancleAudit = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_CancleDealt = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_LockSynOrder = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_Business_Report = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3Data_Mtl = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3Data_Brand = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3Data_Bill = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.sc1)).BeginInit();
             this.sc1.Panel2.SuspendLayout();
             this.sc1.SuspendLayout();
@@ -207,10 +210,39 @@
             this.bnB_lblPageSize.Text = "每页显示";
             this.bnB_lblPageSize.ToolTipText = "每页显示行数";
             // 
+            // bnB_btnFirst
+            // 
+            this.bnB_btnFirst.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnFirst.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_first;
+            this.bnB_btnFirst.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnFirst.Name = "bnB_btnFirst";
+            this.bnB_btnFirst.Size = new System.Drawing.Size(24, 24);
+            this.bnB_btnFirst.Tag = "1";
+            // 
+            // bnB_btnPrevious
+            // 
+            this.bnB_btnPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnPrevious.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_previous;
+            this.bnB_btnPrevious.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnPrevious.Name = "bnB_btnPrevious";
+            this.bnB_btnPrevious.Size = new System.Drawing.Size(24, 24);
+            this.bnB_btnPrevious.Tag = "2";
+            // 
             // bnB_tss1
             // 
             this.bnB_tss1.Name = "bnB_tss1";
             this.bnB_tss1.Size = new System.Drawing.Size(6, 27);
+            // 
+            // bnB_btnGoto
+            // 
+            this.bnB_btnGoto.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnGoto.Image = global::ERPSupport.SupForm.Properties.Resources.control_repeat_blue;
+            this.bnB_btnGoto.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnGoto.Name = "bnB_btnGoto";
+            this.bnB_btnGoto.Size = new System.Drawing.Size(24, 24);
+            this.bnB_btnGoto.Tag = "3";
+            this.bnB_btnGoto.Text = "跳到";
+            this.bnB_btnGoto.ToolTipText = "跳到指定页";
             // 
             // bnB_lblThe
             // 
@@ -250,6 +282,24 @@
             // 
             this.bnB_tss3.Name = "bnB_tss3";
             this.bnB_tss3.Size = new System.Drawing.Size(6, 27);
+            // 
+            // bnB_btnNext
+            // 
+            this.bnB_btnNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnNext.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_next;
+            this.bnB_btnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnNext.Name = "bnB_btnNext";
+            this.bnB_btnNext.Size = new System.Drawing.Size(24, 24);
+            this.bnB_btnNext.Tag = "4";
+            // 
+            // bnB_btnLast
+            // 
+            this.bnB_btnLast.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.bnB_btnLast.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_last;
+            this.bnB_btnLast.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnB_btnLast.Name = "bnB_btnLast";
+            this.bnB_btnLast.Size = new System.Drawing.Size(24, 24);
+            this.bnB_btnLast.Tag = "5";
             // 
             // bnB_tss4
             // 
@@ -296,10 +346,69 @@
             this.bnTop_lblTo.Size = new System.Drawing.Size(13, 24);
             this.bnTop_lblTo.Text = "-";
             // 
+            // bnTop_btnFilter
+            // 
+            this.bnTop_btnFilter.Image = global::ERPSupport.SupForm.Properties.Resources.add;
+            this.bnTop_btnFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnFilter.Name = "bnTop_btnFilter";
+            this.bnTop_btnFilter.Size = new System.Drawing.Size(56, 24);
+            this.bnTop_btnFilter.Tag = "1";
+            this.bnTop_btnFilter.Text = "筛选";
+            this.bnTop_btnFilter.ToolTipText = "设置过滤条件";
+            // 
             // bnTop_tss1
             // 
             this.bnTop_tss1.Name = "bnTop_tss1";
             this.bnTop_tss1.Size = new System.Drawing.Size(6, 27);
+            // 
+            // bnTop_btnCheck
+            // 
+            this.bnTop_btnCheck.Image = global::ERPSupport.SupForm.Properties.Resources.zootool;
+            this.bnTop_btnCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnCheck.Name = "bnTop_btnCheck";
+            this.bnTop_btnCheck.Size = new System.Drawing.Size(56, 24);
+            this.bnTop_btnCheck.Tag = "2";
+            this.bnTop_btnCheck.Text = "检查";
+            this.bnTop_btnCheck.ToolTipText = "检查物料是否已经设置默认调出仓库";
+            // 
+            // bnTop_btnSearch
+            // 
+            this.bnTop_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
+            this.bnTop_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnSearch.Name = "bnTop_btnSearch";
+            this.bnTop_btnSearch.Size = new System.Drawing.Size(56, 24);
+            this.bnTop_btnSearch.Tag = "3";
+            this.bnTop_btnSearch.Text = "查询";
+            this.bnTop_btnSearch.ToolTipText = "查询数据";
+            // 
+            // bnTop_btnShowAll
+            // 
+            this.bnTop_btnShowAll.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
+            this.bnTop_btnShowAll.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnShowAll.Name = "bnTop_btnShowAll";
+            this.bnTop_btnShowAll.Size = new System.Drawing.Size(56, 24);
+            this.bnTop_btnShowAll.Tag = "4";
+            this.bnTop_btnShowAll.Text = "重置";
+            this.bnTop_btnShowAll.ToolTipText = "清空列筛选";
+            // 
+            // bnTop_btnCommit
+            // 
+            this.bnTop_btnCommit.Image = global::ERPSupport.SupForm.Properties.Resources.accept;
+            this.bnTop_btnCommit.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnCommit.Name = "bnTop_btnCommit";
+            this.bnTop_btnCommit.Size = new System.Drawing.Size(56, 24);
+            this.bnTop_btnCommit.Tag = "5";
+            this.bnTop_btnCommit.Text = "提交";
+            // 
+            // bnTop_btnUnLock
+            // 
+            this.bnTop_btnUnLock.Image = global::ERPSupport.SupForm.Properties.Resources.key;
+            this.bnTop_btnUnLock.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.bnTop_btnUnLock.Name = "bnTop_btnUnLock";
+            this.bnTop_btnUnLock.Size = new System.Drawing.Size(56, 24);
+            this.bnTop_btnUnLock.Tag = "6";
+            this.bnTop_btnUnLock.Text = "解锁";
+            this.bnTop_btnUnLock.ToolTipText = "库存解锁";
             // 
             // dgv1
             // 
@@ -399,21 +508,21 @@
             // tsmiTool_Config
             // 
             this.tsmiTool_Config.Name = "tsmiTool_Config";
-            this.tsmiTool_Config.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Config.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Config.Text = "系统配置(&C)";
             this.tsmiTool_Config.Click += new System.EventHandler(this.tsmiTool_Config_Click);
             // 
             // tsmiTool_Parameter
             // 
             this.tsmiTool_Parameter.Name = "tsmiTool_Parameter";
-            this.tsmiTool_Parameter.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Parameter.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Parameter.Text = "参数(&P)";
             this.tsmiTool_Parameter.Click += new System.EventHandler(this.tsmiTool_Parameter_Click);
             // 
             // tsmiTool_tss1
             // 
             this.tsmiTool_tss1.Name = "tsmiTool_tss1";
-            this.tsmiTool_tss1.Size = new System.Drawing.Size(149, 6);
+            this.tsmiTool_tss1.Size = new System.Drawing.Size(148, 6);
             // 
             // tsmiTool_Occupy
             // 
@@ -425,58 +534,58 @@
             this.tssTool_Occupy_1,
             this.tsmiTool_Occupy_LockPickMtl});
             this.tsmiTool_Occupy.Name = "tsmiTool_Occupy";
-            this.tsmiTool_Occupy.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Occupy.Text = "占用解除(&O)";
             // 
             // tsmiTool_Occupy_PickMtl
             // 
             this.tsmiTool_Occupy_PickMtl.Name = "tsmiTool_Occupy_PickMtl";
-            this.tsmiTool_Occupy_PickMtl.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_PickMtl.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_PickMtl.Text = "倒冲领料";
             this.tsmiTool_Occupy_PickMtl.Click += new System.EventHandler(this.smiTool_Occupy_PickMtl_Click);
             // 
             // tsmiTool_Occupy_Trans
             // 
             this.tsmiTool_Occupy_Trans.Name = "tsmiTool_Occupy_Trans";
-            this.tsmiTool_Occupy_Trans.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_Trans.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_Trans.Text = "调拨";
             this.tsmiTool_Occupy_Trans.Click += new System.EventHandler(this.smiTool_Occupy_Trans_Click);
             // 
             // tsmiTool_Occupy_LockStock
             // 
             this.tsmiTool_Occupy_LockStock.Name = "tsmiTool_Occupy_LockStock";
-            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_LockStock.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_LockStock.Text = "锁库";
             this.tsmiTool_Occupy_LockStock.Click += new System.EventHandler(this.tsmiTool_Occupy_LockStock_Click);
             // 
             // tsmiTool_Occupy_OrderRun
             // 
             this.tsmiTool_Occupy_OrderRun.Name = "tsmiTool_Occupy_OrderRun";
-            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_OrderRun.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_OrderRun.Text = "订单运算";
             this.tsmiTool_Occupy_OrderRun.Click += new System.EventHandler(this.tsmiTool_Occupy_OrderRun_Click);
             // 
             // tssTool_Occupy_1
             // 
             this.tssTool_Occupy_1.Name = "tssTool_Occupy_1";
-            this.tssTool_Occupy_1.Size = new System.Drawing.Size(149, 6);
+            this.tssTool_Occupy_1.Size = new System.Drawing.Size(127, 6);
             // 
             // tsmiTool_Occupy_LockPickMtl
             // 
             this.tsmiTool_Occupy_LockPickMtl.Name = "tsmiTool_Occupy_LockPickMtl";
-            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Occupy_LockPickMtl.Size = new System.Drawing.Size(130, 22);
             this.tsmiTool_Occupy_LockPickMtl.Text = "自动领料";
             this.tsmiTool_Occupy_LockPickMtl.Click += new System.EventHandler(this.tsmiTool_Occupy_LockPickMtl_Click);
             // 
             // tsmiTool_tss2
             // 
             this.tsmiTool_tss2.Name = "tsmiTool_tss2";
-            this.tsmiTool_tss2.Size = new System.Drawing.Size(149, 6);
+            this.tsmiTool_tss2.Size = new System.Drawing.Size(148, 6);
             // 
             // tsmiTool_Timer
             // 
             this.tsmiTool_Timer.Name = "tsmiTool_Timer";
-            this.tsmiTool_Timer.Size = new System.Drawing.Size(152, 22);
+            this.tsmiTool_Timer.Size = new System.Drawing.Size(151, 22);
             this.tsmiTool_Timer.Text = "定时器(&T)";
             this.tsmiTool_Timer.Click += new System.EventHandler(this.tsmiTool_Timer_Click);
             // 
@@ -511,6 +620,61 @@
             this.tsmiPro_Business.Size = new System.Drawing.Size(179, 22);
             this.tsmiPro_Business.Text = "电商(&B)";
             // 
+            // tsmiPro_Business_Report
+            // 
+            this.tsmiPro_Business_Report.Name = "tsmiPro_Business_Report";
+            this.tsmiPro_Business_Report.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_Report.Text = "报表管理";
+            this.tsmiPro_Business_Report.Click += new System.EventHandler(this.tsmiPro_Business_Report_Click);
+            // 
+            // tsmiPro_Business_DLOrder
+            // 
+            this.tsmiPro_Business_DLOrder.Name = "tsmiPro_Business_DLOrder";
+            this.tsmiPro_Business_DLOrder.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_DLOrder.Text = "下载又一城订单";
+            // 
+            // tsmiPro_Business_SynOrder
+            // 
+            this.tsmiPro_Business_SynOrder.Name = "tsmiPro_Business_SynOrder";
+            this.tsmiPro_Business_SynOrder.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_SynOrder.Text = "同步订单信息";
+            // 
+            // tsmiPro_Business_DLROrder
+            // 
+            this.tsmiPro_Business_DLROrder.Name = "tsmiPro_Business_DLROrder";
+            this.tsmiPro_Business_DLROrder.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_DLROrder.Text = "下载又一城退货单";
+            // 
+            // tsmiPro_Business_SynROrder
+            // 
+            this.tsmiPro_Business_SynROrder.Name = "tsmiPro_Business_SynROrder";
+            this.tsmiPro_Business_SynROrder.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_SynROrder.Text = "同步退货单信息";
+            // 
+            // tsmiPro_Business_ImportDelivery
+            // 
+            this.tsmiPro_Business_ImportDelivery.Name = "tsmiPro_Business_ImportDelivery";
+            this.tsmiPro_Business_ImportDelivery.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_ImportDelivery.Text = "导入发货信息";
+            // 
+            // tsmiPro_Business_CancleAudit
+            // 
+            this.tsmiPro_Business_CancleAudit.Name = "tsmiPro_Business_CancleAudit";
+            this.tsmiPro_Business_CancleAudit.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_CancleAudit.Text = "待审的取消申请";
+            // 
+            // tsmiPro_Business_CancleDealt
+            // 
+            this.tsmiPro_Business_CancleDealt.Name = "tsmiPro_Business_CancleDealt";
+            this.tsmiPro_Business_CancleDealt.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_CancleDealt.Text = "已处理的取消申请";
+            // 
+            // tsmiPro_Business_LockSynOrder
+            // 
+            this.tsmiPro_Business_LockSynOrder.Name = "tsmiPro_Business_LockSynOrder";
+            this.tsmiPro_Business_LockSynOrder.Size = new System.Drawing.Size(186, 22);
+            this.tsmiPro_Business_LockSynOrder.Text = "锁住同步订单信息";
+            // 
             // tsmiPro_tss0
             // 
             this.tsmiPro_tss0.Name = "tsmiPro_tss0";
@@ -542,10 +706,13 @@
             // 
             // tsmiPro_K3Data
             // 
+            this.tsmiPro_K3Data.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiPro_K3Data_Bill,
+            this.tsmiPro_K3Data_Mtl,
+            this.tsmiPro_K3Data_Brand});
             this.tsmiPro_K3Data.Name = "tsmiPro_K3Data";
             this.tsmiPro_K3Data.Size = new System.Drawing.Size(179, 22);
             this.tsmiPro_K3Data.Text = "K3数据同步(&K)";
-            this.tsmiPro_K3Data.Click += new System.EventHandler(this.tsmiPro_K3Data_Click);
             // 
             // tsmiPro_WMSData
             // 
@@ -604,166 +771,26 @@
             // 
             this.tSumSecond.Interval = 1000;
             // 
-            // bnB_btnFirst
+            // tsmiPro_K3Data_Mtl
             // 
-            this.bnB_btnFirst.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.bnB_btnFirst.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_first;
-            this.bnB_btnFirst.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnB_btnFirst.Name = "bnB_btnFirst";
-            this.bnB_btnFirst.Size = new System.Drawing.Size(24, 24);
-            this.bnB_btnFirst.Tag = "1";
+            this.tsmiPro_K3Data_Mtl.Name = "tsmiPro_K3Data_Mtl";
+            this.tsmiPro_K3Data_Mtl.Size = new System.Drawing.Size(152, 22);
+            this.tsmiPro_K3Data_Mtl.Text = "物料";
+            this.tsmiPro_K3Data_Mtl.Click += new System.EventHandler(this.tsmiPro_K3Data_Mtl_Click);
             // 
-            // bnB_btnPrevious
+            // tsmiPro_K3Data_Brand
             // 
-            this.bnB_btnPrevious.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.bnB_btnPrevious.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_previous;
-            this.bnB_btnPrevious.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnB_btnPrevious.Name = "bnB_btnPrevious";
-            this.bnB_btnPrevious.Size = new System.Drawing.Size(24, 24);
-            this.bnB_btnPrevious.Tag = "2";
+            this.tsmiPro_K3Data_Brand.Name = "tsmiPro_K3Data_Brand";
+            this.tsmiPro_K3Data_Brand.Size = new System.Drawing.Size(152, 22);
+            this.tsmiPro_K3Data_Brand.Text = "销售品牌";
+            this.tsmiPro_K3Data_Brand.Click += new System.EventHandler(this.tsmiPro_K3Data_Brand_Click);
             // 
-            // bnB_btnGoto
+            // tsmiPro_K3Data_Bill
             // 
-            this.bnB_btnGoto.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.bnB_btnGoto.Image = global::ERPSupport.SupForm.Properties.Resources.control_repeat_blue;
-            this.bnB_btnGoto.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnB_btnGoto.Name = "bnB_btnGoto";
-            this.bnB_btnGoto.Size = new System.Drawing.Size(24, 24);
-            this.bnB_btnGoto.Tag = "3";
-            this.bnB_btnGoto.Text = "跳到";
-            this.bnB_btnGoto.ToolTipText = "跳到指定页";
-            // 
-            // bnB_btnNext
-            // 
-            this.bnB_btnNext.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.bnB_btnNext.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_next;
-            this.bnB_btnNext.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnB_btnNext.Name = "bnB_btnNext";
-            this.bnB_btnNext.Size = new System.Drawing.Size(24, 24);
-            this.bnB_btnNext.Tag = "4";
-            // 
-            // bnB_btnLast
-            // 
-            this.bnB_btnLast.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.bnB_btnLast.Image = global::ERPSupport.SupForm.Properties.Resources.resultset_last;
-            this.bnB_btnLast.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnB_btnLast.Name = "bnB_btnLast";
-            this.bnB_btnLast.Size = new System.Drawing.Size(24, 24);
-            this.bnB_btnLast.Tag = "5";
-            // 
-            // bnTop_btnFilter
-            // 
-            this.bnTop_btnFilter.Image = global::ERPSupport.SupForm.Properties.Resources.add;
-            this.bnTop_btnFilter.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnFilter.Name = "bnTop_btnFilter";
-            this.bnTop_btnFilter.Size = new System.Drawing.Size(56, 24);
-            this.bnTop_btnFilter.Tag = "1";
-            this.bnTop_btnFilter.Text = "筛选";
-            this.bnTop_btnFilter.ToolTipText = "设置过滤条件";
-            // 
-            // bnTop_btnCheck
-            // 
-            this.bnTop_btnCheck.Image = global::ERPSupport.SupForm.Properties.Resources.zootool;
-            this.bnTop_btnCheck.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnCheck.Name = "bnTop_btnCheck";
-            this.bnTop_btnCheck.Size = new System.Drawing.Size(56, 24);
-            this.bnTop_btnCheck.Tag = "2";
-            this.bnTop_btnCheck.Text = "检查";
-            this.bnTop_btnCheck.ToolTipText = "检查物料是否已经设置默认调出仓库";
-            // 
-            // bnTop_btnSearch
-            // 
-            this.bnTop_btnSearch.Image = global::ERPSupport.SupForm.Properties.Resources.zoom;
-            this.bnTop_btnSearch.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnSearch.Name = "bnTop_btnSearch";
-            this.bnTop_btnSearch.Size = new System.Drawing.Size(56, 24);
-            this.bnTop_btnSearch.Tag = "3";
-            this.bnTop_btnSearch.Text = "查询";
-            this.bnTop_btnSearch.ToolTipText = "查询数据";
-            // 
-            // bnTop_btnShowAll
-            // 
-            this.bnTop_btnShowAll.Image = global::ERPSupport.SupForm.Properties.Resources.arrow_refresh;
-            this.bnTop_btnShowAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnShowAll.Name = "bnTop_btnShowAll";
-            this.bnTop_btnShowAll.Size = new System.Drawing.Size(56, 24);
-            this.bnTop_btnShowAll.Tag = "4";
-            this.bnTop_btnShowAll.Text = "重置";
-            this.bnTop_btnShowAll.ToolTipText = "清空列筛选";
-            // 
-            // bnTop_btnCommit
-            // 
-            this.bnTop_btnCommit.Image = global::ERPSupport.SupForm.Properties.Resources.accept;
-            this.bnTop_btnCommit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnCommit.Name = "bnTop_btnCommit";
-            this.bnTop_btnCommit.Size = new System.Drawing.Size(56, 24);
-            this.bnTop_btnCommit.Tag = "5";
-            this.bnTop_btnCommit.Text = "提交";
-            // 
-            // bnTop_btnUnLock
-            // 
-            this.bnTop_btnUnLock.Image = global::ERPSupport.SupForm.Properties.Resources.key;
-            this.bnTop_btnUnLock.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.bnTop_btnUnLock.Name = "bnTop_btnUnLock";
-            this.bnTop_btnUnLock.Size = new System.Drawing.Size(56, 24);
-            this.bnTop_btnUnLock.Tag = "6";
-            this.bnTop_btnUnLock.Text = "解锁";
-            this.bnTop_btnUnLock.ToolTipText = "库存解锁";
-            // 
-            // tsmiPro_Business_DLOrder
-            // 
-            this.tsmiPro_Business_DLOrder.Name = "tsmiPro_Business_DLOrder";
-            this.tsmiPro_Business_DLOrder.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_DLOrder.Text = "下载又一城订单";
-            // 
-            // tsmiPro_Business_SynOrder
-            // 
-            this.tsmiPro_Business_SynOrder.Name = "tsmiPro_Business_SynOrder";
-            this.tsmiPro_Business_SynOrder.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_SynOrder.Text = "同步订单信息";
-            // 
-            // tsmiPro_Business_DLROrder
-            // 
-            this.tsmiPro_Business_DLROrder.Name = "tsmiPro_Business_DLROrder";
-            this.tsmiPro_Business_DLROrder.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_DLROrder.Text = "下载又一城退货单";
-            // 
-            // tsmiPro_Business_SynROrder
-            // 
-            this.tsmiPro_Business_SynROrder.Name = "tsmiPro_Business_SynROrder";
-            this.tsmiPro_Business_SynROrder.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_SynROrder.Text = "同步退货单信息";
-            // 
-            // tsmiPro_Business_ImportDelivery
-            // 
-            this.tsmiPro_Business_ImportDelivery.Name = "tsmiPro_Business_ImportDelivery";
-            this.tsmiPro_Business_ImportDelivery.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_ImportDelivery.Text = "导入发货信息";
-            // 
-            // tsmiPro_Business_CancleAudit
-            // 
-            this.tsmiPro_Business_CancleAudit.Name = "tsmiPro_Business_CancleAudit";
-            this.tsmiPro_Business_CancleAudit.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_CancleAudit.Text = "待审的取消申请";
-            // 
-            // tsmiPro_Business_CancleDealt
-            // 
-            this.tsmiPro_Business_CancleDealt.Name = "tsmiPro_Business_CancleDealt";
-            this.tsmiPro_Business_CancleDealt.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_CancleDealt.Text = "已处理的取消申请";
-            // 
-            // tsmiPro_Business_LockSynOrder
-            // 
-            this.tsmiPro_Business_LockSynOrder.Name = "tsmiPro_Business_LockSynOrder";
-            this.tsmiPro_Business_LockSynOrder.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_LockSynOrder.Text = "锁住同步订单信息";
-            // 
-            // tsmiPro_Business_Report
-            // 
-            this.tsmiPro_Business_Report.Name = "tsmiPro_Business_Report";
-            this.tsmiPro_Business_Report.Size = new System.Drawing.Size(186, 22);
-            this.tsmiPro_Business_Report.Text = "报表管理";
-            this.tsmiPro_Business_Report.Click += new System.EventHandler(this.tsmiPro_Business_Report_Click);
+            this.tsmiPro_K3Data_Bill.Name = "tsmiPro_K3Data_Bill";
+            this.tsmiPro_K3Data_Bill.Size = new System.Drawing.Size(152, 22);
+            this.tsmiPro_K3Data_Bill.Text = "单据";
+            this.tsmiPro_K3Data_Bill.Click += new System.EventHandler(this.tsmiPro_K3Data_Bill_Click);
             // 
             // frmMain
             // 
@@ -881,5 +908,8 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_Business_CancleDealt;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_Business_LockSynOrder;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_Business_Report;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data_Bill;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data_Mtl;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data_Brand;
     }
 }

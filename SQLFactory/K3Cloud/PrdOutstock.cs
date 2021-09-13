@@ -78,17 +78,14 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pOrgId">组织</param>
         /// <param name="pYear">年份</param>
         /// <param name="pMonth">月份</param>
-        public void SynPrice(int pOrgId, int pYear, int pMonth)
+        public void SynPrice(string pYearMonth)
         {
-            string strFrom = pYear.ToString() + "-" + (pMonth > 9 ? pMonth.ToString() : "0" + pMonth.ToString()) + "-01";
-            string strTo = pYear.ToString() + "-" + (pMonth + 1 > 9 ? (pMonth + 1).ToString() : "0" + (pMonth + 1).ToString()) + "-01";
-
             _SQL = string.Format("UPDATE T_SAL_OUTSTOCKENTRY_F AF SET (FPRICE,FTAXPRICE) = ");
             _SQL += string.Format(" (SELECT BF.FPRICE,BF.FPRICE FROM T_SAL_OUTSTOCK A,T_SAL_OUTSTOCKENTRY AE,T_SAL_OUTSTOCKENTRY_R AR,T_SAL_ORDER B,T_SAL_ORDERENTRY BE,T_SAL_ORDERENTRY_F BF ");
-            _SQL += string.Format(" WHERE AF.FENTRYID = AR.FENTRYID AND AF.FENTRYID = AE.FENTRYID AND A.FID = AE.FID AND AR.FSRCBILLNO = B.FBILLNO AND B.FID = BE.FID AND AE.PRODUCTIONSEQ = BE.PRODUCTIONSEQ AND BE.FENTRYID = BF.FENTRYID AND A.FSALEORGID = {0} AND A.FDATE BETWEEN TO_DATE('{1}','YYYY-MM-DD') AND TO_DATE('{2}','YYYY-MM-DD') AND AE.PRODUCTIONSEQ != ' ') ", pOrgId, strFrom, strTo);
+            _SQL += string.Format(" WHERE AF.FENTRYID = AR.FENTRYID AND AF.FENTRYID = AE.FENTRYID AND A.FID = AE.FID AND AR.FSRCBILLNO = B.FBILLNO AND B.FID = BE.FID AND AE.PRODUCTIONSEQ = BE.PRODUCTIONSEQ AND BE.FENTRYID = BF.FENTRYID AND TO_CHAR(A.FDATE,'YYMM') = {0} AND AE.PRODUCTIONSEQ != ' ') ", pYearMonth);
             _SQL += string.Format(" WHERE FPRICE = 0 AND EXISTS ");
             _SQL += string.Format(" (SELECT 1 FROM T_SAL_OUTSTOCK A,T_SAL_OUTSTOCKENTRY AE,T_SAL_OUTSTOCKENTRY_R AR,T_SAL_ORDER B,T_SAL_ORDERENTRY BE,T_SAL_ORDERENTRY_F BF ");
-            _SQL += string.Format(" WHERE AF.FENTRYID = AR.FENTRYID AND AF.FENTRYID = AE.FENTRYID AND A.FID = AE.FID AND AR.FSRCBILLNO = B.FBILLNO AND B.FID = BE.FID AND AE.PRODUCTIONSEQ = BE.PRODUCTIONSEQ AND BE.FENTRYID = BF.FENTRYID AND A.FSALEORGID = {0} AND A.FDATE BETWEEN TO_DATE('{1}','YYYY-MM-DD') AND TO_DATE('{2}','YYYY-MM-DD') AND AE.PRODUCTIONSEQ != ' ') ", pOrgId, strFrom, strTo);
+            _SQL += string.Format(" WHERE AF.FENTRYID = AR.FENTRYID AND AF.FENTRYID = AE.FENTRYID AND A.FID = AE.FID AND AR.FSRCBILLNO = B.FBILLNO AND B.FID = BE.FID AND AE.PRODUCTIONSEQ = BE.PRODUCTIONSEQ AND BE.FENTRYID = BF.FENTRYID AND TO_CHAR(A.FDATE,'YYMM') = {0} AND AE.PRODUCTIONSEQ != ' ') ", pYearMonth);
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }

@@ -97,6 +97,7 @@ namespace ERPSupport.IDAL.K3Cloud
         string GetMTLByMTLNumber(string pFNumber, int pUseOrgId = 100508);
         string MTLFNameCheck(string pFNumber);
         string MTLFNameSyn(string pFNumber);
+        string MTLFNameSynByYM(string pYM);
         void UpdateMTLPara(MaterialParameter pMTLPara, int pMaterialId);
         DataTable MStockSetting(string pMTLFNumber);
         void AddMStockSetting(string pMaterialID, string pMaterialNumber, string pDeptID, string pDeptNumber, string pStockID, string pStockNumber);
@@ -105,5 +106,6 @@ namespace ERPSupport.IDAL.K3Cloud
         void DelMStockSetting();
         string GetLocalIP();
         string GetMac();
+        object SqlOperation(int pType, string pStrSQL);
     }
 }

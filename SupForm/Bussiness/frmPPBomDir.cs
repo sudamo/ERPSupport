@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace ERPSupport.SupForm.Bussiness
 {
+    using DALFactory.K3Cloud;
     using UserCrtl;
 
     /// <summary>
@@ -69,6 +70,9 @@ namespace ERPSupport.SupForm.Bussiness
             DALFactory.K3Cloud.DALCreator.PrdAllocation.UpdatePPBom(strBillNos, _rbtDir.Checked);
 
             MessageBox.Show("修改成功。");
+
+            //日志
+            DALCreator.CommFunction.DM_Log_Local("修改调拨单状态", "配置\\单据信息调整", strBillNos);
             Close();
         }
 

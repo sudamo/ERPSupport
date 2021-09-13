@@ -193,8 +193,8 @@ namespace ERPSupport.SupForm.UserCrtl
                     frmDir.Show(this);
                     break;
                 case "4":
-                    Bussiness.frmPPBom frm = new Bussiness.frmPPBom();
-                    frm.ShowDialog();
+                    //Bussiness.frmPPBom frm = new Bussiness.frmPPBom();
+                    //frm.ShowDialog();
                     break;
                 case "5":
                     MessageBox.Show("BOM批改功能还未开发，请联系信息部。");

@@ -184,7 +184,7 @@ namespace ERPSupport.SupForm.Menu
             btnImport.Enabled = false;
 
             //日志............
-            //DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("电商销售订单导入", "项目->电商->报表管理", strBillNos);
+            DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("电商销售订单导入", "项目->电商->报表管理", strBillNos);
         }
 
         private string ImportOrderToK3(List<OrderInfo> pList)
@@ -341,9 +341,9 @@ namespace ERPSupport.SupForm.Menu
                     basedata = new JObject();
                     basedata.Add("FNumber", pList[0].FDELIVERYMETHODCode);
                     model.Add("FDeliveryMethod", basedata);
-                    basedata = new JObject();
-                    basedata.Add("FNumber", pList[0].F_PAEZ_LOGISTCSCOMPANYCode);
-                    model.Add("F_PAEZ_LogistcsCompany", basedata);
+                    //basedata = new JObject();
+                    //basedata.Add("FNumber", pList[0].F_PAEZ_LOGISTCSCOMPANYCode);
+                    //model.Add("F_PAEZ_LogistcsCompany", basedata);
                     model.Add("F_PAEZ_HeadlocAddress", pList[0].F_PAEZ_HEADLOCADDRESS);
                     model.Add("F_PAEZ_Salesplan", "");
                     model.Add("F_PAEZ_Packinstruction", "");
@@ -487,7 +487,7 @@ namespace ERPSupport.SupForm.Menu
                     {
                         BillNo = string.Empty;
                         for (int i = 0; i < ((IList)jo["Result"]["ResponseStatus"]["Errors"]).Count; i++)
-                            BillNo += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
+                            BillNo += jo["Result"]["ResponseStatus"]["Errors"][i]["FieldName"].Value<string>() + "\r\n";//保存不成功返错误信息
                     }
                     else
                     {
@@ -497,6 +497,9 @@ namespace ERPSupport.SupForm.Menu
                         //client.Execute<string>("Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Audit", new object[] { "SAL_SaleOrder", "{\"CreateOrgId\":\"0\",\"Numbers\":[\"" + jo["Result"]["Number"].Value<string>() + "\"]}" });//根据单号审核单据
 
                         //反写数量
+
+                        //修复业务类型
+                        DALCreator.CommFunction.SqlOperation(0, "UPDATE T_SAL_ORDER SET FBUSINESSTYPE = 'NORMAL' WHERE FDATE > SYSDATE - 1 AND FSALEORGID = 477965 AND FBUSINESSTYPE = '1'");
                     }
                 }
             }
