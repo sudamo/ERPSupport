@@ -120,7 +120,7 @@ namespace ERPSupport.SupForm.Menu
             Excel.Workbook workBook = myApp.Workbooks.Open(_filePath, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing, missing);
             Excel.Worksheet worksheet = workBook.Worksheets[1] as Excel.Worksheet;
             myApp.Visible = false;
-            string FNumber = string.Empty;
+
             _BillNos = string.Empty;
             _Eorros = string.Empty;
 
@@ -139,6 +139,10 @@ namespace ERPSupport.SupForm.Menu
                 try
                 {
                     entry.F_CUSTOMERORDERNUMBE = worksheet.Cells[i, 1].Text;
+
+                    if (entry.F_CUSTOMERORDERNUMBE == null || entry.F_CUSTOMERORDERNUMBE == "")
+                        break;
+
                     entry.FCUSTName = worksheet.Cells[i, 2].Text;
                     entry.FHEADDELIVERYWAY = worksheet.Cells[i, 3].Text;
                     entry.FDELIVERYMETHOD = worksheet.Cells[i, 4].Text;
@@ -170,21 +174,24 @@ namespace ERPSupport.SupForm.Menu
                 return;
             }
 
-            string strBillNos = ImportOrderToK3(list);
+            string strMess = ImportOrderToK3(list);
+
+            //修复业务类型
+            //DALCreator.CommFunction.SqlOperation(0, ConstStrings._K3_Sal_1);
 
             if (_Eorros != "")
-                _Eorros = "有些信息导入出错，请查看最后一列的错误提示。";
+                _Eorros = "有些信息导入出错，请查看提示。";
             else
                 _Eorros = "全部数据已经成功导入。";
 
-            MessageBox.Show(_Eorros + "\r\n" + strBillNos);
+            MessageBox.Show(_Eorros + "\r\n" + strMess);
 
             myApp.Visible = true;
 
             btnImport.Enabled = false;
 
             //日志............
-            DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("电商销售订单导入", "项目->电商->报表管理", strBillNos);
+            DALFactory.K3Cloud.DALCreator.CommFunction.DM_Log_Local("电商销售订单导入", "项目->电商->报表管理", _BillNos + _Eorros);
         }
 
         private string ImportOrderToK3(List<OrderInfo> pList)
@@ -252,7 +259,7 @@ namespace ERPSupport.SupForm.Menu
                 }
             }
 
-            string BillNo = string.Empty;
+            string strMess = string.Empty;
             try
             {
                 K3CloudApiClient client = new K3CloudApiClient(GlobalParameter.K3Inf.C_ERPADDRESS);
@@ -281,8 +288,8 @@ namespace ERPSupport.SupForm.Menu
                     // 日期
                     model.Add("FBillNo", "");
                     model.Add("FDate", DateTime.Today);
+                    model.Add("FBusinessType", "NORMAL");
                     //组织
-
                     basedata = new JObject();
                     basedata.Add("FNumber", "GZ04");
                     model.Add("FSaleOrgId", basedata);
@@ -480,26 +487,23 @@ namespace ERPSupport.SupForm.Menu
                     }
 
                     // 调用Web API接口服务，保存单据
-                    BillNo = client.Execute<string>("Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Save", new object[] { "SAL_SaleOrder", jsonRoot.ToString() });
-                    JObject jo = JObject.Parse(BillNo);
+                    strMess = client.Execute<string>("Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Save", new object[] { "SAL_SaleOrder", jsonRoot.ToString() });
+                    JObject jo = JObject.Parse(strMess);
 
                     if (!jo["Result"]["ResponseStatus"]["IsSuccess"].Value<bool>())
                     {
-                        BillNo = string.Empty;
+                        strMess = string.Empty;
                         for (int i = 0; i < ((IList)jo["Result"]["ResponseStatus"]["Errors"]).Count; i++)
-                            BillNo += jo["Result"]["ResponseStatus"]["Errors"][i]["FieldName"].Value<string>() + "\r\n";//保存不成功返错误信息
+                            strMess += jo["Result"]["ResponseStatus"]["Errors"][i]["Message"].Value<string>() + "\r\n";//保存不成功返错误信息
                     }
                     else
                     {
-                        BillNo = "ID:" + jo["Result"]["Id"].Value<string>() + ";Number:" + jo["Result"]["Number"].Value<string>();//保存成功返回入库单FID和单据编号FBILLNO
+                        strMess = "ID:" + jo["Result"]["Id"].Value<string>() + ";Number:" + jo["Result"]["Number"].Value<string>();//保存成功返回入库单FID和单据编号FBILLNO
 
                         //client.Execute<string>("Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Submit", new object[] { "SAL_SaleOrder", "{\"CreateOrgId\":\"0\",\"Numbers\":[\"" + jo["Result"]["Number"].Value<string>() + "\"]}" });//根据单号提交单据
                         //client.Execute<string>("Kingdee.BOS.WebApi.ServicesStub.DynamicFormService.Audit", new object[] { "SAL_SaleOrder", "{\"CreateOrgId\":\"0\",\"Numbers\":[\"" + jo["Result"]["Number"].Value<string>() + "\"]}" });//根据单号审核单据
 
                         //反写数量
-
-                        //修复业务类型
-                        DALCreator.CommFunction.SqlOperation(0, "UPDATE T_SAL_ORDER SET FBUSINESSTYPE = 'NORMAL' WHERE FDATE > SYSDATE - 1 AND FSALEORGID = 477965 AND FBUSINESSTYPE = '1'");
                     }
                 }
             }
@@ -507,7 +511,7 @@ namespace ERPSupport.SupForm.Menu
             {
                 return ex.Message;
             }
-            return BillNo;
+            return strMess;
         }
 
         #region 关闭Excel进程

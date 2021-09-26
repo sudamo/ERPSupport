@@ -1322,7 +1322,7 @@ namespace ERPSupport.SupForm
                         entry.FBillNo = dgv1.Rows[i].Cells[1].Value.ToString();
                         entry.FMaterialCode = dgv1.Rows[i].Cells[6].Value.ToString();
                         entry.FLockQTY = double.Parse(dgv1.Rows[i].Cells[10].Value.ToString());
-                        entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[18].Value.ToString());
+                        entry.FEntryId = int.Parse(dgv1.Rows[i].Cells[20].Value.ToString());
                         entry.FSTOCKORGCode = dgv1.Rows[i].Cells[5].Value.ToString();
                         entry.FUnitNumber = dgv1.Rows[i].Cells[8].Value.ToString();
                         olist.Add(entry);//封装实体

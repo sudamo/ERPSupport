@@ -960,74 +960,23 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
             ORAHelper.ExecuteNonQuery(_SQL);
         }
 
-        /// <summary>
-        /// 根据销售组织查找单价为零的销售订单
-        /// </summary>
-        /// <param name="pSaleOrg"></param>
-        /// <returns></returns>
-        public DataTable NoPriceOrders(string pSaleOrgs)
-        {
-            _SQL = "SELECT O.FBILLNO 单据编号,O.FDATE 日期,OE.FSEQ 序号,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,F.FPRICE 单价,OE.FENTRYID ";
-            _SQL += " FROM T_SAL_ORDER O ";
-            _SQL += " INNER JOIN T_SAL_ORDERENTRY OE ON O.FID = OE.FID ";
-            _SQL += " INNER JOIN T_SAL_ORDERENTRY_F F ON OE.FENTRYID = F.FENTRYID ";
-            _SQL += " INNER JOIN T_BD_MATERIAL MTL ON OE.FMATERIALID = MTL.FMATERIALID ";
-            _SQL += " INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ";
-            _SQL += string.Format(" WHERE O.FDOCUMENTSTATUS = 'A' AND F.FPRICE = 0 AND O.FSALEORGID IN({0}) ", pSaleOrgs);
-            _SQL += " ORDER BY O.FBILLNO,OE.FSEQ ";
+        ///// <summary>
+        ///// 根据销售组织查找单价为零的销售订单
+        ///// </summary>
+        ///// <param name="pSaleOrg"></param>
+        ///// <returns></returns>
+        //public DataTable NoPriceOrders(string pSaleOrgs)
+        //{
+        //    _SQL = "SELECT O.FBILLNO 单据编号,O.FDATE 日期,OE.FSEQ 序号,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,F.FPRICE 单价,OE.FENTRYID ";
+        //    _SQL += " FROM T_SAL_ORDER O ";
+        //    _SQL += " INNER JOIN T_SAL_ORDERENTRY OE ON O.FID = OE.FID ";
+        //    _SQL += " INNER JOIN T_SAL_ORDERENTRY_F F ON OE.FENTRYID = F.FENTRYID ";
+        //    _SQL += " INNER JOIN T_BD_MATERIAL MTL ON OE.FMATERIALID = MTL.FMATERIALID ";
+        //    _SQL += " INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ";
+        //    _SQL += string.Format(" WHERE O.FDOCUMENTSTATUS = 'A' AND F.FPRICE = 0 AND O.FSALEORGID IN({0}) ", pSaleOrgs);
+        //    _SQL += " ORDER BY O.FBILLNO,OE.FSEQ ";
 
-            return ORAHelper.ExecuteTable(_SQL);
-        }
-
-        /// <summary>
-        /// 更新销售订单单价
-        /// </summary>
-        /// <param name="pOrders"></param>
-        /// <returns></returns>
-        public string UpdateOrderPirce(DataTable pOrders)
-        {
-            if (pOrders == null || pOrders.Rows.Count == 0)
-                return "没有数据更新。";
-
-            int iRows = 0;
-            object oPrice;
-            object oConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString_Order"].ConnectionString;
-            if (oConnectionString == null)
-                return "获取配置信息失败。";
-
-            for (int i = 0; i < pOrders.Rows.Count; i++)
-            {
-                _SQL = "SELECT TOP 1 AL.Price ";
-                _SQL += " FROM PO_PurchaseOrder A ";
-                _SQL += " INNER JOIN PO_ProductList AL ON A.ID = AL.PurchaseOrderID ";
-                _SQL += " INNER JOIN PO_Materiel M ON AL.MaterielID = M.ERPFItemID ";
-                _SQL += string.Format(" WHERE A.K3PurchaseOrder = '{0}' AND M.FNumber = '{1}' ", pOrders.Rows[i]["FBillNo"].ToString(), pOrders.Rows[i]["FNumber"].ToString());
-
-                oPrice = SQLHelper.ExecuteScalar(oConnectionString.ToString(), _SQL);
-
-                try
-                {
-                    if (oPrice == null || oPrice.ToString() == string.Empty)
-                        continue;
-                    oPrice = decimal.Parse(oPrice.ToString());
-
-                    _SQL = string.Format("UPDATE T_SAL_ORDERENTRY_F SET FPRICE = {0},FTAXPRICE = {0},FTAXNETPRICE = {0}, FAMOUNT = {0} * FPRICEBASEQTY,FAMOUNT_LC = {0} * FPRICEBASEQTY,FALLAMOUNT = {0} * FPRICEBASEQTY WHERE FENTRYID = {1}", oPrice, pOrders.Rows[i]["FEntryId"]);
-                    ORAHelper.ExecuteNonQuery(_SQL);
-
-                    iRows++;
-                }
-                catch
-                {
-                    continue;
-                }
-            }
-
-            if (iRows == 0)
-                return "没有任何行更新，或许销售订单已经删除。";
-            else if (iRows == pOrders.Rows.Count)
-                return "成功更新了" + iRows + "行信息。";
-            else
-                return "成功更新了" + iRows + "行信息," + (pOrders.Rows.Count - iRows) + "行更新失败。";
-        }
+        //    return ORAHelper.ExecuteTable(_SQL);
+        //}
     }
 }

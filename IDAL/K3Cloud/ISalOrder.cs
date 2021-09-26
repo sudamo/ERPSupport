@@ -27,7 +27,6 @@ namespace ERPSupport.IDAL.K3Cloud
         void UpdateOrderCanOutQty(string pFEntryId, decimal pCanOutQty);
         void UpdateCustomer(string pFBillNo, int pFEntryId, int pCustomerId, bool pOutStock, bool pReceivable, bool pReturnNotice, bool pReturnStock);
         void UpdateUiCityOrders(int pFactoryOrgId, int pSaleOrgId, int pSaleDeptId, int pSalerId, List<string> pFBillNos);
-        DataTable NoPriceOrders(string pSaleOrgs);
-        string UpdateOrderPirce(DataTable pOrders);
+        //DataTable NoPriceOrders(string pSaleOrgs);
     }
 }

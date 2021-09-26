@@ -334,6 +334,42 @@ namespace ERPSupport.SQL
             }
             return dt;
         }
+        public static DataTable ExecuteTable(string pConnectionString, string pCommandText, CommandType pCommandType, SqlParameter[] pParameters)
+        {
+            DataTable dt = new DataTable();
+            SqlConnection conn = new SqlConnection(pConnectionString);
+            SqlDataAdapter adp = new SqlDataAdapter();
+            SqlCommand cmd = conn.CreateCommand();
+            try
+            {
+                conn.Open();
+                adp.SelectCommand = cmd;
+                adp.SelectCommand.CommandText = pCommandText;
+                adp.SelectCommand.CommandType = pCommandType;
+
+                if (pCommandType == CommandType.StoredProcedure)
+                    adp.SelectCommand.CommandTimeout = 10000;
+                else
+                    adp.SelectCommand.CommandTimeout = 500;
+
+                if (pParameters != null)
+                {
+                    foreach (SqlParameter parm in pParameters)
+                    {
+                        adp.SelectCommand.Parameters.Add(parm);
+                    }
+                }
+                adp.Fill(dt);
+                adp.SelectCommand.Parameters.Clear();
+            }
+            catch { return null; }
+            finally
+            {
+                if (conn.State == ConnectionState.Open)
+                    conn.Close();
+            }
+            return dt;
+        }
 
         //Reader
         public static SqlDataReader ExecuteReader(string pCommandText)

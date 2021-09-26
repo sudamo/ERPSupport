@@ -33,10 +33,10 @@ namespace ERPSupport.SupForm.Bussiness
         /// 总记录数
         /// </summary>
         private int _RecordCount;
-        /// <summary>
-        /// 销售组织
-        /// </summary>
-        private string _FOrgIds;
+        ///// <summary>
+        ///// 销售组织
+        ///// </summary>
+        //private string _FOrgIds;
         /// <summary>
         /// Regex
         /// </summary>
@@ -78,7 +78,7 @@ namespace ERPSupport.SupForm.Bussiness
         {
             _Load = true;
             _Chb = new DataGridViewCheckBoxColumn();
-            _FOrgIds = System.Configuration.ConfigurationManager.AppSettings["SAL_FOrgIds"];
+            //_FOrgIds = System.Configuration.ConfigurationManager.AppSettings["SAL_FOrgIds"];
 
 
             FillComboBox();
@@ -138,7 +138,7 @@ namespace ERPSupport.SupForm.Bussiness
             DataSourceBinding(1);
             if (dgv1 != null && dgv1.Rows.Count > 0)
             {
-                dgv1.Columns[7].Visible = false;
+                dgv1.Columns[8].Visible = false;
             }
         }
 
@@ -158,7 +158,7 @@ namespace ERPSupport.SupForm.Bussiness
 
             if (pType == 1)//重新加载数据源
             {
-                _DataSource = DALFactory.K3Cloud.DALCreator.SalOrder.NoPriceOrders(_FOrgIds);
+                _DataSource = DALFacorty.INOrder.DALCreator.CommFunction.NoPriceOrders();
 
                 if (_DataSource == null || _DataSource.Rows.Count == 0)
                 {
@@ -381,8 +381,8 @@ namespace ERPSupport.SupForm.Bussiness
             DataRow dr;
             dt.Columns.Add("FBillNo");
             dt.Columns.Add("FNumber");
+            dt.Columns.Add("FPrice");
             dt.Columns.Add("FEntryId");
-            //dt.Columns.Add("FPrice");
 
             dgv1.CommitEdit(DataGridViewDataErrorContexts.Commit);
             for (int i = 0; i < dgv1.Rows.Count; i++)
@@ -392,8 +392,8 @@ namespace ERPSupport.SupForm.Bussiness
                     dr = dt.NewRow();
                     dr["FBillNo"] = dgv1.Rows[i].Cells[1].Value;
                     dr["FNumber"] = dgv1.Rows[i].Cells[4].Value;
-                    dr["FEntryId"] = dgv1.Rows[i].Cells[7].Value;
-                    //dr["FPrice"] = 0;
+                    dr["FPrice"] = dgv1.Rows[i].Cells[7].Value;
+                    dr["FEntryId"] = dgv1.Rows[i].Cells[8].Value;
                     dt.Rows.Add(dr);
 
                     iRows++;
@@ -407,7 +407,7 @@ namespace ERPSupport.SupForm.Bussiness
                 return;
             }
 
-            string strReturn = DALFactory.K3Cloud.DALCreator.SalOrder.UpdateOrderPirce(dt);
+            string strReturn = DALFacorty.INOrder.DALCreator.CommFunction.UpdateOrderPirce(dt);
             MessageBox.Show(strReturn);
 
             //日志

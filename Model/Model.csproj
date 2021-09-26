@@ -55,6 +55,7 @@
     <Compile Include="Enum\FStatus.cs" />
     <Compile Include="Enum\SQLReturnType.cs" />
     <Compile Include="Enum\SupOperations.cs" />
+    <Compile Include="Globa\ConstStrings.cs" />
     <Compile Include="Globa\GlobalParameter.cs" />
     <Compile Include="Globa\GlobalRights.cs" />
     <Compile Include="Globa\LocalInfo.cs" />

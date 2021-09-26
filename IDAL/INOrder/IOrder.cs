@@ -33,6 +33,20 @@ namespace ERPSupport.IDAL.INOrder
         DataTable GetChinaAddByParentId(int pParentId = 0);
 
         /// <summary>
+        /// 根据销售组织查找单价为零的销售订单
+        /// </summary>
+        /// <param name="pSaleOrgs"></param>
+        /// <returns></returns>
+        DataTable NoPriceOrders();
+
+        /// <summary>
+        /// 更新销售订单单价
+        /// </summary>
+        /// <param name="pOrders"></param>
+        /// <returns></returns>
+        string UpdateOrderPirce(DataTable pOrders);
+
+        /// <summary>
         /// 添加行政地区信息
         /// </summary>
         /// <param name="pParentId">上级行政地区ID</param>
