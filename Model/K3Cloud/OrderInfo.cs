@@ -182,11 +182,11 @@ namespace ERPSupport.Model.K3Cloud
         /// <summary>
         /// 数量
         /// </summary>
-        private double _FQTY;
+        private decimal _FQTY;
         /// <summary>
         /// 单价
         /// </summary>
-        private double _FPRICE;
+        private decimal _FPRICE;
         /// <summary>
         /// 单据体备注
         /// </summary>
@@ -734,7 +734,7 @@ namespace ERPSupport.Model.K3Cloud
             }
         }
 
-        public double FQTY
+        public decimal FQTY
         {
             get
             {
@@ -747,7 +747,7 @@ namespace ERPSupport.Model.K3Cloud
             }
         }
 
-        public double FPRICE
+        public decimal FPRICE
         {
             get
             {

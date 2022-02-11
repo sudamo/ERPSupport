@@ -130,6 +130,7 @@ namespace ERPSupport.SupForm.Menu
                 return;
             }
 
+            string strNote;
             OrderInfo entry;
             List<OrderInfo> list = new List<OrderInfo>();
 
@@ -150,9 +151,18 @@ namespace ERPSupport.SupForm.Menu
                     entry.F_PAEZ_CONTACTNUMBER = worksheet.Cells[i, 6].Text;
                     entry.F_PAEZ_HEADLOCADDRESS = worksheet.Cells[i, 7].Text;
                     entry.FMaterialCode = worksheet.Cells[i, 8].Text;
-                    entry.FPRICE = double.Parse(worksheet.Cells[i, 9].Text);
-                    entry.FQTY = double.Parse(worksheet.Cells[i, 10].Text);
-                    entry.FEntryNOTE = worksheet.Cells[i, 11].Text;
+                    entry.FPRICE = decimal.Parse(worksheet.Cells[i, 9].Text);
+                    entry.FQTY = decimal.Parse(worksheet.Cells[i, 10].Text);
+                    strNote = worksheet.Cells[i, 11].Text;
+
+                    if (entry.FPRICE == 0)//单价为零，备注插入 赠品 两字
+                    {
+                        entry.FEntryNOTE = "[赠品]" + strNote;
+                    }
+                    else
+                    {
+                        entry.FEntryNOTE = strNote;
+                    }
 
                     entry.StrError = string.Empty;
 
