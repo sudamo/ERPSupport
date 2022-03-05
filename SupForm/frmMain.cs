@@ -1691,6 +1691,7 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void Trans(object sender, DoWorkEventArgs e)
         {
+            string strDate = _dateFrom.Value.ToString("yyyy-MM-dd"), strDateTime = _dateFrom.Value.ToString();
             switch (_FormId)
             {
                 case FormID.PRD_PPBOM:
@@ -1723,20 +1724,24 @@ namespace ERPSupport.SupForm
                             strConditionEx = "(" + strConditionEx + ")";
                         }
 
-                        DataTable dtPZ = DALCreator.PrdAllocation.GetTransPZ(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID);
-                        DataTable dtZD = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strCondition);
-                        DataTable dtCL = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, false);
-                        DataTable dtCL_Tran = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, true);
+                        DataTable dtPZ = DALCreator.PrdAllocation.GetTransPZ(strDate, _StockID, _DeptID);//盆子调拨
+                        DataTable dtZD = DALCreator.PrdAllocation.GetTransCL(strDate, _StockID, _DeptID, strCondition);//指定仓调拨
+                        DataTable dtCL = DALCreator.PrdAllocation.GetTransCL(strDate, _StockID, _DeptID, strConditionEx, false);//材料调拨
+                        //DataTable dtCL_Tran = DALCreator.PrdAllocation.GetTransCL(strDate, _StockID, _DeptID, strConditionEx, true);//有中间仓调拨
                         int iPZ = dtPZ == null ? 0 : dtPZ.Rows.Count;
                         int iZD = dtZD == null ? 0 : dtZD.Rows.Count;
                         int iCL = dtCL == null ? 0 : dtCL.Rows.Count;
-                        int iCL_Tran = dtCL_Tran == null ? 0 : dtCL_Tran.Rows.Count;
-                        int iCurrent = 0, iCount = iPZ + iZD + iCL + iCL_Tran;//当前执行数和总记录数
+                        //int iCL_Tran = dtCL_Tran == null ? 0 : dtCL_Tran.Rows.Count;
+                        //int iCurrent = 0, iCount = iPZ + iZD + iCL + iCL_Tran;//当前执行数和总记录数
+                        int iCurrent = 0, iCount = iPZ + iZD + iCL;//当前执行数和总记录数
 
                         #region 盆子调拨
 
                         if (dtPZ == null || dtPZ.Rows.Count == 0)
                             goto CailiaoDiaobo;
+
+                        //20220301修改
+                        //当调出仓为盘子仓则调拨到WMS 否则调拨到ERP
 
                         lstOutStock = new List<string>();
                         lstType = new List<string>();
@@ -1745,6 +1750,8 @@ namespace ERPSupport.SupForm
                         {
                             if (!lstOutStock.Contains(dtPZ.Rows[i]["调出仓库编码"].ToString()))
                                 lstOutStock.Add(dtPZ.Rows[i]["调出仓库编码"].ToString());
+                            //if (!bIsWMSTD && dtPZ.Rows[i]["调出仓库编码"].ToString() == "HWL04")
+                            //    bIsWMSTD = true;
                             if (!lstType.Contains(dtPZ.Rows[i]["调拨类型"].ToString()))
                                 lstType.Add(dtPZ.Rows[i]["调拨类型"].ToString());
                             if (!lstDep.Contains(dtPZ.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtPZ.Rows[i]["领料部门编码"].ToString()))
@@ -1823,7 +1830,10 @@ namespace ERPSupport.SupForm
 
                                                             if (dtPZ_XD.Rows.Count == 1)
                                                             {
-                                                                tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_XD, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                if (lstOutStock[i] == "HWL04")
+                                                                    tmp = DALCreator.PrdAllocation.TransferDirWMS(dtPZ_XD, strDate);
+                                                                else
+                                                                    tmp = DALCreator.PrdAllocation.TransferDirERP(dtPZ_XD, strDateTime);
 
                                                                 iCurrent++;
                                                                 ReportProgreess(e, iCount, iCurrent);
@@ -1838,7 +1848,10 @@ namespace ERPSupport.SupForm
                                                                     if (j == dtPZ_XD.Rows.Count - 1)//最后一行数据,(盘子必然在最后一套之内)
                                                                     {
                                                                         dtPZ_2.ImportRow(dtPZ_XD.Rows[j]);
-                                                                        tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                        if (lstOutStock[i] == "HWL04")
+                                                                            tmp = DALCreator.PrdAllocation.TransferDirWMS(dtPZ_2, strDate);
+                                                                        else
+                                                                            tmp = DALCreator.PrdAllocation.TransferDirERP(dtPZ_2, strDateTime);
 
                                                                         iCurrent++;
                                                                         ReportProgreess(e, iCount, iCurrent);
@@ -1861,7 +1874,10 @@ namespace ERPSupport.SupForm
                                                                         }
                                                                         else
                                                                         {
-                                                                            tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                            if (lstOutStock[i] == "HWL04")
+                                                                                tmp = DALCreator.PrdAllocation.TransferDirWMS(dtPZ_2, strDate);
+                                                                            else
+                                                                                tmp = DALCreator.PrdAllocation.TransferDirERP(dtPZ_2, strDateTime);
 
                                                                             iCurrent++;
                                                                             ReportProgreess(e, iCount, iCurrent);
@@ -1881,7 +1897,10 @@ namespace ERPSupport.SupForm
                                                         }
 
                                                         //大单单独生成调拨单
-                                                        tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_DD, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                        if (lstOutStock[i] == "HWL04")
+                                                            tmp = DALCreator.PrdAllocation.TransferDirWMS(dtPZ_DD, strDate);
+                                                        else
+                                                            tmp = DALCreator.PrdAllocation.TransferDirERP(dtPZ_DD, strDateTime);
 
                                                         iCurrent++;
                                                         ReportProgreess(e, iCount, iCurrent);
@@ -1901,7 +1920,10 @@ namespace ERPSupport.SupForm
 
                                                         if (dt_4.Rows.Count == 1)
                                                         {
-                                                            tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                            if (lstOutStock[i] == "HWL04")
+                                                                tmp = DALCreator.PrdAllocation.TransferDirWMS(dt_4, strDate);
+                                                            else
+                                                                tmp = DALCreator.PrdAllocation.TransferDirERP(dt_4, strDateTime);
 
                                                             iCurrent++;
                                                             ReportProgreess(e, iCount, iCurrent);
@@ -1916,7 +1938,11 @@ namespace ERPSupport.SupForm
                                                                 if (j == dt_4.Rows.Count - 1)//最后一行数据,(盘子必然在最后一套之内)
                                                                 {
                                                                     dtPZ_2.ImportRow(dt_4.Rows[j]);
-                                                                    tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+
+                                                                    if (lstOutStock[i] == "HWL04")
+                                                                        tmp = DALCreator.PrdAllocation.TransferDirWMS(dtPZ_2, strDate);
+                                                                    else
+                                                                        tmp = DALCreator.PrdAllocation.TransferDirERP(dtPZ_2, strDateTime);
 
                                                                     iCurrent++;
                                                                     ReportProgreess(e, iCount, iCurrent);
@@ -1939,7 +1965,10 @@ namespace ERPSupport.SupForm
                                                                     }
                                                                     else
                                                                     {
-                                                                        tmp = DALCreator.PrdAllocation.TransferDir(dtPZ_2, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                                        if (lstOutStock[i] == "HWL04")
+                                                                            tmp = DALCreator.PrdAllocation.TransferDirWMS(dtPZ_2, strDate);
+                                                                        else
+                                                                            tmp = DALCreator.PrdAllocation.TransferDirERP(dtPZ_2, strDateTime);
 
                                                                         iCurrent++;
                                                                         ReportProgreess(e, iCount, iCurrent);
@@ -2001,7 +2030,10 @@ namespace ERPSupport.SupForm
 
                                                 if (dt_4.Rows.Count > 0)
                                                 {
-                                                    tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                    if (lstOutStock[i] == "HWL04")
+                                                        tmp = DALCreator.PrdAllocation.TransferDirWMS(dt_4, strDate);
+                                                    else
+                                                        tmp = DALCreator.PrdAllocation.TransferDirERP(dt_4, strDateTime);
 
                                                     iCurrent++;
                                                     ReportProgreess(e, iCount, iCurrent);
@@ -2025,7 +2057,7 @@ namespace ERPSupport.SupForm
                         #region 处理指定仓调拨
                         if (dtZD != null && dtZD.Rows.Count > 0)
                         {
-                            tmp = DALCreator.PrdAllocation.TransferDirERP(dtZD, _dateFrom.Value);
+                            tmp = DALCreator.PrdAllocation.TransferDirERP(dtZD, strDateTime);
                             iCurrent++;
                             ReportProgreess(e, iCount, iCurrent);
 
@@ -2082,7 +2114,10 @@ namespace ERPSupport.SupForm
 
                                             if (dt_4.Rows.Count > 0)
                                             {
-                                                tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"));
+                                                if (lstOutStock[i] == "HWL04")
+                                                    tmp = DALCreator.PrdAllocation.TransferDirWMS(dt_4, strDate);
+                                                else
+                                                    tmp = DALCreator.PrdAllocation.TransferDirERP(dt_4, strDateTime);
 
                                                 iCurrent++;
                                                 ReportProgreess(e, iCount, iCurrent);
@@ -2099,75 +2134,74 @@ namespace ERPSupport.SupForm
 
                         Transit:
                         #region 处理有中间仓
-                        //dtCL_Tran = PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), _StockID, _DeptID, strConditionEx, true);
-                        if (dtCL_Tran == null || dtCL_Tran.Rows.Count == 0)
-                            goto SHOW;
+                        //if (dtCL_Tran == null || dtCL_Tran.Rows.Count == 0)
+                        //    goto SHOW;
 
-                        lstOutStock = new List<string>();
-                        lstType = new List<string>();
-                        lstDep = new List<string>();
-                        for (int i = 0; i < dtCL_Tran.Rows.Count; i++)
-                        {
-                            if (!lstOutStock.Contains(dtCL_Tran.Rows[i]["调出仓库编码"].ToString()))
-                                lstOutStock.Add(dtCL_Tran.Rows[i]["调出仓库编码"].ToString());
-                            if (!lstType.Contains(dtCL_Tran.Rows[i]["调拨类型"].ToString()))
-                                lstType.Add(dtCL_Tran.Rows[i]["调拨类型"].ToString());
-                            if (!lstDep.Contains(dtCL_Tran.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtCL_Tran.Rows[i]["领料部门编码"].ToString()))
-                                lstDep.Add(dtCL_Tran.Rows[i]["领料部门编码"].ToString());
-                        }
+                        //lstOutStock = new List<string>();
+                        //lstType = new List<string>();
+                        //lstDep = new List<string>();
+                        //for (int i = 0; i < dtCL_Tran.Rows.Count; i++)
+                        //{
+                        //    if (!lstOutStock.Contains(dtCL_Tran.Rows[i]["调出仓库编码"].ToString()))
+                        //        lstOutStock.Add(dtCL_Tran.Rows[i]["调出仓库编码"].ToString());
+                        //    if (!lstType.Contains(dtCL_Tran.Rows[i]["调拨类型"].ToString()))
+                        //        lstType.Add(dtCL_Tran.Rows[i]["调拨类型"].ToString());
+                        //    if (!lstDep.Contains(dtCL_Tran.Rows[i]["领料部门编码"].ToString()) && lstDepSet.Contains(dtCL_Tran.Rows[i]["领料部门编码"].ToString()))
+                        //        lstDep.Add(dtCL_Tran.Rows[i]["领料部门编码"].ToString());
+                        //}
 
-                        for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
-                        {
-                            DataTable dt_2 = dtCL_Tran.Clone();
-                            for (int j = 0; j < dtCL_Tran.Rows.Count; j++)
-                            {
-                                if (lstOutStock[i] == dtCL_Tran.Rows[j]["调出仓库编码"].ToString())
-                                    dt_2.ImportRow(dtCL_Tran.Rows[j]);
-                            }
-                            if (dt_2.Rows.Count > 0)
-                            {
-                                for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
-                                {
-                                    DataTable dt_3 = dtCL_Tran.Clone();
-                                    for (int n = 0; n < dt_2.Rows.Count; n++)
-                                    {
-                                        if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
-                                            dt_3.ImportRow(dt_2.Rows[n]);
-                                    }
-                                    if (dt_3.Rows.Count > 0)
-                                    {
-                                        for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
-                                        {
-                                            DataTable dt_4 = dtCL_Tran.Clone();
-                                            for (int q = 0; q < dt_3.Rows.Count; q++)
-                                            {
-                                                if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
-                                                    dt_4.ImportRow(dt_3.Rows[q]);
-                                            }
+                        //for (int i = 0; i < lstOutStock.Count; i++)//根据不同的调出仓库
+                        //{
+                        //    DataTable dt_2 = dtCL_Tran.Clone();
+                        //    for (int j = 0; j < dtCL_Tran.Rows.Count; j++)
+                        //    {
+                        //        if (lstOutStock[i] == dtCL_Tran.Rows[j]["调出仓库编码"].ToString())
+                        //            dt_2.ImportRow(dtCL_Tran.Rows[j]);
+                        //    }
+                        //    if (dt_2.Rows.Count > 0)
+                        //    {
+                        //        for (int m = 0; m < lstDep.Count; m++)//根据不同的领料部门
+                        //        {
+                        //            DataTable dt_3 = dtCL_Tran.Clone();
+                        //            for (int n = 0; n < dt_2.Rows.Count; n++)
+                        //            {
+                        //                if (lstDep[m] == dt_2.Rows[n]["领料部门编码"].ToString())
+                        //                    dt_3.ImportRow(dt_2.Rows[n]);
+                        //            }
+                        //            if (dt_3.Rows.Count > 0)
+                        //            {
+                        //                for (int p = 0; p < lstType.Count; p++)//根据不同的调拨类型
+                        //                {
+                        //                    DataTable dt_4 = dtCL_Tran.Clone();
+                        //                    for (int q = 0; q < dt_3.Rows.Count; q++)
+                        //                    {
+                        //                        if (lstType[p] == dt_3.Rows[q]["调拨类型"].ToString())
+                        //                            dt_4.ImportRow(dt_3.Rows[q]);
+                        //                    }
 
-                                            if (dt_4.Rows.Count > 0)
-                                            {
-                                                //生成单据-WMS（调出仓库->中间仓）
-                                                tmp = DALCreator.PrdAllocation.TransferDir(dt_4, _dateFrom.Value.ToString("yyyy-MM-dd"), true);
+                        //                    if (dt_4.Rows.Count > 0)
+                        //                    {
+                        //                        //生成单据-WMS（调出仓库->中间仓）
+                        //                        tmp = DALCreator.PrdAllocation.TransferDirWMS(dt_4, strDate, true);
 
-                                                //生成单据-ERP（中间仓->调入仓库）
-                                                tmp += " " + DALCreator.PrdAllocation.TransferDirERP(dt_4, _dateFrom.Value);
+                        //                        //生成单据-ERP（中间仓->调入仓库）
+                        //                        tmp += " " + DALCreator.PrdAllocation.TransferDirERP(dt_4, strDateTime);
 
-                                                iCurrent++;
-                                                ReportProgreess(e, iCount, iCurrent);
+                        //                        iCurrent++;
+                        //                        ReportProgreess(e, iCount, iCurrent);
 
-                                                if (tmp.Trim() != "")
-                                                    strBillNos += "[" + tmp + "]";
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        //                        if (tmp.Trim() != "")
+                        //                            strBillNos += "[" + tmp + "]";
+                        //                    }
+                        //                }
+                        //            }
+                        //        }
+                        //    }
+                        //}
                         #endregion
                         #endregion
 
-                        SHOW:
+                        //SHOW:
                         if (strBillNos != "")
                         {
                             DALCreator.PrdAllocation.UpdateDirFieldsCL(_dateFrom.Value.ToString("yyyy-MM-dd"));//更新【已经生成调拨单】状态
@@ -2182,7 +2216,7 @@ namespace ERPSupport.SupForm
                     {
                         #region 德旭调拨
                         string strBillNos = string.Empty, tmp;
-                        DataTable dtCL = DALCreator.PrdAllocation.GetTransCL(_dateFrom.Value.ToString("yyyy-MM-dd"), 0, 0, "", false, 492501088);
+                        DataTable dtCL = DALCreator.PrdAllocation.GetTransCL(strDate, 0, 0, "", false, 492501088);
                         if (dtCL == null || dtCL.Rows.Count == 0)
                             goto SHOW2;
 
@@ -2233,7 +2267,7 @@ namespace ERPSupport.SupForm
                                     }
                                     if (dt_3.Rows.Count > 0)
                                     {
-                                        tmp = DALCreator.PrdAllocation.TransferDirERP(dt_3, _dateFrom.Value, _FormId);
+                                        tmp = DALCreator.PrdAllocation.TransferDirERP(dt_3, strDateTime);
 
                                         iCurrent++;
                                         ReportProgreess(e, iCount, iCurrent);
@@ -2248,7 +2282,7 @@ namespace ERPSupport.SupForm
                         SHOW2:
                         if (strBillNos != "")
                         {
-                            DALCreator.PrdAllocation.UpdateDirFieldsCL(_dateFrom.Value.ToString("yyyy-MM-dd"), 492501088);//更新【已经生成调拨单】状态
+                            DALCreator.PrdAllocation.UpdateDirFieldsCL(strDate, 492501088);//更新【已经生成调拨单】状态
                             MessageBox.Show("直接调拨单：" + strBillNos);
                         }
                         else

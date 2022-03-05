@@ -9,7 +9,7 @@ namespace ERPSupport.IDAL.K3Cloud
         DataTable GetTransPZ(string pFNeedDate, int pStockID, int pDeptID);
         DataTable GetTransCL(string pFNeedDate, int pStockID, int pDeptID, string pCondition);
         DataTable GetTransCL(string pFNeedDate, int pStockID, int pDeptID, string pCondition, bool pIsTran, int pOrgId = 100508);
-        string TransferDirERP(DataTable pDataTable, DateTime pDate, Model.Enum.FormID pFormId = Model.Enum.FormID.PRD_PPBOM);
+        string TransferDirERP(DataTable pDataTable, string pDate);
         DataTable GetTransForP(string pFilter);
         DataTable GetTransForP(List<string> pList);
         string TransferDir(DataTable pDataTable, List<string> pList, bool pIsDepart);
@@ -18,8 +18,8 @@ namespace ERPSupport.IDAL.K3Cloud
         int Asyn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo);
         void Syn_PPBom_FNeedDate(DateTime pFrom, DateTime pTo);
         void UpdateMST_Tran();
-        string TransferDir(DataTable pDataTable, string pDate);
-        string TransferDir(DataTable pDataTable, string pDate, bool pIsTran);
+        string TransferDirWMS(DataTable pDataTable, string pDate);
+        string TransferDirWMS(DataTable pDataTable, string pDate, bool pIsTran);
         DataTable GetPPBomByBillNo(string pBillNo);
         void UpdatePPBom(bool pSyn, bool pType, int pFEntryId, string pMTLNumber, string pNewMTLNumber, decimal pFZ, decimal pMustQty, DateTime pNeedDate);
         void UpdatePPBom(string pMoBillNos, bool pDir);

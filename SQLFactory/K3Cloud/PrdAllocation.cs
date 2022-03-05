@@ -280,7 +280,7 @@ namespace ERPSupport.SQL.K3Cloud
         /// <param name="pDataTable">数据表</param>
         /// <param name="pDate">日期</param>
         /// <returns></returns>
-        public string TransferDirERP(DataTable pDataTable, DateTime pDate, Model.Enum.FormID pFormId = Model.Enum.FormID.PRD_PPBOM)
+        public string TransferDirERP(DataTable pDataTable, string pDate)
         {
             if (pDataTable.Rows.Count <= 0)
                 return "";
@@ -356,21 +356,22 @@ namespace ERPSupport.SQL.K3Cloud
                     basedata.Add("FNumber", pDataTable.Rows[i]["单位编码"].ToString());
                     entryRow.Add("FPriceUnitID", basedata);
 
-                    if (pFormId == Model.Enum.FormID.PRD_PPBOM)
-                    {
-                        //basedata = new JObject();
-                        //basedata.Add("FNumber", pDataTable.Rows[i]["中间仓库编码"].ToString());
-                        //entryRow.Add("FSrcStockId", basedata);
+                    //if (pFormId == Model.Enum.FormID.PRD_PPBOM)
+                    //{
+                    //    //basedata = new JObject();
+                    //    //basedata.Add("FNumber", pDataTable.Rows[i]["中间仓库编码"].ToString());
+                    //    //entryRow.Add("FSrcStockId", basedata);
+                    //    basedata = new JObject();
+                    //    basedata.Add("FNumber", pDataTable.Rows[i]["调出仓库编码"].ToString());
+                    //    entryRow.Add("FSrcStockId", basedata);
+                    //}
+                    //else
+                    //{
                         basedata = new JObject();
                         basedata.Add("FNumber", pDataTable.Rows[i]["调出仓库编码"].ToString());
                         entryRow.Add("FSrcStockId", basedata);
-                    }
-                    else
-                    {
-                        basedata = new JObject();
-                        basedata.Add("FNumber", pDataTable.Rows[i]["调出仓库编码"].ToString());
-                        entryRow.Add("FSrcStockId", basedata);
-                    }
+                    //}
+
                     basedata = new JObject();
                     basedata.Add("FNumber", pDataTable.Rows[i]["调入仓库编码"].ToString());
                     entryRow.Add("FDestStockId", basedata);
@@ -408,6 +409,239 @@ namespace ERPSupport.SQL.K3Cloud
             }
 
             return strPMBillNO;
+        }
+
+        /// <summary>
+        /// 半成品调拨-WMS（没有中间仓）
+        /// </summary>
+        /// <param name="pDataTable">数据源</param>
+        /// <param name="pDate">单据日期</param>
+        /// <returns></returns>
+        public string TransferDirWMS(DataTable pDataTable, string pDate)
+        {
+            if (pDataTable == null || pDataTable.Rows.Count <= 0)
+                return "";
+
+            string strBillNo = string.Empty;
+
+            //编号
+            SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("DM_P_GetBillNo", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@FBillType", SqlDbType.Int);
+                cmd.Parameters.Add("@BillNo", SqlDbType.VarChar, 50);
+
+                cmd.Parameters["@FBillType"].Value = 1;
+                cmd.Parameters["@BillNo"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                strBillNo = cmd.Parameters["@BillNo"].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            SqlParameter[] parms = new SqlParameter[]
+            {
+                new SqlParameter("@OwnerInId", SqlDbType.Int),
+                new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
+                new SqlParameter("@OwnerInName", SqlDbType.VarChar),
+                new SqlParameter("@InOrgId", SqlDbType.Int),
+                new SqlParameter("@InOrgNumber", SqlDbType.VarChar),
+
+                new SqlParameter("@InOrgName", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgID", SqlDbType.Int),
+                new SqlParameter("@OutOrgNumber", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgName", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartId", SqlDbType.Int),
+
+                new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartName", SqlDbType.VarChar),
+                new SqlParameter("@BillNo", SqlDbType.VarChar),
+                new SqlParameter("@businessType", SqlDbType.Char),
+                new SqlParameter("@billStatus", SqlDbType.Char)
+            };
+            parms[0].Value = int.Parse(pDataTable.Rows[0]["货主"].ToString());
+            parms[1].Value = pDataTable.Rows[0]["货主编码"].ToString();
+            parms[2].Value = pDataTable.Rows[0]["货主名称"].ToString();
+            parms[3].Value = int.Parse(pDataTable.Rows[0]["调入库存组织"].ToString());
+            parms[4].Value = pDataTable.Rows[0]["调入库存组织编码"].ToString();
+
+            parms[5].Value = pDataTable.Rows[0]["调入库存组织名称"].ToString();
+            parms[6].Value = int.Parse(pDataTable.Rows[0]["调出库存组织"].ToString());
+            parms[7].Value = pDataTable.Rows[0]["调出库存组织编码"].ToString();
+            parms[8].Value = pDataTable.Rows[0]["调出库存组织名称"].ToString();
+            parms[9].Value = int.Parse(pDataTable.Rows[0]["领料部门"].ToString());
+
+            parms[10].Value = pDataTable.Rows[0]["领料部门编码"].ToString();
+            parms[11].Value = pDataTable.Rows[0]["领料部门名称"].ToString();
+            parms[12].Value = strBillNo;
+            parms[13].Value = pDataTable.Rows[0]["调拨类型"].ToString();
+            parms[14].Value = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? 2 : 1;//按次调拨类型：审核状态，否则为新建状态
+
+            string strTemp = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? ",0,1" : ",NULL,0";
+
+            _SQL = @"BEGIN TRANSACTION
+            INSERT INTO t_StkTransferOut(billNo,transferDirect,bizType,outOrgID,outOrgNumber,outOrgName,inOrgId,inOrgNumber,inOrgName,billDate,stockManagerId,stockManagerNumber,stockManagerName,transferBizType,pickType,pickDepartId,pickDepartNumber,pickDepartName,ownerTypeOut,ownerTypeIn,ownerInId,ownerInNumber,ownerInName,businessType,billStatus,ownerOutId,ownerOutNumber,ownerOutName,settleOrgId,settleOrgNumber,settleOrgName)
+            VALUES(@BillNo,'General','Standard ',100508,'HN02','河南工厂',@InOrgId,@InOrgNumber,@InOrgName,'" + pDate + @"',0,'','','InnerOrgTransfer',1,@PickDepartId,@PickDepartNumber,@PickDepartName,'BD_OwnerOrg','BD_OwnerOrg',@OwnerInId,@OwnerInNumber,@OwnerInName,@businessType,@billStatus,@InOrgId,@InOrgNumber,@InOrgName,@InOrgId,@InOrgNumber,@InOrgName);
+            DECLARE @stkBillId INT 
+            SELECT @stkBillId = id FROM t_StkTransferOut WHERE billNo = @BillNo;";
+
+            decimal fqty = 0;
+            for (int i = 0; i < pDataTable.Rows.Count; i++)
+            {
+                if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) == 0)
+                    fqty = decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString());
+                else if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) >= decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()))
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString());
+                else
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) * Math.Round(decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) / decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()), MidpointRounding.AwayFromZero);
+
+                _SQL += @"
+                INSERT INTO t_StkTransferOutEntry(stkBillId,mtlId,mtlFnumber,mtlFname,inStockId,inStockNumber,inStockName,inStockStatusId,inStockStatusNumber,inStockStatusName,outStockId,outStockNumber,outStockName,outStockStatusId,outStockStatusNumber,outStockStatusName,unitId,unitFumber,unitFname,fqty,applicationQty,needFqty,pickFqty,batchCode,FPRODUCTIONSEQ,FMONote,deliveryWayName,passQty,entryPassStatus)
+                VALUES(@stkBillId," + int.Parse(pDataTable.Rows[i]["物料"].ToString()) + ",'" + pDataTable.Rows[i]["物料编码"].ToString() + "','" + pDataTable.Rows[i]["物料名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调入仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调入仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调入仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调入库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调入库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调入库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调出仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调出仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调出库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调出库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["单位"].ToString()) + ",'" + pDataTable.Rows[i]["单位编码"].ToString() + "','" + pDataTable.Rows[i]["单位名称"].ToString() + "'," + fqty.ToString() + "," + fqty.ToString() + "," + decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) + ",0,'" + pDataTable.Rows[i]["批号"].ToString() + "','" + pDataTable.Rows[i]["生产顺序号"].ToString() + "','" + pDataTable.Rows[i]["生产订单备注"].ToString() + "','" + pDataTable.Rows[i]["发货类别"].ToString() + "'" + strTemp + ");";
+            }
+
+            _SQL += @"
+            IF @@ERROR = 0
+            BEGIN
+	            COMMIT
+	            SELECT @BillNo
+            END
+            ELSE
+            BEGIN
+	            ROLLBACK
+	            SELECT ''
+            END";
+
+            strBillNo = SQLHelper.ExecuteScalar(_SQL, parms).ToString();
+
+            return strBillNo;
+        }
+
+        /// <summary>
+        /// 半成品调拨-WMS（有中间仓）
+        /// </summary>
+        /// <param name="pDataTable">数据源</param>
+        /// <param name="pDate">单据日期</param>
+        /// <param name="pIsTran">用于区别没有中间仓方法</param>
+        /// <returns></returns>
+        public string TransferDirWMS(DataTable pDataTable, string pDate, bool pIsTran)
+        {
+            if (pDataTable == null || pDataTable.Rows.Count <= 0)
+                return "";
+
+            string strBillNo = string.Empty;
+
+            //编号
+            SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
+            try
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("DM_P_GetBillNo", conn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.Add("@FBillType", SqlDbType.Int);
+                cmd.Parameters.Add("@BillNo", SqlDbType.VarChar, 50);
+
+                cmd.Parameters["@FBillType"].Value = 1;
+                cmd.Parameters["@BillNo"].Direction = ParameterDirection.Output;
+
+                cmd.ExecuteNonQuery();
+                strBillNo = cmd.Parameters["@BillNo"].Value.ToString();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            SqlParameter[] parms = new SqlParameter[]
+            {
+                new SqlParameter("@OwnerInId", SqlDbType.Int),
+                new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
+                new SqlParameter("@OwnerInName", SqlDbType.VarChar),
+                new SqlParameter("@InOrgId", SqlDbType.Int),
+                new SqlParameter("@InOrgNumber", SqlDbType.VarChar),
+
+                new SqlParameter("@InOrgName", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgID", SqlDbType.Int),
+                new SqlParameter("@OutOrgNumber", SqlDbType.VarChar),
+                new SqlParameter("@OutOrgName", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartId", SqlDbType.Int),
+
+                new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
+                new SqlParameter("@PickDepartName", SqlDbType.VarChar),
+                new SqlParameter("@BillNo", SqlDbType.VarChar),
+                new SqlParameter("@businessType", SqlDbType.Char),
+                new SqlParameter("@billStatus", SqlDbType.Char)
+            };
+            parms[0].Value = int.Parse(pDataTable.Rows[0]["货主"].ToString());
+            parms[1].Value = pDataTable.Rows[0]["货主编码"].ToString();
+            parms[2].Value = pDataTable.Rows[0]["货主名称"].ToString();
+            parms[3].Value = int.Parse(pDataTable.Rows[0]["调入库存组织"].ToString());
+            parms[4].Value = pDataTable.Rows[0]["调入库存组织编码"].ToString();
+
+            parms[5].Value = pDataTable.Rows[0]["调入库存组织名称"].ToString();
+            parms[6].Value = int.Parse(pDataTable.Rows[0]["调出库存组织"].ToString());
+            parms[7].Value = pDataTable.Rows[0]["调出库存组织编码"].ToString();
+            parms[8].Value = pDataTable.Rows[0]["调出库存组织名称"].ToString();
+            parms[9].Value = int.Parse(pDataTable.Rows[0]["领料部门"].ToString());
+
+            parms[10].Value = pDataTable.Rows[0]["领料部门编码"].ToString();
+            parms[11].Value = pDataTable.Rows[0]["领料部门名称"].ToString();
+            parms[12].Value = strBillNo;
+            parms[13].Value = pDataTable.Rows[0]["调拨类型"].ToString();
+            parms[14].Value = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? 2 : 1;//按次调拨类型：审核状态，否则为新建状态
+
+            string strTemp = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? ",0,1" : ",NULL,0";
+
+            _SQL = @"BEGIN TRANSACTION
+            INSERT INTO t_StkTransferOut(billNo,transferDirect,bizType,outOrgID,outOrgNumber,outOrgName,inOrgId,inOrgNumber,inOrgName,billDate,stockManagerId,stockManagerNumber,stockManagerName,transferBizType,pickType,pickDepartId,pickDepartNumber,pickDepartName,ownerTypeOut,ownerTypeIn,ownerInId,ownerInNumber,ownerInName,businessType,billStatus,ownerOutId,ownerOutNumber,ownerOutName,settleOrgId,settleOrgNumber,settleOrgName)
+            VALUES(@BillNo,'General','Standard ',100508,'HN02','河南工厂',@InOrgId,@InOrgNumber,@InOrgName,'" + pDate + @"',0,'','','InnerOrgTransfer',1,@PickDepartId,@PickDepartNumber,@PickDepartName,'BD_OwnerOrg','BD_OwnerOrg',@OwnerInId,@OwnerInNumber,@OwnerInName,@businessType,@billStatus,@InOrgId,@InOrgNumber,@InOrgName,@InOrgId,@InOrgNumber,@InOrgName);
+            DECLARE @stkBillId INT 
+            SELECT @stkBillId = id FROM t_StkTransferOut WHERE billNo = @BillNo;";
+
+            decimal fqty = 0;
+            for (int i = 0; i < pDataTable.Rows.Count; i++)
+            {
+                if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) == 0)
+                    fqty = decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString());
+                else if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) >= decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()))
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString());
+                else
+                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) * Math.Round(decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) / decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()), MidpointRounding.AwayFromZero);
+
+                _SQL += @"
+                INSERT INTO t_StkTransferOutEntry(stkBillId,mtlId,mtlFnumber,mtlFname,inStockId,inStockNumber,inStockName,inStockStatusId,inStockStatusNumber,inStockStatusName,outStockId,outStockNumber,outStockName,outStockStatusId,outStockStatusNumber,outStockStatusName,unitId,unitFumber,unitFname,fqty,applicationQty,needFqty,pickFqty,batchCode,FPRODUCTIONSEQ,FMONote,deliveryWayName,passQty,entryPassStatus)
+                VALUES(@stkBillId," + int.Parse(pDataTable.Rows[i]["物料"].ToString()) + ",'" + pDataTable.Rows[i]["物料编码"].ToString() + "','" + pDataTable.Rows[i]["物料名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["中间仓库"].ToString()) + ",'" + pDataTable.Rows[i]["中间仓库编码"].ToString() + "','" + pDataTable.Rows[i]["中间仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["中间库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["中间库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["中间库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调出仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调出仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调出库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调出库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["单位"].ToString()) + ",'" + pDataTable.Rows[i]["单位编码"].ToString() + "','" + pDataTable.Rows[i]["单位名称"].ToString() + "'," + fqty.ToString() + "," + fqty.ToString() + "," + decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) + ",0,'" + pDataTable.Rows[i]["批号"].ToString() + "','" + pDataTable.Rows[i]["生产顺序号"].ToString() + "','" + pDataTable.Rows[i]["生产订单备注"].ToString() + "','" + pDataTable.Rows[i]["发货类别"].ToString() + "'" + strTemp + ");";
+            }
+
+            _SQL += @"
+            IF @@ERROR = 0
+            BEGIN
+	            COMMIT
+	            SELECT @BillNo
+            END
+            ELSE
+            BEGIN
+	            ROLLBACK
+	            SELECT ''
+            END";
+
+            strBillNo = SQLHelper.ExecuteScalar(_SQL, parms).ToString();
+
+            return strBillNo;
         }
 
         /// <summary>
@@ -814,239 +1048,6 @@ namespace ERPSupport.SQL.K3Cloud
             _SQL += " UPDATE T_AUTO_MSTOCKSETTING SET FTRANSTOCKID = 897782,FMODIFYDATE = SYSDATE WHERE FSTOCKID = 467795671 AND FTRANSTOCKID = 0 AND FDEPTID IN(100684,100685,100686,100687,100688,100707,465531838,467909049; ";
             _SQL += " END;";
             ORAHelper.ExecuteNonQuery(_SQL);
-        }
-
-        /// <summary>
-        /// 半成品调拨-WMS（没有中间仓）
-        /// </summary>
-        /// <param name="pDataTable">数据源</param>
-        /// <param name="pDate">单据日期</param>
-        /// <returns></returns>
-        public string TransferDir(DataTable pDataTable, string pDate)
-        {
-            if (pDataTable == null || pDataTable.Rows.Count <= 0)
-                return "";
-
-            string strBillNo = string.Empty;
-
-            //编号
-            SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
-            try
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("DM_P_GetBillNo", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@FBillType", SqlDbType.Int);
-                cmd.Parameters.Add("@BillNo", SqlDbType.VarChar, 50);
-
-                cmd.Parameters["@FBillType"].Value = 1;
-                cmd.Parameters["@BillNo"].Direction = ParameterDirection.Output;
-
-                cmd.ExecuteNonQuery();
-                strBillNo = cmd.Parameters["@BillNo"].Value.ToString();
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-            finally
-            {
-                conn.Close();
-            }
-
-            SqlParameter[] parms = new SqlParameter[]
-            {
-                new SqlParameter("@OwnerInId", SqlDbType.Int),
-                new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
-                new SqlParameter("@OwnerInName", SqlDbType.VarChar),
-                new SqlParameter("@InOrgId", SqlDbType.Int),
-                new SqlParameter("@InOrgNumber", SqlDbType.VarChar),
-
-                new SqlParameter("@InOrgName", SqlDbType.VarChar),
-                new SqlParameter("@OutOrgID", SqlDbType.Int),
-                new SqlParameter("@OutOrgNumber", SqlDbType.VarChar),
-                new SqlParameter("@OutOrgName", SqlDbType.VarChar),
-                new SqlParameter("@PickDepartId", SqlDbType.Int),
-
-                new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
-                new SqlParameter("@PickDepartName", SqlDbType.VarChar),
-                new SqlParameter("@BillNo", SqlDbType.VarChar),
-                new SqlParameter("@businessType", SqlDbType.Char),
-                new SqlParameter("@billStatus", SqlDbType.Char)
-            };
-            parms[0].Value = int.Parse(pDataTable.Rows[0]["货主"].ToString());
-            parms[1].Value = pDataTable.Rows[0]["货主编码"].ToString();
-            parms[2].Value = pDataTable.Rows[0]["货主名称"].ToString();
-            parms[3].Value = int.Parse(pDataTable.Rows[0]["调入库存组织"].ToString());
-            parms[4].Value = pDataTable.Rows[0]["调入库存组织编码"].ToString();
-
-            parms[5].Value = pDataTable.Rows[0]["调入库存组织名称"].ToString();
-            parms[6].Value = int.Parse(pDataTable.Rows[0]["调出库存组织"].ToString());
-            parms[7].Value = pDataTable.Rows[0]["调出库存组织编码"].ToString();
-            parms[8].Value = pDataTable.Rows[0]["调出库存组织名称"].ToString();
-            parms[9].Value = int.Parse(pDataTable.Rows[0]["领料部门"].ToString());
-
-            parms[10].Value = pDataTable.Rows[0]["领料部门编码"].ToString();
-            parms[11].Value = pDataTable.Rows[0]["领料部门名称"].ToString();
-            parms[12].Value = strBillNo;
-            parms[13].Value = pDataTable.Rows[0]["调拨类型"].ToString();
-            parms[14].Value = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? 2 : 1;//按次调拨类型：审核状态，否则为新建状态
-
-            string strTemp = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? ",0,1" : ",NULL,0";
-
-            _SQL = @"BEGIN TRANSACTION
-            INSERT INTO t_StkTransferOut(billNo,transferDirect,bizType,outOrgID,outOrgNumber,outOrgName,inOrgId,inOrgNumber,inOrgName,billDate,stockManagerId,stockManagerNumber,stockManagerName,transferBizType,pickType,pickDepartId,pickDepartNumber,pickDepartName,ownerTypeOut,ownerTypeIn,ownerInId,ownerInNumber,ownerInName,businessType,billStatus,ownerOutId,ownerOutNumber,ownerOutName,settleOrgId,settleOrgNumber,settleOrgName)
-            VALUES(@BillNo,'General','Standard ',100508,'HN02','河南工厂',@InOrgId,@InOrgNumber,@InOrgName,'" + pDate + @"',0,'','','InnerOrgTransfer',1,@PickDepartId,@PickDepartNumber,@PickDepartName,'BD_OwnerOrg','BD_OwnerOrg',@OwnerInId,@OwnerInNumber,@OwnerInName,@businessType,@billStatus,@InOrgId,@InOrgNumber,@InOrgName,@InOrgId,@InOrgNumber,@InOrgName);
-            DECLARE @stkBillId INT 
-            SELECT @stkBillId = id FROM t_StkTransferOut WHERE billNo = @BillNo;";
-
-            decimal fqty = 0;
-            for (int i = 0; i < pDataTable.Rows.Count; i++)
-            {
-                if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) == 0)
-                    fqty = decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString());
-                else if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) >= decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()))
-                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString());
-                else
-                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) * Math.Round(decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) / decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()), MidpointRounding.AwayFromZero);
-
-                _SQL += @"
-                INSERT INTO t_StkTransferOutEntry(stkBillId,mtlId,mtlFnumber,mtlFname,inStockId,inStockNumber,inStockName,inStockStatusId,inStockStatusNumber,inStockStatusName,outStockId,outStockNumber,outStockName,outStockStatusId,outStockStatusNumber,outStockStatusName,unitId,unitFumber,unitFname,fqty,applicationQty,needFqty,pickFqty,batchCode,FPRODUCTIONSEQ,FMONote,deliveryWayName,passQty,entryPassStatus)
-                VALUES(@stkBillId," + int.Parse(pDataTable.Rows[i]["物料"].ToString()) + ",'" + pDataTable.Rows[i]["物料编码"].ToString() + "','" + pDataTable.Rows[i]["物料名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调入仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调入仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调入仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调入库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调入库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调入库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调出仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调出仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调出库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调出库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["单位"].ToString()) + ",'" + pDataTable.Rows[i]["单位编码"].ToString() + "','" + pDataTable.Rows[i]["单位名称"].ToString() + "'," + fqty.ToString() + "," + fqty.ToString() + "," + decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) + ",0,'" + pDataTable.Rows[i]["批号"].ToString() + "','" + pDataTable.Rows[i]["生产顺序号"].ToString() + "','" + pDataTable.Rows[i]["生产订单备注"].ToString() + "','" + pDataTable.Rows[i]["发货类别"].ToString() + "'" + strTemp + ");";
-            }
-
-            _SQL += @"
-            IF @@ERROR = 0
-            BEGIN
-	            COMMIT
-	            SELECT @BillNo
-            END
-            ELSE
-            BEGIN
-	            ROLLBACK
-	            SELECT ''
-            END";
-
-            strBillNo = SQLHelper.ExecuteScalar(_SQL, parms).ToString();
-
-            return strBillNo;
-        }
-
-        /// <summary>
-        /// 半成品调拨-WMS（有中间仓）
-        /// </summary>
-        /// <param name="pDataTable">数据源</param>
-        /// <param name="pDate">单据日期</param>
-        /// <param name="pIsTran">用于区别没有中间仓方法</param>
-        /// <returns></returns>
-        public string TransferDir(DataTable pDataTable, string pDate, bool pIsTran)
-        {
-            if (pDataTable == null || pDataTable.Rows.Count <= 0)
-                return "";
-
-            string strBillNo = string.Empty;
-
-            //编号
-            SqlConnection conn = new SqlConnection(GlobalParameter.SQLInf.ConnectionString);
-            try
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("DM_P_GetBillNo", conn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.Add("@FBillType", SqlDbType.Int);
-                cmd.Parameters.Add("@BillNo", SqlDbType.VarChar, 50);
-
-                cmd.Parameters["@FBillType"].Value = 1;
-                cmd.Parameters["@BillNo"].Direction = ParameterDirection.Output;
-
-                cmd.ExecuteNonQuery();
-                strBillNo = cmd.Parameters["@BillNo"].Value.ToString();
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-            finally
-            {
-                conn.Close();
-            }
-
-            SqlParameter[] parms = new SqlParameter[]
-            {
-                new SqlParameter("@OwnerInId", SqlDbType.Int),
-                new SqlParameter("@OwnerInNumber", SqlDbType.VarChar),
-                new SqlParameter("@OwnerInName", SqlDbType.VarChar),
-                new SqlParameter("@InOrgId", SqlDbType.Int),
-                new SqlParameter("@InOrgNumber", SqlDbType.VarChar),
-
-                new SqlParameter("@InOrgName", SqlDbType.VarChar),
-                new SqlParameter("@OutOrgID", SqlDbType.Int),
-                new SqlParameter("@OutOrgNumber", SqlDbType.VarChar),
-                new SqlParameter("@OutOrgName", SqlDbType.VarChar),
-                new SqlParameter("@PickDepartId", SqlDbType.Int),
-
-                new SqlParameter("@PickDepartNumber", SqlDbType.VarChar),
-                new SqlParameter("@PickDepartName", SqlDbType.VarChar),
-                new SqlParameter("@BillNo", SqlDbType.VarChar),
-                new SqlParameter("@businessType", SqlDbType.Char),
-                new SqlParameter("@billStatus", SqlDbType.Char)
-            };
-            parms[0].Value = int.Parse(pDataTable.Rows[0]["货主"].ToString());
-            parms[1].Value = pDataTable.Rows[0]["货主编码"].ToString();
-            parms[2].Value = pDataTable.Rows[0]["货主名称"].ToString();
-            parms[3].Value = int.Parse(pDataTable.Rows[0]["调入库存组织"].ToString());
-            parms[4].Value = pDataTable.Rows[0]["调入库存组织编码"].ToString();
-
-            parms[5].Value = pDataTable.Rows[0]["调入库存组织名称"].ToString();
-            parms[6].Value = int.Parse(pDataTable.Rows[0]["调出库存组织"].ToString());
-            parms[7].Value = pDataTable.Rows[0]["调出库存组织编码"].ToString();
-            parms[8].Value = pDataTable.Rows[0]["调出库存组织名称"].ToString();
-            parms[9].Value = int.Parse(pDataTable.Rows[0]["领料部门"].ToString());
-
-            parms[10].Value = pDataTable.Rows[0]["领料部门编码"].ToString();
-            parms[11].Value = pDataTable.Rows[0]["领料部门名称"].ToString();
-            parms[12].Value = strBillNo;
-            parms[13].Value = pDataTable.Rows[0]["调拨类型"].ToString();
-            parms[14].Value = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? 2 : 1;//按次调拨类型：审核状态，否则为新建状态
-
-            string strTemp = pDataTable.Rows[0]["调拨类型"].ToString() == "1" ? ",0,1" : ",NULL,0";
-
-            _SQL = @"BEGIN TRANSACTION
-            INSERT INTO t_StkTransferOut(billNo,transferDirect,bizType,outOrgID,outOrgNumber,outOrgName,inOrgId,inOrgNumber,inOrgName,billDate,stockManagerId,stockManagerNumber,stockManagerName,transferBizType,pickType,pickDepartId,pickDepartNumber,pickDepartName,ownerTypeOut,ownerTypeIn,ownerInId,ownerInNumber,ownerInName,businessType,billStatus,ownerOutId,ownerOutNumber,ownerOutName,settleOrgId,settleOrgNumber,settleOrgName)
-            VALUES(@BillNo,'General','Standard ',100508,'HN02','河南工厂',@InOrgId,@InOrgNumber,@InOrgName,'" + pDate + @"',0,'','','InnerOrgTransfer',1,@PickDepartId,@PickDepartNumber,@PickDepartName,'BD_OwnerOrg','BD_OwnerOrg',@OwnerInId,@OwnerInNumber,@OwnerInName,@businessType,@billStatus,@InOrgId,@InOrgNumber,@InOrgName,@InOrgId,@InOrgNumber,@InOrgName);
-            DECLARE @stkBillId INT 
-            SELECT @stkBillId = id FROM t_StkTransferOut WHERE billNo = @BillNo;";
-
-            decimal fqty = 0;
-            for (int i = 0; i < pDataTable.Rows.Count; i++)
-            {
-                if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) == 0)
-                    fqty = decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString());
-                else if (decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) >= decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()))
-                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString());
-                else
-                    fqty = decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()) * Math.Round(decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) / decimal.Parse(pDataTable.Rows[i]["最小批量"].ToString()), MidpointRounding.AwayFromZero);
-
-                _SQL += @"
-                INSERT INTO t_StkTransferOutEntry(stkBillId,mtlId,mtlFnumber,mtlFname,inStockId,inStockNumber,inStockName,inStockStatusId,inStockStatusNumber,inStockStatusName,outStockId,outStockNumber,outStockName,outStockStatusId,outStockStatusNumber,outStockStatusName,unitId,unitFumber,unitFname,fqty,applicationQty,needFqty,pickFqty,batchCode,FPRODUCTIONSEQ,FMONote,deliveryWayName,passQty,entryPassStatus)
-                VALUES(@stkBillId," + int.Parse(pDataTable.Rows[i]["物料"].ToString()) + ",'" + pDataTable.Rows[i]["物料编码"].ToString() + "','" + pDataTable.Rows[i]["物料名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["中间仓库"].ToString()) + ",'" + pDataTable.Rows[i]["中间仓库编码"].ToString() + "','" + pDataTable.Rows[i]["中间仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["中间库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["中间库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["中间库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出仓库"].ToString()) + ",'" + pDataTable.Rows[i]["调出仓库编码"].ToString() + "','" + pDataTable.Rows[i]["调出仓库名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["调出库存状态"].ToString()) + ",'" + pDataTable.Rows[i]["调出库存状态编码"].ToString() + "','" + pDataTable.Rows[i]["调出库存状态名称"].ToString() + "'," + int.Parse(pDataTable.Rows[i]["单位"].ToString()) + ",'" + pDataTable.Rows[i]["单位编码"].ToString() + "','" + pDataTable.Rows[i]["单位名称"].ToString() + "'," + fqty.ToString() + "," + fqty.ToString() + "," + decimal.Parse(pDataTable.Rows[i]["调拨数量"].ToString()) + ",0,'" + pDataTable.Rows[i]["批号"].ToString() + "','" + pDataTable.Rows[i]["生产顺序号"].ToString() + "','" + pDataTable.Rows[i]["生产订单备注"].ToString() + "','" + pDataTable.Rows[i]["发货类别"].ToString() + "'" + strTemp + ");";
-            }
-
-            _SQL += @"
-            IF @@ERROR = 0
-            BEGIN
-	            COMMIT
-	            SELECT @BillNo
-            END
-            ELSE
-            BEGIN
-	            ROLLBACK
-	            SELECT ''
-            END";
-
-            strBillNo = SQLHelper.ExecuteScalar(_SQL, parms).ToString();
-
-            return strBillNo;
         }
 
         /// <summary>
