@@ -978,5 +978,24 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
 
         //    return ORAHelper.ExecuteTable(_SQL);
         //}
+
+        public bool CheckBillByBillNo(FormID pFormID,string pBillNo)
+        {
+            switch(pFormID)
+            {
+                case FormID.SAL_SaleOrder:
+                    _SQL = string.Format("SELECT COUNT(*) FROM T_SAL_ORDER WHERE FBILLNO = '{0}'", pBillNo);
+                    break;
+                case FormID.SAL_OUTSTOCK:
+                    _SQL = string.Format("SELECT COUNT(*) FROM T_SAL_OUTSTOCK WHERE FBILLNO = '{0}'", pBillNo);
+                    break;
+            }
+
+            object o = ORAHelper.ExecuteScalar(_SQL);
+            if (o != null && o.ToString() == "1")
+                return true;
+
+            return false;
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace ERPSupport.IDAL.K3Cloud
         DataTable GetOrganization(int pAcctype = 2, bool pIsContains = false);
         DataTable GetOrganization(string pType);
         DataTable GetAssistantDataEntryByFID(string pFID);
+        bool CheckAssistantByName(string pFID, string pFDataValue);
         int ApplicationFlag(string pConnectionString, string pAppName);
         List<string> GetNavigation();
         DataTable GetNavigation(out string pRIDs, out string pMIDs, out string pFunctionIds);

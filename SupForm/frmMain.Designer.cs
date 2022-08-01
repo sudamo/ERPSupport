@@ -98,6 +98,9 @@
             this.tsmiPro_Dir = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro_tss2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmiPro_K3Data = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3Data_Bill = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3Data_Mtl = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3Data_Brand = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiPro_WMSData = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiHelp_Regedit = new System.Windows.Forms.ToolStripMenuItem();
@@ -108,9 +111,8 @@
             this.tSumSecond = new System.Windows.Forms.Timer(this.components);
             this.tt = new System.Windows.Forms.ToolTip(this.components);
             this.bs1 = new System.Windows.Forms.BindingSource(this.components);
-            this.tsmiPro_K3Data_Mtl = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_K3Data_Brand = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmiPro_K3Data_Bill = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3DataModify = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmiPro_K3Data_Sal = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.sc1)).BeginInit();
             this.sc1.Panel2.SuspendLayout();
             this.sc1.SuspendLayout();
@@ -598,6 +600,7 @@
             this.tsmiPro_tss1,
             this.tsmiPro_Dir,
             this.tsmiPro_tss2,
+            this.tsmiPro_K3DataModify,
             this.tsmiPro_K3Data,
             this.tsmiPro_WMSData});
             this.tsmiPro.Name = "tsmiPro";
@@ -714,6 +717,27 @@
             this.tsmiPro_K3Data.Size = new System.Drawing.Size(179, 22);
             this.tsmiPro_K3Data.Text = "K3数据同步(&K)";
             // 
+            // tsmiPro_K3Data_Bill
+            // 
+            this.tsmiPro_K3Data_Bill.Name = "tsmiPro_K3Data_Bill";
+            this.tsmiPro_K3Data_Bill.Size = new System.Drawing.Size(152, 22);
+            this.tsmiPro_K3Data_Bill.Text = "单据";
+            this.tsmiPro_K3Data_Bill.Click += new System.EventHandler(this.tsmiPro_K3Data_Bill_Click);
+            // 
+            // tsmiPro_K3Data_Mtl
+            // 
+            this.tsmiPro_K3Data_Mtl.Name = "tsmiPro_K3Data_Mtl";
+            this.tsmiPro_K3Data_Mtl.Size = new System.Drawing.Size(152, 22);
+            this.tsmiPro_K3Data_Mtl.Text = "物料";
+            this.tsmiPro_K3Data_Mtl.Click += new System.EventHandler(this.tsmiPro_K3Data_Mtl_Click);
+            // 
+            // tsmiPro_K3Data_Brand
+            // 
+            this.tsmiPro_K3Data_Brand.Name = "tsmiPro_K3Data_Brand";
+            this.tsmiPro_K3Data_Brand.Size = new System.Drawing.Size(152, 22);
+            this.tsmiPro_K3Data_Brand.Text = "销售品牌";
+            this.tsmiPro_K3Data_Brand.Click += new System.EventHandler(this.tsmiPro_K3Data_Brand_Click);
+            // 
             // tsmiPro_WMSData
             // 
             this.tsmiPro_WMSData.Name = "tsmiPro_WMSData";
@@ -771,26 +795,20 @@
             // 
             this.tSumSecond.Interval = 1000;
             // 
-            // tsmiPro_K3Data_Mtl
+            // tsmiPro_K3DataModify
             // 
-            this.tsmiPro_K3Data_Mtl.Name = "tsmiPro_K3Data_Mtl";
-            this.tsmiPro_K3Data_Mtl.Size = new System.Drawing.Size(152, 22);
-            this.tsmiPro_K3Data_Mtl.Text = "物料";
-            this.tsmiPro_K3Data_Mtl.Click += new System.EventHandler(this.tsmiPro_K3Data_Mtl_Click);
+            this.tsmiPro_K3DataModify.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiPro_K3Data_Sal});
+            this.tsmiPro_K3DataModify.Name = "tsmiPro_K3DataModify";
+            this.tsmiPro_K3DataModify.Size = new System.Drawing.Size(179, 22);
+            this.tsmiPro_K3DataModify.Text = "K3数据调整（&M)";
             // 
-            // tsmiPro_K3Data_Brand
+            // tsmiPro_K3Data_Sal
             // 
-            this.tsmiPro_K3Data_Brand.Name = "tsmiPro_K3Data_Brand";
-            this.tsmiPro_K3Data_Brand.Size = new System.Drawing.Size(152, 22);
-            this.tsmiPro_K3Data_Brand.Text = "销售品牌";
-            this.tsmiPro_K3Data_Brand.Click += new System.EventHandler(this.tsmiPro_K3Data_Brand_Click);
-            // 
-            // tsmiPro_K3Data_Bill
-            // 
-            this.tsmiPro_K3Data_Bill.Name = "tsmiPro_K3Data_Bill";
-            this.tsmiPro_K3Data_Bill.Size = new System.Drawing.Size(152, 22);
-            this.tsmiPro_K3Data_Bill.Text = "单据";
-            this.tsmiPro_K3Data_Bill.Click += new System.EventHandler(this.tsmiPro_K3Data_Bill_Click);
+            this.tsmiPro_K3Data_Sal.Name = "tsmiPro_K3Data_Sal";
+            this.tsmiPro_K3Data_Sal.Size = new System.Drawing.Size(152, 22);
+            this.tsmiPro_K3Data_Sal.Text = "供应链(&S)";
+            this.tsmiPro_K3Data_Sal.Click += new System.EventHandler(this.tsmiPro_K3Data_Sal_Click);
             // 
             // frmMain
             // 
@@ -911,5 +929,7 @@
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data_Bill;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data_Mtl;
         private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data_Brand;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3DataModify;
+        private System.Windows.Forms.ToolStripMenuItem tsmiPro_K3Data_Sal;
     }
 }

@@ -259,6 +259,12 @@
     <Compile Include="Menu\frmPro_Dir_WMSSPSyn.Designer.cs">
       <DependentUpon>frmPro_Dir_WMSSPSyn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Menu\frmPro_K3DataModify_Sal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\frmPro_K3DataModify_Sal.Designer.cs">
+      <DependentUpon>frmPro_K3DataModify_Sal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu\frmPro_K3Data_Bas_Mtl.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -488,6 +494,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Dir_WMSSPSyn.resx">
       <DependentUpon>frmPro_Dir_WMSSPSyn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\frmPro_K3DataModify_Sal.resx">
+      <DependentUpon>frmPro_K3DataModify_Sal.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_K3Data_Bas_Mtl.resx">
       <DependentUpon>frmPro_K3Data_Bas_Mtl.cs</DependentUpon>

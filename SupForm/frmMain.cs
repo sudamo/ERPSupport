@@ -2368,7 +2368,7 @@ namespace ERPSupport.SupForm
                         DALCreator.SalOrder.Log_OrderLock((OrderInfo)_ListOrder[i], 1, "单据状态不为[已审核]");
                         continue;
                     }
-                    if (((OrderInfo)_ListOrder[i]).FCloseStatus != "正常")//备货销售订单不需要锁库
+                    if (((OrderInfo)_ListOrder[i]).FCloseStatus != "正常")
                     {
                         dr = ReturnDT.NewRow();
                         dr["操作"] = "失败";
@@ -2960,6 +2960,13 @@ namespace ERPSupport.SupForm
         private void tsmiPro_INOrder_Click(object sender, EventArgs e)
         {
             frmINOrder frm = new frmINOrder();
+            frm.Show(this);
+        }
+
+        
+        private void tsmiPro_K3Data_Sal_Click(object sender, EventArgs e)
+        {
+            frmPro_K3DataModify_Sal frm = new frmPro_K3DataModify_Sal();
             frm.Show(this);
         }
 

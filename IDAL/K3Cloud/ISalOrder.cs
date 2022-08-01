@@ -2,6 +2,7 @@
 using System.Data;
 using System.Collections;
 using System.Collections.Generic;
+using ERPSupport.Model.Enum;
 
 namespace ERPSupport.IDAL.K3Cloud
 {
@@ -28,5 +29,7 @@ namespace ERPSupport.IDAL.K3Cloud
         void UpdateCustomer(string pFBillNo, int pFEntryId, int pCustomerId, bool pOutStock, bool pReceivable, bool pReturnNotice, bool pReturnStock);
         void UpdateUiCityOrders(int pFactoryOrgId, int pSaleOrgId, int pSaleDeptId, int pSalerId, List<string> pFBillNos);
         //DataTable NoPriceOrders(string pSaleOrgs);
+
+        bool CheckBillByBillNo(FormID pFormID, string pBillNo);
     }
 }

@@ -489,6 +489,17 @@ namespace ERPSupport.SQL.K3Cloud
 
             return ORAHelper.ExecuteTable(_SQL);
         }
+
+        public bool CheckAssistantByName(string pFID, string pFDataValue)
+        {
+            _SQL = string.Format("SELECT COUNT(*) FROM T_BAS_ASSISTANTDATAENTRY A INNER JOIN T_BAS_ASSISTANTDATAENTRY_L AL ON A.FENTRYID = AL.FENTRYID WHERE FID = '{0}' AND AL.FDATAVALUE = '{1}'", pFID, pFDataValue);
+
+            object o = ORAHelper.ExecuteScalar(_SQL);
+            if (o != null && o.ToString() == "1")
+                return true;
+
+            return false;
+        }
         #endregion
 
         #region DM
