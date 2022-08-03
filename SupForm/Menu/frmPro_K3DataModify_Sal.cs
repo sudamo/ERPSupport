@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace ERPSupport.SupForm.Menu
 {
-    using DALFactory.K3Cloud;
     using Model.Enum;
+    using DALFactory.K3Cloud;
 
     public partial class frmPro_K3DataModify_Sal : Form
     {
-
-        private DataTable _dt;
         public frmPro_K3DataModify_Sal()
         {
             InitializeComponent();
@@ -23,12 +16,7 @@ namespace ERPSupport.SupForm.Menu
 
         private void frmPro_K3DataModify_Sal_Load(object sender, EventArgs e)
         {
-            _dt = new DataTable();
-            _dt.Columns.Add("FBILLNO");
-            _dt.Columns.Add("FCARRIAGENO");
-            _dt.Columns.Add("F_PAEZ_LOGISTCSCOMPANY");
-            _dt.Columns.Add("FDELIVERYDATE");
-            _dt.Columns.Add("Result");
+
         }
 
         private void dgv1_RowStateChanged(object sender, DataGridViewRowStateChangedEventArgs e)
@@ -95,26 +83,33 @@ namespace ERPSupport.SupForm.Menu
 
             for (int i = 0; i < dgv1.Rows.Count - 1; i++)
             {
-                string billno = dgv1.Rows[i].Cells[0].Value.ToString();
-                if (billno == "" || billno.Length < 4)
+                object o = dgv1.Rows[i].Cells[0].Value;
+                if (o == null || o.ToString() == "")
+                {
+                    dgv1.Rows[i].Cells[4].Value = "";
+                    dgv1.Rows[i].Cells[4].Style.BackColor = Color.White;
+                    continue;
+                }
+                string billno = o.ToString();
+                if (billno.Length < 4)
                 {
                     dgv1.Rows[i].Cells[4].Value = "无效单据编号";
                     dgv1.Rows[i].Cells[4].Style.BackColor = Color.MistyRose;
                     continue;
                 }
-                if (dgv1.Rows[i].Cells[1].Value.ToString() == "")
+                if (dgv1.Rows[i].Cells[1].Value == null || dgv1.Rows[i].Cells[1].Value.ToString() == "")
                 {
                     dgv1.Rows[i].Cells[4].Value = "快递单号不能为空";
                     dgv1.Rows[i].Cells[4].Style.BackColor = Color.MistyRose;
                     continue;
                 }
-                if (dgv1.Rows[i].Cells[2].Value.ToString() == "")
+                if (dgv1.Rows[i].Cells[2].Value == null || dgv1.Rows[i].Cells[2].Value.ToString() == "")
                 {
                     dgv1.Rows[i].Cells[4].Value = "快递公司不能为空";
                     dgv1.Rows[i].Cells[4].Style.BackColor = Color.MistyRose;
                     continue;
                 }
-                if (dgv1.Rows[i].Cells[3].Value.ToString() == "")
+                if (dgv1.Rows[i].Cells[3].Value == null || dgv1.Rows[i].Cells[3].Value.ToString() == "")
                 {
                     dgv1.Rows[i].Cells[4].Value = "发货日期不能为空";
                     dgv1.Rows[i].Cells[4].Style.BackColor = Color.MistyRose;
@@ -173,10 +168,14 @@ namespace ERPSupport.SupForm.Menu
 
             for (int i = 0; i < dgv1.Rows.Count - 1; i++)
             {
-                if (dgv1.Rows[i].Cells[4].Value.ToString() != "")
+                if (dgv1.Rows[i].Cells[0].Value.ToString() == "" || dgv1.Rows[i].Cells[4].Value.ToString() != "")
                     continue;
-
-
+                string strResult = DALCreator.SalOrder.UpdateBills(dgv1.Rows[i].Cells[0].Value.ToString(), dgv1.Rows[i].Cells[1].Value.ToString(), dgv1.Rows[i].Cells[2].Value.ToString(), dgv1.Rows[i].Cells[3].Value.ToString());
+                dgv1.Rows[i].Cells[4].Value = strResult;
+                if (strResult == "更新成功")
+                    dgv1.Rows[i].Cells[4].Style.BackColor = Color.White;
+                else
+                    dgv1.Rows[i].Cells[4].Style.BackColor = Color.MistyRose;
             }
         }
     }

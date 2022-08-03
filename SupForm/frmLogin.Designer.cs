@@ -62,9 +62,9 @@
             this.lblVersion.Font = new System.Drawing.Font("宋体", 10F);
             this.lblVersion.Location = new System.Drawing.Point(195, 13);
             this.lblVersion.Name = "lblVersion";
-            this.lblVersion.Size = new System.Drawing.Size(41, 23);
+            this.lblVersion.Size = new System.Drawing.Size(81, 23);
             this.lblVersion.TabIndex = 13;
-            this.lblVersion.Text = "V7.0";
+            this.lblVersion.Text = "V22.802";
             this.lblVersion.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // pl1
@@ -89,7 +89,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(288, 210);
+            this.ClientSize = new System.Drawing.Size(288, 209);
             this.ControlBox = false;
             this.Controls.Add(this.chbRemenber);
             this.Controls.Add(this.lblVersion);

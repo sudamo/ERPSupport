@@ -73,6 +73,14 @@ namespace ERPSupport.Model.Enum
         /// 销售退货单
         /// </summary>
         SAL_RETURNSTOCK,
+        /// <summary>
+        /// 订单锁库
+        /// </summary>
+        SAL_OrderLock,
+        /// <summary>
+        /// 订单运算
+        /// </summary>
+        SAL_OrderRun,
 
         //----------库存
         /// <summary>

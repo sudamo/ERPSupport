@@ -10,7 +10,7 @@ namespace ERPSupport.IDAL.K3Cloud
     {
         void Log_OrderLock(Model.K3Cloud.OrderInfo pEntry, int pType, string pRemark);
         void Log_OrderLock(DataRow pDR, int pType);
-        DataTable GetDataSource(Model.Enum.FormID pFormId, string pFilter, Model.K3Cloud.OrderInfo pOrderInf);
+        DataTable GetDataSource(FormID pFormId, string pFilter, Model.K3Cloud.OrderInfo pOrderInf);
         DataTable GetOrderLockByFEntryId(int pFEntryId);
         void UpdateOrderLock(string pCanLockQty, int pFID, int pFEntryId);
         void UnLockSalOrder(string pLockQty, int pFEntryId);
@@ -28,8 +28,8 @@ namespace ERPSupport.IDAL.K3Cloud
         void UpdateOrderCanOutQty(string pFEntryId, decimal pCanOutQty);
         void UpdateCustomer(string pFBillNo, int pFEntryId, int pCustomerId, bool pOutStock, bool pReceivable, bool pReturnNotice, bool pReturnStock);
         void UpdateUiCityOrders(int pFactoryOrgId, int pSaleOrgId, int pSaleDeptId, int pSalerId, List<string> pFBillNos);
-        //DataTable NoPriceOrders(string pSaleOrgs);
 
         bool CheckBillByBillNo(FormID pFormID, string pBillNo);
+        string UpdateBills(string pBillNo, string pFCARRIAGENO, string pF_PAEZ_LOGISTCSCOMPANY, string pFDELIVERYDATE);
     }
 }

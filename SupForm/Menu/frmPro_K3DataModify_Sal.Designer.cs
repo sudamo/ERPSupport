@@ -35,6 +35,11 @@
             this.bnTop_tss1 = new System.Windows.Forms.ToolStripSeparator();
             this.bnTop_btnCheck = new System.Windows.Forms.ToolStripButton();
             this.dgv1 = new System.Windows.Forms.DataGridView();
+            this.FBillNO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FCARRIAGENO = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.F_PAEZ_LOGISTCSCOMPANY = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.FDELIVERYDATE = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Result = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.cms = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.tsmiPaste_Area = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmiDel = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,11 +48,6 @@
             this.dataGridViewTextBoxColumn3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FBillNO = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FCARRIAGENO = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.F_PAEZ_LOGISTCSCOMPANY = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.FDELIVERYDATE = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Result = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.bnTop)).BeginInit();
             this.bnTop.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv1)).BeginInit();
@@ -72,7 +72,7 @@
             this.bnTop.MovePreviousItem = null;
             this.bnTop.Name = "bnTop";
             this.bnTop.PositionItem = null;
-            this.bnTop.Size = new System.Drawing.Size(856, 27);
+            this.bnTop.Size = new System.Drawing.Size(684, 27);
             this.bnTop.TabIndex = 2;
             this.bnTop.Text = "bindingNavigator1";
             // 
@@ -118,10 +118,46 @@
             this.dgv1.Name = "dgv1";
             this.dgv1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             this.dgv1.RowTemplate.Height = 23;
-            this.dgv1.Size = new System.Drawing.Size(856, 554);
+            this.dgv1.Size = new System.Drawing.Size(684, 434);
             this.dgv1.TabIndex = 3;
             this.dgv1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dgv1_CellMouseClick);
             this.dgv1.RowStateChanged += new System.Windows.Forms.DataGridViewRowStateChangedEventHandler(this.dgv1_RowStateChanged);
+            // 
+            // FBillNO
+            // 
+            this.FBillNO.Frozen = true;
+            this.FBillNO.HeaderText = "单据编号";
+            this.FBillNO.Name = "FBillNO";
+            this.FBillNO.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FBillNO.ToolTipText = "销售订单/出库单";
+            this.FBillNO.Width = 130;
+            // 
+            // FCARRIAGENO
+            // 
+            this.FCARRIAGENO.HeaderText = "快递单号";
+            this.FCARRIAGENO.Name = "FCARRIAGENO";
+            this.FCARRIAGENO.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.FCARRIAGENO.ToolTipText = "运输单号";
+            // 
+            // F_PAEZ_LOGISTCSCOMPANY
+            // 
+            this.F_PAEZ_LOGISTCSCOMPANY.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.F_PAEZ_LOGISTCSCOMPANY.FillWeight = 50F;
+            this.F_PAEZ_LOGISTCSCOMPANY.HeaderText = "快递公司";
+            this.F_PAEZ_LOGISTCSCOMPANY.Name = "F_PAEZ_LOGISTCSCOMPANY";
+            this.F_PAEZ_LOGISTCSCOMPANY.ToolTipText = "物流公司";
+            this.F_PAEZ_LOGISTCSCOMPANY.Width = 185;
+            // 
+            // FDELIVERYDATE
+            // 
+            this.FDELIVERYDATE.HeaderText = "发货日期";
+            this.FDELIVERYDATE.Name = "FDELIVERYDATE";
+            // 
+            // Result
+            // 
+            this.Result.HeaderText = "结果";
+            this.Result.Name = "Result";
+            this.Result.ReadOnly = true;
             // 
             // cms
             // 
@@ -181,47 +217,11 @@
             this.dataGridViewTextBoxColumn5.Name = "dataGridViewTextBoxColumn5";
             this.dataGridViewTextBoxColumn5.ReadOnly = true;
             // 
-            // FBillNO
-            // 
-            this.FBillNO.Frozen = true;
-            this.FBillNO.HeaderText = "单价编号";
-            this.FBillNO.Name = "FBillNO";
-            this.FBillNO.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FBillNO.ToolTipText = "销售订单/出库单";
-            this.FBillNO.Width = 130;
-            // 
-            // FCARRIAGENO
-            // 
-            this.FCARRIAGENO.HeaderText = "快递单号";
-            this.FCARRIAGENO.Name = "FCARRIAGENO";
-            this.FCARRIAGENO.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.FCARRIAGENO.ToolTipText = "运输单号";
-            // 
-            // F_PAEZ_LOGISTCSCOMPANY
-            // 
-            this.F_PAEZ_LOGISTCSCOMPANY.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.F_PAEZ_LOGISTCSCOMPANY.FillWeight = 50F;
-            this.F_PAEZ_LOGISTCSCOMPANY.HeaderText = "快递公司";
-            this.F_PAEZ_LOGISTCSCOMPANY.Name = "F_PAEZ_LOGISTCSCOMPANY";
-            this.F_PAEZ_LOGISTCSCOMPANY.ToolTipText = "物流公司";
-            this.F_PAEZ_LOGISTCSCOMPANY.Width = 185;
-            // 
-            // FDELIVERYDATE
-            // 
-            this.FDELIVERYDATE.HeaderText = "发货日期";
-            this.FDELIVERYDATE.Name = "FDELIVERYDATE";
-            // 
-            // Result
-            // 
-            this.Result.HeaderText = "结果";
-            this.Result.Name = "Result";
-            this.Result.ReadOnly = true;
-            // 
             // frmPro_K3DataModify_Sal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(856, 581);
+            this.ClientSize = new System.Drawing.Size(684, 461);
             this.Controls.Add(this.dgv1);
             this.Controls.Add(this.bnTop);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -246,11 +246,6 @@
         private System.Windows.Forms.ToolStripSeparator bnTop_tss1;
         private System.Windows.Forms.ToolStripButton bnTop_btnCheck;
         private System.Windows.Forms.DataGridView dgv1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FBillNO;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FCARRIAGENO;
-        private System.Windows.Forms.DataGridViewTextBoxColumn F_PAEZ_LOGISTCSCOMPANY;
-        private System.Windows.Forms.DataGridViewTextBoxColumn FDELIVERYDATE;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Result;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn3;
@@ -259,5 +254,10 @@
         private System.Windows.Forms.ContextMenuStrip cms;
         private System.Windows.Forms.ToolStripMenuItem tsmiPaste_Area;
         private System.Windows.Forms.ToolStripMenuItem tsmiDel;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FBillNO;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FCARRIAGENO;
+        private System.Windows.Forms.DataGridViewTextBoxColumn F_PAEZ_LOGISTCSCOMPANY;
+        private System.Windows.Forms.DataGridViewTextBoxColumn FDELIVERYDATE;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Result;
     }
 }

@@ -959,26 +959,7 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
 
             ORAHelper.ExecuteNonQuery(_SQL);
         }
-
-        ///// <summary>
-        ///// 根据销售组织查找单价为零的销售订单
-        ///// </summary>
-        ///// <param name="pSaleOrg"></param>
-        ///// <returns></returns>
-        //public DataTable NoPriceOrders(string pSaleOrgs)
-        //{
-        //    _SQL = "SELECT O.FBILLNO 单据编号,O.FDATE 日期,OE.FSEQ 序号,MTL.FNUMBER 物料编码,MTLL.FNAME 物料名称,F.FPRICE 单价,OE.FENTRYID ";
-        //    _SQL += " FROM T_SAL_ORDER O ";
-        //    _SQL += " INNER JOIN T_SAL_ORDERENTRY OE ON O.FID = OE.FID ";
-        //    _SQL += " INNER JOIN T_SAL_ORDERENTRY_F F ON OE.FENTRYID = F.FENTRYID ";
-        //    _SQL += " INNER JOIN T_BD_MATERIAL MTL ON OE.FMATERIALID = MTL.FMATERIALID ";
-        //    _SQL += " INNER JOIN T_BD_MATERIAL_L MTLL ON MTL.FMATERIALID = MTLL.FMATERIALID AND MTLL.FLOCALEID = 2052 ";
-        //    _SQL += string.Format(" WHERE O.FDOCUMENTSTATUS = 'A' AND F.FPRICE = 0 AND O.FSALEORGID IN({0}) ", pSaleOrgs);
-        //    _SQL += " ORDER BY O.FBILLNO,OE.FSEQ ";
-
-        //    return ORAHelper.ExecuteTable(_SQL);
-        //}
-
+        
         public bool CheckBillByBillNo(FormID pFormID,string pBillNo)
         {
             switch(pFormID)
@@ -996,6 +977,47 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
                 return true;
 
             return false;
+        }
+
+        public string UpdateBills(string pBillNo, string pFCARRIAGENO, string pF_PAEZ_LOGISTCSCOMPANY, string pFDELIVERYDATE)
+        {
+            _SQL = string.Format("SELECT A.FENTRYID FROM T_BAS_ASSISTANTDATAENTRY A INNER JOIN T_BAS_ASSISTANTDATAENTRY_L AL ON A.FENTRYID = AL.FENTRYID WHERE FID = '58709cf996a15c' AND AL.FDATAVALUE = '{0}'", pF_PAEZ_LOGISTCSCOMPANY);
+            string strFentryId = ORAHelper.ExecuteScalar(_SQL).ToString();
+            if (strFentryId == "")
+                return "更新失败";
+            string strFDELIVERYDATE;
+            try
+            {
+                strFDELIVERYDATE = DateTime.Parse(pFDELIVERYDATE).ToString("yyyy-MM-dd");
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+
+            switch (pBillNo.Substring(0, 4))
+            {
+                case "XSDD":
+                    _SQL = string.Format("UPDATE T_SAL_ORDER SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',F_DELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD') WHERE FBILLNO = '{3}'", pFCARRIAGENO, strFentryId, strFDELIVERYDATE, pBillNo);
+                    break;
+                case "XSCK":
+                    _SQL = string.Format("UPDATE T_SAL_OUTSTOCK SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',FDELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD') WHERE FBILLNO = '{3}'", pFCARRIAGENO, strFentryId, strFDELIVERYDATE, pBillNo);
+                    break;
+                default:
+                    _SQL = string.Empty;
+                    break;
+            }
+            if (_SQL.Equals(string.Empty))
+                return "更新失败";
+            try
+            {
+                ORAHelper.ExecuteNonQuery(_SQL);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+            return "更新成功";
         }
     }
 }
