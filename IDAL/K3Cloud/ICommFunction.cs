@@ -30,6 +30,7 @@ namespace ERPSupport.IDAL.K3Cloud
         string GetStockNumber(int pUseOrgId, string pFName);
         DataTable GetOrganization(int pAcctype = 2, bool pIsContains = false);
         DataTable GetOrganization(string pType);
+        string GetOrganizationNumber(string pFName);
         DataTable GetAssistantDataEntryByFID(string pFID);
         bool CheckAssistantByName(string pFID, string pFDataValue);
         int ApplicationFlag(string pConnectionString, string pAppName);

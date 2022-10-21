@@ -124,7 +124,7 @@ namespace ERPSupport.SupForm.Menu
             _BillNos = string.Empty;
             _Eorros = string.Empty;
 
-            if (worksheet.Cells[1, 1].Text != "电商销售订单导入模版")
+            if (worksheet.Cells[1, 1].Text != "电商销售订单导入模版" || worksheet.Cells[2, 12].Text != "生产组织")
             {
                 MessageBox.Show("请使用[电商销售订单导入模版]格式的Excel文件导入！");
                 return;
@@ -154,6 +154,7 @@ namespace ERPSupport.SupForm.Menu
                     entry.FPRICE = decimal.Parse(worksheet.Cells[i, 9].Text);
                     entry.FQTY = decimal.Parse(worksheet.Cells[i, 10].Text);
                     strNote = worksheet.Cells[i, 11].Text;
+                    entry.F_PAEZ_FACTORGCode = worksheet.Cells[i, 12].Text;
 
                     if (entry.FPRICE == 0)//单价为零，备注插入 赠品 两字
                     {
@@ -258,6 +259,8 @@ namespace ERPSupport.SupForm.Menu
                         else
                             entity.FDELIVERYMETHODCode = DALCreator.CommFunction.GetAssistantDataCode(entity.FDELIVERYMETHOD, "58709d3c96a15e");//58709cf996a15c
 
+                        entity.F_PAEZ_FACTORGCode = DALCreator.CommFunction.GetOrganizationNumber(entity.F_PAEZ_FACTORGCode);
+
                         bTitle = true;
                     }
                     entity.FUnitNumber = DALCreator.CommFunction.GetUnitCodeByMTLCode(entity.FMaterialCode);
@@ -349,7 +352,7 @@ namespace ERPSupport.SupForm.Menu
                     //摘要
                     model.Add("FNote", "");
                     basedata = new JObject();
-                    basedata.Add("FNumber", "HN02");
+                    basedata.Add("FNumber", pList[0].F_PAEZ_FACTORGCode);
                     model.Add("F_PAEZ_FactOrgID", basedata);
                     model.Add("FIsMobile", false);
                     model.Add("FSalePath", "1");
@@ -448,18 +451,18 @@ namespace ERPSupport.SupForm.Menu
                         entryRow.Add("FDeliveryDate", DateTime.Today);
 
                         basedata = new JObject();
-                        basedata.Add("FNumber", "HN02");
+                        basedata.Add("FNumber", pList[0].F_PAEZ_FACTORGCode);
                         entryRow.Add("FStockOrgId", basedata);
                         basedata = new JObject();
                         basedata.Add("FNumber", "GZ04");
                         entryRow.Add("FSettleOrgIds", basedata);
                         basedata = new JObject();
-                        basedata.Add("FNumber", "HN02");
+                        basedata.Add("FNumber", pList[0].F_PAEZ_FACTORGCode);
                         entryRow.Add("FSupplyOrgId", basedata);
 
                         entryRow.Add("FOwnerTypeId", "BD_OwnerOrg");
                         basedata = new JObject();
-                        basedata.Add("FNumber", "HN02");
+                        basedata.Add("FNumber", pList[0].F_PAEZ_FACTORGCode);
                         entryRow.Add("FOwnerId", basedata);
                         entryRow.Add("FReserveType", "1");
 

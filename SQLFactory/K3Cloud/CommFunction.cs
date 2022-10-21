@@ -474,6 +474,21 @@ namespace ERPSupport.SQL.K3Cloud
 
             return ORAHelper.ExecuteTable(_SQL);
         }
+        /// <summary>
+        /// 获取组织代码
+        /// </summary>
+        /// <param name="pFName">组织名称</param>
+        /// <returns></returns>
+        public string GetOrganizationNumber(string pFName)
+        {
+            _SQL = string.Format("SELECT O.FNUMBER FROM T_ORG_ORGANIZATIONS O INNER JOIN T_ORG_ORGANIZATIONS_L OL ON O.FORGID = OL.FORGID AND OL.FLOCALEID = 2052 WHERE OL.FNAME = '{0}'", pFName);
+            _obj = ORAHelper.ExecuteScalar(_SQL);
+
+            if (_obj != null)
+                return _obj.ToString();
+            else
+                return "";
+        }
 
         /// <summary>
         /// 根据类别FID获取辅助资料信息

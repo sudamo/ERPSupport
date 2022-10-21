@@ -324,12 +324,12 @@ namespace ERPSupport.SQL.K3Cloud
                     JObject linkRow = new JObject();
                     linkRows.Add(linkRow);
 
-                    //FFlowId : 业务流程图，可选
-                    string fldFlowIdKey = string.Format("{0}_FFlowId", linkEntityKey);
-                    linkRow.Add(fldFlowIdKey, "");
-                    //FFlowLineId ：业务流程图路线，可选
-                    string fldFlowLineIdKey = string.Format("{0}_FFlowLineId", linkEntityKey);
-                    linkRow.Add(fldFlowLineIdKey, "");
+                    ////FFlowId : 业务流程图，可选
+                    //string fldFlowIdKey = string.Format("{0}_FFlowId", linkEntityKey);
+                    //linkRow.Add(fldFlowIdKey, "");
+                    ////FFlowLineId ：业务流程图路线，可选
+                    //string fldFlowLineIdKey = string.Format("{0}_FFlowLineId", linkEntityKey);
+                    //linkRow.Add(fldFlowLineIdKey, "");
 
                     string fldRuleIdKey = string.Format("{0}_FRuleId", linkEntityKey);
                     linkRow.Add(fldRuleIdKey, "PRD_PPBOM-PRD_PICKMTRL");
