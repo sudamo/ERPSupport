@@ -235,6 +235,12 @@
     <Compile Include="Comm\frmCategory.Designer.cs">
       <DependentUpon>frmCategory.cs</DependentUpon>
     </Compile>
+    <Compile Include="Menu\frmPro_Business_Bill.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Menu\frmPro_Business_Bill.Designer.cs">
+      <DependentUpon>frmPro_Business_Bill.cs</DependentUpon>
+    </Compile>
     <Compile Include="Menu\frmPro_Business_Report.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -482,6 +488,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Comm\frmCategory.resx">
       <DependentUpon>frmCategory.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Menu\frmPro_Business_Bill.resx">
+      <DependentUpon>frmPro_Business_Bill.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\frmPro_Business_Report.resx">
       <DependentUpon>frmPro_Business_Report.cs</DependentUpon>

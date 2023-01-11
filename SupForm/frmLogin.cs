@@ -40,6 +40,8 @@ namespace ERPSupport.SupForm
             ucLG.Dock = DockStyle.Fill;
             ucLG._LoginClick += new EventHandler(UserLogin);
             pl1.Controls.Add(ucLG);
+
+            lblVersion.Text = "V22.1212";
         }
 
         /// <summary>

@@ -2948,7 +2948,13 @@ namespace ERPSupport.SupForm
         /// <param name="e"></param>
         private void tsmiPro_Business_Report_Click(object sender, EventArgs e)
         {
-            frmPro_Business_Report frm = new SupForm.Menu.frmPro_Business_Report();
+            frmPro_Business_Report frm = new frmPro_Business_Report();
+            frm.Show(this);
+        }
+
+        private void tsmiPro_Business_SynBill_Click(object sender, EventArgs e)
+        {
+            frmPro_Business_Bill frm = new frmPro_Business_Bill();
             frm.Show(this);
         }
 

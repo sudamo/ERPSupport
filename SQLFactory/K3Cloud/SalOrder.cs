@@ -998,10 +998,16 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
             switch (pBillNo.Substring(0, 4))
             {
                 case "XSDD":
-                    _SQL = string.Format("UPDATE T_SAL_ORDER SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',F_DELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD') WHERE FBILLNO = '{3}'", pFCARRIAGENO, strFentryId, strFDELIVERYDATE, pBillNo);
+                    _SQL = string.Format(@"BEGIN
+UPDATE T_SAL_ORDER SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',F_DELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD') WHERE FBILLNO = '{3}';
+UPDATE T_SAL_OUTSTOCK SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',FDELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD')
+WHERE FID IN(SELECT FID FROM T_SAL_OUTSTOCKENTRY_R WHERE FSRCBILLNO = '{3}');END;", pFCARRIAGENO, strFentryId, strFDELIVERYDATE, pBillNo);
+
                     break;
                 case "XSCK":
-                    _SQL = string.Format("UPDATE T_SAL_OUTSTOCK SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',FDELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD') WHERE FBILLNO = '{3}'", pFCARRIAGENO, strFentryId, strFDELIVERYDATE, pBillNo);
+                    _SQL = string.Format(@"BEGIN
+UPDATE T_SAL_OUTSTOCK SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',FDELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD') WHERE FBILLNO = '{3}';
+UPDATE T_SAL_ORDER SET FCARRIAGENO = '{0}',F_PAEZ_LOGISTCSCOMPANY = '{1}',F_DELIVERYDATE = TO_DATE('{2}','YYYY-MM-DD') WHERE FBILLNO IN(SELECT FSRCBILLNO FROM T_SAL_OUTSTOCKENTRY_R AR INNER JOIN T_SAL_OUTSTOCK A ON AR.FID = A.FID WHERE A.FBILLNO = '{3}');END;", pFCARRIAGENO, strFentryId, strFDELIVERYDATE, pBillNo);
                     break;
                 default:
                     _SQL = string.Empty;
@@ -1017,6 +1023,48 @@ WHERE AE.FENTRYID IN(" + strFEntryIds + ")";
             {
                 return ex.Message;
             }
+            return "更新成功";
+        }
+
+
+        public DataTable GetOutStockByOrder(string pOrderBillNo)
+        {
+            _SQL = string.Format(@"SELECT DISTINCT NVL(A.FBILLNO,'')CKD,NVL(L.FDATAVALUE,'') WL,NVL(A.FCARRIAGENO,'') YSD
+FROM T_SAL_ORDER O
+INNER JOIN T_SAL_OUTSTOCKENTRY_R R ON R.FSOORDERNO = O.FBILLNO
+INNER JOIN T_SAL_OUTSTOCK A ON R.FID = A.FID
+LEFT JOIN T_BAS_ASSISTANTDATAENTRY_L L ON A.F_PAEZ_LOGISTCSCOMPANY = L.FENTRYID AND L.FLOCALEID = 2052
+WHERE O.FBILLNO = '{0}'", pOrderBillNo);
+            return ORAHelper.ExecuteTable(_SQL);
+        }
+
+        public string UpdateOutStock(string pBillNo, string pWLGS, string pYSD, string pWLGS2, string pYSD2)
+        {
+            string wl = string.Empty;
+            if (pWLGS != string.Empty && pWLGS != pWLGS2)
+            {
+                CommFunction comm = new CommFunction();
+                wl = comm.GetAssistantDataCode(pWLGS, "58709cf996a15c");
+                if (wl == "")
+                    return "物流公司无效";
+            }
+            if (pYSD == pYSD2)
+                return "运输单号无需更新";
+
+            _SQL = string.Format("UPDATE T_SAL_OUTSTOCK SET FCARRIAGENO = '{0}'", pYSD);
+            if (wl != string.Empty)
+                _SQL += string.Format(",F_PAEZ_LogistcsCompany = '{0}'", wl);
+            _SQL += string.Format(" WHERE FBILLNO = '{0}'", pBillNo);
+
+            try
+            {
+                ORAHelper.ExecuteNonQuery(_SQL);
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
+
             return "更新成功";
         }
     }

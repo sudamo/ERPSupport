@@ -31,5 +31,7 @@ namespace ERPSupport.IDAL.K3Cloud
 
         bool CheckBillByBillNo(FormID pFormID, string pBillNo);
         string UpdateBills(string pBillNo, string pFCARRIAGENO, string pF_PAEZ_LOGISTCSCOMPANY, string pFDELIVERYDATE);
+        DataTable GetOutStockByOrder(string pOrderBillNo);
+        string UpdateOutStock(string pBillNo, string pWLGS, string pYSD, string pWLGS2, string pYSD2);
     }
 }
